@@ -1,0 +1,33 @@
+package com.mdmobile.mobiconsole.DataTypes;
+
+
+public class ComplexDataType {
+
+    //Represent the possible option for DataCollection
+    public enum BuiltInDataType {
+        ForegroundApp,
+        MissedCallls,
+        SuccessCalls,
+        DroppedCalls,
+        AvailableExternalStorage,
+        AvailableInternalStorage,
+        OperatingSystemVersion,
+        VoiceUsage,
+        TrafficCellularTethered,
+        TrafficCellularRoaming,
+        TrafficCellular,
+        TrafficWifi,
+        TrafficUsb,
+        BSSID,
+        CallLog,
+        CellularSignalStrength,
+        CellularCarrier,
+        IPAddress,
+        RSSI,
+        SSID,
+        Location,
+        AvailableStorage,
+        AvailableMemory,
+        BatteryStatus
+    }
+}

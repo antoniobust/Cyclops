@@ -30,4 +30,8 @@ public class ComplexDataType {
         AvailableMemory,
         BatteryStatus
     }
+
+    public enum DirecotryResourceType {
+        Both , User, Group
+    }
 }

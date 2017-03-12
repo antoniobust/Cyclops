@@ -8,6 +8,8 @@ import android.util.Pair;
 import com.mdmobile.mobiconsole.DataTypes.ComplexDataType;
 import com.mdmobile.mobiconsole.DataTypes.ParameterKeys;
 
+import java.util.Arrays;
+
 /**
  * ApiModel contains the difference kind of API available represented as classes
  */
@@ -135,6 +137,105 @@ public class ApiModels {
             public String build() {
                 return Uri.decode(currentApi.build().toString());
             }
+        }
+    }
+
+    public static class DirectoriesApi {
+
+        private static Uri.Builder currentApi;
+
+        private DirectoriesApi(Uri.Builder currentApi) {
+            DirectoriesApi.currentApi = currentApi;
+        }
+
+        public static DirectoriesApi Builder(@NonNull String authority) {
+            Uri.parse(authority).buildUpon().appendPath(MobiControl).appendPath(ApiTypes.directoriesResourceApi);
+            return new DirectoriesApi(currentApi);
+        }
+
+        public DirectoriesApi getLdapUserOrGroups(@NonNull String directoryConnectionName, @NonNull String search,
+                                                  @Nullable String type, @Nullable String[] memberOf) {
+
+            String searchParameterKey = "searchString";
+            String path = "directoryConnectionName";
+            String typeParameterKey = "type";
+
+            currentApi.appendPath(path).appendQueryParameter(searchParameterKey, search);
+
+            if (type == null) {
+                currentApi.appendQueryParameter(typeParameterKey, ComplexDataType.DirecotryResourceType.Both.toString());
+            } else {
+                currentApi.appendQueryParameter(searchParameterKey, search);
+            }
+
+            if (memberOf != null) {
+                String memberOfQueryKey = "memberOf";
+                currentApi.appendQueryParameter(memberOfQueryKey, Uri.encode(Arrays.toString(memberOf)));
+            }
+
+            return DirectoriesApi.this;
+        }
+
+        public String build() {
+            return Uri.decode(currentApi.build().toString());
+        }
+
+
+    }
+
+    public static class UserSecurityApi {
+        private static Uri.Builder currentApi;
+
+
+        private UserSecurityApi(Uri.Builder currentApi) {
+            UserSecurityApi.currentApi = currentApi;
+        }
+
+        public static UserSecurityApi Builder(@NonNull String authority) {
+            Uri.parse(authority).buildUpon().appendPath(MobiControl).appendPath(ApiTypes.usersResource);
+            return new UserSecurityApi(currentApi);
+        }
+
+        public UserSecurityApi getAllUsers(@NonNull Boolean includeHiddenUsers, @Nullable String searchString, @Nullable String[] memberOf) {
+            String includeHiddenUsersParameterKey = "includeHiddenUsers";
+            if (includeHiddenUsers) {
+                currentApi.appendQueryParameter(includeHiddenUsersParameterKey, "true");
+            } else {
+                currentApi.appendQueryParameter(includeHiddenUsersParameterKey, "false");
+            }
+
+            if (searchString != null) {
+                String searchStringParamKey = "searchString";
+                currentApi.appendQueryParameter(searchStringParamKey, searchString);
+            }
+
+            if (memberOf != null) {
+                String memberOfParamKey = "memberOf";
+                currentApi.appendQueryParameter(memberOfParamKey, Uri.encode(Arrays.toString(memberOf)));
+            }
+
+            return UserSecurityApi.this;
+        }
+
+        public UserSecurityApi getSingleUser(@NonNull String userName) {
+            currentApi.appendPath(userName);
+            return UserSecurityApi.this;
+        }
+
+        public UserSecurityApi getUserGroups(@NonNull String userName, @NonNull Boolean showGroupInheritance) {
+            String groupsPath = "groups";
+            String showGroupInheritanceParamKey = "showGroupInheritance";
+            getSingleUser(userName);
+            if (showGroupInheritance) {
+                currentApi.appendPath(groupsPath).appendQueryParameter(showGroupInheritanceParamKey, "true");
+            } else {
+                currentApi.appendPath(groupsPath).appendQueryParameter(showGroupInheritanceParamKey, "false");
+            }
+            return UserSecurityApi.this;
+        }
+
+        public String build() {
+            return Uri.decode(currentApi.build().toString());
         }
     }
 

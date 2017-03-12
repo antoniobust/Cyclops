@@ -9,7 +9,7 @@ import com.mdmobile.mobiconsole.DataTypes.ComplexDataType;
 import com.mdmobile.mobiconsole.DataTypes.ParameterKeys;
 
 /**
- * ApiModel cotains the difference kind of API available represented as classes
+ * ApiModel contains the difference kind of API available represented as classes
  */
 
 public class ApiModels {
@@ -39,6 +39,20 @@ public class ApiModels {
                 String parameter = filter.first.concat(":").concat(filter.second);
                 //Append the filter to the request in super
                 super.currentApi.appendQueryParameter(ParameterKeys.userFilter.toString(), parameter);
+                return ListDevices.this;
+            }
+
+            public ApiStandard getCollectedData(@NonNull String startDate, @NonNull String endDate,
+                                                @Nullable ComplexDataType.BuiltInDataType dataType, @Nullable String customDataType) {
+                String path = "collectedData";
+                super.currentApi.appendEncodedPath(path).appendQueryParameter(ParameterKeys.startDate.toString(), Uri.encode(startDate))
+                        .appendQueryParameter(ParameterKeys.endDate.toString(), Uri.encode(endDate));
+
+                if (dataType != null && customDataType == null) {
+                    super.currentApi.appendQueryParameter(ParameterKeys.builtInDataType.toString(), dataType.toString());
+                } else if (dataType == null && customDataType != null) {
+                    super.currentApi.appendQueryParameter(ParameterKeys.customDataType.toString(), customDataType);
+                }
                 return ListDevices.this;
             }
         }

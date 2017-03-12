@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
 import com.mdmobile.mobiconsole.Api.ApiModels;
+import com.mdmobile.mobiconsole.DataTypes.ComplexDataType;
 import com.mdmobile.mobiconsole.DataTypes.DeviceAttributes;
 import com.mdmobile.mobiconsole.DataTypes.ParameterKeys;
 
@@ -24,6 +25,8 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+
+    String authority = "https://uk.mobicontrolcloud.com";
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
@@ -48,13 +51,13 @@ public class ExampleInstrumentedTest {
 
 
         String apiReq =
-                ApiModels.DevicesApi.Builder("https://uk.mobicontrolcloud.com").skip(20).take(10).order(order).filter(filter).build();
+                ApiModels.DevicesApi.Builder(authority).skip(20).take(10).order(order).filter(filter).build();
         assertTrue("\nUrl created does not match with the test one: " + apiReq, apiReq.equalsIgnoreCase(testReq));
 
         //test api with user filter
         testReq = "https://uk.mobicontrolcloud.com/MobiControl/api/devices?userFilter=UserName:acalabrese";
         Pair<String, String> userFilter = new Pair<>(ParameterKeys.UserName.toString(), "acalabrese");
-        apiReq = ApiModels.DevicesApi.Builder("https://uk.mobicontrolcloud.com").addUserFilter(userFilter).build();
+        apiReq = ApiModels.DevicesApi.Builder(authority).addUserFilter(userFilter).build();
 
         assertTrue("Url created does not match with the test one: " + apiReq, apiReq.equals(testReq));
     }
@@ -64,9 +67,27 @@ public class ExampleInstrumentedTest {
         String testReq =
                 "https://uk.mobicontrolcloud.com/MobiControl/api/devices/AndroidPlus0001";
 
-        String apiReq = ApiModels.DevicesApi.Builder("https://uk.mobicontrolcloud.com", "AndroidPlus0001").build();
+        String apiReq = ApiModels.DevicesApi.Builder(authority, "AndroidPlus0001").build();
         String msg = "\n" + this.getClass().getSimpleName() + "\nUrl created does not match with the test one: ";
         assertTrue(msg + apiReq, apiReq.equals(testReq));
+    }
+
+    @Test
+    public void getAllCustomData(){
+
+        String testReq = "https://uk.mobicontrolcloud.com/MobiControl/api/devices/" +
+                "collectedData?startDate=2015-12-19T16%3A39%3A57-02%3A00&endDate=2015-12-19T16%3A39%3A57-02%3A00" +
+                "&builtInDataType=SuccessCalls&skip=10&take=50";
+
+
+        String apiReq = ApiModels.DevicesApi.Builder(authority)
+                .getCollectedData("2015-12-19T16:39:57-02:00","2015-12-19T16:39:57-02:00", ComplexDataType.BuiltInDataType.SuccessCalls,null)
+                .skip(10).take(50).build();
+
+        String msg = "\n" + this.getClass().getSimpleName() + "\nUrl created does not match with the test one: ";
+
+        assertTrue(msg + apiReq, apiReq.equals(testReq));
+
     }
 
     @Test
@@ -81,7 +102,7 @@ public class ExampleInstrumentedTest {
         String msg = "\n" + this.getClass().getSimpleName() + "\nUrl created does not match with the test one: ";
 
 
-        String apiReq = ApiModels.DevicesApi.Builder("https://uk.mobicontrolcloud.com", devId)
+        String apiReq = ApiModels.DevicesApi.Builder(authority, devId)
                 .getCollectedData(startDate, endDate, null, null).build();
 
 

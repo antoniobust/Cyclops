@@ -83,22 +83,54 @@ public class ApiModels {
             }
 
             public SelectDevice getInstalledApplications() {
-                String installedApp = "installedApplications";
-                currentApi.appendPath(installedApp);
+                String path = "installedApplications";
+                currentApi.appendPath(path);
                 return SelectDevice.this;
             }
 
             public SelectDevice getInstalledProfiles() {
-                String installedApp = "profiles";
-                currentApi.appendPath(installedApp);
+                String path = "profiles";
+                currentApi.appendPath(path);
+                return SelectDevice.this;
+            }
+
+            public SelectDevice installDeviceProfile(@NonNull String profileID) {
+                String path = "actions";
+                getInstalledProfiles();
+                currentApi.appendPath(profileID).appendPath(path);
                 return SelectDevice.this;
             }
 
             public SelectDevice getSupportContactInfo() {
-                String installedApp = "support";
-                currentApi.appendPath(installedApp);
+                String path = "support";
+                currentApi.appendPath(path);
                 return SelectDevice.this;
             }
+
+            public SelectDevice sendAction() {
+                String path = "actions";
+                currentApi.appendPath(path);
+                return SelectDevice.this;
+            }
+
+            public SelectDevice relocate() {
+                String path = "parentPath";
+                currentApi.appendPath(path);
+                return SelectDevice.this;
+            }
+
+            public SelectDevice setPassCode() {
+                String path = "passCode";
+                currentApi.appendPath(path);
+                return SelectDevice.this;
+            }
+
+            public SelectDevice setCustomAttirbute(@NonNull String customAttributeId) {
+                String path = "customAttributes";
+                currentApi.appendPath(path).appendQueryParameter(ParameterKeys.customAttributeId.toString(), customAttributeId);
+                return SelectDevice.this;
+            }
+
 
             public String build() {
                 return Uri.decode(currentApi.build().toString());

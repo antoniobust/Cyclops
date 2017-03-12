@@ -42,6 +42,7 @@ public class ApiModels {
                 return ListDevices.this;
             }
 
+            //TODO: this api has path parameter to limit the result to a specific folder needs to be implemented
             public ApiStandard getCollectedData(@NonNull String startDate, @NonNull String endDate,
                                                 @Nullable ComplexDataType.BuiltInDataType dataType, @Nullable String customDataType) {
                 String path = "collectedData";
@@ -78,6 +79,24 @@ public class ApiModels {
                     currentApi.appendQueryParameter(ParameterKeys.customDataType.toString(), customDataType);
                 }
 
+                return SelectDevice.this;
+            }
+
+            public SelectDevice getInstalledApplications() {
+                String installedApp = "installedApplications";
+                currentApi.appendPath(installedApp);
+                return SelectDevice.this;
+            }
+
+            public SelectDevice getInstalledProfiles() {
+                String installedApp = "profiles";
+                currentApi.appendPath(installedApp);
+                return SelectDevice.this;
+            }
+
+            public SelectDevice getSupportContactInfo() {
+                String installedApp = "support";
+                currentApi.appendPath(installedApp);
                 return SelectDevice.this;
             }
 

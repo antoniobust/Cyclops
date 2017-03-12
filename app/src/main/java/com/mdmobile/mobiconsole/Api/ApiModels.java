@@ -187,13 +187,9 @@ public class ApiModels {
         private static Uri.Builder currentApi;
 
 
-        private UserSecurityApi(Uri.Builder currentApi) {
-            UserSecurityApi.currentApi = currentApi;
-        }
-
         public static UserSecurityApi Builder(@NonNull String authority) {
-            Uri.parse(authority).buildUpon().appendPath(MobiControl).appendPath(ApiTypes.usersResource);
-            return new UserSecurityApi(currentApi);
+            currentApi = Uri.parse(authority).buildUpon().appendPath(MobiControl).appendPath(ApiTypes.usersResource);
+            return new UserSecurityApi();
         }
 
         public UserSecurityApi getAllUsers(@NonNull Boolean includeHiddenUsers, @Nullable String searchString, @Nullable String[] memberOf) {
@@ -237,6 +233,25 @@ public class ApiModels {
         public String build() {
             return Uri.decode(currentApi.build().toString());
         }
+    }
+
+    public static class ServerApi {
+
+        private static Uri.Builder currentApi;
+
+        public static ServerApi Builder(@NonNull String authority) {
+            currentApi = Uri.parse(authority).buildUpon().appendPath(MobiControl).appendPath(ApiTypes.usersResource);
+            return new ServerApi();
+        }
+
+        public ServerApi getServerInfo() {
+            return ServerApi.this;
+        }
+
+        public String build() {
+            return Uri.decode(currentApi.build().toString());
+        }
+
     }
 
 }

@@ -1,14 +1,14 @@
-package com.mdmobile.mobiconsole;
+package com.mdmobile.pocketconsole;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
-import com.mdmobile.mobiconsole.Api.ApiModels;
-import com.mdmobile.mobiconsole.DataTypes.ComplexDataType;
-import com.mdmobile.mobiconsole.DataTypes.DeviceAttributes;
-import com.mdmobile.mobiconsole.DataTypes.ParameterKeys;
+import com.mdmobile.pocketconsole.Api.ApiModels;
+import com.mdmobile.pocketconsole.DataTypes.ComplexDataType;
+import com.mdmobile.pocketconsole.DataTypes.DeviceAttributes;
+import com.mdmobile.pocketconsole.DataTypes.ParameterKeys;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

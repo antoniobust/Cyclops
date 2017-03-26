@@ -1,4 +1,4 @@
-package com.mdmobile.mobiconsole.DataTypes;
+package com.mdmobile.pocketconsole.DataTypes;
 
 
 public class ComplexDataType {

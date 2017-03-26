@@ -1,4 +1,4 @@
-package com.mdmobile.mobiconsole;
+package com.mdmobile.pocketconsole;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

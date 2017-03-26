@@ -1,12 +1,12 @@
-package com.mdmobile.mobiconsole.Api;
+package com.mdmobile.pocketconsole.Api;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Pair;
 
-import com.mdmobile.mobiconsole.DataTypes.ComplexDataType;
-import com.mdmobile.mobiconsole.DataTypes.ParameterKeys;
+import com.mdmobile.pocketconsole.DataTypes.ComplexDataType;
+import com.mdmobile.pocketconsole.DataTypes.ParameterKeys;
 
 import java.util.Arrays;
 

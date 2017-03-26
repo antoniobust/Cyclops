@@ -1,4 +1,4 @@
-package com.mdmobile.mobiconsole;
+package com.mdmobile.pocketconsole;
 
 import org.junit.Test;
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MobiConsole</string>
+    <string name="app_name">Pocket Console</string>
     <string name="MobiControl">MobiControl</string>
     <string name="api_secret_hint">Api secret</string>
     <string name="client_id_hint">Client ID</string>
@@ -7,5 +7,6 @@
     <string name="password_hint">Password</string>
     <string name="user_name_hint">User name</string>
     <string name="info_text">i</string>
-    <string name="connect_label">Connect</string>
+    <string name="logIn_label">LogIn</string>
+    <string name="test_connection_label">Test connection</string>
 </resources>

@@ -54,8 +54,8 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:text="@string/connect_label"
-        android:enabled="false"/>
+        android:text="@string/logIn_label"
+        android:enabled="true" />
 
     <!--<TextView-->
     <!--android:id="@+id/login_footer"-->

@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.UI;
+package com.mdmobile.pocketconsole.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.mdmobile.pocketconsole.Adapters.LogInViewPagerAdapter;
+import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.R;
 
 public class LoginActivity extends AppCompatActivity {

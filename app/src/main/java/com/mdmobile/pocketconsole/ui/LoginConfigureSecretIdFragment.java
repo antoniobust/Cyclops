@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.UI;
+package com.mdmobile.pocketconsole.ui;
 
 
 import android.os.Bundle;

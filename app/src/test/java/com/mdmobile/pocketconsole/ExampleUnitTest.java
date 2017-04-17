@@ -1,6 +1,5 @@
 package com.mdmobile.pocketconsole;
 
-import com.mdmobile.pocketconsole.UI.LoginConfigureServerFragment;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
 import org.junit.Test;

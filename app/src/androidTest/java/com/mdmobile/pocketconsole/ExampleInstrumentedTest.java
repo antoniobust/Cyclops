@@ -5,10 +5,10 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
-import com.mdmobile.pocketconsole.Api.ApiModels;
-import com.mdmobile.pocketconsole.DataTypes.ComplexDataType;
-import com.mdmobile.pocketconsole.DataTypes.DeviceAttributes;
-import com.mdmobile.pocketconsole.DataTypes.ParameterKeys;
+import com.mdmobile.pocketconsole.api.ApiModels;
+import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
+import com.mdmobile.pocketconsole.dataTypes.DeviceAttributes;
+import com.mdmobile.pocketconsole.dataTypes.ParameterKeys;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

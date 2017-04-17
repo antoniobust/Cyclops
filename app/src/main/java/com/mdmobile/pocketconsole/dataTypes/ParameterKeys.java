@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.DataTypes;
+package com.mdmobile.pocketconsole.dataTypes;
 
 public enum ParameterKeys {
     userFilter, UserName, UserId, startDate, endDate, builtInDataType, customDataType, customAttributeId,

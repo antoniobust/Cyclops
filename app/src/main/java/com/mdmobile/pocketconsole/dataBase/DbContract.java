@@ -4,6 +4,7 @@ package com.mdmobile.pocketconsole.dataBase;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 
 public class DbContract {
 
@@ -81,6 +82,19 @@ public class DbContract {
                 + COLUMN_PATH + " TEXT, "
                 + COLUMN_PLATFORM + " INTEGER"
                 + ");";
+
+        public final Uri builUriWithDeviceID(@NonNull String deviceID) {
+            return CONTENT_URI.buildUpon().appendPath(deviceID).build();
+        }
+
+        public final String getDeviceIdFromUri(@NonNull Uri uri) {
+            //Check if URI provided is device URI
+            if (uri.toString().startsWith(CONTENT_URI.toString())) {
+                return uri.getLastPathSegment();
+            } else {
+                return null;
+            }
+        }
     }
 
 
@@ -132,6 +146,19 @@ public class DbContract {
                 + VALUE + " TEXT, "
                 + DATA_TYPE + " INTEGER"
                 + ");";
+
+        public final Uri buildUriWithName(@NonNull String customAttribute) {
+            return CONTENT_URI.buildUpon().appendPath(customAttribute).build();
+        }
+
+        public final String getNameFromURI(@NonNull Uri uri) {
+            //Check if URI provided is custom attr URI
+            if (uri.toString().startsWith(CONTENT_URI.toString())) {
+                return uri.getLastPathSegment();
+            } else {
+                return null;
+            }
+        }
     }
 
 
@@ -176,6 +203,19 @@ public class DbContract {
                 + KIND + " INTEGER, "
                 + TIME + " TEXT"
                 + ");";
+
+        public final Uri buildUriWithName(@NonNull String customDataName) {
+            return CONTENT_URI.buildUpon().appendPath(customDataName).build();
+        }
+
+        public final String getNameFromURI(@NonNull Uri uri) {
+            //Check if URI provided is custom attr URI
+            if (uri.toString().startsWith(CONTENT_URI.toString())) {
+                return uri.getLastPathSegment();
+            } else {
+                return null;
+            }
+        }
     }
 
 

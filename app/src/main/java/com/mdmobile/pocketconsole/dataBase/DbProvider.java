@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -121,22 +120,17 @@ public class DbProvider extends ContentProvider {
         }
     }
 
-
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s,
-                        @Nullable String[] strings1, @Nullable String s1) {
+    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
+
         return null;
     }
 
-
-    @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection,
-                        @Nullable String[] selectionArgs, @Nullable String sortOrder, @Nullable CancellationSignal cancellationSignal) {
-        return super.query(uri, projection, selection, selectionArgs, sortOrder, cancellationSignal);
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
+        return super.bulkInsert(uri, values);
     }
-
 
     @Nullable
     @Override
@@ -144,21 +138,13 @@ public class DbProvider extends ContentProvider {
         return null;
     }
 
-
     @Override
-    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-        return super.bulkInsert(uri, values);
-    }
-
-
-    @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         return 0;
     }
 
-
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         return 0;
     }
 }

@@ -2,7 +2,9 @@
   <dictionary name="Antonio">
     <words>
       <w>devicegroups</w>
+      <w>mdmobile</w>
       <w>mobi</w>
+      <w>pocketconsole</w>
     </words>
   </dictionary>
 </component>

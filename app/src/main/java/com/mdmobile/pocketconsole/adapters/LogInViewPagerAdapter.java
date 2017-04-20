@@ -9,7 +9,7 @@ import com.mdmobile.pocketconsole.ui.LoginUserNamePasswordFragment;
 
 /**
  * This adapter inflates fragments in the login activity viewPager
- * in order to guide the user to a step by step configuring procedure
+ * in order to guide the user to a step by step configuration procedure
  */
 
 public class LogInViewPagerAdapter extends FragmentPagerAdapter {

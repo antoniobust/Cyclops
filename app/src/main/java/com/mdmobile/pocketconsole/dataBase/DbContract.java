@@ -63,25 +63,6 @@ public class DbContract {
         public final static String COLUMN_PATH = "Path";
         public final static String COLUMN_PLATFORM = "Platform";
 
-        final static String CREATE_TABLE_QUERY = " CREATE TABLE " + DEVICE_TABLE_NAME
-                + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
-                + COLUMN_DEVICE_ID + " TEXT UNIQUE NOT NULL, "
-                + COLUMN_KIND + " INTEGER, "
-                + COLUMN_DEVICE_NAME + " TEXT, "
-                + COLUMN_AGENT_ONLINE + " INTEGER, "
-                + COLUMN_FAMILY + " INTEGER, "
-                + COLUMN_HOST_NAME + " TEXT, "
-                + COLUMN_ENROLLMENT_TIME + " TEXT, "
-                + COLUMN_COMPLIANCE_STATUS + " INTEGER, "
-                + COLUMN_VIRTUAL + " INTEGER, "
-                + COLUMN_MAC_ADDRESS + " TEXT, "
-                + COLUMN_MANUFACTURER + " TEXT, "
-                + COLUMN_MODE + " INTEGER, "
-                + COLUMN_MODEL + " TEXT, "
-                + COLUMN_OS_VERSION + " TEXT, "
-                + COLUMN_PATH + " TEXT, "
-                + COLUMN_PLATFORM + " INTEGER"
-                + ");";
 
         public final Uri builUriWithDeviceID(@NonNull String deviceID) {
             return CONTENT_URI.buildUpon().appendPath(deviceID).build();
@@ -114,13 +95,6 @@ public class DbContract {
         public final static String COMPLIANCE_TYPE = "ComplianceType";
         public final static String COMPLIANCE_VALUE = "ComplianceValue";
 
-        final static String CREATE_TABLE_QUERY = " CREATE TABLE " + COMPLIANCE_ITEM_TABLE_NAME
-                + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
-                + DEV_ID + " INT NOT NULL, "
-                + COMPLIANCE_TYPE + " INTEGER, "
-                + COMPLIANCE_VALUE + " TEXT, "
-                + "FOREIGN KEY(" + DEV_ID + ") REFERENCES " + DEVICE_TABLE_NAME + " (" + Device._ID + ")"
-                + ");";
     }
 
 
@@ -139,13 +113,6 @@ public class DbContract {
         public final static String NAME = "Name";
         public final static String VALUE = "Value";
         public final static String DATA_TYPE = "DataType";
-
-        final static String CREATE_TABLE_QUERY = " CREATE TABLE " + CUSTOM_ATTRIBUTE_TABLE_NAME
-                + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
-                + NAME + " TEXT, "
-                + VALUE + " TEXT, "
-                + DATA_TYPE + " INTEGER"
-                + ");";
 
         public final Uri buildUriWithName(@NonNull String customAttribute) {
             return CONTENT_URI.buildUpon().appendPath(customAttribute).build();
@@ -168,18 +135,10 @@ public class DbContract {
         public static final Uri CONTENT_URI = DB_URI.buildUpon()
                 .appendPath(CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME).build();
 
-
         //Columns
         public static final String DEVICE_ID = "DeviceID";
         public static final String CUSTOM_ATTRIBUTE_ID = "CustomAttributeID";
 
-        final static String CREATE_TABLE_QUERY = " CREATE TABLE " + CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME
-                + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
-                + DEVICE_ID + " INTEGER, "
-                + CUSTOM_ATTRIBUTE_ID + " INTEGER, "
-                + "FOREIGN KEY(" + DEVICE_ID + ") REFERENCES " + DEVICE_TABLE_NAME + " (" + Device._ID + "),"
-                + "FOREIGN KEY(" + CUSTOM_ATTRIBUTE_ID + ") REFERENCES " + CUSTOM_ATTRIBUTE_TABLE_NAME + " (" + CustomAttribute._ID + ")"
-                + ");";
     }
 
 
@@ -198,11 +157,6 @@ public class DbContract {
         public static final String KIND = "Kind";
         public static final String TIME = "Time";
 
-        final static String CREATE_TABLE_QUERY = " CREATE TABLE " + CUSTOM_DATA_TABLE_NAME
-                + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
-                + KIND + " INTEGER, "
-                + TIME + " TEXT"
-                + ");";
 
         public final Uri buildUriWithName(@NonNull String customDataName) {
             return CONTENT_URI.buildUpon().appendPath(customDataName).build();
@@ -228,13 +182,6 @@ public class DbContract {
         public static final String DEVICE_ID = "DeviceID";
         public static final String CUSTOM_DATA_ID = "CustomDataID";
 
-        final static String CREATE_TABLE_QUERY = " CREATE TABLE " + CUSTOM_DATA_DEVICE_TABLE_NAME
-                + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
-                + DEVICE_ID + " INTEGER, "
-                + CUSTOM_DATA_ID + " INTEGER, "
-                + "FOREIGN KEY(" + DEVICE_ID + ") REFERENCES " + DEVICE_TABLE_NAME + " (" + Device._ID + "),"
-                + "FOREIGN KEY(" + CUSTOM_DATA_ID + ") REFERENCES " + CUSTOM_DATA_TABLE_NAME + " (" + CustomData._ID + ")"
-                + ");";
     }
 
 
@@ -316,7 +263,6 @@ public class DbContract {
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + MANAGEMENT_SERVER_TABLE_NAME;
 
-
         //Columns
         public final static String PRIMARY_MANAGEMENT_ADDRESS = "PrimaryManagementAddress";
         public final static String SECONDARY_MANAGEMENT_ADDRESS = "SecondaryManagementAddress";
@@ -329,19 +275,6 @@ public class DbContract {
         public final static String NAME = "Name";
         public final static String STATUS = "Status";
 
-        final static String CREATE_TABLE_QUERY = " CREATE TABLE " + MANAGEMENT_SERVER_TABLE_NAME
-                + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
-                + PRIMARY_MANAGEMENT_ADDRESS + " TEXT, "
-                + SECONDARY_MANAGEMENT_ADDRESS + " TEXT, "
-                + FULLY_QUALIFIED_NAME + " TEXT, "
-                + PORT_NUMBER + " INTEGER, "
-                + DESCRIPTION + " TEXT, "
-                + STATUS_TIME + " TEXT, "
-                + MAC_ADRESS + " TEXT, "
-                + TOTAL_USER_COUNT + " INTEGER, "
-                + NAME + " TEXT, "
-                + STATUS + " TEXT "
-                + ");";
     }
 
 
@@ -375,25 +308,5 @@ public class DbContract {
         public final static String MANAGERS_CONNECTED = "ManagersConnectedCount";
         public final static String QUEUE_LENGTH = "QueueLength";
 
-        final static String CREATE_TABLE_QUERY = " CREATE TABLE " + MANAGEMENT_SERVER_TABLE_NAME
-                + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
-                + NAME + " TEXT, "
-                + STATUS + " TEXT, "
-                + CONNECTED + " TEXT, "
-                + PRIMARY_AGENT_ADDRESS + " INTEGER, "
-                + SECONDARY_AGENT_ADDRESS + " TEXT, "
-                + DEVICE_MANAGEMENT_ADDRESS + " TEXT, "
-                + PULSE_TIMEOUT + " TEXT, "
-                + RULE_RELOAD + " INTEGER, "
-                + SCHEDULE_INTERVAL + " TEXT, "
-                + MIN_THREADS + " TEXT "
-                + MAX_THREADS + " INTEGER, "
-                + MAX_BURST_THREADS + " TEXT, "
-                + CURRENT_THREAD_COUNT + " TEXT, "
-                + PULSE_WAIT_INTERVAL + " TEXT, "
-                + DEVICES_CONNECTED + " INTEGER, "
-                + MANAGERS_CONNECTED + " TEXT, "
-                + QUEUE_LENGTH + " TEXT "
-                + ");";
     }
 }

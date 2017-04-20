@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme">
 
 
-
         <activity android:name=".ui.LoginActivity">
 
             <intent-filter>
@@ -22,6 +21,11 @@
             </intent-filter>
 
         </activity>
+
+        <!--Data provider-->
+        <provider
+            android:name=".dataBase.DbProvider"
+            android:authorities="com.mdmobile.pocketconsole" />
     </application>
 
 </manifest>

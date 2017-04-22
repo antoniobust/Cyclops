@@ -4,6 +4,7 @@
     
     <!--Permissions-->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -26,6 +27,16 @@
         <provider
             android:name=".dataBase.DbProvider"
             android:authorities="com.mdmobile.pocketconsole" />
+
+        <!--Account authenticator service-->
+        <service android:name=".services.AuthenticationService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+
+            </service>
     </application>
 
 </manifest>

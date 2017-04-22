@@ -59,7 +59,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:enabled="true"
-            android:onClick="registerApiClient"
+            android:onClick="registerAccount"
             android:text="@string/logIn_label" />
 
         <!--<TextView-->

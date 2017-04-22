@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
@@ -15,11 +14,17 @@ import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //Authenticator intent keys
+    public final static String ACCOUNT_TYPE_KEY = "AccountTypeIntentKey";
+    public final static String AUTH_TOKEN_TYPE_KEY = "AuthTokenTypeIntentKey";
+    public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
+
+
+
     private final String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey", API_SECRET_KEY = "apiSecretKey",
             USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     ViewPager viewPager;
     TabLayout dotsIndicator;
-    EditText serverAddressEditText, clientIdEditText, apiSecretEditText, userNameEditText, passwordEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,60 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         setViewPager();
     }
 
-
-    //LogIn Button OnClick function
-    public void registerApiClient(View v) {
-
-        Bundle serverConfiguration = new Bundle();
-
-        //Get all fragments in the viewPager
-        ViewGroup[] displayedFrags = new ViewGroup[viewPager.getChildCount()];
-        String tempString, tempString1;
-
-        for (int i = 0; i < viewPager.getChildCount(); i++) {
-
-            tempString = null;
-            tempString1 = null;
-
-            switch (i) {
-                case 0:
-
-                    tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.server_address_text_view)).getText().toString();
-
-                    if (tempString.equals("")) {
-                        showInvalidInputSneakBar();
-                        break;
-                    } else {
-                        serverConfiguration
-                                .putString(SERVER_ADDRESS_KEY, tempString);
-                        continue;
-                    }
-                case 1:
-                    tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.client_id_text_view)).getText().toString();
-                    tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.api_secret_text_view)).getText().toString();
-                    if (tempString.equals("") || tempString1.equals("")) {
-                        showInvalidInputSneakBar();
-                        break;
-                    } else {
-                        serverConfiguration.putString(CLIENT_ID_KEY, tempString);
-                        serverConfiguration.putString(API_SECRET_KEY, tempString);
-                        continue;
-                    }
-                case 2:
-                    tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.user_name_text_view)).getText().toString();
-                    tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.password_text_view)).getText().toString();
-                    if (tempString.equals("") || tempString1.equals("")) {
-                        showInvalidInputSneakBar();
-                        break;
-                    } else {
-                        serverConfiguration.putString(USER_NAME_KEY, tempString);
-                        serverConfiguration.putString(PASSWORD_KEY, tempString);
-                    }
-            }
-        }
-
-    }
-
+    //Set up the view pager
     private void setViewPager() {
         //Set adapter to viewPager
         viewPager.setAdapter(new LogInViewPagerAdapter(getSupportFragmentManager()));
@@ -113,9 +65,74 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void showInvalidInputSneakBar() {
-        Snackbar.make(viewPager, "Invalid input", Snackbar.LENGTH_SHORT).show();
+
+    //LogIn Button OnClick function
+    public void registerAccount(View v) {
+
+        //Get user input
+        Bundle userInfo = getUserInput();
+
     }
 
+
+
+
+    private Bundle getUserInput() {
+        Bundle infoBundle = new Bundle();
+
+        //temp strings to store user input
+        String tempString, tempString1;
+
+        for (int i = 0; i < viewPager.getChildCount(); i++) {
+
+            //resetting temp strings from previous cycle
+            tempString = "";
+            tempString1 = "";
+
+            //According the current position get the relative data
+            switch (i) {
+                case 0:
+                    tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.server_address_text_view)).getText().toString();
+
+                    if (tempString.equals("")) {
+                        showInvalidInputSneakBar();
+                        break;
+                    } else {
+                        infoBundle
+                                .putString(SERVER_ADDRESS_KEY, tempString);
+                        continue;
+                    }
+                case 1:
+                    tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.client_id_text_view)).getText().toString();
+                    tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.api_secret_text_view)).getText().toString();
+                    if (tempString.equals("") || tempString1.equals("")) {
+                        showInvalidInputSneakBar();
+                        break;
+                    } else {
+                        infoBundle.putString(CLIENT_ID_KEY, tempString);
+                        infoBundle.putString(API_SECRET_KEY, tempString);
+                        continue;
+                    }
+                case 2:
+                    tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.user_name_text_view)).getText().toString();
+                    tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.password_text_view)).getText().toString();
+                    if (tempString.equals("") || tempString1.equals("")) {
+                        showInvalidInputSneakBar();
+                        break;
+                    } else {
+                        infoBundle.putString(USER_NAME_KEY, tempString);
+                        infoBundle.putString(PASSWORD_KEY, tempString);
+                    }
+            }
+        }
+
+        //If we are out the cycle means that no field is empty return the info bundle
+        return infoBundle;
+    }
+
+    //Showed if any input field is empty
+    private void showInvalidInputSneakBar() {
+        Snackbar.make(viewPager, "Please check your data", Snackbar.LENGTH_SHORT).show();
+    }
 }
 

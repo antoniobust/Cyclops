@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
-import com.mdmobile.pocketconsole.api.ApiModels;
+import com.mdmobile.pocketconsole.apiHandler.api.api1.ApiModels;
 import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
 import com.mdmobile.pocketconsole.dataTypes.DeviceAttributes;
 import com.mdmobile.pocketconsole.dataTypes.ParameterKeys;

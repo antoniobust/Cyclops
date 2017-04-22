@@ -50,7 +50,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         AccountManager accountManager = AccountManager.get(mContext);
         String authToken = accountManager.peekAuthToken(account, authTokenType);
 
-        //If auth token is null then try to log in the user with the stired credential
+        //If auth token is null then try to log in the user with the stored credentials
         if (authToken.equals("")) {
             final String password = accountManager.getPassword(account);
             if (password != null) {

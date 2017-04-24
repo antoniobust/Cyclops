@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.apiHandler.api.api1;
+package com.mdmobile.pocketconsole.apiHandler.api;
 
 
 import android.net.Uri;

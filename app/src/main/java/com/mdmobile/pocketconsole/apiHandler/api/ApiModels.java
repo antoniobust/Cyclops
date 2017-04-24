@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.apiHandler.api.api1;
+package com.mdmobile.pocketconsole.apiHandler.api;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -46,7 +46,7 @@ public class ApiModels {
 
             //TODO: this api has path parameter to limit the result to a specific folder needs to be implemented
             public ApiStandard getCollectedData(@NonNull String startDate, @NonNull String endDate,
-                                                @Nullable ComplexDataType.BuiltInDataType dataType, @Nullable String customDataType) {
+                                                                                          @Nullable ComplexDataType.BuiltInDataType dataType, @Nullable String customDataType) {
                 String path = "collectedData";
                 super.currentApi.appendEncodedPath(path).appendQueryParameter(ParameterKeys.startDate.toString(), Uri.encode(startDate))
                         .appendQueryParameter(ParameterKeys.endDate.toString(), Uri.encode(endDate));

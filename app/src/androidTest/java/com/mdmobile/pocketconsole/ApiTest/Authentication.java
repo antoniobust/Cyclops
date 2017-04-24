@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.android.volley.VolleyLog;
 import com.mdmobile.pocketconsole.ApiTest.TestClass.FakeApiManager;
+import com.mdmobile.pocketconsole.R;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +21,9 @@ public class Authentication {
     @Test
     public void getAuthenticationToken() {
         FakeApiManager manager = new FakeApiManager(InstrumentationRegistry.getTargetContext());
-        //TODO: type user name password instead ****
-        String tokenResponse = manager.getApiToken("****", "*****");
+        String userName = InstrumentationRegistry.getTargetContext().getString(R.string.mc_user_name);
+        String password = InstrumentationRegistry.getTargetContext().getString(R.string.mc_password);
+        String tokenResponse = manager.getApiToken(userName, password);
 
         assertTrue("Error receiving token" ,!tokenResponse.equals("Error receiving token"));
     }

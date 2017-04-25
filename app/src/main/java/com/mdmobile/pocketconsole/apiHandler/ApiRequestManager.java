@@ -2,6 +2,7 @@ package com.mdmobile.pocketconsole.apiHandler;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -10,6 +11,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.mdmobile.pocketconsole.BuildConfig;
+import com.mdmobile.pocketconsole.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,31 +22,42 @@ import java.util.Map;
  * Provides methods to manage users, queue/launch api requests etc.
  * It is a Singleton class so requests can be queue under the same queue throughout the app lifecycle
  */
-public class ApiManager {
+public class ApiRequestManager {
 
-    private static ApiManager server;
+    private final static String LOG_TAG = ApiRequestManager.class.getSimpleName();
+    private static ApiRequestManager server;
     private RequestQueue requestsQueue;
+    private Context mContex;
 
-    private ApiManager(Context context) {
+    private ApiRequestManager(Context context) {
         //New Api server instance created, instantiate a volley request queue
         //Getting the app context from the context provided will avoid memory leaks
         requestsQueue = Volley.newRequestQueue(context.getApplicationContext());
+        mContex = context;
     }
 
-    public static synchronized ApiManager getInstance(Context context) {
+    public static synchronized ApiRequestManager getInstance(Context context) {
         if (server == null) {
-            server = new ApiManager(context);
+            server = new ApiRequestManager(context);
             return server;
         } else {
             return server;
         }
     }
 
-    public void getApiToken(final String userName, final String password) {
+    public void getApiToken(String tokenUrl, String clientID, String clientSecret,
+                            String userName, String password) {
 
-        String tokenUrl = "https://uk.mobicontrolcloud.com/api/token";
-        String clientID = "189e788896d44300bc4eda2f0c6d6298";
-        String clientSecret = "DfELQy11kDNBGrU1pG9TQ2lVpfzMVec7";
+        //if debug discard input and use debugging info
+        if (BuildConfig.DEBUG) {
+            tokenUrl = "https://uk.mobicontrolcloud.com/MobiControl/api/token";
+            clientID = "e0edb1295a8e4754a3180bb9595b7f6a";
+            clientSecret = "MD7oqtUp3HPsJSXF36e2YhVKG9KTWnDe";
+            userName = mContex.getString(R.string.mc_user_name);
+            password = mContex.getString(R.string.mc_password);
+
+        }
+        final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
         final String header = clientID.concat(":").concat(clientSecret);
 
 
@@ -51,12 +65,16 @@ public class ApiManager {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        Log.i(LOG_TAG, "Token request received successfully");
+                        if (BuildConfig.DEBUG) {
+                            Log.v(LOG_TAG, "Token Response:" + response.replace(",","\n"));
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e(LOG_TAG, "Error receiving token");
+                error.printStackTrace();
             }
         }) {
             @Override
@@ -67,8 +85,9 @@ public class ApiManager {
             }
 
             @Override
-            public byte[] getBody() throws AuthFailureError {
-                return ("grant_type=password&username="+userName+"&password="+password).getBytes();            }
+            public byte[] getBody() {
+                return grantType.getBytes();
+            }
         };
 
         requestsQueue.add(tokenRequest);

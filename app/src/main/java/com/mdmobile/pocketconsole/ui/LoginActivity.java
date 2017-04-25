@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
+import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -71,6 +72,14 @@ public class LoginActivity extends AppCompatActivity {
 
         //Get user input
         Bundle userInfo = getUserInput();
+
+        //Request token through ApiRequestManager
+        ApiRequestManager.getInstance(getApplicationContext()).getApiToken(
+                userInfo.getString(SERVER_ADDRESS_KEY),
+                userInfo.getString(CLIENT_ID_KEY),
+                userInfo.getString(API_SECRET_KEY),
+                userInfo.getString(USER_NAME_KEY),
+                userInfo.getString(PASSWORD_KEY));
 
     }
 

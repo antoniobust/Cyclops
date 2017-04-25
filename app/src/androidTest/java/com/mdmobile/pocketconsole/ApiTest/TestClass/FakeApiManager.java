@@ -26,7 +26,7 @@ import java.util.concurrent.TimeoutException;
 import static android.R.attr.y;
 
 /**
- * Copy of ApiManager, it has same methods but is not a singleton class.
+ * Copy of ApiRequestManager, it has same methods but is not a singleton class.
  * Created for test purposes only
  * It uses blocking calls instead of async logic
  */
@@ -64,18 +64,9 @@ public class FakeApiManager {
 
             @Override
             public byte[] getBody() {
-
                 return ("grant_type=password&username="+userName+"&password="+password).getBytes();
             }
         };
-
-        Log.v("TEST", "\n\nbodyContentType = " +tokenReq.getBodyContentType());
-        try {
-            Log.v("TEST", "\nheaders = " + tokenReq.getHeaders().toString());
-        }catch (AuthFailureError error){
-            error.printStackTrace();
-        }
-
 
         queue.add(tokenReq);
 

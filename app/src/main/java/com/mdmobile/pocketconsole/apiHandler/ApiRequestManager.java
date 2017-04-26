@@ -12,7 +12,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.mdmobile.pocketconsole.BuildConfig;
+import com.mdmobile.pocketconsole.NetworkCallBack;
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.ui.LoginActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,13 +29,13 @@ public class ApiRequestManager {
     private final static String LOG_TAG = ApiRequestManager.class.getSimpleName();
     private static ApiRequestManager server;
     private RequestQueue requestsQueue;
-    private Context mContex;
+    private Context mContext;
 
     private ApiRequestManager(Context context) {
         //New Api server instance created, instantiate a volley request queue
         //Getting the app context from the context provided will avoid memory leaks
         requestsQueue = Volley.newRequestQueue(context.getApplicationContext());
-        mContex = context;
+        mContext = context;
     }
 
     public static synchronized ApiRequestManager getInstance(Context context) {
@@ -46,15 +48,16 @@ public class ApiRequestManager {
     }
 
     public void getApiToken(String tokenUrl, String clientID, String clientSecret,
-                            String userName, String password) {
+                            String userName, String password, final NetworkCallBack callBack) {
+
 
         //if debug discard input and use debugging info
         if (BuildConfig.DEBUG) {
             tokenUrl = "https://uk.mobicontrolcloud.com/MobiControl/api/token";
             clientID = "e0edb1295a8e4754a3180bb9595b7f6a";
             clientSecret = "MD7oqtUp3HPsJSXF36e2YhVKG9KTWnDe";
-            userName = mContex.getString(R.string.mc_user_name);
-            password = mContex.getString(R.string.mc_password);
+            userName = mContext.getString(R.string.mc_user_name);
+            password = mContext.getString(R.string.mc_password);
 
         }
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
@@ -69,10 +72,14 @@ public class ApiRequestManager {
                         if (BuildConfig.DEBUG) {
                             Log.v(LOG_TAG, "Token Response:" + response.replace(",","\n"));
                         }
+                        //Return data to LogIn activity
+                        callBack.tokenReceived(response);
+
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                callBack.tokenReceived(error.toString());
                 Log.e(LOG_TAG, "Error receiving token");
                 error.printStackTrace();
             }
@@ -93,4 +100,6 @@ public class ApiRequestManager {
         requestsQueue.add(tokenRequest);
 
     }
+
+
 }

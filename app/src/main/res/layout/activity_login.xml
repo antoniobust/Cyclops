@@ -59,7 +59,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:enabled="true"
-            android:onClick="registerAccount"
+            android:onClick="logIn"
             android:text="@string/logIn_label" />
 
         <!--<TextView-->

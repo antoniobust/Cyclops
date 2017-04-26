@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mdmobile.pocketconsole.NetworkCallBack;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements NetworkCallBack{
 
     //Authenticator intent keys
     public final static String ACCOUNT_TYPE_KEY = "AccountTypeIntentKey";
@@ -68,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     //LogIn Button OnClick function
-    public void registerAccount(View v) {
+    public void logIn(View v) {
 
         //Get user input
         Bundle userInfo = getUserInput();
@@ -79,7 +80,8 @@ public class LoginActivity extends AppCompatActivity {
                 userInfo.getString(CLIENT_ID_KEY),
                 userInfo.getString(API_SECRET_KEY),
                 userInfo.getString(USER_NAME_KEY),
-                userInfo.getString(PASSWORD_KEY));
+                userInfo.getString(PASSWORD_KEY),
+                this);
 
     }
 
@@ -142,6 +144,18 @@ public class LoginActivity extends AppCompatActivity {
     //Showed if any input field is empty
     private void showInvalidInputSneakBar() {
         Snackbar.make(viewPager, "Please check your data", Snackbar.LENGTH_SHORT).show();
+    }
+
+    //Interface network callback
+    @Override
+    public void tokenReceived(String response){
+        Snackbar.make(viewPager, "token received", Snackbar.LENGTH_SHORT).show();
+
+    }
+    @Override
+    public void errorReceivingToken(String error){
+        Snackbar.make(viewPager, "error receiving token", Snackbar.LENGTH_SHORT).show();
+
     }
 }
 

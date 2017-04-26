@@ -5,15 +5,18 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.NetworkCallBack;
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.ui.LoginActivity;
 
 import java.util.HashMap;
@@ -72,14 +75,17 @@ public class ApiRequestManager {
                         if (BuildConfig.DEBUG) {
                             Log.v(LOG_TAG, "Token Response:" + response.replace(",","\n"));
                         }
+
+                        //Parse network response to get token details
+                        Token token = new Gson().fromJson(response,Token.class);
                         //Return data to LogIn activity
-                        callBack.tokenReceived(response);
+                        callBack.tokenReceived(token);
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callBack.tokenReceived(error.toString());
+                callBack.errorReceivingToken(error.toString());
                 Log.e(LOG_TAG, "Error receiving token");
                 error.printStackTrace();
             }
@@ -100,6 +106,4 @@ public class ApiRequestManager {
         requestsQueue.add(tokenRequest);
 
     }
-
-
 }

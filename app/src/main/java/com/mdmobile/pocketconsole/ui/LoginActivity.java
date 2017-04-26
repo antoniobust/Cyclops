@@ -1,18 +1,24 @@
 package com.mdmobile.pocketconsole.ui;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.NetworkCallBack;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
+import com.mdmobile.pocketconsole.gson.Token;
 
 public class LoginActivity extends AppCompatActivity implements NetworkCallBack {
 
@@ -20,18 +26,39 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack 
     public final static String ACCOUNT_TYPE_KEY = "AccountTypeIntentKey";
     public final static String AUTH_TOKEN_TYPE_KEY = "AuthTokenTypeIntentKey";
     public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
-
-
+    public final String LOG_TAG = LoginActivity.class.getSimpleName();
+    public final String USER_TOKEN_KEY = "tokenKey", TOKEN_TYPE_KEY = "tokenTypeKey", TOKEN_EXPIRATION = "tokenExpirationKey";
     private final String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey", API_SECRET_KEY = "apiSecretKey",
             USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     ViewPager viewPager;
     TabLayout dotsIndicator;
+    Bundle userInputBundle;
 
     //Interface network callback
     @Override
-    public void tokenReceived(String response) {
+    public void tokenReceived(Token response) {
         //TODO: register new user with info,launch mainActivity
-        Snackbar.make(viewPager, "token received", Snackbar.LENGTH_SHORT).show();
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(getApplicationContext(), "token received", Toast.LENGTH_SHORT).show();
+        }
+
+        //Save new user in Account, if we are here is because there is no account saved so
+        //we will add it explicitly
+        Bundle userInfo = new Bundle();
+        userInfo.putString(USER_TOKEN_KEY, response.getAccess_token());
+        userInfo.putString(TOKEN_TYPE_KEY, response.getToken_type());
+        userInfo.putInt(TOKEN_EXPIRATION, response.getExpires_in());
+        Account account = new Account(userInputBundle.getString(USER_NAME_KEY), getString(R.string.account_type));
+        AccountManager ac = AccountManager.get(getApplicationContext());
+        if (ac.addAccountExplicitly(
+                account, userInputBundle.getString(PASSWORD_KEY), userInfo)) {
+            Log.i(LOG_TAG, "Account created successfully: " + account.name + " type: " + account.type);
+            //TODO:If we are using android M or above notify account authenticate
+
+        } else {
+            Log.e(LOG_TAG, "Error creating Account: " + account.name + " type: " + account.type);
+        }
+
     }
 
     @Override
@@ -100,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack 
 
 
     private Bundle getUserInput() {
-        Bundle infoBundle = new Bundle();
+        userInputBundle = new Bundle();
 
         //temp strings to store user input
         String tempString, tempString1;
@@ -120,7 +147,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack 
                         showInvalidInputSneakBar();
                         break;
                     } else {
-                        infoBundle
+                        userInputBundle
                                 .putString(SERVER_ADDRESS_KEY, tempString);
                         continue;
                     }
@@ -131,8 +158,8 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack 
                         showInvalidInputSneakBar();
                         break;
                     } else {
-                        infoBundle.putString(CLIENT_ID_KEY, tempString);
-                        infoBundle.putString(API_SECRET_KEY, tempString);
+                        userInputBundle.putString(CLIENT_ID_KEY, tempString);
+                        userInputBundle.putString(API_SECRET_KEY, tempString);
                         continue;
                     }
                 case 2:
@@ -142,14 +169,14 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack 
                         showInvalidInputSneakBar();
                         break;
                     } else {
-                        infoBundle.putString(USER_NAME_KEY, tempString);
-                        infoBundle.putString(PASSWORD_KEY, tempString);
+                        userInputBundle.putString(USER_NAME_KEY, tempString);
+                        userInputBundle.putString(PASSWORD_KEY, tempString);
                     }
             }
         }
 
         //If we are out the cycle means that no field is empty return the info bundle
-        return infoBundle;
+        return userInputBundle;
     }
 
     //Showed if any input field is empty

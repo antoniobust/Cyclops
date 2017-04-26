@@ -14,7 +14,7 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 
-public class LoginActivity extends AppCompatActivity implements NetworkCallBack{
+public class LoginActivity extends AppCompatActivity implements NetworkCallBack {
 
     //Authenticator intent keys
     public final static String ACCOUNT_TYPE_KEY = "AccountTypeIntentKey";
@@ -22,11 +22,23 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack{
     public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
 
 
-
     private final String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey", API_SECRET_KEY = "apiSecretKey",
             USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     ViewPager viewPager;
     TabLayout dotsIndicator;
+
+    //Interface network callback
+    @Override
+    public void tokenReceived(String response) {
+        //TODO: register new user with info,launch mainActivity
+        Snackbar.make(viewPager, "token received", Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void errorReceivingToken(String error) {
+        //TODO: based on the error message prompt the related error message to user
+        Snackbar.make(viewPager, "error receiving token", Snackbar.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack{
         //Configure viewPager
         setViewPager();
     }
+
 
     //Set up the view pager
     private void setViewPager() {
@@ -84,8 +97,6 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack{
                 this);
 
     }
-
-
 
 
     private Bundle getUserInput() {
@@ -144,18 +155,6 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack{
     //Showed if any input field is empty
     private void showInvalidInputSneakBar() {
         Snackbar.make(viewPager, "Please check your data", Snackbar.LENGTH_SHORT).show();
-    }
-
-    //Interface network callback
-    @Override
-    public void tokenReceived(String response){
-        Snackbar.make(viewPager, "token received", Snackbar.LENGTH_SHORT).show();
-
-    }
-    @Override
-    public void errorReceivingToken(String error){
-        Snackbar.make(viewPager, "error receiving token", Snackbar.LENGTH_SHORT).show();
-
     }
 }
 

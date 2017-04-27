@@ -27,17 +27,17 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack 
     public final static String AUTH_TOKEN_TYPE_KEY = "AuthTokenTypeIntentKey";
     public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
-    public final String USER_TOKEN_KEY = "tokenKey", TOKEN_TYPE_KEY = "tokenTypeKey", TOKEN_EXPIRATION = "tokenExpirationKey";
     private final String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey", API_SECRET_KEY = "apiSecretKey",
             USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     ViewPager viewPager;
     TabLayout dotsIndicator;
     Bundle userInputBundle;
 
-    //Interface network callback
+    //Token received network callback
     @Override
     public void tokenReceived(Token response) {
-        //TODO: register new user with info,launch mainActivity
+        String userName;
+        //TODO:launch mainActivity
         if (BuildConfig.DEBUG) {
             Toast.makeText(getApplicationContext(), "token received", Toast.LENGTH_SHORT).show();
         }
@@ -45,26 +45,43 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack 
         //Save new user in Account, if we are here is because there is no account saved so
         //we will add it explicitly
         Bundle userInfo = new Bundle();
-        userInfo.putString(USER_TOKEN_KEY, response.getAccess_token());
-        userInfo.putString(TOKEN_TYPE_KEY, response.getToken_type());
-        userInfo.putInt(TOKEN_EXPIRATION, response.getExpires_in());
-        Account account = new Account(userInputBundle.getString(USER_NAME_KEY), getString(R.string.account_type));
+        //if debug discard input and use debugging info
+        if (BuildConfig.DEBUG) {
+            userInfo.putString(CLIENT_ID_KEY, getString(R.string.mc_clientID));
+            userInfo.putString(API_SECRET_KEY, getString(R.string.mc_client_secret));
+            userInfo.putString(SERVER_ADDRESS_KEY, getString(R.string.mc_server_url));
+            userName = getString(R.string.mc_user_name);
+        } else {
+            userInfo.putString(CLIENT_ID_KEY, userInfo.getString(CLIENT_ID_KEY));
+            userInfo.putString(API_SECRET_KEY, userInfo.getString(API_SECRET_KEY));
+            userInfo.putString(SERVER_ADDRESS_KEY, userInfo.getString(SERVER_ADDRESS_KEY));
+            userName = userInfo.getString(USER_NAME_KEY);
+        }
+
+        Account account = new Account(userName, getString(R.string.account_type));
         AccountManager ac = AccountManager.get(getApplicationContext());
+
+        //Register account
         if (ac.addAccountExplicitly(
                 account, userInputBundle.getString(PASSWORD_KEY), userInfo)) {
-            Log.i(LOG_TAG, "Account created successfully: " + account.name + " type: " + account.type);
             //TODO:If we are using android M or above notify account authenticate
 
+            Log.i(LOG_TAG, "Account created successfully: " + account.name + " type: " + account.type);
+            //Add token to this account
+            ac.setAuthToken(account, response.getToken_type(), response.getAccess_token());
+
         } else {
+            //TODO: error saving account check if there is any account with same name
             Log.e(LOG_TAG, "Error creating Account: " + account.name + " type: " + account.type);
         }
 
     }
 
+    //Error receiving token Network callback
     @Override
     public void errorReceivingToken(String error) {
         //TODO: based on the error message prompt the related error message to user
-        Snackbar.make(viewPager, "error receiving token", Snackbar.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "error receiving token", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -115,7 +132,7 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack 
         Bundle userInfo = getUserInput();
 
         //Request token through ApiRequestManager
-        ApiRequestManager.getInstance(getApplicationContext()).getApiToken(
+        ApiRequestManager.getInstance(getApplicationContext()).addNewAccount(
                 userInfo.getString(SERVER_ADDRESS_KEY),
                 userInfo.getString(CLIENT_ID_KEY),
                 userInfo.getString(API_SECRET_KEY),

@@ -1,11 +1,12 @@
 package com.mdmobile.pocketconsole.apiHandler;
 
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
 import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -17,7 +18,8 @@ import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.NetworkCallBack;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.gson.Token;
-import com.mdmobile.pocketconsole.ui.LoginActivity;
+import com.mdmobile.pocketconsole.services.AccountAuthenticator;
+import com.mdmobile.pocketconsole.utils.UsersUtility;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,22 +52,32 @@ public class ApiRequestManager {
         }
     }
 
-    public void getApiToken(String tokenUrl, String clientID, String clientSecret,
-                            String userName, String password, final NetworkCallBack callBack) {
+    /**
+     * This method is called only by LogIn Activity to get a token and add a brand new account
+     * There are callbacks to LogIn activity so do not call it from anywhere else
+     */
+    public void addNewAccount(String tokenUrl, String clientID, String clientSecret,
+                              String userName, String password, final NetworkCallBack callBack) {
 
 
         //if debug discard input and use debugging info
         if (BuildConfig.DEBUG) {
-            tokenUrl = "https://uk.mobicontrolcloud.com/MobiControl/api/token";
-            clientID = "e0edb1295a8e4754a3180bb9595b7f6a";
-            clientSecret = "MD7oqtUp3HPsJSXF36e2YhVKG9KTWnDe";
+            tokenUrl = mContext.getString(R.string.mc_server_url).concat("/api/token");
+            clientID = mContext.getString(R.string.mc_clientID);
+            clientSecret = mContext.getString(R.string.mc_client_secret);
             userName = mContext.getString(R.string.mc_user_name);
             password = mContext.getString(R.string.mc_password);
-
         }
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
         final String header = clientID.concat(":").concat(clientSecret);
 
+        //Before attempting the connection to the server check if there is a user logged with the same username
+        Account account = UsersUtility.checkUserExists(mContext, userName);
+        if (account != null) {
+            //TODO: plan what to do if I'm trying to log in with an existing account
+            //Same user name already registered attempt a refresh of his token to get logged in
+            return;
+        }
 
         StringRequest tokenRequest = new StringRequest(Request.Method.POST, tokenUrl,
                 new Response.Listener<String>() {
@@ -73,14 +85,12 @@ public class ApiRequestManager {
                     public void onResponse(String response) {
                         Log.i(LOG_TAG, "Token request received successfully");
                         if (BuildConfig.DEBUG) {
-                            Log.v(LOG_TAG, "Token Response:" + response.replace(",","\n"));
+                            Log.v(LOG_TAG, "Token Response:" + response.replace(",", "\n"));
                         }
 
                         //Parse network response to get token details
-                        Token token = new Gson().fromJson(response,Token.class);
-                        //Return data to LogIn activity
+                        Token token = new Gson().fromJson(response, Token.class);
                         callBack.tokenReceived(token);
-
                     }
                 }, new Response.ErrorListener() {
             @Override

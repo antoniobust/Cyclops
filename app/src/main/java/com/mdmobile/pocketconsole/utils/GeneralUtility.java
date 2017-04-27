@@ -18,7 +18,7 @@ public class GeneralUtility {
         //Check if url ends with "/", if yes remove it
         subStr = url.substring(url.length() - 1, url.length());
         if (subStr.equals("/")) {
-            serverUrl = serverUrl.delete(serverUrl.length() - 1,serverUrl.length());
+            serverUrl = serverUrl.delete(serverUrl.length() - 1, serverUrl.length());
         }
 
         return serverUrl.toString();

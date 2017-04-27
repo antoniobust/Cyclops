@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 import com.mdmobile.pocketconsole.gson.Token;
 
-public class LoginActivity extends AppCompatActivity implements NetworkCallBack {
+public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack {
 
     //Authenticator intent keys
     public final static String ACCOUNT_TYPE_KEY = "AccountTypeIntentKey";
@@ -96,7 +95,6 @@ public class LoginActivity extends AppCompatActivity implements NetworkCallBack 
         //Configure viewPager
         setViewPager();
     }
-
 
     //Set up the view pager
     private void setViewPager() {

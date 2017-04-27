@@ -1,12 +1,12 @@
 package com.mdmobile.pocketconsole.ui;
 
 import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -31,50 +31,19 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
     ViewPager viewPager;
     TabLayout dotsIndicator;
     Bundle userInputBundle;
+    AccountAuthenticatorResponse authenticatorResponse;
 
     //Token received network callback
     @Override
     public void tokenReceived(Token response) {
-        String userName;
         //TODO:launch mainActivity
         if (BuildConfig.DEBUG) {
             Toast.makeText(getApplicationContext(), "token received", Toast.LENGTH_SHORT).show();
         }
 
-        //Save new user in Account, if we are here is because there is no account saved so
-        //we will add it explicitly
-        Bundle userInfo = new Bundle();
-        //if debug discard input and use debugging info
-        if (BuildConfig.DEBUG) {
-            userInfo.putString(CLIENT_ID_KEY, getString(R.string.mc_clientID));
-            userInfo.putString(API_SECRET_KEY, getString(R.string.mc_client_secret));
-            userInfo.putString(SERVER_ADDRESS_KEY, getString(R.string.mc_server_url));
-            userName = getString(R.string.mc_user_name);
-        } else {
-            userInfo.putString(CLIENT_ID_KEY, userInfo.getString(CLIENT_ID_KEY));
-            userInfo.putString(API_SECRET_KEY, userInfo.getString(API_SECRET_KEY));
-            userInfo.putString(SERVER_ADDRESS_KEY, userInfo.getString(SERVER_ADDRESS_KEY));
-            userName = userInfo.getString(USER_NAME_KEY);
-        }
-
-        Account account = new Account(userName, getString(R.string.account_type));
-        AccountManager ac = AccountManager.get(getApplicationContext());
-
-        //Register account
-        if (ac.addAccountExplicitly(
-                account, userInputBundle.getString(PASSWORD_KEY), userInfo)) {
-            //TODO:If we are using android M or above notify account authenticate
-
-            Log.i(LOG_TAG, "Account created successfully: " + account.name + " type: " + account.type);
-            //Add token to this account
-            ac.setAuthToken(account, response.getToken_type(), response.getAccess_token());
-
-        } else {
-            //TODO: error saving account check if there is any account with same name
-            Log.e(LOG_TAG, "Error creating Account: " + account.name + " type: " + account.type);
-        }
-
+        finishLogin(response);
     }
+
 
     //Error receiving token Network callback
     @Override
@@ -91,6 +60,9 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         //Instantiate views
         viewPager = (ViewPager) findViewById(R.id.login_view_pager);
         dotsIndicator = (TabLayout) findViewById(R.id.login_view_pager_dots_indicator);
+
+        //If activity was launched from authenticator get the intent with the auth response
+        authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
         //Configure viewPager
         setViewPager();
@@ -130,7 +102,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         Bundle userInfo = getUserInput();
 
         //Request token through ApiRequestManager
-        ApiRequestManager.getInstance(getApplicationContext()).addNewAccount(
+        ApiRequestManager.getInstance(getApplicationContext()).getToken(
                 userInfo.getString(SERVER_ADDRESS_KEY),
                 userInfo.getString(CLIENT_ID_KEY),
                 userInfo.getString(API_SECRET_KEY),
@@ -197,6 +169,73 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
     //Showed if any input field is empty
     private void showInvalidInputSneakBar() {
         Snackbar.make(viewPager, "Please check your data", Snackbar.LENGTH_SHORT).show();
+    }
+
+    //Create account and return info to account authenticator
+    private void finishLogin(Token response) {
+
+        String userName, tokenType = null, accountType = null, psw;
+        Boolean newAccount = true;
+
+        //Save new user in Account, if we are here is because there is no account saved so
+        //we will add it explicitly
+        Bundle userInfo = new Bundle();
+        //if debug discard input and use debugging info
+        if (BuildConfig.DEBUG) {
+            userInfo.putString(CLIENT_ID_KEY, getString(R.string.mc_clientID));
+            userInfo.putString(API_SECRET_KEY, getString(R.string.mc_client_secret));
+            userInfo.putString(SERVER_ADDRESS_KEY, getString(R.string.mc_server_url));
+            userName = getString(R.string.mc_user_name);
+            psw = getString(R.string.mc_password);
+        } else {
+            userInfo.putString(CLIENT_ID_KEY, userInfo.getString(CLIENT_ID_KEY));
+            userInfo.putString(API_SECRET_KEY, userInfo.getString(API_SECRET_KEY));
+            userInfo.putString(SERVER_ADDRESS_KEY, userInfo.getString(SERVER_ADDRESS_KEY));
+            userName = userInputBundle.getString(USER_NAME_KEY);
+            psw = userInputBundle.getString(PASSWORD_KEY);
+        }
+
+        if (getIntent().getExtras() != null && getIntent().hasExtra(AUTH_TOKEN_TYPE_KEY)) {
+            tokenType = getIntent().getStringExtra(AUTH_TOKEN_TYPE_KEY);
+        }
+        if (getIntent().getExtras() != null && getIntent().hasExtra(ADDING_NEW_ACCOUNT_KEY)) {
+            newAccount = getIntent().getBooleanExtra(ADDING_NEW_ACCOUNT_KEY, false);
+        }
+        if (getIntent().getExtras() != null && getIntent().hasExtra(ACCOUNT_TYPE_KEY)) {
+            accountType = getIntent().getStringExtra(ACCOUNT_TYPE_KEY);
+        }
+
+        if (tokenType == null || tokenType.equals("")) {
+            tokenType = response.getToken_type();
+        }
+        if (accountType == null || tokenType.equals("")) {
+            accountType = getString(R.string.account_type);
+        }
+
+
+        Account account = new Account(userName, accountType);
+        AccountManager accountManager = AccountManager.get(getApplicationContext());
+
+        if (newAccount) {
+            //Create the account
+            accountManager.addAccountExplicitly(account, psw, userInfo);
+        } else {
+            //Update account with new info
+            accountManager.setPassword(account, psw);
+        }
+
+        //Set the token we have for this account
+        accountManager.setAuthToken(account, tokenType, response.getAccess_token());
+
+        //If activity was launched from account authenticator return data back
+        if (authenticatorResponse != null) {
+            setAccountAuthenticatorResult(getIntent().getExtras());
+
+            // Tell the account manager settings page that all went well
+            setResult(RESULT_OK, getIntent());
+            finish();
+        }
+
     }
 }
 

@@ -56,8 +56,8 @@ public class ApiRequestManager {
      * This method is called only by LogIn Activity to get a token and add a brand new account
      * There are callbacks to LogIn activity so do not call it from anywhere else
      */
-    public void addNewAccount(String tokenUrl, String clientID, String clientSecret,
-                              String userName, String password, final NetworkCallBack callBack) {
+    public void getToken(String tokenUrl, String clientID, String clientSecret,
+                         String userName, String password, final NetworkCallBack callBack) {
 
 
         //if debug discard input and use debugging info
@@ -71,13 +71,6 @@ public class ApiRequestManager {
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
         final String header = clientID.concat(":").concat(clientSecret);
 
-        //Before attempting the connection to the server check if there is a user logged with the same username
-        Account account = UsersUtility.checkUserExists(mContext, userName);
-        if (account != null) {
-            //TODO: plan what to do if I'm trying to log in with an existing account
-            //Same user name already registered attempt a refresh of his token to get logged in
-            return;
-        }
 
         StringRequest tokenRequest = new StringRequest(Request.Method.POST, tokenUrl,
                 new Response.Listener<String>() {

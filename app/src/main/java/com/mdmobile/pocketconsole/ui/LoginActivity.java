@@ -64,6 +64,16 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         //If activity was launched from authenticator get the intent with the auth response
         authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
+        //Check if activity was launched from authenticator(to add a new account),
+        // if not check if there is any user already logged in
+        if(authenticatorResponse == null) {
+            Account[] account = AccountManager.get(getApplicationContext()).getAccountsByType(getString(R.string.account_type));
+            if (account.length > 0) {
+                //TODO lunch main activity
+                finish();
+            }
+        }
+
         //Configure viewPager
         setViewPager();
     }
@@ -234,6 +244,8 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             // Tell the account manager settings page that all went well
             setResult(RESULT_OK, getIntent());
             finish();
+        } else {
+            //Launch MainActivity
         }
 
     }

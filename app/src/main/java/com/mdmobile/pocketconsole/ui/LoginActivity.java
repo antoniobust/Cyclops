@@ -3,6 +3,7 @@ package com.mdmobile.pocketconsole.ui;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -18,6 +19,9 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 import com.mdmobile.pocketconsole.gson.Token;
+import com.mdmobile.pocketconsole.utils.UsersUtility;
+
+import res.layout.MainActivity;
 
 public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack {
 
@@ -66,16 +70,28 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
         //Check if activity was launched from authenticator(to add a new account),
         // if not check if there is any user already logged in
-        if(authenticatorResponse == null) {
-            Account[] account = AccountManager.get(getApplicationContext()).getAccountsByType(getString(R.string.account_type));
-            if (account.length > 0) {
-                //TODO lunch main activity
-                finish();
+        if (authenticatorResponse == null) {
+            if (UsersUtility.checkAnyUserLoggedIn(getApplicationContext())) {
+                //user found, launch main activity
+                startMainActivity();
             }
         }
 
         //Configure viewPager
         setViewPager();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Check if a user was added while the activity was paused
+        if (authenticatorResponse == null) {
+            if (UsersUtility.checkAnyUserLoggedIn(getApplicationContext())) {
+                //user found, launch main activity
+                startMainActivity();
+            }
+        }
+
     }
 
     //Set up the view pager
@@ -246,8 +262,18 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             finish();
         } else {
             //Launch MainActivity
+            startMainActivity();
         }
 
+    }
+
+    private void startMainActivity(){
+        //Login done launch main activity
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }
 

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mdmobile.pocketconsole">
-    
-    <!--Permissions-->
+
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
 
     <application
         android:allowBackup="true"
@@ -14,31 +13,33 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
         <activity android:name=".ui.LoginActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
-        <!--Data provider-->
+        <!-- Data provider -->
         <provider
             android:name=".dataBase.DbProvider"
             android:authorities="com.mdmobile.pocketconsole" />
 
-        <!--Account authenticator service-->
+        <!-- Account authenticator service -->
         <service android:name=".services.AuthenticationService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
-            <meta-data android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
 
-            </service>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <activity
+            android:name="res.layout.MainActivity"
+            android:label="@string/title_activity_main"></activity>
     </application>
 
 </manifest>

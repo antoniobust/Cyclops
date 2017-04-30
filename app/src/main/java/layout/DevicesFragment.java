@@ -1,4 +1,5 @@
-package com.mdmobile.pocketconsole.ui;
+package layout;
+
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,15 +10,14 @@ import android.view.ViewGroup;
 import com.mdmobile.pocketconsole.R;
 
 
-public class UsersFragment extends Fragment {
+public class DevicesFragment extends Fragment {
 
-    public UsersFragment() {
+    public DevicesFragment() {
         // Required empty public constructor
     }
 
-    public static UsersFragment newInstance() {
-
-        return new UsersFragment();
+    public static DevicesFragment newInstance() {
+        return new DevicesFragment();
     }
 
     @Override
@@ -29,6 +29,7 @@ public class UsersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_users, container, false);
+        return inflater.inflate(R.layout.fragment_devices, container, false);
     }
+
 }

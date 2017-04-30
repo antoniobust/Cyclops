@@ -17,7 +17,7 @@ public class ServerFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static ServerFragment newInstance(String param1, String param2) {
+    public static ServerFragment newInstance() {
         return new ServerFragment();
     }
 

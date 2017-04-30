@@ -3,17 +3,19 @@ package com.mdmobile.pocketconsole.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 
+import layout.DevicesFragment;
+
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    private BottomNavigationView bottomNavigation;
 
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -21,20 +23,24 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_devices:
-                    mTextMessage.setText(R.string.title_devices);
+                    ft.replace(R.id.main_activity_fragment_container, DevicesFragment.newInstance());
+                    ft.commit();
                     return true;
                 case R.id.navigation_profiles:
-                    mTextMessage.setText(R.string.title_profile);
+                    ft.replace(R.id.main_activity_fragment_container, ProfilesFragment.newInstance());
+                    ft.commit();
                     return true;
                 case R.id.navigation_server:
-                    mTextMessage.setText(R.string.title_server);
+                    ft.replace(R.id.main_activity_fragment_container, ServerFragment.newInstance());
+                    ft.commit();
                     return true;
                 case R.id.navigation_users:
-                    mTextMessage.setText(R.string.title_users);
+                    ft.replace(R.id.main_activity_fragment_container, UsersFragment.newInstance());
+                    ft.commit();
                     return true;
-
             }
             return false;
         }
@@ -46,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavigation.setSelectedItemId(R.id.navigation_devices);
 
         //Set action bar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));

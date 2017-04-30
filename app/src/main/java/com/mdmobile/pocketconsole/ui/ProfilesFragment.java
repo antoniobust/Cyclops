@@ -18,7 +18,7 @@ public class ProfilesFragment extends Fragment {
     }
 
 
-    public static ProfilesFragment newInstance(String param1, String param2) {
+    public static ProfilesFragment newInstance() {
         return new ProfilesFragment();
     }
 

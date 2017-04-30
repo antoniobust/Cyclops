@@ -2,17 +2,22 @@ package com.mdmobile.pocketconsole.ui;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 
 
 public class DevicesFragment extends Fragment {
+
+    private final static String LOG_TAG= DevicesFragment.class.getSimpleName();
 
     public DevicesFragment() {
         // Required empty public constructor
@@ -45,4 +50,9 @@ public class DevicesFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
 }

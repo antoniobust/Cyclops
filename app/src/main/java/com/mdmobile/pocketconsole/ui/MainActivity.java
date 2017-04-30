@@ -11,11 +11,8 @@ import android.view.MenuItem;
 
 import com.mdmobile.pocketconsole.R;
 
-import layout.DevicesFragment;
 
 public class MainActivity extends AppCompatActivity {
-
-    private BottomNavigationView bottomNavigation;
 
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         bottomNavigation.setSelectedItemId(R.id.navigation_devices);
 
@@ -65,5 +62,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
 }

@@ -3,7 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:colorPrimary" tools:targetApi="lollipop">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
+        <item name="android:colorPrimaryDark" tools:targetApi="lollipop">@color/colorPrimaryDark
+        </item>
         <item name="android:colorAccent" tools:targetApi="lollipop">@color/colorAccent</item>
         <!--Enable window content shared_element_transition-->
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>

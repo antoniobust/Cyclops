@@ -1,14 +1,14 @@
-package res.layout;
+package com.mdmobile.pocketconsole.ui;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,11 +50,14 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            navigation.setItemIconTintList(getColorStateList(R.color.color_state_list));
-        }else{
-            getResources().getColorStateList((R.color.color_state_list),this.getTheme());
+        //Set action bar
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
         }
+
     }
 
 }

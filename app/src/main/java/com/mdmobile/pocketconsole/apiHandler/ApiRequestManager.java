@@ -1,7 +1,5 @@
 package com.mdmobile.pocketconsole.apiHandler;
 
-import android.accounts.Account;
-import android.accounts.AccountAuthenticatorResponse;
 import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
@@ -15,11 +13,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mdmobile.pocketconsole.BuildConfig;
-import com.mdmobile.pocketconsole.NetworkCallBack;
+import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.gson.Token;
-import com.mdmobile.pocketconsole.services.AccountAuthenticator;
-import com.mdmobile.pocketconsole.utils.UsersUtility;
 
 import java.util.HashMap;
 import java.util.Map;

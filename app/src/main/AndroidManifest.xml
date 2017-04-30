@@ -21,6 +21,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/title_activity_main"/>
+
         <!-- Data provider -->
         <provider
             android:name=".dataBase.DbProvider"
@@ -37,9 +41,7 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <activity
-            android:name="res.layout.MainActivity"
-            android:label="@string/title_activity_main"></activity>
+
     </application>
 
 </manifest>

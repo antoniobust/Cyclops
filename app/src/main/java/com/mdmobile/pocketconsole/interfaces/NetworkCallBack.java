@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole;
+package com.mdmobile.pocketconsole.interfaces;
 
 import com.mdmobile.pocketconsole.gson.Token;
 

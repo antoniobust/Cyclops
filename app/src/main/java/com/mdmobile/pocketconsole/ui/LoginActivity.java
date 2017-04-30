@@ -14,14 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mdmobile.pocketconsole.BuildConfig;
-import com.mdmobile.pocketconsole.NetworkCallBack;
+import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.utils.UsersUtility;
-
-import res.layout.MainActivity;
 
 public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack {
 

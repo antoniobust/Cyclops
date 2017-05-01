@@ -20,14 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/title_activity_main"/>
+            android:label="@string/title_activity_main" />
 
         <!-- Data provider -->
         <provider
-            android:name=".dataBase.DbProvider"
+            android:name=".provider.McProvider"
             android:authorities="com.mdmobile.pocketconsole" />
 
         <!-- Account authenticator service -->
@@ -40,8 +39,10 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-
-
+        <service
+            android:name=".services.RefreshInfo"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

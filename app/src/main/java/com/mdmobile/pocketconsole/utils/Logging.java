@@ -13,7 +13,7 @@ import com.android.volley.BuildConfig;
 public class Logging {
 
     public static void log(@NonNull String logTag, @NonNull String msg,
-                           @IntRange(from = Log.VERBOSE, to = Log.ERROR) int priority) {
+                    @IntRange(from = Log.VERBOSE, to = Log.ERROR) int priority) {
 
         switch (priority) {
 

@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.volleyCustomrequests;
+package com.mdmobile.pocketconsole.volleyCustomRequests;
 
 import com.android.volley.Request;
 import com.android.volley.Response;

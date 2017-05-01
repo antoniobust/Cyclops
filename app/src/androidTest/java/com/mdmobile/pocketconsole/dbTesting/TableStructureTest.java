@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.mdmobile.pocketconsole.dataBase.DbContract;
-import com.mdmobile.pocketconsole.dataBase.DbHelper;
+import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.provider.McHelper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,14 +25,14 @@ public class TableStructureTest {
     SQLiteDatabase db;
 
     private void deleteExistingDB() {
-        mContext.deleteDatabase(DbHelper.DB_NAME);
+        mContext.deleteDatabase(McHelper.DB_NAME);
     }
 
     @Before
     public void setUp() {
         mContext = InstrumentationRegistry.getTargetContext();
         deleteExistingDB();
-        db = new DbHelper(mContext).getWritableDatabase();
+        db = new McHelper(mContext).getWritableDatabase();
         assertTrue("Db was not created properly", db.isOpen());
 
     }
@@ -46,14 +46,14 @@ public class TableStructureTest {
 
         //Contains the tables name
         HashSet<String> tableNames = new HashSet<>();
-        tableNames.add(DbContract.DEVICE_TABLE_NAME);
-        tableNames.add(DbContract.COMPLIANCE_ITEM_TABLE_NAME);
-        tableNames.add(DbContract.CUSTOM_ATTRIBUTE_TABLE_NAME);
-        tableNames.add(DbContract.CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME);
-        tableNames.add(DbContract.CUSTOM_DATA_TABLE_NAME);
-        tableNames.add(DbContract.CUSTOM_DATA_DEVICE_TABLE_NAME);
-        tableNames.add(DbContract.DEPLOYMENT_SERVER_TABLE_NAME);
-        tableNames.add(DbContract.MANAGEMENT_SERVER_TABLE_NAME);
+        tableNames.add(McContract.DEVICE_TABLE_NAME);
+        tableNames.add(McContract.COMPLIANCE_ITEM_TABLE_NAME);
+        tableNames.add(McContract.CUSTOM_ATTRIBUTE_TABLE_NAME);
+        tableNames.add(McContract.CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME);
+        tableNames.add(McContract.CUSTOM_DATA_TABLE_NAME);
+        tableNames.add(McContract.CUSTOM_DATA_DEVICE_TABLE_NAME);
+        tableNames.add(McContract.DEPLOYMENT_SERVER_TABLE_NAME);
+        tableNames.add(McContract.MANAGEMENT_SERVER_TABLE_NAME);
 
         //Remove from table name set table returned in the cursor
         HashSet<String> testTableNames = new HashSet<>(tableNames);

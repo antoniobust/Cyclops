@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.dataBase;
+package com.mdmobile.pocketconsole.provider;
 
 
 import android.content.ContentResolver;
@@ -6,10 +6,13 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 
-public class DbContract {
+public class McContract {
 
     //Defines the schema
     public static final String CONTENT_AUTHORITY = "com.mdmobile.pocketconsole";
+    //Content type
+    private static final String CONTENT_TYPE_BASE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
+    private static final String CONTENT_TYPE_ITEM_BASE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
     //DB tables
     public static final String DEVICE_TABLE_NAME = "Device";
     public static final String COMPLIANCE_ITEM_TABLE_NAME = "ComplianceItem";
@@ -30,12 +33,110 @@ public class DbContract {
             .authority(CONTENT_AUTHORITY)
             .build();
 
+    private McContract() {
+    }
 
-    private DbContract() {
+    //Content Type Helper Methods
+    public static String makeContentType(@NonNull String tableName) {
+        return CONTENT_TYPE_BASE + tableName;
+    }
+
+    public static String makeItemContentType(@NonNull String tableName){
+        return  CONTENT_TYPE_ITEM_BASE + tableName;
+    }
+
+    // ************ Table's columns interfaces **********************
+    interface DeviceColumns {
+        //Columns
+        String COLUMN_KIND = "Kind";
+        String COLUMN_COMPLIANCE_STATUS = "ComplianceStatus";
+        String COLUMN_DEVICE_ID = "DeviceId";
+        String COLUMN_DEVICE_NAME = "DeviceName";
+        String COLUMN_ENROLLMENT_TIME = "EnrollmentTime";
+        String COLUMN_FAMILY = "Family";
+        String COLUMN_HOST_NAME = "HostName";
+        String COLUMN_AGENT_ONLINE = "Online";
+        String COLUMN_VIRTUAL = "Virtual";
+        String COLUMN_MAC_ADDRESS = "MAC";
+        String COLUMN_MANUFACTURER = "Manufacturer";
+        String COLUMN_MODE = "Mode";
+        String COLUMN_MODEL = "Model";
+        String COLUMN_OS_VERSION = "OSVersion";
+        String COLUMN_PATH = "Path";
+        String COLUMN_PLATFORM = "Platform";
+    }
+
+    interface ComplianceItemColumns {
+        //Columns
+        String DEV_ID = "DeviceID";
+        String COMPLIANCE_TYPE = "ComplianceType";
+        String COMPLIANCE_VALUE = "ComplianceValue";
+    }
+
+    interface CustomAttributeColumns {
+        //Columns
+        String NAME = "Name";
+        String VALUE = "Value";
+        String DATA_TYPE = "DataType";
+    }
+
+    interface CustomAttributeDeviceColumns {
+        //Columns
+        String DEVICE_ID = "DeviceID";
+        String CUSTOM_ATTRIBUTE_ID = "CustomAttributeID";
+    }
+
+    interface CustomDataColumns {
+        //Columns
+        String KIND = "Kind";
+        String TIME = "Time";
+
+    }
+
+    interface CustomDataDeviceColumns {
+        //Columns
+        String DEVICE_ID = "DeviceID";
+        String CUSTOM_DATA_ID = "CustomDataID";
+    }
+
+    interface ManagementServerColumns {
+        //Columns
+        String PRIMARY_MANAGEMENT_ADDRESS = "PrimaryManagementAddress";
+        String SECONDARY_MANAGEMENT_ADDRESS = "SecondaryManagementAddress";
+        String FULLY_QUALIFIED_NAME = "Fqdn";
+        String PORT_NUMBER = "PortNumber";
+        String DESCRIPTION = "Description";
+        String STATUS_TIME = "StatusTime";
+        String MAC_ADRESS = "MacAddress";
+        String TOTAL_USER_COUNT = "TotalConsoleUsers";
+        String NAME = "Name";
+        String STATUS = "Status";
+    }
+    //***************************************************************
+
+    interface DeploymentServerColumns {
+        //Columns
+        String NAME = "Name";
+        String STATUS = "Status";
+        String CONNECTED = "Connected";
+        String PRIMARY_AGENT_ADDRESS = "PrimaryAgentAddress";
+        String SECONDARY_AGENT_ADDRESS = "SecondaryAgentAddress";
+        String DEVICE_MANAGEMENT_ADDRESS = "DeviceManagementAddress";
+        String PULSE_TIMEOUT = "PulseTimeout";
+        String RULE_RELOAD = "RuleReload";
+        String SCHEDULE_INTERVAL = "ScheduleInterval";
+        String MIN_THREADS = "MinThreads";
+        String MAX_THREADS = "MaxThreads";
+        String MAX_BURST_THREADS = "MaxBurstThreads";
+        String CURRENT_THREAD_COUNT = "CurrentThreadCount";
+        String PULSE_WAIT_INTERVAL = "PulseWaitInterval";
+        String DEVICES_CONNECTED = "DevicesConnectedCount";
+        String MANAGERS_CONNECTED = "ManagersConnectedCount";
+        String QUEUE_LENGTH = "QueueLength";
     }
 
     //Represent Device table
-    public static class Device implements BaseColumns {
+    public static class Device implements DeviceColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEVICE_TABLE_NAME).build();
 
@@ -44,24 +145,6 @@ public class DbContract {
                 + DEVICE_TABLE_NAME;
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + DEVICE_TABLE_NAME;
-
-        //Columns
-        public final static String COLUMN_KIND = "Kind";
-        public final static String COLUMN_COMPLIANCE_STATUS = "ComplianceStatus";
-        public final static String COLUMN_DEVICE_ID = "DeviceId";
-        public final static String COLUMN_DEVICE_NAME = "DeviceName";
-        public final static String COLUMN_ENROLLMENT_TIME = "EnrollmentTime";
-        public final static String COLUMN_FAMILY = "Family";
-        public final static String COLUMN_HOST_NAME = "HostName";
-        public final static String COLUMN_AGENT_ONLINE = "Online";
-        public final static String COLUMN_VIRTUAL = "Virtual";
-        public final static String COLUMN_MAC_ADDRESS = "MAC";
-        public final static String COLUMN_MANUFACTURER = "Manufacturer";
-        public final static String COLUMN_MODE = "Mode";
-        public final static String COLUMN_MODEL = "Model";
-        public final static String COLUMN_OS_VERSION = "OSVersion";
-        public final static String COLUMN_PATH = "Path";
-        public final static String COLUMN_PLATFORM = "Platform";
 
 
         public final Uri builUriWithDeviceID(@NonNull String deviceID) {
@@ -80,7 +163,7 @@ public class DbContract {
 
 
     ////Represent Compliance table
-    public static class ComplianceItem implements BaseColumns {
+    public static class ComplianceItem implements ComplianceItemColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(COMPLIANCE_ITEM_TABLE_NAME).build();
 
@@ -89,17 +172,11 @@ public class DbContract {
                 + COMPLIANCE_ITEM_TABLE_NAME;
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + COMPLIANCE_ITEM_TABLE_NAME;
-
-        //Columns
-        public final static String DEV_ID = "DeviceID";
-        public final static String COMPLIANCE_TYPE = "ComplianceType";
-        public final static String COMPLIANCE_VALUE = "ComplianceValue";
-
     }
 
 
     //Represent Custom Attribute table
-    public static class CustomAttribute implements BaseColumns {
+    public static class CustomAttribute implements CustomAttributeColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(CUSTOM_ATTRIBUTE_TABLE_NAME).build();
 
@@ -109,10 +186,6 @@ public class DbContract {
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + CUSTOM_ATTRIBUTE_TABLE_NAME;
 
-        //Columns
-        public final static String NAME = "Name";
-        public final static String VALUE = "Value";
-        public final static String DATA_TYPE = "DataType";
 
         public final Uri buildUriWithName(@NonNull String customAttribute) {
             return CONTENT_URI.buildUpon().appendPath(customAttribute).build();
@@ -130,20 +203,15 @@ public class DbContract {
 
 
     //Link table n -> n relation from devices and custom attributes
-    public static class CustomAttributeDevice implements BaseColumns {
+    public static class CustomAttributeDevice implements CustomAttributeDeviceColumns, BaseColumns {
         //Table URI
         public static final Uri CONTENT_URI = DB_URI.buildUpon()
                 .appendPath(CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME).build();
-
-        //Columns
-        public static final String DEVICE_ID = "DeviceID";
-        public static final String CUSTOM_ATTRIBUTE_ID = "CustomAttributeID";
-
     }
 
 
     //Represent custom data table
-    public static class CustomData implements BaseColumns {
+    public static class CustomData implements CustomDataColumns, BaseColumns {
         //Table URI
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(CUSTOM_DATA_TABLE_NAME).build();
 
@@ -152,11 +220,6 @@ public class DbContract {
                 + CUSTOM_DATA_TABLE_NAME;
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + CUSTOM_DATA_TABLE_NAME;
-
-        //Columns
-        public static final String KIND = "Kind";
-        public static final String TIME = "Time";
-
 
         public final Uri buildUriWithName(@NonNull String customDataName) {
             return CONTENT_URI.buildUpon().appendPath(customDataName).build();
@@ -174,13 +237,9 @@ public class DbContract {
 
 
     //Represent the link table for n -> n relation between Devices and CustomData
-    public static class CustomDataDevice implements BaseColumns {
+    public static class CustomDataDevice implements CustomDataDeviceColumns, BaseColumns {
         //Table URI
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(CUSTOM_DATA_DEVICE_TABLE_NAME).build();
-
-        //Columns
-        public static final String DEVICE_ID = "DeviceID";
-        public static final String CUSTOM_DATA_ID = "CustomDataID";
 
     }
 
@@ -253,7 +312,7 @@ public class DbContract {
 
 
     //Represent Management server table
-    public static class ManagementServer implements BaseColumns {
+    public static class ManagementServer implements ManagementServerColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(MANAGEMENT_SERVER_TABLE_NAME).build();
 
@@ -263,23 +322,11 @@ public class DbContract {
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + MANAGEMENT_SERVER_TABLE_NAME;
 
-        //Columns
-        public final static String PRIMARY_MANAGEMENT_ADDRESS = "PrimaryManagementAddress";
-        public final static String SECONDARY_MANAGEMENT_ADDRESS = "SecondaryManagementAddress";
-        public final static String FULLY_QUALIFIED_NAME = "Fqdn";
-        public final static String PORT_NUMBER = "PortNumber";
-        public final static String DESCRIPTION = "Description";
-        public final static String STATUS_TIME = "StatusTime";
-        public final static String MAC_ADRESS = "MacAddress";
-        public final static String TOTAL_USER_COUNT = "TotalConsoleUsers";
-        public final static String NAME = "Name";
-        public final static String STATUS = "Status";
-
     }
 
 
     //Represent deployment server table
-    public static class DeploymentServer implements BaseColumns {
+    public static class DeploymentServer implements DeploymentServerColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEPLOYMENT_SERVER_TABLE_NAME).build();
 
@@ -288,25 +335,6 @@ public class DbContract {
                 + DEPLOYMENT_SERVER_TABLE_NAME;
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + DEPLOYMENT_SERVER_TABLE_NAME;
-
-        //Columns
-        public final static String NAME = "Name";
-        public final static String STATUS = "Status";
-        public final static String CONNECTED = "Connected";
-        public final static String PRIMARY_AGENT_ADDRESS = "PrimaryAgentAddress";
-        public final static String SECONDARY_AGENT_ADDRESS = "SecondaryAgentAddress";
-        public final static String DEVICE_MANAGEMENT_ADDRESS = "DeviceManagementAddress";
-        public final static String PULSE_TIMEOUT = "PulseTimeout";
-        public final static String RULE_RELOAD = "RuleReload";
-        public final static String SCHEDULE_INTERVAL = "ScheduleInterval";
-        public final static String MIN_THREADS = "MinThreads";
-        public final static String MAX_THREADS = "MaxThreads";
-        public final static String MAX_BURST_THREADS = "MaxBurstThreads";
-        public final static String CURRENT_THREAD_COUNT = "CurrentThreadCount";
-        public final static String PULSE_WAIT_INTERVAL = "PulseWaitInterval";
-        public final static String DEVICES_CONNECTED = "DevicesConnectedCount";
-        public final static String MANAGERS_CONNECTED = "ManagersConnectedCount";
-        public final static String QUEUE_LENGTH = "QueueLength";
 
     }
 }

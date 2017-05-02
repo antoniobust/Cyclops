@@ -10,9 +10,6 @@ public class McContract {
 
     //Defines the schema
     public static final String CONTENT_AUTHORITY = "com.mdmobile.pocketconsole";
-    //Content type
-    private static final String CONTENT_TYPE_BASE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
-    private static final String CONTENT_TYPE_ITEM_BASE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
     //DB tables
     public static final String DEVICE_TABLE_NAME = "Device";
     public static final String COMPLIANCE_ITEM_TABLE_NAME = "ComplianceItem";
@@ -28,6 +25,9 @@ public class McContract {
     public static final String CUSTOM_DATA_DEVICE_TABLE_NAME = "CustomDataDevice";
     public static final String MANAGEMENT_SERVER_TABLE_NAME = "ManagementServer";
     public static final String DEPLOYMENT_SERVER_TABLE_NAME = "DeploymentServer";
+    //Content type
+    private static final String CONTENT_TYPE_BASE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
+    private static final String CONTENT_TYPE_ITEM_BASE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
     //DB URI
     private static final Uri DB_URI = Uri.parse("content://").buildUpon()
             .authority(CONTENT_AUTHORITY)
@@ -41,8 +41,8 @@ public class McContract {
         return CONTENT_TYPE_BASE + tableName;
     }
 
-    public static String makeItemContentType(@NonNull String tableName){
-        return  CONTENT_TYPE_ITEM_BASE + tableName;
+    public static String makeItemContentType(@NonNull String tableName) {
+        return CONTENT_TYPE_ITEM_BASE + tableName;
     }
 
     // ************ Table's columns interfaces **********************
@@ -52,7 +52,6 @@ public class McContract {
         String COLUMN_COMPLIANCE_STATUS = "ComplianceStatus";
         String COLUMN_DEVICE_ID = "DeviceId";
         String COLUMN_DEVICE_NAME = "DeviceName";
-        String COLUMN_ENROLLMENT_TIME = "EnrollmentTime";
         String COLUMN_FAMILY = "Family";
         String COLUMN_HOST_NAME = "HostName";
         String COLUMN_AGENT_ONLINE = "Online";
@@ -64,6 +63,41 @@ public class McContract {
         String COLUMN_OS_VERSION = "OSVersion";
         String COLUMN_PATH = "Path";
         String COLUMN_PLATFORM = "Platform";
+        String COLUMN_AGENT_VERSION = "AgentVersion";
+        String COLUMN_AVAILABLE_EXTERNAL_STORAGE = "AvailableExternalStorage";
+        String COLUMN_AVAILABLE_MEMORY = "AvailableMemory";
+        String COLUMN_AVAILABLE_SD_CARD_STORAGE = "AvailableSdCardStorage";
+        String COLUMN_TOTAL_EXTERNAL_STORAGE = "TotExternalMemory";
+        String COLUMN_TOTAL_MEMORY = "TotMemory";
+        String COLUMN_TOTAL_SD_CARD_STORAGE = "TotSdCardStorage";
+        String COLUMN_TOTAL_STORAGE = "TotStorage";
+        String COLUMN_BACKUP_BATTERY_STATUS = "Backup";
+        String COLUMN_BATTERY_STATUS = "BatteryStatus";
+        String COLUMN_CELLULAR_CARRIER = "CellularCarrier";
+        String COLUMN_CELLULAR_SIGNAL_STRENGTH = "CellularSignalStrength";
+        String COLUMN_DEVICE_TERMS = "DeviceTerms";
+        String COLUMN_DEVICE_USER_INFO = "DeviceUserInfo";
+        String COLUMN_EXCHANGE_BLOCKED = "ExchangeBlocked";
+        String COLUMN_EXCHANGE_STATUS = "ExchangeStatus";
+        String COLUMN_IMEI_MEID_ESN = "IMEI_MEID_ESN";
+        String COLUMN_IN_ROAMING = "InRoaming";
+        String COLUMN_IPV6 = "IPv6";
+        String COLUMN_IS_AGENT_COMPATIBLE = "IsAgentCompatible";
+        String COLUMN_IS_AGENTLESS = "IsAgentLess";
+        String COLUMN_IS_LEARNING = "IsLearning";
+        String COLUMN_LAST_CHECKIN_TIME = "LastCheckIn";
+        String COLUMN_LAST_AGENT_CONNECTION_TIME = "LastAgentConnection";
+        String COLUMN_LAST_AGENT_DISCONNECTION_TIME = "LastAgentDisconnection";
+        String COLUMN_LAST_LOGGED_ON_AT = "LastLoggedOn";
+        String COLUMN_LAST_LOGGED_USER = "LastLoggedUser";
+        String COLUMN_NETWORK_CONNECTION_TYPE = "NetworkConnectionType";
+        String COLUMN_NETWORK_RSSI = "NetworkRSSI";
+        String COLUMN_NETWORK_SSID = "NetworkSSID";
+        String COLUMN_PASSCODE_ENABLED = "PassCodeEnabled";
+        String COLUMN_PHONE_NUMBER = "PhoneNumber";
+        String COLUMN_PROCESSOR = "Processor";
+        String COLUMN_SUBSCRIBER_NUMBER = "SubscriberNumber";
+        String COLUMN_ENROLLMENT_TIME = "EnrollmentTime";
     }
 
     interface ComplianceItemColumns {
@@ -135,6 +169,7 @@ public class McContract {
         String QUEUE_LENGTH = "QueueLength";
     }
 
+
     //Represent Device table
     public static class Device implements DeviceColumns, BaseColumns {
         //Table Uri
@@ -147,11 +182,15 @@ public class McContract {
                 + DEVICE_TABLE_NAME;
 
 
-        public final Uri builUriWithDeviceID(@NonNull String deviceID) {
+        public static Uri builUriWithDeviceID(@NonNull String deviceID) {
             return CONTENT_URI.buildUpon().appendPath(deviceID).build();
         }
 
-        public final String getDeviceIdFromUri(@NonNull Uri uri) {
+        public static Uri buildUriWithID(long ID) {
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(ID)).build();
+        }
+
+        public static String getDeviceIdFromUri(@NonNull Uri uri) {
             //Check if URI provided is device URI
             if (uri.toString().startsWith(CONTENT_URI.toString())) {
                 return uri.getLastPathSegment();
@@ -172,6 +211,19 @@ public class McContract {
                 + COMPLIANCE_ITEM_TABLE_NAME;
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + COMPLIANCE_ITEM_TABLE_NAME;
+
+        public static Uri buildUriWithID(long ID) {
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(ID)).build();
+        }
+
+        public static String getComplianceIdFromUri(@NonNull Uri uri) {
+            //Check if URI provided is device URI
+            if (uri.toString().startsWith(CONTENT_URI.toString())) {
+                return uri.getLastPathSegment();
+            } else {
+                return null;
+            }
+        }
     }
 
 
@@ -186,6 +238,18 @@ public class McContract {
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + CUSTOM_ATTRIBUTE_TABLE_NAME;
 
+        public static Uri buildUriWithID(long ID) {
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(ID)).build();
+        }
+
+        public static String getCustomAttributeFromUri(@NonNull Uri uri) {
+            //Check if URI provided is device URI
+            if (uri.toString().startsWith(CONTENT_URI.toString())) {
+                return uri.getLastPathSegment();
+            } else {
+                return null;
+            }
+        }
 
         public final Uri buildUriWithName(@NonNull String customAttribute) {
             return CONTENT_URI.buildUpon().appendPath(customAttribute).build();

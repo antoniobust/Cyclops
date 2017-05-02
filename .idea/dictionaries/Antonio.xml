@@ -1,12 +1,19 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Antonio">
     <words>
+      <w>agentless</w>
+      <w>checkin</w>
       <w>devicegroups</w>
+      <w>imei</w>
       <w>logins</w>
       <w>mdmobile</w>
+      <w>meid</w>
       <w>mobi</w>
+      <w>passcode</w>
       <w>pocketconsole</w>
+      <w>rssi</w>
       <w>smartphone</w>
+      <w>ssid</w>
     </words>
   </dictionary>
 </component>

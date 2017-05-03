@@ -71,11 +71,9 @@ public class McProvider extends ContentProvider {
             case DEVICES:
                 return McContract.Device.buildUriWithID(newRowID);
             case CUSTOM_ATTRIBUTE:
-            case CUSTOM_ATTRIBUTE_DEVICE:
             case CUSTOM_DATA:
         }
         return null;
-
     }
 
     @Override

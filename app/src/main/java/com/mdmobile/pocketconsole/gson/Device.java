@@ -1,128 +1,248 @@
 package com.mdmobile.pocketconsole.gson;
 
-
 public class Device {
-
-    private String kind, deviceId, deviceName, enrollmentTime, family, hostName, macAddress, manufacturer, mode, model,
-            osVersion, path, platform;
-    private Boolean complianceStatus, isAgentOnline, isVirtual;
-
-    public Device(String kind, String deviceId, String deviceName, String enrollmentTime, String family,
-                  String hostName, String macAddress, String manufacturer, String mode, String model,
-                  String osVersion, String path, String platform, Boolean complianceStatus,
-                  Boolean isAgentOnline, Boolean isVirtual) {
-        this.kind = kind;
-        this.deviceId = deviceId;
-        this.deviceName = deviceName;
-        this.enrollmentTime = enrollmentTime;
-        this.family = family;
-        this.hostName = hostName;
-        this.macAddress = macAddress;
-        this.manufacturer = manufacturer;
-        this.mode = mode;
-        this.model = model;
-        this.osVersion = osVersion;
-        this.path = path;
-        this.platform = platform;
-        this.complianceStatus = complianceStatus;
-        this.isAgentOnline = isAgentOnline;
-        this.isVirtual = isVirtual;
-    }
+    int BackupBatteryStatus, BatteryStatus, CellularSignalStrength;
+    private String Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
+            OSVersion, Path, Platform, AgentVersion, CellularCarrier,
+            DeviceTerms, DeviceUserInfo, ExchangeStatus, HardwareSerialNumber, IMEI_MEID_ESN, Ipv6,
+            LastCheckInTime, LastAgentConnectTime, LastAgentDisconnectTime, LastLoggedOnAt, LastLoggedOnUser, NetworkConnectionType,
+            NetworkRSSI, NetworkSSID, PhoneNumber, Processor, SubscriberNumber;
+    private Boolean ComplianceStatus, IsAgentOnline, PasscodeEnabled, IsVirtual, ExchangeBlocked, InRoaming, IsAgentCompatible, IsAgentless, IsLearning;
 
     public String getKind() {
-        return kind;
+        return Kind;
     }
 
     public String getDeviceId() {
-        return deviceId;
+        return DeviceId;
     }
 
     public String getDeviceName() {
-        return deviceName;
+        return DeviceName;
     }
 
     public String getEnrollmentTime() {
-        return enrollmentTime;
+        return EnrollmentTime;
     }
 
     public String getFamily() {
-        return family;
+        return Family;
     }
 
     public String getHostName() {
-        return hostName;
+        return HostName;
     }
 
-    public String getMacAddress() {
-        return macAddress;
+    public String getMACAddress() {
+        return MACAddress;
     }
 
     public String getManufacturer() {
-        return manufacturer;
+        return Manufacturer;
     }
 
     public String getMode() {
-        return mode;
+        return Mode;
     }
 
     public String getModel() {
-        return model;
+        return Model;
     }
 
-    public String getOsVersion() {
-        return osVersion;
+    public String getOSVersion() {
+        return OSVersion;
     }
 
     public String getPath() {
-        return path;
+        return Path;
     }
 
     public String getPlatform() {
-        return platform;
+        return Platform;
     }
 
-    public Boolean getComplianceStatus() {
-        return complianceStatus;
+    public String getAgentVersion() {
+        return AgentVersion;
     }
 
-    public Boolean getAgentOnline() {
-        return isAgentOnline;
+    public String getCellularCarrier() {
+        return CellularCarrier;
     }
 
-    public Boolean getVirtual() {
-        return isVirtual;
+    public String getDeviceTerms() {
+        return DeviceTerms;
     }
+
+    public String getDeviceUserInfo() {
+        return DeviceUserInfo;
+    }
+
+    public String getExchangeStatus() {
+        return ExchangeStatus;
+    }
+
+    public String getHardwareSerialNumber() {
+        return HardwareSerialNumber;
+    }
+
+    public String getIMEI_MEID_ESN() {
+        return IMEI_MEID_ESN;
+    }
+
+    public String getIpv6() {
+        return Ipv6;
+    }
+
+    public String getLastCheckInTime() {
+        return LastCheckInTime;
+    }
+
+    public String getLastAgentConnectTime() {
+        return LastAgentConnectTime;
+    }
+
+    public String getLastAgentDisconnectTime() {
+        return LastAgentDisconnectTime;
+    }
+
+    public String getLastLoggedOnAt() {
+        return LastLoggedOnAt;
+    }
+
+    public String getLastLoggedOnUser() {
+        return LastLoggedOnUser;
+    }
+
+    public String getNetworkConnectionType() {
+        return NetworkConnectionType;
+    }
+
+    public String getNetworkRSSI() {
+        return NetworkRSSI;
+    }
+
+    public String getNetworkSSID() {
+        return NetworkSSID;
+    }
+
+    public String getPhoneNumber() {
+        return PhoneNumber;
+    }
+
+    public String getProcessor() {
+        return Processor;
+    }
+
+    public String getSubscriberNumber() {
+        return SubscriberNumber;
+    }
+
+    public int getBackupBatteryStatus() {
+        return BackupBatteryStatus;
+    }
+
+    public int getBatteryStatus() {
+        return BatteryStatus;
+    }
+
+    public int getCellularSignalStrength() {
+        return CellularSignalStrength;
+    }
+
+    public int getComplianceStatus() {
+        return ComplianceStatus ? 1 : 0;
+    }
+
+    public int getAgentOnline() {
+        return IsAgentOnline ? 1 : 0;
+    }
+
+    public int getPasscodeEnabled() {
+        return PasscodeEnabled ? 1 : 0;
+    }
+
+    public int getVirtual() {
+        return IsVirtual ? 1 : 0;
+    }
+
+    public int getExchangeBlocked() {
+        return ExchangeBlocked ? 1 : 0;
+    }
+
+    public int getInRoaming() {
+        return InRoaming ? 1 : 0;
+    }
+
+    public int getAgentCompatible() {
+        return IsAgentCompatible ? 1 : 0;
+    }
+
+    public int getAgentless() {
+        return IsAgentless ? 1 : 0;
+    }
+
+    public int getLearning() {
+        return IsLearning ? 1 : 0;
+    }
+
 
 
     //Inner class for nested objects
-    public final class ComplianceItems {
-        private String complianceType;
-        private Boolean complianceValue;
+    public class Memory {
+        int AvailableExternalStorage, AvailableMemory, AvailableSDCardStorage, AvailableStorage,
+                TotalExternalStorage, TotalMemory, TotalSDCardStorage, TotalStorage;
 
-        public ComplianceItems(String complianceType, Boolean complianceValue) {
-            this.complianceType = complianceType;
-            this.complianceValue = complianceValue;
+        public int getAvailableExternalStorage() {
+            return AvailableExternalStorage;
         }
+
+        public int getAvailableMemory() {
+            return AvailableMemory;
+        }
+
+        public int getAvailableSDCardStorage() {
+            return AvailableSDCardStorage;
+        }
+
+        public int getAvailableStorage() {
+            return AvailableStorage;
+        }
+
+        public int getTotalExternalStorage() {
+            return TotalExternalStorage;
+        }
+
+        public int getTotalMemory() {
+            return TotalMemory;
+        }
+
+        public int getTotalSDCardStorage() {
+            return TotalSDCardStorage;
+        }
+
+        public int getTotalStorage() {
+            return TotalStorage;
+        }
+    }
+
+    //Inner class for nested objects
+    public class ComplianceItems {
+        private String ComplianceType;
+        private Boolean ComplianceValue;
 
         public String getComplianceType() {
-            return complianceType;
+            return ComplianceType;
         }
 
-        public Boolean getComplianceValue() {
-            return complianceValue;
+        public int getComplianceValue() {
+            return ComplianceValue ? 1 : 0;
         }
     }
 
     //Inner class for nested objects
-    public final class CustomAttributes {
+    public class CustomAttributes {
         private String name, value;
         private Boolean dataType;
-
-        public CustomAttributes(String name, String value, Boolean dataType) {
-            this.name = name;
-            this.value = value;
-            this.dataType = dataType;
-        }
 
         public String getName() {
             return name;
@@ -132,8 +252,8 @@ public class Device {
             return value;
         }
 
-        public Boolean getDataType() {
-            return dataType;
+        public int getDataType() {
+            return dataType ? 1 : 0;
         }
     }
 

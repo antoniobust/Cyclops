@@ -6,15 +6,13 @@ package com.mdmobile.pocketconsole.provider;
  */
 
 public enum McEnumUri {
-
+    //TODO:fix double uris
     //Uri matcher codes
-    DEVICES(500, McContract.Device.COLUMN_DEVICE_NAME, false, McContract.Device.COLUMN_DEVICE_NAME),
+    DEVICES(500, McContract.DEVICE_TABLE_NAME, false, McContract.DEVICE_TABLE_NAME),
 
-    DEVICES_VERBOSE(501, McContract.Device.COLUMN_DEVICE_NAME, false, McContract.Device.COLUMN_DEVICE_NAME),
+    DEVICES_ID(502, McContract.DEVICE_TABLE_NAME + "/*", true, McContract.DEVICE_TABLE_NAME),
 
-    DEVICES_ID(502, McContract.Device.COLUMN_DEVICE_NAME + "/*", true, McContract.Device.COLUMN_DEVICE_NAME),
-
-    DEVICES_ID_VERBOSE(503, McContract.Device.COLUMN_DEVICE_NAME + "/*", false, McContract.Device.COLUMN_DEVICE_NAME),
+    DEVICES_ID_VERBOSE(503, McContract.DEVICE_TABLE_NAME + "/*", false, McContract.DEVICE_TABLE_NAME),
 
     CUSTOM_DATA_ID(504, McContract.CUSTOM_DATA_TABLE_NAME + "/*", true, McContract.CUSTOM_DATA_TABLE_NAME),
 

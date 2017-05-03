@@ -175,6 +175,7 @@ public class McContract {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEVICE_TABLE_NAME).build();
 
+
         //Content Type
         public static final String DIR_CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY
                 + DEVICE_TABLE_NAME;

@@ -188,7 +188,7 @@ public class Device {
 
 
     //Inner class for nested objects
-    public class Memory {
+    public  final class Memory {
         int AvailableExternalStorage, AvailableMemory, AvailableSDCardStorage, AvailableStorage,
                 TotalExternalStorage, TotalMemory, TotalSDCardStorage, TotalStorage;
 
@@ -226,9 +226,9 @@ public class Device {
     }
 
     //Inner class for nested objects
-    public class ComplianceItems {
-        private String ComplianceType;
-        private Boolean ComplianceValue;
+    public static class ComplianceItems {
+        public String ComplianceType;
+        public Boolean ComplianceValue;
 
         public String getComplianceType() {
             return ComplianceType;
@@ -240,9 +240,9 @@ public class Device {
     }
 
     //Inner class for nested objects
-    public class CustomAttributes {
-        private String name, value;
-        private Boolean dataType;
+    public static class CustomAttributes {
+        public  String name, value;
+        public  Boolean dataType;
 
         public String getName() {
             return name;

@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.gson.Gson;
+import com.mdmobile.pocketconsole.fakeData.FakeJSON;
+import com.mdmobile.pocketconsole.gson.Device;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.provider.McHelper;
 
@@ -16,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static java.lang.Integer.getInteger;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
@@ -44,24 +48,25 @@ public class DbData {
 
     @Test
     public void createNewDevice() {
-        ContentValues deviceValues = com.mdmobile.pocketconsole.utils.DbData.getDeviceContentValues(
-                "Android", 1, "deviceId23234", "AndroidPlus0001", "11:00", "android plus", "AntoHost", 1,
-                0, "00:00:00:ff", "Samsung", "enabled", "S8", "marshmellow", "\\AntoFolder", "platform",
-                "13.3", 100, 100, 100, 100, 100, 100, 100, 90, 95, "EE", 50, "", "", 1, "offline", "IMEI", 0, "IPv6",
-                1, 0, 0, "12:00", "12:00", "12:00", "12:00", "12:00", "mobile", "RSSI", "SSID", 1, "07475", "exynos",
-                "345");
+
+        Gson gson = new Gson();
+        Device device = gson.fromJson(FakeJSON.deviceJson,Device.class);
+        assertTrue("Device name doesn't match: "+device.getDeviceName(),
+                device.getDeviceName().equals("(John) Honeywell Dolphin Black 70e 00001"));
+
+        ContentValues deviceValues = com.mdmobile.pocketconsole.utils.DbData.getDeviceContentValues(device);
 
         Uri newDev = mContext.getApplicationContext().getContentResolver().insert(McContract.Device.CONTENT_URI, deviceValues);
         assertNotNull("Device was not created", newDev);
         String id = McContract.Device.getDeviceIdFromUri(newDev);
-        assertTrue("New device id is not valid", !id.equals("-1"));
+        assertFalse("New device id is not valid", id!= null && id.equals("-1"));
 
         //TODO:test values inserted
         Cursor c = db.rawQuery("SELECT * from " + McContract.DEVICE_TABLE_NAME, null);
         assertTrue("No device found", c.moveToFirst());
-        while (c.moveToNext()) {
+        do {
             assertTrue("Data error found device online: 0", c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1);
-        }
+        } while (c.moveToNext());
         c.close();
     }
 

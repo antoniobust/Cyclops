@@ -12,15 +12,74 @@ public class Device {
             LastCheckInTime, LastAgentConnectTime, LastAgentDisconnectTime, LastLoggedOnAt, LastLoggedOnUser, NetworkConnectionType,
             NetworkRSSI, NetworkSSID, PhoneNumber, Processor, SubscriberNumber;
     private Boolean ComplianceStatus, IsAgentOnline, PasscodeEnabled, IsVirtual, ExchangeBlocked, InRoaming, IsAgentCompatible, IsAgentless, IsLearning;
-
     @SerializedName("Memory")
     private Memory memory;
-
     @SerializedName("CustomData")
     private List<CustomData> customDataList;
-
     @SerializedName("ComplianceItem")
     private List<ComplianceItem> complianceItemList;
+
+    public Device(int backupBatteryStatus, int batteryStatus, int cellularSignalStrength, String kind,
+                  String deviceId, String deviceName, String enrollmentTime, String family, String hostName,
+                  String MACAddress, String manufacturer, String mode, String model, String OSVersion,
+                  String path, String platform, String agentVersion, String cellularCarrier,
+                  String deviceTerms, String deviceUserInfo, String exchangeStatus,
+                  String hardwareSerialNumber, String IMEI_MEID_ESN, String ipv6, String lastCheckInTime,
+                  String lastAgentConnectTime, String lastAgentDisconnectTime, String lastLoggedOnAt,
+                  String lastLoggedOnUser, String networkConnectionType, String networkRSSI,
+                  String networkSSID, String phoneNumber, String processor, String subscriberNumber,
+                  Boolean complianceStatus, Boolean isAgentOnline, Boolean passcodeEnabled,
+                  Boolean isVirtual, Boolean exchangeBlocked, Boolean inRoaming,
+                  Boolean isAgentCompatible, Boolean isAgentless, Boolean isLearning,
+                  Memory memory, List<CustomData> customDataList, List<ComplianceItem> complianceItemList) {
+        BackupBatteryStatus = backupBatteryStatus;
+        BatteryStatus = batteryStatus;
+        CellularSignalStrength = cellularSignalStrength;
+        Kind = kind;
+        DeviceId = deviceId;
+        DeviceName = deviceName;
+        EnrollmentTime = enrollmentTime;
+        Family = family;
+        HostName = hostName;
+        this.MACAddress = MACAddress;
+        Manufacturer = manufacturer;
+        Mode = mode;
+        Model = model;
+        this.OSVersion = OSVersion;
+        Path = path;
+        Platform = platform;
+        AgentVersion = agentVersion;
+        CellularCarrier = cellularCarrier;
+        DeviceTerms = deviceTerms;
+        DeviceUserInfo = deviceUserInfo;
+        ExchangeStatus = exchangeStatus;
+        HardwareSerialNumber = hardwareSerialNumber;
+        this.IMEI_MEID_ESN = IMEI_MEID_ESN;
+        Ipv6 = ipv6;
+        LastCheckInTime = lastCheckInTime;
+        LastAgentConnectTime = lastAgentConnectTime;
+        LastAgentDisconnectTime = lastAgentDisconnectTime;
+        LastLoggedOnAt = lastLoggedOnAt;
+        LastLoggedOnUser = lastLoggedOnUser;
+        NetworkConnectionType = networkConnectionType;
+        NetworkRSSI = networkRSSI;
+        NetworkSSID = networkSSID;
+        PhoneNumber = phoneNumber;
+        Processor = processor;
+        SubscriberNumber = subscriberNumber;
+        ComplianceStatus = complianceStatus;
+        IsAgentOnline = isAgentOnline;
+        PasscodeEnabled = passcodeEnabled;
+        IsVirtual = isVirtual;
+        ExchangeBlocked = exchangeBlocked;
+        InRoaming = inRoaming;
+        IsAgentCompatible = isAgentCompatible;
+        IsAgentless = isAgentless;
+        IsLearning = isLearning;
+        this.memory = memory;
+        this.customDataList = customDataList;
+        this.complianceItemList = complianceItemList;
+    }
 
     public List<ComplianceItem> getComplianceItemList() {
         return complianceItemList;
@@ -211,23 +270,15 @@ public class Device {
     }
 
     //Inner class for nested objects
-    public static class ComplianceItems {
-        public String ComplianceType;
-        public Boolean ComplianceValue;
-
-        public String getComplianceType() {
-            return ComplianceType;
-        }
-
-        public int getComplianceValue() {
-            return ComplianceValue ? 1 : 0;
-        }
-    }
-
-    //Inner class for nested objects
     public static class CustomAttributes {
-        public String name, value;
-        public Boolean dataType;
+        String name, value;
+        Boolean dataType;
+
+        public CustomAttributes(String name, String value, Boolean dataType) {
+            this.name = name;
+            this.value = value;
+            this.dataType = dataType;
+        }
 
         public String getName() {
             return name;
@@ -243,9 +294,41 @@ public class Device {
     }
 
     //Inner class for nested objects
-    public final class Memory {
+    private class ComplianceItems {
+        String ComplianceType;
+        Boolean ComplianceValue;
+
+        public ComplianceItems(String complianceType, Boolean complianceValue) {
+            ComplianceType = complianceType;
+            ComplianceValue = complianceValue;
+        }
+
+        public String getComplianceType() {
+            return ComplianceType;
+        }
+
+        public int getComplianceValue() {
+            return ComplianceValue ? 1 : 0;
+        }
+    }
+
+    //Inner class for nested objects
+    private class Memory {
         int AvailableExternalStorage, AvailableMemory, AvailableSDCardStorage, AvailableStorage,
                 TotalExternalStorage, TotalMemory, TotalSDCardStorage, TotalStorage;
+
+        public Memory(int availableExternalStorage, int availableMemory, int availableSDCardStorage,
+                      int availableStorage, int totalExternalStorage, int totalMemory,
+                      int totalSDCardStorage, int totalStorage) {
+            AvailableExternalStorage = availableExternalStorage;
+            AvailableMemory = availableMemory;
+            AvailableSDCardStorage = availableSDCardStorage;
+            AvailableStorage = availableStorage;
+            TotalExternalStorage = totalExternalStorage;
+            TotalMemory = totalMemory;
+            TotalSDCardStorage = totalSDCardStorage;
+            TotalStorage = totalStorage;
+        }
 
         public int getAvailableExternalStorage() {
             return AvailableExternalStorage;
@@ -280,9 +363,14 @@ public class Device {
         }
     }
 
-    public class ComplianceItem {
+    private class ComplianceItem {
         String ComplianceType;
         Boolean ComplianceValue;
+
+        public ComplianceItem(String complianceType, Boolean complianceValue) {
+            ComplianceType = complianceType;
+            ComplianceValue = complianceValue;
+        }
 
         public String getComplianceType() {
             return ComplianceType;
@@ -293,8 +381,8 @@ public class Device {
         }
     }
 
-    public class CustomData {
-
+    private class CustomData {
+        //TODO:test device with custom data and populate this table
     }
 
 

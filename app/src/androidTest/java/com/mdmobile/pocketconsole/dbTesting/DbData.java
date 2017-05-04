@@ -55,7 +55,7 @@ public class DbData {
 
         Gson gson = new Gson();
         Type deviceCollectionType = new TypeToken<Collection<Device>>(){}.getType();
-        Collection<Device> device = gson.fromJson(FakeJSON.deviceJson,deviceCollectionType);
+        Collection<Device> device = gson.fromJson(FakeJSON.devicesJson,deviceCollectionType);
         Device[] devicesArray = new Device[device.size()];
         device.toArray(devicesArray);
         assertTrue("Device name doesn't match: "+ devicesArray[0].getDeviceName(),

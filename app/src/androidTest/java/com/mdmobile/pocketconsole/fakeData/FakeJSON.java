@@ -3,7 +3,7 @@ package com.mdmobile.pocketconsole.fakeData;
 
 public class FakeJSON {
 
-    public final static String deviceJson ="[\n" +
+    public final static String devicesJson ="[\n" +
             "  {\n" +
             "    \"AgentVersion\": \"13.30.2908\",\n" +
             "    \"Memory\": {\n" +

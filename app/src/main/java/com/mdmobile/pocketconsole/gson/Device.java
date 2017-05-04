@@ -1,13 +1,38 @@
 package com.mdmobile.pocketconsole.gson;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class Device {
-    int BackupBatteryStatus, BatteryStatus, CellularSignalStrength;
+    private int BackupBatteryStatus, BatteryStatus, CellularSignalStrength;
     private String Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
             OSVersion, Path, Platform, AgentVersion, CellularCarrier,
             DeviceTerms, DeviceUserInfo, ExchangeStatus, HardwareSerialNumber, IMEI_MEID_ESN, Ipv6,
             LastCheckInTime, LastAgentConnectTime, LastAgentDisconnectTime, LastLoggedOnAt, LastLoggedOnUser, NetworkConnectionType,
             NetworkRSSI, NetworkSSID, PhoneNumber, Processor, SubscriberNumber;
     private Boolean ComplianceStatus, IsAgentOnline, PasscodeEnabled, IsVirtual, ExchangeBlocked, InRoaming, IsAgentCompatible, IsAgentless, IsLearning;
+
+    @SerializedName("Memory")
+    private Memory memory;
+
+    @SerializedName("CustomData")
+    private List<CustomData> customDataList;
+
+    @SerializedName("ComplianceItem")
+    private List<ComplianceItem> complianceItemList;
+
+    public List<ComplianceItem> getComplianceItemList() {
+        return complianceItemList;
+    }
+
+    public Memory getMemory() {
+        return memory;
+    }
+
+    public List<CustomData> getCustomDataList() {
+        return customDataList;
+    }
 
     public String getKind() {
         return Kind;
@@ -185,10 +210,40 @@ public class Device {
         return IsLearning ? 1 : 0;
     }
 
+    //Inner class for nested objects
+    public static class ComplianceItems {
+        public String ComplianceType;
+        public Boolean ComplianceValue;
 
+        public String getComplianceType() {
+            return ComplianceType;
+        }
+
+        public int getComplianceValue() {
+            return ComplianceValue ? 1 : 0;
+        }
+    }
 
     //Inner class for nested objects
-    public  final class Memory {
+    public static class CustomAttributes {
+        public String name, value;
+        public Boolean dataType;
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public int getDataType() {
+            return dataType ? 1 : 0;
+        }
+    }
+
+    //Inner class for nested objects
+    public final class Memory {
         int AvailableExternalStorage, AvailableMemory, AvailableSDCardStorage, AvailableStorage,
                 TotalExternalStorage, TotalMemory, TotalSDCardStorage, TotalStorage;
 
@@ -225,10 +280,9 @@ public class Device {
         }
     }
 
-    //Inner class for nested objects
-    public static class ComplianceItems {
-        public String ComplianceType;
-        public Boolean ComplianceValue;
+    public class ComplianceItem {
+        String ComplianceType;
+        Boolean ComplianceValue;
 
         public String getComplianceType() {
             return ComplianceType;
@@ -239,22 +293,8 @@ public class Device {
         }
     }
 
-    //Inner class for nested objects
-    public static class CustomAttributes {
-        public  String name, value;
-        public  Boolean dataType;
+    public class CustomData {
 
-        public String getName() {
-            return name;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public int getDataType() {
-            return dataType ? 1 : 0;
-        }
     }
 
 

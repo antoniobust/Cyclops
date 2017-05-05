@@ -313,7 +313,7 @@ public class Device {
     }
 
     //Inner class for nested objects
-    private class Memory {
+    public class Memory {
         int AvailableExternalStorage, AvailableMemory, AvailableSDCardStorage, AvailableStorage,
                 TotalExternalStorage, TotalMemory, TotalSDCardStorage, TotalStorage;
 

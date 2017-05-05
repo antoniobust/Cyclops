@@ -22,7 +22,6 @@ import org.junit.runner.RunWith;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
-import static java.lang.Integer.getInteger;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
@@ -34,8 +33,8 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class DbData {
 
-    Context mContext;
-    SQLiteDatabase db;
+    private Context mContext;
+    private SQLiteDatabase db;
 
     private void deleteExistingDB() {
         mContext.deleteDatabase(McHelper.DB_NAME);
@@ -51,15 +50,14 @@ public class DbData {
     }
 
     @Test
-    public void createNewDevice() {
+    public void testInsertDevice() {
+        createSingleNewDevice();
+        createNewDevicesBulkImport();
+    }
 
-        Gson gson = new Gson();
-        Type deviceCollectionType = new TypeToken<Collection<Device>>(){}.getType();
-        Collection<Device> device = gson.fromJson(FakeJSON.devicesJson,deviceCollectionType);
-        Device[] devicesArray = new Device[device.size()];
-        device.toArray(devicesArray);
-        assertTrue("Device name doesn't match: "+ devicesArray[0].getDeviceName(),
-                devicesArray[0].getDeviceName().equals("(John) Honeywell Dolphin Black 70e 00001"));
+
+    private void createSingleNewDevice() {
+        Device[] devicesArray = getDeviceFromJson();
 
         ContentValues deviceValues = com.mdmobile.pocketconsole.utils.DbData.getDeviceContentValues(devicesArray[0]);
 
@@ -67,9 +65,8 @@ public class DbData {
         assertNotNull("Device was not created", newDev);
         String id = McContract.Device.getDeviceIdFromUri(newDev);
         assertNotNull(id);
-        assertFalse("New device id is not valid",id.equals("-1"));
+        assertFalse("New device id is not valid", id.equals("-1"));
 
-        //TODO:test values inserted
         Cursor c = db.rawQuery("SELECT * from " + McContract.DEVICE_TABLE_NAME, null);
         assertTrue("No device found", c.moveToFirst());
         do {
@@ -78,6 +75,29 @@ public class DbData {
 
         } while (c.moveToNext());
         c.close();
+    }
+
+    private void createNewDevicesBulkImport() {
+        Device[] devicesArray = getDeviceFromJson();
+        ContentValues[] devicesValues = com.mdmobile.pocketconsole.utils.DbData.getListOfDeviceContentValues(devicesArray);
+        int newDev = mContext.getApplicationContext().getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
+        assertFalse("Not all devices have been inserted correctly", newDev == 0);
+    }
+
+
+    private Device[] getDeviceFromJson() {
+        Gson gson = new Gson();
+        Type deviceCollectionType = new TypeToken<Collection<Device>>() {
+        }.getType();
+        Collection<Device> device = gson.fromJson(FakeJSON.devicesJson, deviceCollectionType);
+        Device[] devicesArray = new Device[device.size()];
+        device.toArray(devicesArray);
+        assertTrue("Device name doesn't match: " + devicesArray[0].getDeviceName(),
+                devicesArray[0].getDeviceName().equals("(John) Honeywell Dolphin Black 70e 00001"));
+        assertTrue("Device name doesn't match: " + devicesArray[1].getDeviceName(),
+                devicesArray[1].getDeviceName().equals("(John) Intermec CN70 00001"));
+
+        return devicesArray;
     }
 
 }

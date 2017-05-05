@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.mdmobile.pocketconsole.utils.Logging;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 public class McProvider extends ContentProvider {
 
@@ -18,10 +18,9 @@ public class McProvider extends ContentProvider {
 
     //Matcher
     private static McUriMatcher matcher;
-
+    SQLiteDatabase database;
     //DB helper
     private McHelper mcHelper;
-
 
     @Override
     public boolean onCreate() {
@@ -45,33 +44,68 @@ public class McProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-        return super.bulkInsert(uri, values);
+
+        Logger.log(LOG_TAG, "insert( uri:" + uri.toString() + " , objects: " + values.length, Log.VERBOSE);
+
+        //Get DB is an expensive operation check if we already have opened it
+        if (database == null) {
+            database = mcHelper.getWritableDatabase();
+        }
+        McEnumUri mcEnumUri = matcher.matchUri(uri);
+        int dataInserted = 0;
+
+        if (mcEnumUri.tableName != null) {
+            switch (mcEnumUri) {
+                case DEVICES:
+                    for (ContentValues contentValues : values) {
+                        if (database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME,
+                                null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                            //if data was inserted correctly increment data inserted value
+                            dataInserted++;
+                        }
+                    }
+                    if (dataInserted == values.length) {
+                        getContext().getContentResolver().notifyChange(uri, null);
+                        return 1;
+                    } else {
+                        Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);
+                    }
+            }
+        }
+        return 0;
     }
 
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        if (contentValues != null) {
-            Logging.log(LOG_TAG, "insert( uri: " + uri.toString() + " , values: " + contentValues.toString() + ")", Log.VERBOSE);
-        } else {
-            Logging.log(LOG_TAG, "insert( uri: " + uri.toString() + " , values: null )", Log.VERBOSE);
-        }
 
-        final SQLiteDatabase db = mcHelper.getWritableDatabase();
+        if (contentValues != null) {
+            Logger.log(LOG_TAG, "insert( uri: " + uri.toString() + " , values: " + contentValues.size() + ")", Log.VERBOSE);
+        } else {
+            Logger.log(LOG_TAG, "insert( uri: " + uri.toString() + " , values: null )", Log.VERBOSE);
+        }
+        //Get DB is an expensive operation check if we already have opened it
+        if (database == null) {
+            database = mcHelper.getWritableDatabase();
+        }
 
         McEnumUri mcEnumUri = matcher.matchUri(uri);
-        long newRowID = -1;
+        long newRowID;
 
         if (mcEnumUri.tableName != null) {
-            newRowID = db.insertWithOnConflict(McContract.DEVICE_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-            getContext().getContentResolver().notifyChange(uri, null);
-        }
+            switch (mcEnumUri) {
+                case DEVICES:
+                    newRowID = database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                    if (newRowID < 1) {
+                        Logger.log(LOG_TAG, "Impossible to insert device in DB", Log.ERROR);
+                        return null;
+                    }
+                    getContext().getContentResolver().notifyChange(uri, null);
 
-        switch(mcEnumUri){
-            case DEVICES:
-                return McContract.Device.buildUriWithID(newRowID);
-            case CUSTOM_ATTRIBUTE:
-            case CUSTOM_DATA:
+                    return McContract.Device.buildUriWithID(newRowID);
+                case CUSTOM_ATTRIBUTE:
+                case CUSTOM_DATA:
+            }
         }
         return null;
     }

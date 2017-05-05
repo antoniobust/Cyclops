@@ -69,4 +69,12 @@ public class DbData {
         return deviceValues;
     }
 
+    public static ContentValues[] getListOfDeviceContentValues(Device[] devices) {
+        ContentValues[] values = new ContentValues[devices.length];
+        for (int i = 0; i < devices.length; i++) {
+            values[i] = getDeviceContentValues(devices[i]);
+        }
+        return values;
+    }
+
 }

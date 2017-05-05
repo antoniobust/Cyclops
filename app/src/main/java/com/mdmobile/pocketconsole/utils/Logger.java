@@ -10,7 +10,7 @@ import com.android.volley.BuildConfig;
  * Helper class to organise logs
  */
 
-public class Logging {
+public class Logger {
 
     public static void log(@NonNull String logTag, @NonNull String msg,
                     @IntRange(from = Log.VERBOSE, to = Log.ERROR) int priority) {

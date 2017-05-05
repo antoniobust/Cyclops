@@ -3,23 +3,23 @@ package com.mdmobile.pocketconsole.gson;
 
 public class CollectedData {
 
-    private String DeviceId, Kind, Timestamp;
+    private String deviceId, kind, timestamp;
 
-    public CollectedData(String DeviceId, String Kind, String Timestamp) {
-        this.DeviceId = DeviceId;
-        this.Kind = Kind;
-        this.Timestamp = Timestamp;
+    public CollectedData(String deviceId, String kind, String timestamp) {
+        this.deviceId = deviceId;
+        this.kind = kind;
+        this.timestamp = timestamp;
     }
 
     public String getDeviceId() {
-        return DeviceId;
+        return deviceId;
     }
 
     public String getKind() {
-        return Kind;
+        return kind;
     }
 
     public String getTimestamp() {
-        return Timestamp;
+        return timestamp;
     }
 }

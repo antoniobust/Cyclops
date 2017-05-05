@@ -221,6 +221,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
         if (getIntent().getExtras() != null && getIntent().hasExtra(AUTH_TOKEN_TYPE_KEY)) {
             tokenType = getIntent().getStringExtra(AUTH_TOKEN_TYPE_KEY);
+            userInfo.putString(AUTH_TOKEN_TYPE_KEY, tokenType);
         }
         if (getIntent().getExtras() != null && getIntent().hasExtra(ADDING_NEW_ACCOUNT_KEY)) {
             newAccount = getIntent().getBooleanExtra(ADDING_NEW_ACCOUNT_KEY, false);

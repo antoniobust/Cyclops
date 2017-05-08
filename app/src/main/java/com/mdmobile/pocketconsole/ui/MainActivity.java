@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
+
+        ApiRequestManager.getInstance(getApplicationContext()).getAndroidDevices();
 
     }
 }

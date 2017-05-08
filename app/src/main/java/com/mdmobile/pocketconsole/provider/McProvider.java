@@ -12,6 +12,8 @@ import android.util.Log;
 
 import com.mdmobile.pocketconsole.utils.Logger;
 
+import static android.R.attr.data;
+
 public class McProvider extends ContentProvider {
 
     private final static String LOG_TAG = McProvider.class.getSimpleName();
@@ -45,7 +47,7 @@ public class McProvider extends ContentProvider {
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
 
-        Logger.log(LOG_TAG, "insert( uri:" + uri.toString() + " , objects: " + values.length, Log.VERBOSE);
+        Logger.log(LOG_TAG, "insert( uri:" + uri.toString() + " , objects: " + values.length+")", Log.VERBOSE);
 
         //Get DB is an expensive operation check if we already have opened it
         if (database == null) {
@@ -66,6 +68,8 @@ public class McProvider extends ContentProvider {
                     }
                     if (dataInserted == values.length) {
                         getContext().getContentResolver().notifyChange(uri, null);
+                        Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " devices in DB", Log.VERBOSE);
+
                         return 1;
                     } else {
                         Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);

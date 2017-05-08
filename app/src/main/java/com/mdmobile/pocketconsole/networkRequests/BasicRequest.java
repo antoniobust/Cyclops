@@ -15,30 +15,36 @@ import java.util.Map;
 
 import static com.mdmobile.pocketconsole.ui.LoginActivity.AUTH_TOKEN_TYPE_KEY;
 
-public abstract class BasicRequest extends Request {
+/**
+ * Extend this class in Custom volley request.
+ * This insert MobiControl authentication token in the headers
+ */
+
+public abstract class BasicRequest<T> extends Request<T> {
 
     private final Context mContext;
 
-    public BasicRequest(int method, String url, Response.ErrorListener listener, Context context) {
-        super(method, url, listener);
+    public BasicRequest(int method, String url, Response.ErrorListener errorListener, Context context) {
+        super(method, url, errorListener);
         mContext = context;
     }
 
-
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        Map<String,String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<>();
         AccountManager accountManager = AccountManager.get(mContext);
         Account[] accountAvailable = accountManager.getAccountsByType(mContext.getString(R.string.account_type));
 
         String tokenType = accountManager.getUserData(accountAvailable[0], AUTH_TOKEN_TYPE_KEY);
         //Assuming we only have 1 account
         //TODO: support multiple account
-        String token = accountManager.peekAuthToken(accountAvailable[0],tokenType);
+        String token = accountManager.peekAuthToken(accountAvailable[0], tokenType);
 
         headers.put("Authorization", tokenType.concat(" ").concat(token));
+
+        headers.put("Accept", "application/json");
+
         return headers;
     }
-
 }
 

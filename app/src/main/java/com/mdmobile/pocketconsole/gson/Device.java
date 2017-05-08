@@ -5,81 +5,23 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Device {
-    private int BackupBatteryStatus, BatteryStatus, CellularSignalStrength;
+
+    @SerializedName("Memory")
+    public Memory memory;
+    @SerializedName("CustomData")
+    public List<CustomData> customDataList;
+    @SerializedName("ComplianceItem")
+    public List<ComplianceItem> complianceItemList;
+    @SerializedName("DeviceUserInfo")
+    public DeviceUserInfo deviceUserInfo;
+
     private String Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
             OSVersion, Path, Platform, AgentVersion, CellularCarrier,
-            DeviceTerms, DeviceUserInfo, ExchangeStatus, HardwareSerialNumber, IMEI_MEID_ESN, Ipv6,
+            DeviceTerms, ExchangeStatus, HardwareSerialNumber, IMEI_MEID_ESN, Ipv6,
             LastCheckInTime, LastAgentConnectTime, LastAgentDisconnectTime, LastLoggedOnAt, LastLoggedOnUser, NetworkConnectionType,
-            NetworkRSSI, NetworkSSID, PhoneNumber, Processor, SubscriberNumber;
+            NetworkRSSI, NetworkSSID, PhoneNumber, Processor, SubscriberNumber, BackupBatteryStatus, BatteryStatus, CellularSignalStrength;
     private Boolean ComplianceStatus, IsAgentOnline, PasscodeEnabled, IsVirtual, ExchangeBlocked, InRoaming, IsAgentCompatible, IsAgentless, IsLearning;
-    @SerializedName("Memory")
-    private Memory memory;
-    @SerializedName("CustomData")
-    private List<CustomData> customDataList;
-    @SerializedName("ComplianceItem")
-    private List<ComplianceItem> complianceItemList;
 
-    public Device(int backupBatteryStatus, int batteryStatus, int cellularSignalStrength, String kind,
-                  String deviceId, String deviceName, String enrollmentTime, String family, String hostName,
-                  String MACAddress, String manufacturer, String mode, String model, String OSVersion,
-                  String path, String platform, String agentVersion, String cellularCarrier,
-                  String deviceTerms, String deviceUserInfo, String exchangeStatus,
-                  String hardwareSerialNumber, String IMEI_MEID_ESN, String ipv6, String lastCheckInTime,
-                  String lastAgentConnectTime, String lastAgentDisconnectTime, String lastLoggedOnAt,
-                  String lastLoggedOnUser, String networkConnectionType, String networkRSSI,
-                  String networkSSID, String phoneNumber, String processor, String subscriberNumber,
-                  Boolean complianceStatus, Boolean isAgentOnline, Boolean passcodeEnabled,
-                  Boolean isVirtual, Boolean exchangeBlocked, Boolean inRoaming,
-                  Boolean isAgentCompatible, Boolean isAgentless, Boolean isLearning,
-                  Memory memory, List<CustomData> customDataList, List<ComplianceItem> complianceItemList) {
-        BackupBatteryStatus = backupBatteryStatus;
-        BatteryStatus = batteryStatus;
-        CellularSignalStrength = cellularSignalStrength;
-        Kind = kind;
-        DeviceId = deviceId;
-        DeviceName = deviceName;
-        EnrollmentTime = enrollmentTime;
-        Family = family;
-        HostName = hostName;
-        this.MACAddress = MACAddress;
-        Manufacturer = manufacturer;
-        Mode = mode;
-        Model = model;
-        this.OSVersion = OSVersion;
-        Path = path;
-        Platform = platform;
-        AgentVersion = agentVersion;
-        CellularCarrier = cellularCarrier;
-        DeviceTerms = deviceTerms;
-        DeviceUserInfo = deviceUserInfo;
-        ExchangeStatus = exchangeStatus;
-        HardwareSerialNumber = hardwareSerialNumber;
-        this.IMEI_MEID_ESN = IMEI_MEID_ESN;
-        Ipv6 = ipv6;
-        LastCheckInTime = lastCheckInTime;
-        LastAgentConnectTime = lastAgentConnectTime;
-        LastAgentDisconnectTime = lastAgentDisconnectTime;
-        LastLoggedOnAt = lastLoggedOnAt;
-        LastLoggedOnUser = lastLoggedOnUser;
-        NetworkConnectionType = networkConnectionType;
-        NetworkRSSI = networkRSSI;
-        NetworkSSID = networkSSID;
-        PhoneNumber = phoneNumber;
-        Processor = processor;
-        SubscriberNumber = subscriberNumber;
-        ComplianceStatus = complianceStatus;
-        IsAgentOnline = isAgentOnline;
-        PasscodeEnabled = passcodeEnabled;
-        IsVirtual = isVirtual;
-        ExchangeBlocked = exchangeBlocked;
-        InRoaming = inRoaming;
-        IsAgentCompatible = isAgentCompatible;
-        IsAgentless = isAgentless;
-        IsLearning = isLearning;
-        this.memory = memory;
-        this.customDataList = customDataList;
-        this.complianceItemList = complianceItemList;
-    }
 
     public List<ComplianceItem> getComplianceItemList() {
         return complianceItemList;
@@ -157,10 +99,6 @@ public class Device {
         return DeviceTerms;
     }
 
-    public String getDeviceUserInfo() {
-        return DeviceUserInfo;
-    }
-
     public String getExchangeStatus() {
         return ExchangeStatus;
     }
@@ -222,55 +160,105 @@ public class Device {
     }
 
     public int getBackupBatteryStatus() {
-        return BackupBatteryStatus;
+        if (BackupBatteryStatus == null) {
+            return -1;
+        } else
+            return Integer.valueOf(BackupBatteryStatus);
     }
 
     public int getBatteryStatus() {
-        return BatteryStatus;
+        if (BatteryStatus == null) {
+            return -1;
+        } else {
+            return Integer.valueOf(BatteryStatus);
+        }
     }
 
     public int getCellularSignalStrength() {
-        return CellularSignalStrength;
+        if (CellularSignalStrength == null) {
+            return -1;
+        } else {
+            return Integer.valueOf(CellularSignalStrength);
+        }
     }
 
     public int getComplianceStatus() {
-        return ComplianceStatus ? 1 : 0;
+        if (ComplianceStatus == null) {
+            return -1;
+        } else {
+            return ComplianceStatus ? 1 : 0;
+        }
     }
 
     public int getAgentOnline() {
+        if (IsAgentOnline == null) {
+            return -1;
+        } else {
+        }
         return IsAgentOnline ? 1 : 0;
     }
 
     public int getPasscodeEnabled() {
+        if (PasscodeEnabled == null) {
+            return -1;
+        } else {
+        }
         return PasscodeEnabled ? 1 : 0;
     }
 
     public int getVirtual() {
-        return IsVirtual ? 1 : 0;
+        if (IsVirtual == null) {
+            return -1;
+        } else {
+
+            return IsVirtual ? 1 : 0;
+        }
     }
 
     public int getExchangeBlocked() {
-        return ExchangeBlocked ? 1 : 0;
+        if (ExchangeBlocked == null) {
+            return -1;
+        } else {
+
+            return ExchangeBlocked ? 1 : 0;
+        }
     }
 
     public int getInRoaming() {
-        return InRoaming ? 1 : 0;
+        if (InRoaming == null) {
+            return -1;
+        } else {
+            return InRoaming ? 1 : 0;
+        }
     }
 
     public int getAgentCompatible() {
-        return IsAgentCompatible ? 1 : 0;
+        if (IsAgentCompatible == null) {
+            return -1;
+        } else {
+
+            return IsAgentCompatible ? 1 : 0;
+        }
     }
 
     public int getAgentless() {
-        return IsAgentless ? 1 : 0;
+        if (IsAgentless == null) {
+            return -1;
+        } else {
+            return IsAgentless ? 1 : 0;
+        }
     }
 
     public int getLearning() {
-        return IsLearning ? 1 : 0;
+        if (IsLearning == null) {
+            return -1;
+        } else {
+            return IsLearning ? 1 : 0;
+        }
     }
 
     //Inner class for nested objects
-    public static class CustomAttributes {
+    public class CustomAttributes {
         String name, value;
         Boolean dataType;
 
@@ -294,7 +282,7 @@ public class Device {
     }
 
     //Inner class for nested objects
-    private class ComplianceItems {
+    public class ComplianceItems {
         String ComplianceType;
         Boolean ComplianceValue;
 
@@ -314,12 +302,12 @@ public class Device {
 
     //Inner class for nested objects
     public class Memory {
-        int AvailableExternalStorage, AvailableMemory, AvailableSDCardStorage, AvailableStorage,
+        String AvailableExternalStorage, AvailableMemory, AvailableSDCardStorage, AvailableStorage,
                 TotalExternalStorage, TotalMemory, TotalSDCardStorage, TotalStorage;
 
-        public Memory(int availableExternalStorage, int availableMemory, int availableSDCardStorage,
-                      int availableStorage, int totalExternalStorage, int totalMemory,
-                      int totalSDCardStorage, int totalStorage) {
+        public Memory(String availableExternalStorage, String availableMemory, String availableSDCardStorage,
+                      String availableStorage, String totalExternalStorage, String totalMemory,
+                      String totalSDCardStorage, String totalStorage) {
             AvailableExternalStorage = availableExternalStorage;
             AvailableMemory = availableMemory;
             AvailableSDCardStorage = availableSDCardStorage;
@@ -330,40 +318,126 @@ public class Device {
             TotalStorage = totalStorage;
         }
 
-        public int getAvailableExternalStorage() {
-            return AvailableExternalStorage;
+        public long getAvailableExternalStorage() {
+            if (AvailableExternalStorage == null) {
+                return -1;
+            } else {
+
+                return Long.valueOf(AvailableExternalStorage);
+            }
         }
 
-        public int getAvailableMemory() {
-            return AvailableMemory;
+        public long getAvailableMemory() {
+            if (AvailableMemory == null) {
+                return -1;
+            } else {
+                return Long.valueOf(AvailableMemory);
+            }
         }
 
-        public int getAvailableSDCardStorage() {
-            return AvailableSDCardStorage;
+        public long getAvailableSDCardStorage() {
+            if (AvailableSDCardStorage == null) {
+                return -1;
+            } else {
+                return Long.valueOf(AvailableSDCardStorage);
+            }
         }
 
-        public int getAvailableStorage() {
-            return AvailableStorage;
+        public long getAvailableStorage() {
+            if (AvailableStorage == null) {
+                return -1;
+            } else {
+                return Long.valueOf(AvailableStorage);
+            }
         }
 
-        public int getTotalExternalStorage() {
-            return TotalExternalStorage;
+        public long getTotalExternalStorage() {
+            if (TotalExternalStorage == null) {
+                return -1;
+            } else {
+                return Long.valueOf(TotalExternalStorage);
+            }
         }
 
-        public int getTotalMemory() {
-            return TotalMemory;
+        public long getTotalMemory() {
+            if (TotalMemory == null) {
+                return -1;
+            } else {
+                return Long.valueOf(TotalMemory);
+            }
         }
 
-        public int getTotalSDCardStorage() {
-            return TotalSDCardStorage;
+        public long getTotalSDCardStorage() {
+            if (TotalSDCardStorage == null) {
+                return -1;
+            } else {
+                return Long.valueOf(TotalSDCardStorage);
+            }
         }
 
-        public int getTotalStorage() {
-            return TotalStorage;
+        public long getTotalStorage() {
+            if (TotalStorage == null) {
+                return -1;
+            } else {
+                return Long.valueOf(TotalStorage);
+            }
         }
     }
 
-    private class ComplianceItem {
+    public class DeviceUserInfo {
+        private String UserName, FirstName, MiddleName, LastName, DomainName, UPN, PhoneNumber,
+                Email, CustomProperty1, CustomProperty2, CustomProperty3, Identifier;
+
+        public String getUserName() {
+            return UserName;
+        }
+
+        public String getFirstName() {
+            return FirstName;
+        }
+
+        public String getMiddleName() {
+            return MiddleName;
+        }
+
+        public String getLastName() {
+            return LastName;
+        }
+
+        public String getDomainName() {
+            return DomainName;
+        }
+
+        public String getUPN() {
+            return UPN;
+        }
+
+        public String getPhoneNumber() {
+            return PhoneNumber;
+        }
+
+        public String getEmail() {
+            return Email;
+        }
+
+        public String getCustomProperty1() {
+            return CustomProperty1;
+        }
+
+        public String getCustomProperty2() {
+            return CustomProperty2;
+        }
+
+        public String getCustomProperty3() {
+            return CustomProperty3;
+        }
+
+        public String getIdentifier() {
+            return Identifier;
+        }
+    }
+
+    public class ComplianceItem {
         String ComplianceType;
         Boolean ComplianceValue;
 
@@ -381,7 +455,7 @@ public class Device {
         }
     }
 
-    private class CustomData {
+    public class CustomData {
         //TODO:test device with custom data and populate this table
     }
 

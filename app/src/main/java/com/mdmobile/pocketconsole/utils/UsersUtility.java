@@ -6,6 +6,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.ui.LoginActivity;
+
+import java.util.HashMap;
 
 /**
  * Helper methods to deal with users
@@ -44,6 +47,21 @@ public class UsersUtility {
             return true;
         }
         return false;
+    }
+
+    public static HashMap<String,String> getUserInfo(Context context){
+        AccountManager accountManager =  AccountManager.get(context);
+        Account[] accounts = accountManager.getAccountsByType(context.getString(R.string.account_type));
+        HashMap<String,String> userInfo = new HashMap<>();
+        //TODO:support multiple account
+         userInfo.put(LoginActivity.SERVER_ADDRESS_KEY,
+                 accountManager.getUserData(accounts[0], LoginActivity.SERVER_ADDRESS_KEY));
+        userInfo.put(LoginActivity.CLIENT_ID_KEY,
+                accountManager.getUserData(accounts[0], LoginActivity.CLIENT_ID_KEY));
+        userInfo.put(LoginActivity.API_SECRET_KEY,
+                accountManager.getUserData(accounts[0], LoginActivity.API_SECRET_KEY));
+
+        return userInfo;
     }
 
 }

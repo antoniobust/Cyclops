@@ -11,6 +11,7 @@ public class McContract {
     //Defines the schema
     public static final String CONTENT_AUTHORITY = "com.mdmobile.pocketconsole";
     //DB tables
+    //TODO: create user info table
     public static final String DEVICE_TABLE_NAME = "Device";
     public static final String COMPLIANCE_ITEM_TABLE_NAME = "ComplianceItem";
     public static final String CUSTOM_ATTRIBUTE_TABLE_NAME = "CustomAttribute";
@@ -76,7 +77,6 @@ public class McContract {
         String COLUMN_CELLULAR_CARRIER = "CellularCarrier";
         String COLUMN_CELLULAR_SIGNAL_STRENGTH = "CellularSignalStrength";
         String COLUMN_DEVICE_TERMS = "DeviceTerms";
-        String COLUMN_DEVICE_USER_INFO = "DeviceUserInfo";
         String COLUMN_EXCHANGE_BLOCKED = "ExchangeBlocked";
         String COLUMN_EXCHANGE_STATUS = "ExchangeStatus";
         String COLUMN_IMEI_MEID_ESN = "IMEI_MEID_ESN";

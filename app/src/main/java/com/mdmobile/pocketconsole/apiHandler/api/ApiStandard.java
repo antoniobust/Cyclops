@@ -2,9 +2,11 @@ package com.mdmobile.pocketconsole.apiHandler.api;
 
 
 import android.net.Uri;
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.HashSet;
+import java.util.logging.Logger;
 
 /**
  * ApiStandard is an abstract class which provides the standard methods to append standard parameters
@@ -66,7 +68,9 @@ public abstract class ApiStandard {
     }
 
     public String build() {
-        return Uri.decode(currentApi.build().toString());
+        String uri = Uri.decode(currentApi.build().toString());
+        com.mdmobile.pocketconsole.utils.Logger.log("ApiStandard.class", uri , Log.VERBOSE);
+        return uri;
     }
 
 

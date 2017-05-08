@@ -15,7 +15,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.MANAGEMENT_SERVER_T
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 6;
 
     public McHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -54,7 +54,6 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.Device.COLUMN_CELLULAR_CARRIER + " TEXT, "
                 + McContract.Device.COLUMN_CELLULAR_SIGNAL_STRENGTH + " INTEGER, "
                 + McContract.Device.COLUMN_DEVICE_TERMS + " TEXT, "
-                + McContract.Device.COLUMN_DEVICE_USER_INFO + " TEXT, "
                 + McContract.Device.COLUMN_EXCHANGE_BLOCKED + " INTEGER, "
                 + McContract.Device.COLUMN_EXCHANGE_STATUS + " TEXT, "
                 + McContract.Device.COLUMN_IMEI_MEID_ESN + " TEXT, "

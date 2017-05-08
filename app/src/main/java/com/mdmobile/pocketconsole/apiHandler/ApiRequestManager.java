@@ -3,6 +3,7 @@ package com.mdmobile.pocketconsole.apiHandler;
 import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Pair;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -12,12 +13,21 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.mdmobile.pocketconsole.BuildConfig;
-import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.apiHandler.api.ApiModels;
 import com.mdmobile.pocketconsole.gson.Token;
+import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
+import com.mdmobile.pocketconsole.networkRequests.DeviceRequest;
+import com.mdmobile.pocketconsole.ui.LoginActivity;
+import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.UsersUtility;
+
+import org.json.JSONArray;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -58,7 +68,7 @@ public class ApiRequestManager {
 
         //if debug discard input and use debugging info
         if (BuildConfig.DEBUG) {
-            tokenUrl = mContext.getString(R.string.mc_server_url).concat("/api/token");
+            tokenUrl = mContext.getString(R.string.mc_server_url).concat("/MobiControl/api/token");
             clientID = mContext.getString(R.string.mc_clientID);
             clientSecret = mContext.getString(R.string.mc_client_secret);
             userName = mContext.getString(R.string.mc_user_name);
@@ -104,5 +114,26 @@ public class ApiRequestManager {
 
         requestsQueue.add(tokenRequest);
 
+    }
+
+    public void getAndroidDevices() {
+
+        String apiAuthority = UsersUtility.getUserInfo(mContext).get(LoginActivity.SERVER_ADDRESS_KEY);
+        String api = ApiModels.DevicesApi.Builder(apiAuthority).take(20).build();
+
+        DeviceRequest deviceRequest = new DeviceRequest<>(mContext, Request.Method.GET, api,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
+            }
+        });
+
+        requestsQueue.add(deviceRequest);
     }
 }

@@ -14,22 +14,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mdmobile.pocketconsole.BuildConfig;
-import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 import com.mdmobile.pocketconsole.gson.Token;
+import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.utils.UsersUtility;
 
 public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack {
 
     //Authenticator intent keys
-    public final static String ACCOUNT_TYPE_KEY = "AccountTypeIntentKey";
-    public final static String AUTH_TOKEN_TYPE_KEY = "AuthTokenTypeIntentKey";
+    public final static String ACCOUNT_TYPE_KEY = "AccountTypeKey";
+    public final static String AUTH_TOKEN_TYPE_KEY = "AuthTokenTypeKey";
+    public final static String AUTH_TOKEN_EXPIRATION = "AuthTokenExpirationKey";
+
     public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
+    public final static String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey",
+            API_SECRET_KEY = "apiSecretKey", USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
-    private final String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey", API_SECRET_KEY = "apiSecretKey",
-            USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     ViewPager viewPager;
     TabLayout dotsIndicator;
     Bundle userInputBundle;
@@ -212,17 +214,20 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             userName = getString(R.string.mc_user_name);
             psw = getString(R.string.mc_password);
         } else {
-            userInfo.putString(CLIENT_ID_KEY, userInfo.getString(CLIENT_ID_KEY));
-            userInfo.putString(API_SECRET_KEY, userInfo.getString(API_SECRET_KEY));
-            userInfo.putString(SERVER_ADDRESS_KEY, userInfo.getString(SERVER_ADDRESS_KEY));
+            userInfo.putString(CLIENT_ID_KEY, userInputBundle.getString(CLIENT_ID_KEY));
+            userInfo.putString(API_SECRET_KEY, userInputBundle.getString(API_SECRET_KEY));
+            userInfo.putString(SERVER_ADDRESS_KEY, userInputBundle.getString(SERVER_ADDRESS_KEY));
             userName = userInputBundle.getString(USER_NAME_KEY);
             psw = userInputBundle.getString(PASSWORD_KEY);
         }
+
+        userInfo.putInt(AUTH_TOKEN_EXPIRATION,response.getTokenExpiration());
 
         if (getIntent().getExtras() != null && getIntent().hasExtra(AUTH_TOKEN_TYPE_KEY)) {
             tokenType = getIntent().getStringExtra(AUTH_TOKEN_TYPE_KEY);
             userInfo.putString(AUTH_TOKEN_TYPE_KEY, tokenType);
         }
+
         if (getIntent().getExtras() != null && getIntent().hasExtra(ADDING_NEW_ACCOUNT_KEY)) {
             newAccount = getIntent().getBooleanExtra(ADDING_NEW_ACCOUNT_KEY, false);
         }
@@ -232,6 +237,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
         if (tokenType == null || tokenType.equals("")) {
             tokenType = response.getToken_type();
+            userInfo.putString(AUTH_TOKEN_TYPE_KEY, tokenType);
         }
         if (accountType == null || tokenType.equals("")) {
             accountType = getString(R.string.account_type);
@@ -266,7 +272,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
     }
 
-    private void startMainActivity(){
+    private void startMainActivity() {
         //Login done launch main activity
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

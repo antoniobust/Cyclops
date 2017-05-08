@@ -9,6 +9,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.fakeData.FakeJSON;
 import com.mdmobile.pocketconsole.gson.Device;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import static junit.framework.Assert.assertFalse;
@@ -70,7 +72,7 @@ public class DbData {
         Cursor c = db.rawQuery("SELECT * from " + McContract.DEVICE_TABLE_NAME, null);
         assertTrue("No device found", c.moveToFirst());
         do {
-            assertTrue("Data error found device online: 0", c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1);
+            assertFalse("Data error found device online: 1", c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1);
             assertTrue("Data error found device Memory doesn't match", c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AVAILABLE_MEMORY)) == 306085888);
 
         } while (c.moveToNext());
@@ -86,10 +88,10 @@ public class DbData {
 
 
     private Device[] getDeviceFromJson() {
-        Gson gson = new Gson();
-        Type deviceCollectionType = new TypeToken<Collection<Device>>() {
+        Type deviceCollectionType = new TypeToken<ArrayList<Device>>() {
         }.getType();
-        Collection<Device> device = gson.fromJson(FakeJSON.devicesJson, deviceCollectionType);
+
+        ArrayList<Device> device = new Gson().fromJson(FakeJSON.devicesJson, deviceCollectionType);
         Device[] devicesArray = new Device[device.size()];
         device.toArray(devicesArray);
         assertTrue("Device name doesn't match: " + devicesArray[0].getDeviceName(),

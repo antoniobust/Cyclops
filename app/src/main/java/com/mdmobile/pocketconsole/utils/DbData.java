@@ -14,6 +14,7 @@ public class DbData {
     public static ContentValues getDeviceContentValues(Device device) {
         ContentValues deviceValues = new ContentValues(16);
 
+
         deviceValues.put(McContract.Device.COLUMN_KIND, device.getKind());
         deviceValues.put(McContract.Device.COLUMN_COMPLIANCE_STATUS, device.getComplianceStatus());
         deviceValues.put(McContract.Device.COLUMN_DEVICE_ID, device.getDeviceId());
@@ -31,19 +32,20 @@ public class DbData {
         deviceValues.put(McContract.Device.COLUMN_PATH, device.getPath());
         deviceValues.put(McContract.Device.COLUMN_PLATFORM, device.getPlatform());
         deviceValues.put(McContract.Device.COLUMN_AGENT_VERSION, device.getAgentVersion());
-        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, device.getMemory().getAvailableExternalStorage());
-        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, device.getMemory().getAvailableMemory());
-        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, device.getMemory().getAvailableSDCardStorage());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, device.getMemory().getTotalExternalStorage());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_MEMORY, device.getMemory().getTotalMemory());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, device.getMemory().getTotalSDCardStorage());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_STORAGE, device.getMemory().getTotalStorage());
+        if(device.getMemory() != null) {
+            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, device.getMemory().getAvailableExternalStorage());
+            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, device.getMemory().getAvailableMemory());
+            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, device.getMemory().getAvailableSDCardStorage());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, device.getMemory().getTotalExternalStorage());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_MEMORY, device.getMemory().getTotalMemory());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, device.getMemory().getTotalSDCardStorage());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_STORAGE, device.getMemory().getTotalStorage());
+        }
         deviceValues.put(McContract.Device.COLUMN_BACKUP_BATTERY_STATUS, device.getBackupBatteryStatus());
         deviceValues.put(McContract.Device.COLUMN_BATTERY_STATUS, device.getBatteryStatus());
         deviceValues.put(McContract.Device.COLUMN_CELLULAR_CARRIER, device.getCellularCarrier());
         deviceValues.put(McContract.Device.COLUMN_CELLULAR_SIGNAL_STRENGTH, device.getCellularSignalStrength());
         deviceValues.put(McContract.Device.COLUMN_DEVICE_TERMS, device.getDeviceTerms());
-        deviceValues.put(McContract.Device.COLUMN_DEVICE_USER_INFO, device.getDeviceUserInfo());
         deviceValues.put(McContract.Device.COLUMN_EXCHANGE_BLOCKED, device.getExchangeBlocked());
         deviceValues.put(McContract.Device.COLUMN_EXCHANGE_STATUS, device.getExchangeStatus());
         deviceValues.put(McContract.Device.COLUMN_IMEI_MEID_ESN, device.getIMEI_MEID_ESN());

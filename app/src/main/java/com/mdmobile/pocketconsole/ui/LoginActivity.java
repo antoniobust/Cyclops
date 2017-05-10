@@ -27,6 +27,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
     public final static String ACCOUNT_TYPE_KEY = "AccountTypeKey";
     public final static String AUTH_TOKEN_TYPE_KEY = "AuthTokenTypeKey";
     public final static String AUTH_TOKEN_EXPIRATION = "AuthTokenExpirationKey";
+    public final static String REFRESH_AUTH_TOKEN = "RefreshAuthTokenKey";
 
     public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
     public final static String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey",
@@ -221,7 +222,8 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             psw = userInputBundle.getString(PASSWORD_KEY);
         }
 
-        userInfo.putInt(AUTH_TOKEN_EXPIRATION,response.getTokenExpiration());
+        userInfo.putInt(AUTH_TOKEN_EXPIRATION, response.getTokenExpiration());
+        userInfo.putString(REFRESH_AUTH_TOKEN, response.getRefreshToken());
 
         if (getIntent().getExtras() != null && getIntent().hasExtra(AUTH_TOKEN_TYPE_KEY)) {
             tokenType = getIntent().getStringExtra(AUTH_TOKEN_TYPE_KEY);
@@ -253,6 +255,11 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         } else {
             //Update account with new info
             accountManager.setPassword(account, psw);
+            //Update account with new user data (token type would be teh same, the others may have changed)
+            accountManager.setUserData(account, CLIENT_ID_KEY, userInfo.getString(CLIENT_ID_KEY));
+            accountManager.setUserData(account, API_SECRET_KEY, userInfo.getString(API_SECRET_KEY));
+            accountManager.setUserData(account, SERVER_ADDRESS_KEY, userInfo.getString(SERVER_ADDRESS_KEY));
+            accountManager.setUserData(account, AUTH_TOKEN_EXPIRATION, userInfo.getString(AUTH_TOKEN_EXPIRATION));
         }
 
         //Set the token we have for this account

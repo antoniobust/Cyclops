@@ -20,6 +20,7 @@ import com.mdmobile.pocketconsole.apiHandler.api.ApiModels;
 import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.networkRequests.DeviceRequest;
+import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
 import com.mdmobile.pocketconsole.ui.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.UsersUtility;
@@ -29,6 +30,9 @@ import org.json.JSONArray;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import static android.text.TextUtils.concat;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
 
 /**
  * Main class for API requests.
@@ -59,26 +63,28 @@ public class ApiRequestManager {
     }
 
     /**
-     * This method is called only by LogIn Activity to get a token and add a brand new account
-     * There are callbacks to LogIn activity so do not call it from anywhere else
+     * Get a new token for the provided user and server
      */
-    public void getToken(String tokenUrl, String clientID, String clientSecret,
+    public void getToken(String serverUrl, String clientID, String clientSecret,
                          String userName, String password, final NetworkCallBack callBack) {
 
 
         //if debug discard input and use debugging info
         if (BuildConfig.DEBUG) {
-            tokenUrl = mContext.getString(R.string.mc_server_url).concat("/MobiControl/api/token");
+            serverUrl = mContext.getString(R.string.mc_server_url).concat("/MobiControl/api/token");
             clientID = mContext.getString(R.string.mc_clientID);
             clientSecret = mContext.getString(R.string.mc_client_secret);
             userName = mContext.getString(R.string.mc_user_name);
             password = mContext.getString(R.string.mc_password);
+        }else {
+            //If not debug take the url input from user and attach the token request
+            serverUrl = serverUrl.concat("/MobiControl/api/token");
         }
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
         final String header = clientID.concat(":").concat(clientSecret);
 
 
-        StringRequest tokenRequest = new StringRequest(Request.Method.POST, tokenUrl,
+        SimpleRequest tokenRequest = new SimpleRequest(Request.Method.POST, serverUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -94,11 +100,11 @@ public class ApiRequestManager {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callBack.errorReceivingToken(error.toString());
+                callBack.errorReceivingToken(error);
                 Log.e(LOG_TAG, "Error receiving token");
                 error.printStackTrace();
             }
-        }) {
+        }, mContext) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -116,24 +122,24 @@ public class ApiRequestManager {
 
     }
 
-    public void getAndroidDevices() {
-
-        String apiAuthority = UsersUtility.getUserInfo(mContext).get(LoginActivity.SERVER_ADDRESS_KEY);
-        String api = ApiModels.DevicesApi.Builder(apiAuthority).take(20).build();
-
-        DeviceRequest deviceRequest = new DeviceRequest<>(mContext, Request.Method.GET, api,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
-            }
-        });
-
-        requestsQueue.add(deviceRequest);
-    }
+//    public void getAndroidDevices() {
+//
+//        String apiAuthority = UsersUtility.getUserInfo(mContext).get(SERVER_ADDRESS_KEY);
+//        String api = ApiModels.DevicesApi.Builder(apiAuthority).take(20).build();
+//
+//        DeviceRequest deviceRequest = new DeviceRequest<>(mContext, Request.Method.GET, api,
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
+//            }
+//        });
+//
+//        requestsQueue.add(deviceRequest);
+//    }
 }

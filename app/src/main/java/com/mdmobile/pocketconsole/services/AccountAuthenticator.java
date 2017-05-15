@@ -10,12 +10,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.android.volley.VolleyError;
+import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
+import com.mdmobile.pocketconsole.gson.Token;
+import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.ui.LoginActivity;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
+    //Authenticator intent keys
+    public final static String ACCOUNT_TYPE_KEY = "AccountTypeKey";
+    public final static String AUTH_TOKEN_TYPE_KEY = "AuthTokenTypeKey";
+    public final static String AUTH_TOKEN_EXPIRATION_KEY = "AuthTokenExpirationKey";
+    public final static String REFRESH_AUTH_TOKEN_KEY = "RefreshAuthTokenKey";
+    public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
+    public final static String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey",
+            API_SECRET_KEY = "apiSecretKey", USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     private Context mContext;
+    private String LOG_TAG = AccountAuthenticator.class.getSimpleName();
 
     public AccountAuthenticator(Context context) {
         super(context);
@@ -43,34 +58,53 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle getAuthToken(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account,
-                               String authTokenType, Bundle bundle) throws NetworkErrorException {
+    public Bundle getAuthToken(final AccountAuthenticatorResponse authenticatorResponse, final Account account,
+                               final String authTokenType, Bundle bundle) throws NetworkErrorException {
+
 
         //Get the account manager to access the account details
-        AccountManager accountManager = AccountManager.get(mContext);
-        String authToken = accountManager.peekAuthToken(account, authTokenType);
+        final AccountManager accountManager = AccountManager.get(mContext);
 
-        //If auth token is null then try to log in the user with the stored credentials
-        if (authToken.equals("")) {
-            final String password = accountManager.getPassword(account);
-            if (password != null) {
-                //TODO: attempt login returning the authToken in case of success
-            }
+        //Get account details
+        final String password = accountManager.getPassword(account);
+        final String clientID = accountManager.getUserData(account, CLIENT_ID_KEY);
+        final String apiSecret = accountManager.getUserData(account, API_SECRET_KEY);
+        final String serverUrl = accountManager.getUserData(account, SERVER_ADDRESS_KEY);
+
+        //If we have all necessary details let's attempt a token request
+        if (password != null && clientID != null && apiSecret != null && serverUrl != null) {
+            Logger.log(LOG_TAG, "Requesting new token...", Log.VERBOSE);
+            ApiRequestManager.getInstance(mContext)
+                    .getToken(serverUrl, clientID, apiSecret, account.name, password,
+                            new NetworkCallBack() {
+                                @Override
+                                public void tokenReceived(Token JsonToken) {
+                                    //Credentials still valid, token received
+                                    //Returning data back to authenticatorResponse
+                                    Bundle result = new Bundle();
+                                    result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+                                    result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+                                    result.putString(AUTH_TOKEN_TYPE_KEY, JsonToken.getToken_type());
+                                    result.putString(AccountManager.KEY_AUTHTOKEN, JsonToken.getAccess_token());
+                                    authenticatorResponse.onResult(result);
+                                }
+
+                                @Override
+                                public void errorReceivingToken(VolleyError errorResponse) {
+                                    //If we are here with error 400 it only means credentials have changed
+                                    //Return the error to authenticatorResponse
+                                    if (errorResponse.networkResponse.statusCode == 400) {
+                                        authenticatorResponse.onError(errorResponse.networkResponse.statusCode, "AuthenticationException");
+                                    }
+                                }
+                            });
+            return null;
         }
 
-        //If we got an authToken now return the account and login info in a bundle
-        if(!authToken.equals("")){
-            Bundle result = new Bundle();
-            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-            result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
-
-            return result;
-        }
 
         //If we are here then means either we do not have an account signed
         //or credentials are no longer valid -> prompt login procedure again
-        return promptLoginActivity(accountAuthenticatorResponse, account.type, authTokenType, null);
+        return promptLoginActivity(authenticatorResponse, account.type, authTokenType, null);
     }
 
     @Override
@@ -98,10 +132,10 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         final Intent intent = new Intent(mContext, LoginActivity.class);
 
         //Insert the parameter required from LoginActivity to create a new account
-        intent.putExtra(LoginActivity.ACCOUNT_TYPE_KEY, accountType);
-        intent.putExtra(LoginActivity.AUTH_TOKEN_TYPE_KEY, authTokenType);
+        intent.putExtra(ACCOUNT_TYPE_KEY, accountType);
+        intent.putExtra(AUTH_TOKEN_TYPE_KEY, authTokenType);
         if (addingNewAccount != null) {
-            intent.putExtra(LoginActivity.ADDING_NEW_ACCOUNT_KEY, addingNewAccount);
+            intent.putExtra(ADDING_NEW_ACCOUNT_KEY, addingNewAccount);
         }
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
 

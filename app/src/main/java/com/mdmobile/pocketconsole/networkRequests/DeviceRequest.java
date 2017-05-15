@@ -7,26 +7,15 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.gson.Device;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.DbData;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Request devices
@@ -35,8 +24,8 @@ import java.util.List;
 
 public class DeviceRequest<T> extends BasicRequest<T> {
 
-    Response.Listener<T> listener;
-    Context mContext;
+    private Response.Listener<T> listener;
+    private Context mContext;
 
     public DeviceRequest(Context context, int method, String url, Response.Listener<T> listener,
                          Response.ErrorListener errorListener) {
@@ -51,10 +40,8 @@ public class DeviceRequest<T> extends BasicRequest<T> {
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
 
-
-            String jsonResponseString =  new String (response.data,
+            String jsonResponseString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
-
 
             Gson gson = new Gson();
             Type deviceCollectionType = new TypeToken<Collection<Device>>() {
@@ -71,7 +58,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                 mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
             }
 
-            return Response.success(null ,
+            return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

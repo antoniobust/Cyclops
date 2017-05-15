@@ -3,12 +3,20 @@ package com.mdmobile.pocketconsole.utils;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.ui.LoginActivity;
 
 import java.util.HashMap;
+
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.API_SECRET_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_EXPIRATION_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.CLIENT_ID_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
 
 /**
  * Helper methods to deal with users
@@ -49,19 +57,47 @@ public class UsersUtility {
         return false;
     }
 
-    public static HashMap<String,String> getUserInfo(Context context){
-        AccountManager accountManager =  AccountManager.get(context);
-        Account[] accounts = accountManager.getAccountsByType(context.getString(R.string.account_type));
-        HashMap<String,String> userInfo = new HashMap<>();
+    public static HashMap<String, String> getUserInfo(Context context, Account account) {
+        AccountManager accountManager = AccountManager.get(context);
+        HashMap<String, String> userInfo = new HashMap<>();
         //TODO:support multiple account
-         userInfo.put(LoginActivity.SERVER_ADDRESS_KEY,
-                 accountManager.getUserData(accounts[0], LoginActivity.SERVER_ADDRESS_KEY));
-        userInfo.put(LoginActivity.CLIENT_ID_KEY,
-                accountManager.getUserData(accounts[0], LoginActivity.CLIENT_ID_KEY));
-        userInfo.put(LoginActivity.API_SECRET_KEY,
-                accountManager.getUserData(accounts[0], LoginActivity.API_SECRET_KEY));
+        userInfo.put(SERVER_ADDRESS_KEY,
+                accountManager.getUserData(account, SERVER_ADDRESS_KEY));
+        userInfo.put(CLIENT_ID_KEY,
+                accountManager.getUserData(account, CLIENT_ID_KEY));
+        userInfo.put(API_SECRET_KEY,
+                accountManager.getUserData(account, API_SECRET_KEY));
+        userInfo.put(AUTH_TOKEN_TYPE_KEY,
+                accountManager.getUserData(account, AUTH_TOKEN_TYPE_KEY));
+        userInfo.put(AUTH_TOKEN_EXPIRATION_KEY,
+                accountManager.getUserData(account, AUTH_TOKEN_EXPIRATION_KEY));
 
         return userInfo;
+    }
+
+    public static void updateUserData(@NonNull Context context, @NonNull Bundle userInfo, @NonNull Account account){
+        //TODO:support multiple account
+
+          AccountManager manager = AccountManager.get(context);
+
+        Account[] accounts = manager.getAccountsByType(context.getString(R.string.account_type));
+
+        //Update accountsUpdateListener with new user data (token type would be teh same, the others may have changed)
+        if(userInfo.containsKey(CLIENT_ID_KEY)) {
+            manager.setUserData(account, CLIENT_ID_KEY, userInfo.getString(CLIENT_ID_KEY));
+        }
+        if(userInfo.containsKey(API_SECRET_KEY)) {
+            manager.setUserData(account, API_SECRET_KEY, userInfo.getString(API_SECRET_KEY));
+        }
+        if(userInfo.containsKey(SERVER_ADDRESS_KEY)) {
+            manager.setUserData(account, SERVER_ADDRESS_KEY, userInfo.getString(SERVER_ADDRESS_KEY));
+        }
+        if(userInfo.containsKey(AUTH_TOKEN_EXPIRATION_KEY)) {
+            manager.setUserData(account, AUTH_TOKEN_EXPIRATION_KEY, userInfo.getString(AUTH_TOKEN_EXPIRATION_KEY));
+        }
+        if(userInfo.containsKey(AUTH_TOKEN_TYPE_KEY)) {
+            manager.setUserData(account, AUTH_TOKEN_TYPE_KEY, userInfo.getString(AUTH_TOKEN_TYPE_KEY));
+        }
     }
 
 }

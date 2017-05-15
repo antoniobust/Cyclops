@@ -8,30 +8,36 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
+import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.UsersUtility;
+
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.ACCOUNT_TYPE_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.ADDING_NEW_ACCOUNT_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.API_SECRET_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_EXPIRATION_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.CLIENT_ID_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.PASSWORD_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.REFRESH_AUTH_TOKEN_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.USER_NAME_KEY;
 
 public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack {
 
-    //Authenticator intent keys
-    public final static String ACCOUNT_TYPE_KEY = "AccountTypeKey";
-    public final static String AUTH_TOKEN_TYPE_KEY = "AuthTokenTypeKey";
-    public final static String AUTH_TOKEN_EXPIRATION = "AuthTokenExpirationKey";
-    public final static String REFRESH_AUTH_TOKEN = "RefreshAuthTokenKey";
 
-    public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
-    public final static String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey",
-            API_SECRET_KEY = "apiSecretKey", USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
     ViewPager viewPager;
     TabLayout dotsIndicator;
@@ -41,7 +47,6 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
     //Token received network callback
     @Override
     public void tokenReceived(Token response) {
-        //TODO:launch mainActivity
         if (BuildConfig.DEBUG) {
             Toast.makeText(getApplicationContext(), "token received", Toast.LENGTH_SHORT).show();
         }
@@ -52,7 +57,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
     //Error receiving token Network callback
     @Override
-    public void errorReceivingToken(String error) {
+    public void errorReceivingToken(VolleyError error) {
         //TODO: based on the error message prompt the related error message to user
         Toast.makeText(getApplicationContext(), "error receiving token", Toast.LENGTH_SHORT).show();
     }
@@ -69,7 +74,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         //If activity was launched from authenticator get the intent with the auth response
         authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
-        //Check if activity was launched from authenticator(to add a new account),
+        //Check if activity was launched from authenticator(to add a new accountsUpdateListener),
         // if not check if there is any user already logged in
         if (authenticatorResponse == null) {
             if (UsersUtility.checkAnyUserLoggedIn(getApplicationContext())) {
@@ -129,6 +134,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         Bundle userInfo = getUserInput();
 
         //Request token through ApiRequestManager
+        Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
         ApiRequestManager.getInstance(getApplicationContext()).getToken(
                 userInfo.getString(SERVER_ADDRESS_KEY),
                 userInfo.getString(CLIENT_ID_KEY),
@@ -198,13 +204,13 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         Snackbar.make(viewPager, "Please check your data", Snackbar.LENGTH_SHORT).show();
     }
 
-    //Create account and return info to account authenticator
+    //Create accountsUpdateListener and return info to accountsUpdateListener authenticator
     private void finishLogin(Token response) {
 
         String userName, tokenType = null, accountType = null, psw;
         Boolean newAccount = true;
 
-        //Save new user in Account, if we are here is because there is no account saved so
+        //Save new user in Account, if we are here is because there is no accountsUpdateListener saved so
         //we will add it explicitly
         Bundle userInfo = new Bundle();
         //if debug discard input and use debugging info
@@ -222,8 +228,8 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             psw = userInputBundle.getString(PASSWORD_KEY);
         }
 
-        userInfo.putInt(AUTH_TOKEN_EXPIRATION, response.getTokenExpiration());
-        userInfo.putString(REFRESH_AUTH_TOKEN, response.getRefreshToken());
+        userInfo.putInt(AUTH_TOKEN_EXPIRATION_KEY, response.getTokenExpiration());
+        userInfo.putString(REFRESH_AUTH_TOKEN_KEY, response.getRefreshToken());
 
         if (getIntent().getExtras() != null && getIntent().hasExtra(AUTH_TOKEN_TYPE_KEY)) {
             tokenType = getIntent().getStringExtra(AUTH_TOKEN_TYPE_KEY);
@@ -250,26 +256,23 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         AccountManager accountManager = AccountManager.get(getApplicationContext());
 
         if (newAccount) {
-            //Create the account
+            //Create the accountsUpdateListener
             accountManager.addAccountExplicitly(account, psw, userInfo);
         } else {
-            //Update account with new info
+            //Update accountsUpdateListener with new info
             accountManager.setPassword(account, psw);
             //Update account with new user data (token type would be teh same, the others may have changed)
-            accountManager.setUserData(account, CLIENT_ID_KEY, userInfo.getString(CLIENT_ID_KEY));
-            accountManager.setUserData(account, API_SECRET_KEY, userInfo.getString(API_SECRET_KEY));
-            accountManager.setUserData(account, SERVER_ADDRESS_KEY, userInfo.getString(SERVER_ADDRESS_KEY));
-            accountManager.setUserData(account, AUTH_TOKEN_EXPIRATION, userInfo.getString(AUTH_TOKEN_EXPIRATION));
+            UsersUtility.updateUserData(getApplicationContext(), userInfo, account);
         }
 
-        //Set the token we have for this account
+        //Set the token we have for this accountsUpdateListener
         accountManager.setAuthToken(account, tokenType, response.getAccess_token());
 
-        //If activity was launched from account authenticator return data back
+        //If activity was launched from accountsUpdateListener authenticator return data back
         if (authenticatorResponse != null) {
             setAccountAuthenticatorResult(getIntent().getExtras());
 
-            // Tell the account manager settings page that all went well
+            // Tell the accountsUpdateListener manager settings page that all went well
             setResult(RESULT_OK, getIntent());
             finish();
         } else {

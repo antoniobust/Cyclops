@@ -6,19 +6,19 @@ import android.support.annotation.Nullable;
 public class ErrorResponse {
 
     private int errorCode;
-    private String errorMessage, data, helpLink;
+    private String Message, data, helpLink;
 
 
-    public ErrorResponse(int errorCode, String errorMessage, @Nullable String data, @Nullable String helpLink) {
+    public ErrorResponse(int errorCode, String Message, @Nullable String data, @Nullable String helpLink) {
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.Message = Message;
         this.data = data;
         this.helpLink = helpLink;
 
     }
 
-    public ErrorResponse(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public ErrorResponse(String Message) {
+        this.Message = Message;
     }
 
 
@@ -27,7 +27,7 @@ public class ErrorResponse {
     }
 
     public String getErrorMessage() {
-        return errorMessage;
+        return Message;
     }
 
     public String getData() {

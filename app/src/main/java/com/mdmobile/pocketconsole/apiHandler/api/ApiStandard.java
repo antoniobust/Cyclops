@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 
+import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
@@ -43,12 +44,15 @@ public abstract class ApiStandard {
         for (Pair<String, String> pair : filters) {
             s = s.concat(pair.first).concat(":").concat(pair.second).concat(",");
         }
+
         //Remove the last comma from the string
         s = s.substring(0, s.length() - 1);
 
+        //Url Encode parameters
+        s = Uri.encode(s);
+
         //Append the filter to the url
-        String filterParameterKey = "filter";
-        currentApi.appendQueryParameter(filterParameterKey, s);
+        currentApi.appendQueryParameter("filter", s);
         return this;
     }
 

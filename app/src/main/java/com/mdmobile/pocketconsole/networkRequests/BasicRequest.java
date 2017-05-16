@@ -10,6 +10,7 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -19,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.ui.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.io.IOException;
@@ -36,7 +38,6 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKE
 
 public abstract class BasicRequest<T> extends Request<T> {
 
-    private static int attempts = 0;
     private final Context mContext;
     private final String LOG_TAG = BasicRequest.class.getSimpleName();
     private AccountManagerCallback<Bundle> managerCallback = new AccountManagerCallback<Bundle>() {
@@ -122,12 +123,10 @@ public abstract class BasicRequest<T> extends Request<T> {
             e.printStackTrace();
         }
 
-        //If request returns 401 there could be a problem with the authentication token which
+        //If request returns 401 or 400 there could be a problem with the authentication token which
         //may be expired
-        if (response.statusCode == 400) {
+        if (response.statusCode == 400 || response.statusCode == 401) {
             //Allow max 1 attempt to get the token -> this will avoid recursive loop of requests
-            if (attempts == 0) {
-                attempts++;
                 Logger.log(LOG_TAG, "Attempt requesting a new Token", Log.VERBOSE);
 
                 //Get current user data we have stored
@@ -137,8 +136,7 @@ public abstract class BasicRequest<T> extends Request<T> {
                 if (accounts.length == 1) {
                     manager.getAuthToken(accounts[0],
                             manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
-                            null, true, managerCallback, null);
-                }
+                            null, false, managerCallback, null);
 
             }
         }

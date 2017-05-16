@@ -19,7 +19,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.services.AccountAuthenticator;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.io.IOException;
@@ -43,17 +42,42 @@ public abstract class BasicRequest<T> extends Request<T> {
     private AccountManagerCallback<Bundle> managerCallback = new AccountManagerCallback<Bundle>() {
         @Override
         public void run(AccountManagerFuture accountManagerFuture) {
-            if (accountManagerFuture.isDone()) {
-                Bundle accountFutureResult;
-                try {
-                    accountFutureResult = (Bundle) accountManagerFuture.getResult();
-                } catch (OperationCanceledException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (AuthenticatorException e) {
-                    //TODO: support multi user
+            try {
+                if (accountManagerFuture.isDone() && !accountManagerFuture.isCancelled()) {
+                    Bundle newInfo = (Bundle) accountManagerFuture.getResult();
+
+                    //If result contains KEY INTENT from account manager it means it failed to get
+                    //a new token as we cannot log in -> prompt login activity
+                    if (newInfo.containsKey(AccountManager.KEY_INTENT)) {
+                        //TODO:after getting new credentials if we get token we need to save new password
+                        //which is not getting saved -> stays null after clearPassword
+                        Intent intent = (Intent) newInfo.get(AccountManager.KEY_INTENT);
+                        if (intent != null) {
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            mContext.startActivity(intent);
+                        }
+                    }
                 }
+
+            } catch (AuthenticatorException e) {
+                if (e.getMessage().equals("AuthenticationException")) {
+                    //Launch login activity
+                    //TODO:Launch log in activity
+                    Logger.log(LOG_TAG, "Authentication exception ...\n No connection was possible with account authenticator\nRedirecting to login ", Log.ERROR);
+                    e.printStackTrace();
+
+                    //Clearing user credential and let the user input new ones
+                    AccountManager accountManager = AccountManager.get(mContext);
+                    Account[] accounts = accountManager.getAccountsByType(mContext.getString(R.string.account_type));
+                    accountManager.clearPassword(accounts[0]);
+                    accountManager.getAuthToken(accounts[0],
+                            accountManager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY)
+                            , null, null, this, null);
+                }
+            } catch (IOException | OperationCanceledException e) {
+                e.printStackTrace();
             }
         }
     };
@@ -87,6 +111,10 @@ public abstract class BasicRequest<T> extends Request<T> {
         //TODO:support Multiple account
 
         NetworkResponse response = volleyError.networkResponse;
+        if (response.data == null) {
+            return super.parseNetworkError(volleyError);
+        }
+
         try {
             String errorResponse = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             Logger.log(LOG_TAG, errorResponse, Log.ERROR);

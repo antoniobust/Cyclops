@@ -1,5 +1,7 @@
 package com.mdmobile.pocketconsole.apiHandler;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
@@ -122,24 +124,25 @@ public class ApiRequestManager {
 
     }
 
-//    public void getAndroidDevices() {
-//
-//        String apiAuthority = UsersUtility.getUserInfo(mContext).get(SERVER_ADDRESS_KEY);
-//        String api = ApiModels.DevicesApi.Builder(apiAuthority).take(20).build();
-//
-//        DeviceRequest deviceRequest = new DeviceRequest<>(mContext, Request.Method.GET, api,
-//                new Response.Listener<JSONArray>() {
-//                    @Override
-//                    public void onResponse(JSONArray response) {
-//                        Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
-//            }
-//        });
-//
-//        requestsQueue.add(deviceRequest);
-//    }
+    public void getAndroidDevices() {
+
+        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
+        String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
+        String api = ApiModels.DevicesApi.Builder(apiAuthority).take(20).build();
+
+        DeviceRequest deviceRequest = new DeviceRequest<>(mContext, Request.Method.GET, api,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
+            }
+        });
+
+        requestsQueue.add(deviceRequest);
+    }
 }

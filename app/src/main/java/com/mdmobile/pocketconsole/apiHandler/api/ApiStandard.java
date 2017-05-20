@@ -65,6 +65,9 @@ public abstract class ApiStandard {
         //Remove the last comma from the string
         s = s.substring(0, s.length() - 1);
 
+        //Url Encode parameters
+        s = Uri.encode(s);
+
         //Append the filter to the url
         String orderParameterKey = "order";
         currentApi.appendQueryParameter(orderParameterKey, s);

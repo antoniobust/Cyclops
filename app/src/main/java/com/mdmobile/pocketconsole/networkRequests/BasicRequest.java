@@ -10,7 +10,6 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -20,7 +19,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.ui.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.io.IOException;
@@ -127,16 +125,16 @@ public abstract class BasicRequest<T> extends Request<T> {
         //may be expired
         if (response.statusCode == 400 || response.statusCode == 401) {
             //Allow max 1 attempt to get the token -> this will avoid recursive loop of requests
-                Logger.log(LOG_TAG, "Attempt requesting a new Token", Log.VERBOSE);
+            Logger.log(LOG_TAG, "Attempt requesting a new Token", Log.VERBOSE);
 
-                //Get current user data we have stored
-                AccountManager manager = AccountManager.get(mContext);
+            //Get current user data we have stored
+            AccountManager manager = AccountManager.get(mContext);
 
-                Account[] accounts = manager.getAccountsByType(mContext.getString(R.string.account_type));
-                if (accounts.length == 1) {
-                    manager.getAuthToken(accounts[0],
-                            manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
-                            null, false, managerCallback, null);
+            Account[] accounts = manager.getAccountsByType(mContext.getString(R.string.account_type));
+            if (accounts.length == 1) {
+                manager.getAuthToken(accounts[0],
+                        manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
+                        null, false, managerCallback, null);
 
             }
         }

@@ -1,10 +1,11 @@
-package com.mdmobile.pocketconsole.gson;
+package com.mdmobile.pocketconsole.gson.devices;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Device {
+//TODO: support missing platform, only android ios added so far
+public class BasicDevice {
 
     @SerializedName("Memory")
     public Memory memory;
@@ -18,7 +19,8 @@ public class Device {
             OSVersion, Path;
     private Boolean ComplianceStatus, IsAgentOnline, IsVirtual;
 
-    public Device(String deviceId, String deviceName, String enrollmentTime, String family, String hostName, String MACAddress,
+    public BasicDevice(String deviceId, String deviceName, String enrollmentTime, String family, String hostName,
+                       String MACAddress,
                   String manufacturer, String mode, String model, String OSVersion, String path, Boolean complianceStatus,
                   Boolean isAgentOnline, Boolean isVirtual) {
         DeviceId = deviceId;

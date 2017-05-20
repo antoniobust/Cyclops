@@ -337,7 +337,7 @@ public class FakeJSON {
             "      \"AndroidRcVirtualDisplay\",\n" +
             "      \"Android41Enterprise\"\n" +
             "    ],\n" +
-            "    \"Kind\": \"AndroidPlus\",\n" +
+            "    \"Kind\": \"AndroidPlusDevice\",\n" +
             "    \"ComplianceStatus\": true,\n" +
             "    \"ComplianceItems\": [\n" +
             "      {\n" +
@@ -364,7 +364,7 @@ public class FakeJSON {
             "    \"DeviceId\": \"f40eb7f25d416ff5\",\n" +
             "    \"DeviceName\": \"(John) Lenovo Tab 3 Business 10\",\n" +
             "    \"EnrollmentTime\": \"2017-04-25T07:27:58Z\",\n" +
-            "    \"Family\": \"AndroidPlus\",\n" +
+            "    \"Family\": \"AndroidPlusDevice\",\n" +
             "    \"HostName\": \"192.168.0.38\",\n" +
             "    \"IsAgentOnline\": true,\n" +
             "    \"IsVirtual\": false,\n" +
@@ -375,7 +375,7 @@ public class FakeJSON {
             "    \"Model\": \"Lenovo TB3-X70L\",\n" +
             "    \"OSVersion\": \"6.0\",\n" +
             "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Android++ Devices\",\n" +
-            "    \"Platform\": \"AndroidPlus\"\n" +
+            "    \"Platform\": \"AndroidPlusDevice\"\n" +
             "  },\n" +
             "  {\n" +
             "    \"AgentVersion\": \"13.32.1000\",\n" +
@@ -436,7 +436,7 @@ public class FakeJSON {
             "      \"AndroidRcVirtualDisplay\",\n" +
             "      \"AndroidLGMdm3\"\n" +
             "    ],\n" +
-            "    \"Kind\": \"AndroidPlus\",\n" +
+            "    \"Kind\": \"AndroidPlusDevice\",\n" +
             "    \"ComplianceStatus\": true,\n" +
             "    \"ComplianceItems\": [\n" +
             "      {\n" +
@@ -463,7 +463,7 @@ public class FakeJSON {
             "    \"DeviceId\": \"352645072250927\",\n" +
             "    \"DeviceName\": \"(John) LG G3\",\n" +
             "    \"EnrollmentTime\": \"2017-04-18T07:22:56Z\",\n" +
-            "    \"Family\": \"AndroidPlus\",\n" +
+            "    \"Family\": \"AndroidPlusDevice\",\n" +
             "    \"HostName\": \"192.168.0.34\",\n" +
             "    \"IsAgentOnline\": false,\n" +
             "    \"IsVirtual\": false,\n" +
@@ -480,7 +480,7 @@ public class FakeJSON {
             "    \"Model\": \"LG-D855\",\n" +
             "    \"OSVersion\": \"5.0\",\n" +
             "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Android++ Devices\",\n" +
-            "    \"Platform\": \"AndroidPlus\"\n" +
+            "    \"Platform\": \"AndroidPlusDevice\"\n" +
             "  }\n" +
             "]";
 }

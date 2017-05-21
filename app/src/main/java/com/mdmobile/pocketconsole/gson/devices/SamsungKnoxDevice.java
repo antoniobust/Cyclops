@@ -22,7 +22,8 @@ public class SamsungKnoxDevice extends SamsungElmDevice {
                              boolean canResetPassword, boolean exchangeBlocked, boolean isAgentCompatible, boolean isAgentless,
                              boolean isEncrypted, boolean isOSSecure, boolean passcodeEnabled, short batteryStatus,
                              int cellularSignalStrength, int networkConnectionType, int networkRSSI, int hardwareEncryptionCaps,
-                             String elmStatus, String integrityServiceBaselineStatus, SamsungKnoxDevice.Knox knox) {
+                             String elmStatus, String integrityServiceBaselineStatus, SamsungKnoxDevice.Knox knox,
+                             String Platform) {
 
         super(Kind,deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
                 OSVersion,
@@ -31,7 +32,7 @@ public class SamsungKnoxDevice extends SamsungElmDevice {
                 subscriberNumber, passcodeStatus, supportedApis, exchangeStatus, lastCheckInTime, lastAgentConnectTime,
                 lastAgentDisconnectTime, inRoaming, androidDeviceAdmin, canResetPassword, exchangeBlocked, isAgentCompatible,
                 isAgentless, isEncrypted, isOSSecure, passcodeEnabled, batteryStatus, cellularSignalStrength, networkConnectionType,
-                networkRSSI, hardwareEncryptionCaps, elmStatus);
+                networkRSSI, hardwareEncryptionCaps, elmStatus,Platform);
 
         IntegrityServiceBaselineStatus = integrityServiceBaselineStatus;
         Knox = knox;

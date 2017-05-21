@@ -24,7 +24,8 @@ public class AndroidForWorkDevice extends AndroidPlusDevice {
                                 boolean isAgentCompatible, boolean isAgentless, boolean isEncrypted, boolean isOSSecure,
                                 boolean passcodeEnabled, short batteryStatus, int cellularSignalStrength,
                                 int networkConnectionType, int networkRSSI, int hardwareEncryptionCaps,
-                                String bluetoothMACAddress, String buildVersion, String cellularTechnology) {
+                                String bluetoothMACAddress, String buildVersion, String cellularTechnology, String
+                                        Platform) {
 
         super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
                 OSVersion, path, complianceStatus, isAgentOnline, isVirtual, agentVersion, hardwareSerialNumber,
@@ -32,7 +33,7 @@ public class AndroidForWorkDevice extends AndroidPlusDevice {
                 OEMVersion, phoneNumber, subscriberNumber, passcodeStatus, supportedApis, exchangeStatus, lastCheckInTime,
                 lastAgentConnectTime, lastAgentDisconnectTime, inRoaming, androidDeviceAdmin, canResetPassword,
                 exchangeBlocked, isAgentCompatible, isAgentless, isEncrypted, isOSSecure, passcodeEnabled, batteryStatus,
-                cellularSignalStrength, networkConnectionType, networkRSSI, hardwareEncryptionCaps);
+                cellularSignalStrength, networkConnectionType, networkRSSI, hardwareEncryptionCaps,Platform);
 
         BluetoothMACAddress = bluetoothMACAddress;
         BuildVersion = buildVersion;

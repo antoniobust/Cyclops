@@ -31,11 +31,11 @@ public class AndroidGenericDevice extends BasicDevice {
                                 boolean isAgentCompatible, boolean isAgentless, boolean isEncrypted, boolean isOSSecure,
                                 boolean canResetPassword, boolean exchangeBlocked, boolean inRoaming, boolean passcodeEnabled,
                                 short batteryStatus, int cellularSignalStrength, int hardwareEncryptionCaps,
-                                int networkConnectionType, int networkRSSI) {
+                                int networkConnectionType, int networkRSSI, String Platform) {
 
         super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
                 OSVersion, path,
-                complianceStatus, isAgentOnline, isVirtual);
+                complianceStatus, isAgentOnline, isVirtual,Platform);
 
         AgentVersion = agentVersion;
         LastCheckInTime = lastCheckInTime;

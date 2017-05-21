@@ -32,11 +32,10 @@ public class AndroidPlusDevice extends BasicDevice {
                              boolean inRoaming, boolean androidDeviceAdmin, boolean canResetPassword, boolean exchangeBlocked,
                              boolean isAgentCompatible, boolean isAgentless, boolean isEncrypted, boolean isOSSecure,
                              boolean passcodeEnabled, short batteryStatus, int cellularSignalStrength, int networkConnectionType,
-                             int networkRSSI, int hardwareEncryptionCaps) {
+                             int networkRSSI, int hardwareEncryptionCaps,String Platform) {
 
         super(Kind,deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
-                OSVersion,
-                path, complianceStatus, isAgentOnline, isVirtual);
+                OSVersion, path, complianceStatus, isAgentOnline, isVirtual,Platform);
 
         AgentVersion = agentVersion;
         HardwareSerialNumber = hardwareSerialNumber;

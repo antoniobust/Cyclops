@@ -16,12 +16,12 @@ public class BasicDevice {
 
 
     private String Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
-            OSVersion, Path;
+            OSVersion, Path, Platform;
     private Boolean ComplianceStatus, IsAgentOnline, IsVirtual;
 
     public BasicDevice(String Kind, String deviceId, String deviceName, String enrollmentTime, String family, String
             hostName, String MACAddress, String manufacturer, String mode, String model, String OSVersion,
-                       String path, Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual) {
+                       String path, Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual, String Platform) {
         this.Kind = Kind;
         DeviceId = deviceId;
         DeviceName = deviceName;
@@ -37,6 +37,11 @@ public class BasicDevice {
         ComplianceStatus = complianceStatus;
         IsAgentOnline = isAgentOnline;
         IsVirtual = isVirtual;
+        this.Platform = Platform;
+    }
+
+    public String getPlatform() {
+        return Platform;
     }
 
     public String getKind() {

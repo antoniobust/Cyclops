@@ -20,7 +20,7 @@ public class SamsungElmDevice extends AndroidPlusDevice {
                             boolean androidDeviceAdmin, boolean canResetPassword, boolean exchangeBlocked,
                             boolean isAgentCompatible, boolean isAgentless, boolean isEncrypted, boolean isOSSecure,
                             boolean passcodeEnabled, short batteryStatus, int cellularSignalStrength, int networkConnectionType,
-                            int networkRSSI, int hardwareEncryptionCaps, String elmStatus) {
+                            int networkRSSI, int hardwareEncryptionCaps, String elmStatus, String Platform) {
 
         super(Kind,deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
                 OSVersion,
@@ -29,7 +29,7 @@ public class SamsungElmDevice extends AndroidPlusDevice {
                 subscriberNumber, passcodeStatus, supportedApis, exchangeStatus, lastCheckInTime, lastAgentConnectTime,
                 lastAgentDisconnectTime, inRoaming, androidDeviceAdmin, canResetPassword, exchangeBlocked, isAgentCompatible,
                 isAgentless, isEncrypted, isOSSecure, passcodeEnabled, batteryStatus, cellularSignalStrength,
-                networkConnectionType, networkRSSI, hardwareEncryptionCaps);
+                networkConnectionType, networkRSSI, hardwareEncryptionCaps,Platform);
 
         ElmStatus = elmStatus;
     }

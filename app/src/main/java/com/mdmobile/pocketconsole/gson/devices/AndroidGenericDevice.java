@@ -20,7 +20,8 @@ public class AndroidGenericDevice extends BasicDevice {
 //    DeviceUser	DeviceUserInfo;
 
 
-    public AndroidGenericDevice(String deviceId, String deviceName, String enrollmentTime, String family, String hostName,
+    public AndroidGenericDevice(String Kind,String deviceId, String deviceName, String enrollmentTime, String family,
+                                String hostName,
                                 String MACAddress, String manufacturer, String mode, String model, String OSVersion,
                                 String path, Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual,
                                 String agentVersion, String lastCheckInTime, String lastAgentConnectTime,
@@ -32,7 +33,8 @@ public class AndroidGenericDevice extends BasicDevice {
                                 short batteryStatus, int cellularSignalStrength, int hardwareEncryptionCaps,
                                 int networkConnectionType, int networkRSSI) {
 
-        super(deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model, OSVersion, path,
+        super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
+                OSVersion, path,
                 complianceStatus, isAgentOnline, isVirtual);
 
         AgentVersion = agentVersion;

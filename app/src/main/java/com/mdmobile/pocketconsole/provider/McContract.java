@@ -48,6 +48,7 @@ public class McContract {
 
     // ************ Table's columns interfaces **********************
     interface DeviceColumns {
+
         //Columns
         String COLUMN_KIND = "Kind";
         String COLUMN_COMPLIANCE_STATUS = "ComplianceStatus";
@@ -64,7 +65,6 @@ public class McContract {
         String COLUMN_OS_VERSION = "OSVersion";
         String COLUMN_PATH = "Path";
         String COLUMN_PLATFORM = "Platform";
-        String COLUMN_AGENT_VERSION = "AgentVersion";
         String COLUMN_AVAILABLE_EXTERNAL_STORAGE = "AvailableExternalStorage";
         String COLUMN_AVAILABLE_MEMORY = "AvailableMemory";
         String COLUMN_AVAILABLE_SD_CARD_STORAGE = "AvailableSdCardStorage";
@@ -72,33 +72,10 @@ public class McContract {
         String COLUMN_TOTAL_MEMORY = "TotMemory";
         String COLUMN_TOTAL_SD_CARD_STORAGE = "TotSdCardStorage";
         String COLUMN_TOTAL_STORAGE = "TotStorage";
-        String COLUMN_BACKUP_BATTERY_STATUS = "Backup";
-        String COLUMN_BATTERY_STATUS = "BatteryStatus";
-        String COLUMN_CELLULAR_CARRIER = "CellularCarrier";
-        String COLUMN_CELLULAR_SIGNAL_STRENGTH = "CellularSignalStrength";
-        String COLUMN_DEVICE_TERMS = "DeviceTerms";
-        String COLUMN_EXCHANGE_BLOCKED = "ExchangeBlocked";
-        String COLUMN_EXCHANGE_STATUS = "ExchangeStatus";
-        String COLUMN_IMEI_MEID_ESN = "IMEI_MEID_ESN";
-        String COLUMN_IN_ROAMING = "InRoaming";
-        String COLUMN_IPV6 = "IPv6";
-        String COLUMN_IS_AGENT_COMPATIBLE = "IsAgentCompatible";
-        String COLUMN_IS_AGENTLESS = "IsAgentLess";
-        String COLUMN_IS_LEARNING = "IsLearning";
-        String COLUMN_LAST_CHECKIN_TIME = "LastCheckIn";
-        String COLUMN_LAST_AGENT_CONNECTION_TIME = "LastAgentConnection";
-        String COLUMN_LAST_AGENT_DISCONNECTION_TIME = "LastAgentDisconnection";
-        String COLUMN_LAST_LOGGED_ON_AT = "LastLoggedOn";
-        String COLUMN_LAST_LOGGED_USER = "LastLoggedUser";
-        String COLUMN_NETWORK_CONNECTION_TYPE = "NetworkConnectionType";
-        String COLUMN_NETWORK_RSSI = "NetworkRSSI";
-        String COLUMN_NETWORK_SSID = "NetworkSSID";
-        String COLUMN_PASSCODE_ENABLED = "PassCodeEnabled";
-        String COLUMN_PHONE_NUMBER = "PhoneNumber";
-        String COLUMN_PROCESSOR = "Processor";
-        String COLUMN_SUBSCRIBER_NUMBER = "SubscriberNumber";
         String COLUMN_ENROLLMENT_TIME = "EnrollmentTime";
+        String COLUMN_EXTRA_INFO = "ExtraDeviceInfo";
     }
+
 
     interface ComplianceItemColumns {
         //Columns

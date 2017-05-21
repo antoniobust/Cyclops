@@ -6,8 +6,8 @@ package com.mdmobile.pocketconsole.utils;
 
 public class DbData {
 
-//    public static ContentValues getDeviceContentValues(Device device) {
-//        ContentValues deviceValues = new ContentValues(16);
+//    public static ContentValues getDeviceContentValues() {
+//        ContentValues deviceValues = new ContentValues();
 //
 //
 //        deviceValues.put(McContract.Device.COLUMN_KIND, device.getKind());

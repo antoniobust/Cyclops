@@ -15,7 +15,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.MANAGEMENT_SERVER_T
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 6;
+    private static final int DB_VERSION = 7;
 
     public McHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -29,7 +29,6 @@ public class McHelper extends SQLiteOpenHelper {
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + McContract.Device.COLUMN_DEVICE_ID + " TEXT UNIQUE NOT NULL, "
                 + McContract.Device.COLUMN_KIND + " TEXT, "
-                + McContract.Device.COLUMN_AGENT_VERSION + " TEXT, "
                 + McContract.Device.COLUMN_DEVICE_NAME + " TEXT, "
                 + McContract.Device.COLUMN_AGENT_ONLINE + " INTEGER, "
                 + McContract.Device.COLUMN_FAMILY + " TEXT, "
@@ -46,36 +45,12 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.Device.COLUMN_TOTAL_MEMORY + " INTEGER, "
                 + McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE + " INTEGER, "
                 + McContract.Device.COLUMN_TOTAL_STORAGE + " INTEGER, "
-                + McContract.Device.COLUMN_BACKUP_BATTERY_STATUS + " INTEGER, "
-                + McContract.Device.COLUMN_BATTERY_STATUS + " INTEGER, "
                 + McContract.Device.COLUMN_MODE + " INTEGER, "
                 + McContract.Device.COLUMN_MODEL + " TEXT, "
                 + McContract.Device.COLUMN_OS_VERSION + " TEXT, "
-                + McContract.Device.COLUMN_CELLULAR_CARRIER + " TEXT, "
-                + McContract.Device.COLUMN_CELLULAR_SIGNAL_STRENGTH + " INTEGER, "
-                + McContract.Device.COLUMN_DEVICE_TERMS + " TEXT, "
-                + McContract.Device.COLUMN_EXCHANGE_BLOCKED + " INTEGER, "
-                + McContract.Device.COLUMN_EXCHANGE_STATUS + " TEXT, "
-                + McContract.Device.COLUMN_IMEI_MEID_ESN + " TEXT, "
-                + McContract.Device.COLUMN_IN_ROAMING + " INTEGER, "
-                + McContract.Device.COLUMN_IPV6 + " TEXT, "
-                + McContract.Device.COLUMN_IS_AGENT_COMPATIBLE + " INTEGER, "
-                + McContract.Device.COLUMN_IS_AGENTLESS + " INTEGER, "
                 + McContract.Device.COLUMN_PATH + " TEXT, "
-                + McContract.Device.COLUMN_IS_LEARNING + " INTEGER, "
-                + McContract.Device.COLUMN_LAST_CHECKIN_TIME + " TEXT, "
-                + McContract.Device.COLUMN_LAST_AGENT_CONNECTION_TIME + " TEXT, "
-                + McContract.Device.COLUMN_LAST_AGENT_DISCONNECTION_TIME + " TEXT, "
-                + McContract.Device.COLUMN_LAST_LOGGED_ON_AT + " TEXT, "
-                + McContract.Device.COLUMN_LAST_LOGGED_USER + " TEXT, "
-                + McContract.Device.COLUMN_NETWORK_CONNECTION_TYPE + " TEXT, "
-                + McContract.Device.COLUMN_NETWORK_RSSI + " TEXT, "
-                + McContract.Device.COLUMN_NETWORK_SSID + " TEXT, "
-                + McContract.Device.COLUMN_PASSCODE_ENABLED + " INTEGER, "
-                + McContract.Device.COLUMN_PHONE_NUMBER + " TEXT, "
-                + McContract.Device.COLUMN_PROCESSOR + " TEXT, "
-                + McContract.Device.COLUMN_SUBSCRIBER_NUMBER + " TEXT, "
-                + McContract.Device.COLUMN_PLATFORM + " INTEGER"
+                + McContract.Device.COLUMN_PLATFORM + " INTEGER, "
+                + McContract.Device.COLUMN_EXTRA_INFO + " INTEGER"
                 + ");");
 
 

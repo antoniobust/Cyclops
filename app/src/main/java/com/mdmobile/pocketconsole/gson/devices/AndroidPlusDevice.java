@@ -22,7 +22,7 @@ public class AndroidPlusDevice extends BasicDevice {
 //    DeviceIntegratedApplication[]	IntegratedApplications
 
 
-    public AndroidPlusDevice(String deviceId, String deviceName, String enrollmentTime, String family, String hostName,
+    public AndroidPlusDevice(String Kind,String deviceId, String deviceName, String enrollmentTime, String family, String hostName,
                              String MACAddress, String manufacturer, String mode, String model, String OSVersion, String path,
                              Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual, String agentVersion,
                              String hardwareSerialNumber, String hardwareVersion, String IMEI_MEID_ESN, String cellularCarrier,
@@ -34,7 +34,8 @@ public class AndroidPlusDevice extends BasicDevice {
                              boolean passcodeEnabled, short batteryStatus, int cellularSignalStrength, int networkConnectionType,
                              int networkRSSI, int hardwareEncryptionCaps) {
 
-        super(deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model, OSVersion,
+        super(Kind,deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
+                OSVersion,
                 path, complianceStatus, isAgentOnline, isVirtual);
 
         AgentVersion = agentVersion;

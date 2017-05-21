@@ -24,8 +24,9 @@ public class IosDevice extends BasicDevice {
 //    DeviceUser	DeviceUserInfo
 
 
-    public IosDevice(String deviceId, String deviceName, String enrollmentTime, String family, String hostName, String MACAddress,
-                     String manufacturer, String mode, String model, String OSVersion, String path, Boolean complianceStatus,
+    public IosDevice(String Kind, String deviceId, String deviceName, String enrollmentTime, String family, String
+            hostName, String MACAddress, String manufacturer, String mode, String model,
+                     String OSVersion, String path, Boolean complianceStatus,
                      Boolean isAgentOnline, Boolean isVirtual, String agentVersion, String bluetoothMACAddress,
                      String buildVersion, String carrierSettingsVersion, String cellularCarrier, String currentMCC,
                      String currentMNC, String firmwareVersion, String cellularTechnology, String exchangeStatus, String ICCID,
@@ -40,7 +41,8 @@ public class IosDevice extends BasicDevice {
                      boolean isOSSecure, boolean isPersonalHotspotEnabled, boolean isSupervised, boolean passcodeEnabled,
                      boolean voiceRoamingEnabled, boolean exchangeBlocked) {
 
-        super(deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model, OSVersion,
+        super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
+                OSVersion,
                 path, complianceStatus, isAgentOnline, isVirtual);
 
         AgentVersion = agentVersion;

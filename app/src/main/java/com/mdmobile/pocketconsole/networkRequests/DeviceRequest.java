@@ -75,6 +75,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
             Gson gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();
             Collection<T> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
+
 //            BasicDevice[] devicesArray = new BasicDevice[devices.size()];
 //            devices.toArray(devicesArray);
 

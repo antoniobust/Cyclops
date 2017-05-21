@@ -10,7 +10,8 @@ public class SamsungKnoxDevice extends SamsungElmDevice {
     private String	IntegrityServiceBaselineStatus;
     private Knox	Knox;
 
-    public SamsungKnoxDevice(String deviceId, String deviceName, String enrollmentTime, String family, String hostName,
+    public SamsungKnoxDevice(String Kind,String deviceId, String deviceName, String enrollmentTime, String family,
+                             String hostName,
                              String MACAddress, String manufacturer, String mode, String model, String OSVersion, String path,
                              Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual, String agentVersion,
                              String hardwareSerialNumber, String hardwareVersion, String IMEI_MEID_ESN, String cellularCarrier,
@@ -23,7 +24,8 @@ public class SamsungKnoxDevice extends SamsungElmDevice {
                              int cellularSignalStrength, int networkConnectionType, int networkRSSI, int hardwareEncryptionCaps,
                              String elmStatus, String integrityServiceBaselineStatus, SamsungKnoxDevice.Knox knox) {
 
-        super(deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model, OSVersion,
+        super(Kind,deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
+                OSVersion,
                 path, complianceStatus, isAgentOnline, isVirtual, agentVersion, hardwareSerialNumber, hardwareVersion,
                 IMEI_MEID_ESN, cellularCarrier, lastLoggedOnUser, networkBSSID, ipv6, networkSSID, OEMVersion, phoneNumber,
                 subscriberNumber, passcodeStatus, supportedApis, exchangeStatus, lastCheckInTime, lastAgentConnectTime,

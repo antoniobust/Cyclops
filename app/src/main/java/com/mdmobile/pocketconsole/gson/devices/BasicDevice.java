@@ -15,14 +15,14 @@ public class BasicDevice {
     public List<CustomAttributes> customAttributesList;
 
 
-    private String DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
+    private String Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
             OSVersion, Path;
     private Boolean ComplianceStatus, IsAgentOnline, IsVirtual;
 
-    public BasicDevice(String deviceId, String deviceName, String enrollmentTime, String family, String hostName,
-                       String MACAddress,
-                  String manufacturer, String mode, String model, String OSVersion, String path, Boolean complianceStatus,
-                  Boolean isAgentOnline, Boolean isVirtual) {
+    public BasicDevice(String Kind, String deviceId, String deviceName, String enrollmentTime, String family, String
+            hostName, String MACAddress, String manufacturer, String mode, String model, String OSVersion,
+                       String path, Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual) {
+        this.Kind = Kind;
         DeviceId = deviceId;
         DeviceName = deviceName;
         EnrollmentTime = enrollmentTime;
@@ -37,6 +37,10 @@ public class BasicDevice {
         ComplianceStatus = complianceStatus;
         IsAgentOnline = isAgentOnline;
         IsVirtual = isVirtual;
+    }
+
+    public String getKind() {
+        return Kind;
     }
 
     public String getDeviceId() {

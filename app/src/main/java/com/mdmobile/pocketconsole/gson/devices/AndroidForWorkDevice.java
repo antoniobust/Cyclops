@@ -11,7 +11,7 @@ public class AndroidForWorkDevice extends AndroidPlusDevice {
 //    DeviceUserIdentity[]	UserIdentities
 
 
-    public AndroidForWorkDevice(String deviceId, String deviceName, String enrollmentTime, String family,
+    public AndroidForWorkDevice(String Kind, String deviceId, String deviceName, String enrollmentTime, String family,
                                 String hostName, String MACAddress, String manufacturer, String mode, String model,
                                 String OSVersion, String path, Boolean complianceStatus, Boolean isAgentOnline,
                                 Boolean isVirtual, String agentVersion, String hardwareSerialNumber,
@@ -26,7 +26,7 @@ public class AndroidForWorkDevice extends AndroidPlusDevice {
                                 int networkConnectionType, int networkRSSI, int hardwareEncryptionCaps,
                                 String bluetoothMACAddress, String buildVersion, String cellularTechnology) {
 
-        super(deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
+        super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
                 OSVersion, path, complianceStatus, isAgentOnline, isVirtual, agentVersion, hardwareSerialNumber,
                 hardwareVersion, IMEI_MEID_ESN, cellularCarrier, lastLoggedOnUser, networkBSSID, ipv6, networkSSID,
                 OEMVersion, phoneNumber, subscriberNumber, passcodeStatus, supportedApis, exchangeStatus, lastCheckInTime,

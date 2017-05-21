@@ -163,7 +163,8 @@ public class ApiModels {
             currentApi.appendPath(path).appendQueryParameter(searchParameterKey, search);
 
             if (type == null) {
-                currentApi.appendQueryParameter(typeParameterKey, ComplexDataType.DirecotryResourceType.Both.toString());
+                currentApi.appendQueryParameter(typeParameterKey, ComplexDataType.DirectoryResourceType.Both.toString
+                        ());
             } else {
                 currentApi.appendQueryParameter(searchParameterKey, search);
             }

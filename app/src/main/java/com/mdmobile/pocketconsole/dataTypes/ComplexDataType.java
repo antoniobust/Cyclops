@@ -31,7 +31,12 @@ public class ComplexDataType {
         BatteryStatus
     }
 
-    public enum DirecotryResourceType {
-        Both , User, Group
+    public enum DirectoryResourceType {
+        Both, User, Group
+    }
+
+    public enum DeviceKind {
+        AndroidForWork, AndroidElm, AndroidKnox, AndroidPlus, AndroidGeneric, iOS, Mac, WindowsCE, WindowsDesktop,
+        WindowsDesktopLegacy, WindowsPhone, WindowsRuntime, ZebraPrinter
     }
 }

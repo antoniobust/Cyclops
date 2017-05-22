@@ -9,7 +9,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.fakeData.FakeJSON;
 import com.mdmobile.pocketconsole.gson.Device;
@@ -22,7 +21,6 @@ import org.junit.runner.RunWith;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -81,7 +79,7 @@ public class DbData {
 
     private void createNewDevicesBulkImport() {
         Device[] devicesArray = getDeviceFromJson();
-        ContentValues[] devicesValues = com.mdmobile.pocketconsole.utils.DbData.getListOfDeviceContentValues(devicesArray);
+        ContentValues[] devicesValues = com.mdmobile.pocketconsole.utils.DbData.bulkFormatDeviceData(devicesArray);
         int newDev = mContext.getApplicationContext().getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
         assertFalse("Not all devices have been inserted correctly", newDev == 0);
     }

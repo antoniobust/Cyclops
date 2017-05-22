@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.networkRequests;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import com.android.volley.NetworkResponse;
@@ -23,13 +24,12 @@ import com.mdmobile.pocketconsole.gson.devices.WindowsDesktop;
 import com.mdmobile.pocketconsole.gson.devices.WindowsDesktopLegacy;
 import com.mdmobile.pocketconsole.gson.devices.WindowsPhone;
 import com.mdmobile.pocketconsole.gson.devices.WindowsRuntime;
+import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.DbData;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-import static android.R.attr.format;
 
 /**
  * Request devices
@@ -85,16 +85,16 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             }
 
 
-//            BasicDevice[] devicesArray = new BasicDevice[devices.size()];
-//            devices.toArray(devicesArray);
+            BasicDevice[] devicesArray = new BasicDevice[devices.size()];
+            devices.toArray(devicesArray);
 
-//            if (devicesArray.length == 1) {
-//                ContentValues device = DbData.getDeviceContentValues(devicesArray[0]);
-//                mContext.getContentResolver().insert(McContract.Device.CONTENT_URI, device);
-//            } else if (devices.size() > 1) {
-//                ContentValues[] devicesValues = DbData.getListOfDeviceContentValues(devicesArray);
-//                mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
-//            }
+            if (devicesArray.length == 1) {
+                ContentValues device = DbData.formatDeviceData(devicesArray[0]);
+                mContext.getContentResolver().insert(McContract.Device.CONTENT_URI, device);
+            } else if (devices.size() > 1) {
+                ContentValues[] devicesValues = DbData.bulkFormatDeviceData(devicesArray);
+                mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
+            }
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));

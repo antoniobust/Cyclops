@@ -7,12 +7,12 @@ import java.util.List;
 //TODO: support missing platform, only android ios added so far
 public class BasicDevice {
 
-//    @SerializedName("Memory")
-//    public Memory memory;
-//    @SerializedName("ComplianceItem")
-//    public List<ComplianceItem> complianceItemList;
-//    @SerializedName("CustomAttributes")
-//    public List<CustomAttributes> customAttributesList;
+    @SerializedName("Memory")
+    public Memory memory;
+    @SerializedName("ComplianceItem")
+    public List<ComplianceItem> complianceItemList;
+    @SerializedName("CustomAttributes")
+    public List<CustomAttributes> customAttributesList;
 
 
     private String Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
@@ -105,115 +105,115 @@ public class BasicDevice {
     }
 
 
-//    //Inner class for nested objects
-//    public class CustomAttributes {
-//        String name, value;
-//        Boolean dataType;
-//
-//        public CustomAttributes(String name, String value, Boolean dataType) {
-//            this.name = name;
-//            this.value = value;
-//            this.dataType = dataType;
-//        }
-//
-//        public String getName() {
-//            return name;
-//        }
-//
-//        public String getValue() {
-//            return value;
-//        }
-//
-//        public int getDataType() {
-//            return dataType ? 1 : 0;
-//        }
-//    }
+    //Inner class for nested objects
+    public class CustomAttributes {
+        String name, value;
+        Boolean dataType;
 
-//    //Inner class for nested objects
-//    public class ComplianceItems {
-//        String ComplianceType;
-//        Boolean ComplianceValue;
-//
-//        public ComplianceItems(String complianceType, Boolean complianceValue) {
-//            ComplianceType = complianceType;
-//            ComplianceValue = complianceValue;
-//        }
-//
-//        public String getComplianceType() {
-//            return ComplianceType;
-//        }
-//
-//        public int getComplianceValue() {
-//            return ComplianceValue ? 1 : 0;
-//        }
-//    }
+        public CustomAttributes(String name, String value, Boolean dataType) {
+            this.name = name;
+            this.value = value;
+            this.dataType = dataType;
+        }
 
-//    //Inner class for nested objects
-//    public class Memory {
-//        private long AvailableExternalStorage, AvailableMemory, AvailableSDCardStorage, AvailableStorage,
-//                TotalExternalStorage, TotalMemory, TotalSDCardStorage, TotalStorage;
-//
-//        public Memory(long availableExternalStorage, long availableMemory, long availableSDCardStorage, long availableStorage,
-//                      long totalExternalStorage, long totalMemory, long totalSDCardStorage, long totalStorage) {
-//            AvailableExternalStorage = availableExternalStorage;
-//            AvailableMemory = availableMemory;
-//            AvailableSDCardStorage = availableSDCardStorage;
-//            AvailableStorage = availableStorage;
-//            TotalExternalStorage = totalExternalStorage;
-//            TotalMemory = totalMemory;
-//            TotalSDCardStorage = totalSDCardStorage;
-//            TotalStorage = totalStorage;
-//        }
-//
-//        public long getAvailableExternalStorage() {
-//            return AvailableExternalStorage;
-//        }
-//
-//        public long getAvailableMemory() {
-//            return AvailableMemory;
-//        }
-//
-//        public long getAvailableSDCardStorage() {
-//            return AvailableSDCardStorage;
-//        }
-//
-//        public long getAvailableStorage() {
-//            return AvailableStorage;
-//        }
-//
-//        public long getTotalExternalStorage() {
-//            return TotalExternalStorage;
-//        }
-//
-//        public long getTotalMemory() {
-//            return TotalMemory;
-//        }
-//
-//        public long getTotalSDCardStorage() {
-//            return TotalSDCardStorage;
-//        }
-//
-//        public long getTotalStorage() {
-//            return TotalStorage;
-//        }
-//    }
-//
-//
-//    public class ComplianceItem {
-//        private String ComplianceType;
-//        private Boolean ComplianceValue;
-//
-//        public ComplianceItem(String complianceType, Boolean complianceValue) {
-//            ComplianceType = complianceType;
-//            ComplianceValue = complianceValue;
-//        }
-//
-//        public String getComplianceType() {
-//            return ComplianceType;
-//        }
-//
-//        public int getComplianceValue() {
-//            return ComplianceValue ? 1 : 0;
-//        }
-//    }
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public int getDataType() {
+            return dataType ? 1 : 0;
+        }
+    }
+
+    //Inner class for nested objects
+    public class ComplianceItems {
+        String ComplianceType;
+        Boolean ComplianceValue;
+
+        public ComplianceItems(String complianceType, Boolean complianceValue) {
+            ComplianceType = complianceType;
+            ComplianceValue = complianceValue;
+        }
+
+        public String getComplianceType() {
+            return ComplianceType;
+        }
+
+        public int getComplianceValue() {
+            return ComplianceValue ? 1 : 0;
+        }
+    }
+
+    //Inner class for nested objects
+    public class Memory {
+        private long AvailableExternalStorage, AvailableMemory, AvailableSDCardStorage, AvailableStorage,
+                TotalExternalStorage, TotalMemory, TotalSDCardStorage, TotalStorage;
+
+        public Memory(long availableExternalStorage, long availableMemory, long availableSDCardStorage, long availableStorage,
+                      long totalExternalStorage, long totalMemory, long totalSDCardStorage, long totalStorage) {
+            AvailableExternalStorage = availableExternalStorage;
+            AvailableMemory = availableMemory;
+            AvailableSDCardStorage = availableSDCardStorage;
+            AvailableStorage = availableStorage;
+            TotalExternalStorage = totalExternalStorage;
+            TotalMemory = totalMemory;
+            TotalSDCardStorage = totalSDCardStorage;
+            TotalStorage = totalStorage;
+        }
+
+        public long getAvailableExternalStorage() {
+            return AvailableExternalStorage;
+        }
+
+        public long getAvailableMemory() {
+            return AvailableMemory;
+        }
+
+        public long getAvailableSDCardStorage() {
+            return AvailableSDCardStorage;
+        }
+
+        public long getAvailableStorage() {
+            return AvailableStorage;
+        }
+
+        public long getTotalExternalStorage() {
+            return TotalExternalStorage;
+        }
+
+        public long getTotalMemory() {
+            return TotalMemory;
+        }
+
+        public long getTotalSDCardStorage() {
+            return TotalSDCardStorage;
+        }
+
+        public long getTotalStorage() {
+            return TotalStorage;
+        }
+    }
+
+
+    public class ComplianceItem {
+        private String ComplianceType;
+        private Boolean ComplianceValue;
+
+        public ComplianceItem(String complianceType, Boolean complianceValue) {
+            ComplianceType = complianceType;
+            ComplianceValue = complianceValue;
+        }
+
+        public String getComplianceType() {
+            return ComplianceType;
+        }
+
+        public int getComplianceValue() {
+            return ComplianceValue ? 1 : 0;
+        }
+    }
 }

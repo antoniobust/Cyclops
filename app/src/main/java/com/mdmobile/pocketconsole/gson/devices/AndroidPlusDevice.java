@@ -7,8 +7,9 @@ package com.mdmobile.pocketconsole.gson.devices;
 public class AndroidPlusDevice extends BasicDevice {
     private String AgentVersion, HardwareSerialNumber, HardwareVersion, IMEI_MEID_ESN, CellularCarrier,
             LastLoggedOnUser,
-            NetworkBSSID, Ipv6, NetworkSSID, OEMVersion, PhoneNumber, SubscriberNumber, PasscodeStatus, SupportedApis,
+            NetworkBSSID, Ipv6, NetworkSSID, OEMVersion, PhoneNumber, SubscriberNumber, PasscodeStatus,
             ExchangeStatus, LastCheckInTime, LastAgentConnectTime, LastAgentDisconnectTime;
+    private String[] SupportedApis;
     private boolean InRoaming, AndroidDeviceAdmin, CanResetPassword, ExchangeBlocked, IsAgentCompatible, IsAgentless,
             IsEncrypted, IsOSSecure, PasscodeEnabled;
     private short BatteryStatus;
@@ -27,7 +28,7 @@ public class AndroidPlusDevice extends BasicDevice {
                              Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual, String agentVersion,
                              String hardwareSerialNumber, String hardwareVersion, String IMEI_MEID_ESN, String cellularCarrier,
                              String lastLoggedOnUser, String networkBSSID, String ipv6, String networkSSID, String OEMVersion,
-                             String phoneNumber, String subscriberNumber, String passcodeStatus, String supportedApis,
+                             String phoneNumber, String subscriberNumber, String passcodeStatus, String[] supportedApis,
                              String exchangeStatus, String lastCheckInTime, String lastAgentConnectTime, String lastAgentDisconnectTime,
                              boolean inRoaming, boolean androidDeviceAdmin, boolean canResetPassword, boolean exchangeBlocked,
                              boolean isAgentCompatible, boolean isAgentless, boolean isEncrypted, boolean isOSSecure,
@@ -123,7 +124,7 @@ public class AndroidPlusDevice extends BasicDevice {
         return PasscodeStatus;
     }
 
-    public String getSupportedApis() {
+    public String[] getSupportedApis() {
         return SupportedApis;
     }
 

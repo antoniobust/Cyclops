@@ -15,12 +15,12 @@ public class SamsungElmDevice extends AndroidPlusDevice {
                             String agentVersion, String hardwareSerialNumber, String hardwareVersion, String IMEI_MEID_ESN,
                             String cellularCarrier, String lastLoggedOnUser, String networkBSSID, String ipv6,
                             String networkSSID, String OEMVersion, String phoneNumber, String subscriberNumber,
-                            String passcodeStatus, String supportedApis, String exchangeStatus, String lastCheckInTime,
+                            String passcodeStatus, String[] supportedApis, String exchangeStatus, String lastCheckInTime,
                             String lastAgentConnectTime, String lastAgentDisconnectTime, boolean inRoaming,
                             boolean androidDeviceAdmin, boolean canResetPassword, boolean exchangeBlocked,
                             boolean isAgentCompatible, boolean isAgentless, boolean isEncrypted, boolean isOSSecure,
                             boolean passcodeEnabled, short batteryStatus, int cellularSignalStrength, int networkConnectionType,
-                            int networkRSSI, int hardwareEncryptionCaps, String elmStatus, String Platform) {
+                            int networkRSSI, int hardwareEncryptionCaps, String elmStatus,String Platform) {
 
         super(Kind,deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
                 OSVersion,

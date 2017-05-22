@@ -129,10 +129,13 @@ public class ApiRequestManager {
 
         Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
-        Pair<String,String> pair = new Pair<>("Platform", "AndroidPlusDevice");
+        Pair<String,String> pair = new Pair<>("Platform", "AndroidPlus");
         HashSet<Pair<String,String>> hashSet = new HashSet<>();
         hashSet.add(pair);
-        String api = ApiModels.DevicesApi.Builder(apiAuthority).build();
+        pair= new Pair<>("Platform","iOS");
+        hashSet.add(pair);
+
+        String api = ApiModels.DevicesApi.Builder(apiAuthority).filter(hashSet).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(mContext, Request.Method.GET, api,
                 new Response.Listener<JSONArray>() {

@@ -23,10 +23,13 @@ import com.mdmobile.pocketconsole.gson.devices.WindowsDesktop;
 import com.mdmobile.pocketconsole.gson.devices.WindowsDesktopLegacy;
 import com.mdmobile.pocketconsole.gson.devices.WindowsPhone;
 import com.mdmobile.pocketconsole.gson.devices.WindowsRuntime;
+import com.mdmobile.pocketconsole.utils.DbData;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.util.Collection;
+import java.util.ArrayList;
+
+import static android.R.attr.format;
 
 /**
  * Request devices
@@ -55,7 +58,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                     HttpHeaderParser.parseCharset(response.headers));
 
 
-            Type deviceCollectionType = new TypeToken<Collection>() {
+            Type deviceCollectionType = new TypeToken<ArrayList<BasicDevice>>() {
             }.getType();
 
             final RuntimeTypeAdapterFactory<BasicDevice> typeFactory = RuntimeTypeAdapterFactory
@@ -74,7 +77,13 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
 
             Gson gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();
-            Collection<T> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
+            ArrayList<BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
+
+            //Parse devices to extract common properties and put other as extra string
+            for(int i = 0; i < devices.size(); i++){
+                DbData.formatDeviceData(devices.get(i));
+            }
+
 
 //            BasicDevice[] devicesArray = new BasicDevice[devices.size()];
 //            devices.toArray(devicesArray);

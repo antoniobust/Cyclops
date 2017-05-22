@@ -16,7 +16,7 @@ public class SamsungKnoxDevice extends SamsungElmDevice {
                              Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual, String agentVersion,
                              String hardwareSerialNumber, String hardwareVersion, String IMEI_MEID_ESN, String cellularCarrier,
                              String lastLoggedOnUser, String networkBSSID, String ipv6, String networkSSID, String OEMVersion,
-                             String phoneNumber, String subscriberNumber, String passcodeStatus, String supportedApis,
+                             String phoneNumber, String subscriberNumber, String passcodeStatus, String[] supportedApis,
                              String exchangeStatus, String lastCheckInTime, String lastAgentConnectTime,
                              String lastAgentDisconnectTime, boolean inRoaming, boolean androidDeviceAdmin,
                              boolean canResetPassword, boolean exchangeBlocked, boolean isAgentCompatible, boolean isAgentless,

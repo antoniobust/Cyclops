@@ -6,19 +6,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.CancellationSignal;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mdmobile.pocketconsole.utils.Logger;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-
-import static android.R.attr.data;
-import static android.R.attr.value;
 
 public class McProvider extends ContentProvider {
 
@@ -38,7 +32,6 @@ public class McProvider extends ContentProvider {
     }
 
 
-
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
@@ -50,8 +43,8 @@ public class McProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs,
                         @Nullable String sortOrder) {
 
-        Logger.log(LOG_TAG, "Query( uri:" +uri.toString()+ ", data selected: " + Arrays.toString(projection)
-                + " selection parameters: " + selection + "values:"+ Arrays.toString(selectionArgs),Log.VERBOSE);
+        Logger.log(LOG_TAG, "Query( uri:" + uri.toString() + ", data selected: " + Arrays.toString(projection)
+                + " selection parameters: " + selection + "values:" + Arrays.toString(selectionArgs), Log.VERBOSE);
         //Get DB is an expensive operation check if we already have opened it
         if (database == null) {
             database = mcHelper.getWritableDatabase();
@@ -59,20 +52,21 @@ public class McProvider extends ContentProvider {
         McEnumUri mcEnumUri = matcher.matchUri(uri);
         Cursor c;
 
-        switch (mcEnumUri){
+        switch (mcEnumUri) {
             case DEVICES:
-                c = database.query(McContract.DEVICE_TABLE_NAME, projection,selection,selectionArgs,null,null,sortOrder);
+                c = database.query(McContract.DEVICE_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
             case DEVICES_ID:
                 String devID = McContract.Device.getDeviceIdFromUri(uri);
                 c = database.query(McContract.DEVICE_TABLE_NAME,
                         projection,
-                        McContract.Device.COLUMN_DEVICE_ID+"=?",
-                        new String[]{devID}, null,null,sortOrder);
+                        McContract.Device.COLUMN_DEVICE_ID + "=?",
+                        new String[]{devID}, null, null, sortOrder);
                 break;
 
-            default: throw new UnsupportedOperationException("Unsupported URI: "+ uri.toString());
+            default:
+                throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }
 
         return c;
@@ -90,27 +84,27 @@ public class McProvider extends ContentProvider {
         McEnumUri mcEnumUri = matcher.matchUri(uri);
         int dataInserted = 0;
 
-        if (mcEnumUri.tableName != null) {
-            switch (mcEnumUri) {
-                case DEVICES:
-                    for (ContentValues contentValues : values) {
-                        if (database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME,
-                                null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
-                            //if data was inserted correctly increment data inserted value
-                            dataInserted++;
-                        }
+        switch (mcEnumUri) {
+            case DEVICES:
+                for (ContentValues contentValues : values) {
+                    if (database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME,
+                            null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                        //if data was inserted correctly increment data inserted value
+                        dataInserted++;
                     }
-                    if (dataInserted == values.length) {
-                        getContext().getContentResolver().notifyChange(uri, null);
-                        Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " devices in DB", Log.VERBOSE);
+                }
+                if (dataInserted == values.length) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " devices in DB", Log.VERBOSE);
 
-                        return 1;
-                    } else {
-                        Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);
-                    }
-            }
+                    return 1;
+                } else {
+                    Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);
+                }
+
+            default:
+                throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }
-        return 0;
     }
 
     @Nullable
@@ -130,22 +124,25 @@ public class McProvider extends ContentProvider {
         McEnumUri mcEnumUri = matcher.matchUri(uri);
         long newRowID;
 
-        if (mcEnumUri.tableName != null) {
-            switch (mcEnumUri) {
-                case DEVICES:
-                    newRowID = database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-                    if (newRowID < 1) {
-                        Logger.log(LOG_TAG, "Impossible to insert device in DB", Log.ERROR);
-                        return null;
-                    }
-                    getContext().getContentResolver().notifyChange(uri, null);
 
-                    return McContract.Device.buildUriWithID(newRowID);
-                case CUSTOM_ATTRIBUTE:
-                case CUSTOM_DATA:
-            }
+        switch (mcEnumUri) {
+            case DEVICES:
+                newRowID = database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                if (newRowID < 1) {
+                    Logger.log(LOG_TAG, "Impossible to insert device in DB", Log.ERROR);
+                    return null;
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+
+                return McContract.Device.buildUriWithID(newRowID);
+            case CUSTOM_ATTRIBUTE:
+
+            case CUSTOM_DATA:
+
+            default:
+                throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }
-        return null;
+
     }
 
     @Override
@@ -154,7 +151,26 @@ public class McProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+
+        Logger.log(LOG_TAG, "Update(uri: " + uri.toString() + " selection: " + selection + " values: " + Arrays.toString(selectionArgs), Log.VERBOSE);
+
+        SQLiteDatabase database = mcHelper.getWritableDatabase();
+
+        McEnumUri mcEnumUri = matcher.matchUri(uri);
+        int updated;
+
+        switch (mcEnumUri) {
+            case DEVICES_ID:
+                String devId = McContract.Device.getDeviceIdFromUri(uri);
+                updated = database.update(McContract.DEVICE_TABLE_NAME, values, McContract.Device.COLUMN_DEVICE_ID + "=?", new String[]{devId});
+                Logger.log(LOG_TAG, "Devices Updated:" + updated, Log.VERBOSE);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
+
+        }
+
+        return updated;
     }
 }

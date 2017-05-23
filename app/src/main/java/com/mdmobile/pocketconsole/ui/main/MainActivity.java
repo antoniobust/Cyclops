@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui;
+package com.mdmobile.pocketconsole.ui.main;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
+import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 

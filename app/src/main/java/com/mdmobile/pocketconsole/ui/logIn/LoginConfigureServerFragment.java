@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui;
+package com.mdmobile.pocketconsole.ui.logIn;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

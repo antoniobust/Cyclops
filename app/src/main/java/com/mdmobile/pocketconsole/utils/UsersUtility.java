@@ -5,7 +5,6 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mdmobile.pocketconsole.R;
@@ -75,27 +74,27 @@ public class UsersUtility {
         return userInfo;
     }
 
-    public static void updateUserData(@NonNull Context context, @NonNull Bundle userInfo, @NonNull Account account){
+    public static void updateUserData(@NonNull Context context, @NonNull Bundle userInfo, @NonNull Account account) {
         //TODO:support multiple account
 
-          AccountManager manager = AccountManager.get(context);
+        AccountManager manager = AccountManager.get(context);
 
         Account[] accounts = manager.getAccountsByType(context.getString(R.string.account_type));
 
         //Update accountsUpdateListener with new user data (token type would be teh same, the others may have changed)
-        if(userInfo.containsKey(CLIENT_ID_KEY)) {
+        if (userInfo.containsKey(CLIENT_ID_KEY)) {
             manager.setUserData(account, CLIENT_ID_KEY, userInfo.getString(CLIENT_ID_KEY));
         }
-        if(userInfo.containsKey(API_SECRET_KEY)) {
+        if (userInfo.containsKey(API_SECRET_KEY)) {
             manager.setUserData(account, API_SECRET_KEY, userInfo.getString(API_SECRET_KEY));
         }
-        if(userInfo.containsKey(SERVER_ADDRESS_KEY)) {
+        if (userInfo.containsKey(SERVER_ADDRESS_KEY)) {
             manager.setUserData(account, SERVER_ADDRESS_KEY, userInfo.getString(SERVER_ADDRESS_KEY));
         }
-        if(userInfo.containsKey(AUTH_TOKEN_EXPIRATION_KEY)) {
+        if (userInfo.containsKey(AUTH_TOKEN_EXPIRATION_KEY)) {
             manager.setUserData(account, AUTH_TOKEN_EXPIRATION_KEY, userInfo.getString(AUTH_TOKEN_EXPIRATION_KEY));
         }
-        if(userInfo.containsKey(AUTH_TOKEN_TYPE_KEY)) {
+        if (userInfo.containsKey(AUTH_TOKEN_TYPE_KEY)) {
             manager.setUserData(account, AUTH_TOKEN_TYPE_KEY, userInfo.getString(AUTH_TOKEN_TYPE_KEY));
         }
     }

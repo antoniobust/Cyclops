@@ -3,7 +3,6 @@ package com.mdmobile.pocketconsole.apiHandler;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
@@ -13,10 +12,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiHandler.api.ApiModels;
@@ -24,7 +21,6 @@ import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.networkRequests.DeviceRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
-import com.mdmobile.pocketconsole.ui.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.UsersUtility;
 
@@ -34,7 +30,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import static android.text.TextUtils.concat;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
 
 /**
@@ -79,7 +74,7 @@ public class ApiRequestManager {
             clientSecret = mContext.getString(R.string.mc_client_secret);
             userName = mContext.getString(R.string.mc_user_name);
             password = mContext.getString(R.string.mc_password);
-        }else {
+        } else {
             //If not debug take the url input from user and attach the token request
             serverUrl = serverUrl.concat("/MobiControl/api/token");
         }
@@ -129,10 +124,12 @@ public class ApiRequestManager {
 
         Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
-        Pair<String,String> pair = new Pair<>("Platform", "AndroidPlus");
-        HashSet<Pair<String,String>> hashSet = new HashSet<>();
+        Pair<String, String> pair = new Pair<>("Platform", "AndroidPlus");
+        HashSet<Pair<String, String>> hashSet = new HashSet<>();
         hashSet.add(pair);
-        pair= new Pair<>("Platform","iOS");
+        pair = new Pair<>("Platform", "iOS");
+        hashSet.add(pair);
+        pair = new Pair<>("Platform", "Android");
         hashSet.add(pair);
 
         String api = ApiModels.DevicesApi.Builder(apiAuthority).filter(hashSet).build();

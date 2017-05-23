@@ -3,7 +3,6 @@ package com.mdmobile.pocketconsole.utils;
 import android.content.ContentValues;
 
 import com.mdmobile.pocketconsole.gson.devices.BasicDevice;
-import com.mdmobile.pocketconsole.gson.devices.IosDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,12 +26,13 @@ public class DbData {
 
         ContentValues deviceBasicValues = getDeviceBasicValues(device);
 
-        StringBuilder extraStringBuilder = new StringBuilder();
 
         try {
             Class<?> c = Class.forName(device.getClass().getName());
             Method[] methods = c.getDeclaredMethods();
             String append, propertyName;
+            StringBuilder extraStringBuilder = new StringBuilder();
+
             Object o;
 
             for (Method method : methods) {
@@ -48,15 +48,15 @@ public class DbData {
                     append = o.toString();
                 }
                 propertyName = method.getName();
-                if( propertyName.startsWith("get")){
+                if (propertyName.startsWith("get")) {
                     propertyName = propertyName.substring(2);
-                } else if (propertyName.startsWith("is")){
-                    propertyName= propertyName.substring(1);
+                } else if (propertyName.startsWith("is")) {
+                    propertyName = propertyName.substring(1);
                 }
                 extraStringBuilder.append(propertyName).append("=").append(append).append(",");
             }
 
-            deviceBasicValues.put(McContract.Device.COLUMN_EXTRA_INFO,extraStringBuilder.toString());
+            deviceBasicValues.put(McContract.Device.COLUMN_EXTRA_INFO, extraStringBuilder.toString());
 
         } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();

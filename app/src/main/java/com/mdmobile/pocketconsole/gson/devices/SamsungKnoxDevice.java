@@ -7,10 +7,10 @@ package com.mdmobile.pocketconsole.gson.devices;
 //TODO: support knox devices
 
 public class SamsungKnoxDevice extends SamsungElmDevice {
-    private String	IntegrityServiceBaselineStatus;
-    private Knox	Knox;
+    private String IntegrityServiceBaselineStatus;
+    private Knox Knox;
 
-    public SamsungKnoxDevice(String Kind,String deviceId, String deviceName, String enrollmentTime, String family,
+    public SamsungKnoxDevice(String Kind, String deviceId, String deviceName, String enrollmentTime, String family,
                              String hostName,
                              String MACAddress, String manufacturer, String mode, String model, String OSVersion, String path,
                              Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual, String agentVersion,
@@ -25,14 +25,14 @@ public class SamsungKnoxDevice extends SamsungElmDevice {
                              String elmStatus, String integrityServiceBaselineStatus, SamsungKnoxDevice.Knox knox,
                              String Platform) {
 
-        super(Kind,deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
+        super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
                 OSVersion,
                 path, complianceStatus, isAgentOnline, isVirtual, agentVersion, hardwareSerialNumber, hardwareVersion,
                 IMEI_MEID_ESN, cellularCarrier, lastLoggedOnUser, networkBSSID, ipv6, networkSSID, OEMVersion, phoneNumber,
                 subscriberNumber, passcodeStatus, supportedApis, exchangeStatus, lastCheckInTime, lastAgentConnectTime,
                 lastAgentDisconnectTime, inRoaming, androidDeviceAdmin, canResetPassword, exchangeBlocked, isAgentCompatible,
                 isAgentless, isEncrypted, isOSSecure, passcodeEnabled, batteryStatus, cellularSignalStrength, networkConnectionType,
-                networkRSSI, hardwareEncryptionCaps, elmStatus,Platform);
+                networkRSSI, hardwareEncryptionCaps, elmStatus, Platform);
 
         IntegrityServiceBaselineStatus = integrityServiceBaselineStatus;
         Knox = knox;
@@ -48,14 +48,14 @@ public class SamsungKnoxDevice extends SamsungElmDevice {
 
     private class Knox {
         String KnoxCapability,
-        IntegrityServiceBaselineStatus,
-        KnoxAttestationCapability,
-        KnoxAttestationStatus;
-        KnoxLicenseInfo	KnoxLicense;
+                IntegrityServiceBaselineStatus,
+                KnoxAttestationCapability,
+                KnoxAttestationStatus;
+        KnoxLicenseInfo KnoxLicense;
     }
 
     private class KnoxLicenseInfo {
-        private String LicenseGuid, LicenseKey, LicenseType	, LicenseStatus, OrderNumber, StartDate,EndDate,UpdateDate;
+        private String LicenseGuid, LicenseKey, LicenseType, LicenseStatus, OrderNumber, StartDate, EndDate, UpdateDate;
         private int TotalSeats, AvailableSeats;
         private boolean enabled;
     }

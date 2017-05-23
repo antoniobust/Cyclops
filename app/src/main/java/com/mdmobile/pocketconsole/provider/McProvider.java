@@ -6,13 +6,19 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.CancellationSignal;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mdmobile.pocketconsole.utils.Logger;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import static android.R.attr.data;
+import static android.R.attr.value;
 
 public class McProvider extends ContentProvider {
 
@@ -32,6 +38,7 @@ public class McProvider extends ContentProvider {
     }
 
 
+
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
@@ -40,14 +47,41 @@ public class McProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        return null;
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs,
+                        @Nullable String sortOrder) {
+
+        Logger.log(LOG_TAG, "Query( uri:" +uri.toString()+ ", data selected: " + Arrays.toString(projection)
+                + " selection parameters: " + selection + "values:"+ Arrays.toString(selectionArgs),Log.VERBOSE);
+        //Get DB is an expensive operation check if we already have opened it
+        if (database == null) {
+            database = mcHelper.getWritableDatabase();
+        }
+        McEnumUri mcEnumUri = matcher.matchUri(uri);
+        Cursor c;
+
+        switch (mcEnumUri){
+            case DEVICES:
+                c = database.query(McContract.DEVICE_TABLE_NAME, projection,selection,selectionArgs,null,null,sortOrder);
+                break;
+
+            case DEVICES_ID:
+                String devID = McContract.Device.getDeviceIdFromUri(uri);
+                c = database.query(McContract.DEVICE_TABLE_NAME,
+                        projection,
+                        McContract.Device.COLUMN_DEVICE_ID+"=?",
+                        new String[]{devID}, null,null,sortOrder);
+                break;
+
+            default: throw new UnsupportedOperationException("Unsupported URI: "+ uri.toString());
+        }
+
+        return c;
     }
 
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
 
-        Logger.log(LOG_TAG, "insert( uri:" + uri.toString() + " , objects: " + values.length+")", Log.VERBOSE);
+        Logger.log(LOG_TAG, "insert( uri:" + uri.toString() + " , objects: " + values.length + ")", Log.VERBOSE);
 
         //Get DB is an expensive operation check if we already have opened it
         if (database == null) {

@@ -16,7 +16,7 @@ import com.android.volley.VolleyError;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
-import com.mdmobile.pocketconsole.ui.LoginActivity;
+import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {

@@ -1,7 +1,5 @@
-package com.mdmobile.pocketconsole.ui;
+package com.mdmobile.pocketconsole.ui.main;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,15 +9,16 @@ import android.view.ViewGroup;
 import com.mdmobile.pocketconsole.R;
 
 
-public class ProfilesFragment extends Fragment {
+public class ServerFragment extends Fragment {
 
-    public ProfilesFragment() {
+    public ServerFragment() {
         // Required empty public constructor
     }
 
 
-    public static ProfilesFragment newInstance() {
-        return new ProfilesFragment();
+    // TODO: Rename and change types and number of parameters
+    public static ServerFragment newInstance() {
+        return new ServerFragment();
     }
 
     @Override
@@ -31,8 +30,6 @@ public class ProfilesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profiles, container, false);
+        return inflater.inflate(R.layout.fragment_server, container, false);
     }
-
-
 }

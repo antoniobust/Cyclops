@@ -8,7 +8,7 @@ public class SamsungElmDevice extends AndroidPlusDevice {
 
     private String ElmStatus;
 
-    public SamsungElmDevice(String Kind,String deviceId, String deviceName, String enrollmentTime, String family,
+    public SamsungElmDevice(String Kind, String deviceId, String deviceName, String enrollmentTime, String family,
                             String hostName,
                             String MACAddress, String manufacturer, String mode, String model, String OSVersion,
                             String path, Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual,
@@ -20,16 +20,16 @@ public class SamsungElmDevice extends AndroidPlusDevice {
                             boolean androidDeviceAdmin, boolean canResetPassword, boolean exchangeBlocked,
                             boolean isAgentCompatible, boolean isAgentless, boolean isEncrypted, boolean isOSSecure,
                             boolean passcodeEnabled, short batteryStatus, int cellularSignalStrength, int networkConnectionType,
-                            int networkRSSI, int hardwareEncryptionCaps, String elmStatus,String Platform) {
+                            int networkRSSI, int hardwareEncryptionCaps, String elmStatus, String Platform) {
 
-        super(Kind,deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
+        super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
                 OSVersion,
                 path, complianceStatus, isAgentOnline, isVirtual, agentVersion, hardwareSerialNumber, hardwareVersion,
                 IMEI_MEID_ESN, cellularCarrier, lastLoggedOnUser, networkBSSID, ipv6, networkSSID, OEMVersion, phoneNumber,
                 subscriberNumber, passcodeStatus, supportedApis, exchangeStatus, lastCheckInTime, lastAgentConnectTime,
                 lastAgentDisconnectTime, inRoaming, androidDeviceAdmin, canResetPassword, exchangeBlocked, isAgentCompatible,
                 isAgentless, isEncrypted, isOSSecure, passcodeEnabled, batteryStatus, cellularSignalStrength,
-                networkConnectionType, networkRSSI, hardwareEncryptionCaps,Platform);
+                networkConnectionType, networkRSSI, hardwareEncryptionCaps, Platform);
 
         ElmStatus = elmStatus;
     }

@@ -1,12 +1,11 @@
 package com.mdmobile.pocketconsole.adapters;
 
-import android.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.mdmobile.pocketconsole.ui.LoginConfigureSecretIdFragment;
-import com.mdmobile.pocketconsole.ui.LoginConfigureServerFragment;
-import com.mdmobile.pocketconsole.ui.LoginUserNamePasswordFragment;
+import com.mdmobile.pocketconsole.ui.logIn.LoginConfigureSecretIdFragment;
+import com.mdmobile.pocketconsole.ui.logIn.LoginConfigureServerFragment;
+import com.mdmobile.pocketconsole.ui.logIn.LoginUserNamePasswordFragment;
 
 /**
  * This adapter inflates fragments in the login activity viewPager

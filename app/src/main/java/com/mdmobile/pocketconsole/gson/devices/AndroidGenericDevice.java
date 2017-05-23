@@ -20,7 +20,7 @@ public class AndroidGenericDevice extends BasicDevice {
 //    DeviceUser	DeviceUserInfo;
 
 
-    public AndroidGenericDevice(String Kind,String deviceId, String deviceName, String enrollmentTime, String family,
+    public AndroidGenericDevice(String Kind, String deviceId, String deviceName, String enrollmentTime, String family,
                                 String hostName,
                                 String MACAddress, String manufacturer, String mode, String model, String OSVersion,
                                 String path, Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual,
@@ -35,7 +35,7 @@ public class AndroidGenericDevice extends BasicDevice {
 
         super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
                 OSVersion, path,
-                complianceStatus, isAgentOnline, isVirtual,Platform);
+                complianceStatus, isAgentOnline, isVirtual, Platform);
 
         AgentVersion = agentVersion;
         LastCheckInTime = lastCheckInTime;
@@ -119,39 +119,39 @@ public class AndroidGenericDevice extends BasicDevice {
     }
 
     public int isAndroidDeviceAdmin() {
-        return AndroidDeviceAdmin ? 1 :0;
+        return AndroidDeviceAdmin ? 1 : 0;
     }
 
     public int isAgentCompatible() {
-        return IsAgentCompatible? 1 :0;
+        return IsAgentCompatible ? 1 : 0;
     }
 
     public int isAgentless() {
-        return IsAgentless? 1 :0;
+        return IsAgentless ? 1 : 0;
     }
 
     public int isEncrypted() {
-        return IsEncrypted? 1 :0;
+        return IsEncrypted ? 1 : 0;
     }
 
     public int isOSSecure() {
-        return IsOSSecure? 1 :0;
+        return IsOSSecure ? 1 : 0;
     }
 
     public int isCanResetPassword() {
-        return CanResetPassword? 1 :0;
+        return CanResetPassword ? 1 : 0;
     }
 
     public int isExchangeBlocked() {
-        return ExchangeBlocked? 1 :0;
+        return ExchangeBlocked ? 1 : 0;
     }
 
     public int isInRoaming() {
-        return InRoaming? 1 :0;
+        return InRoaming ? 1 : 0;
     }
 
     public int isPasscodeEnabled() {
-        return PasscodeEnabled? 1 :0;
+        return PasscodeEnabled ? 1 : 0;
     }
 
     public short getBatteryStatus() {

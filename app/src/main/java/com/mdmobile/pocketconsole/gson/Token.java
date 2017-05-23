@@ -22,11 +22,11 @@ public class Token {
         return token_type;
     }
 
-    public int getTokenExpiration(){
+    public int getTokenExpiration() {
         return expires_in;
     }
 
-    public String getRefreshToken(){
+    public String getRefreshToken() {
         return refresh_token;
     }
 }

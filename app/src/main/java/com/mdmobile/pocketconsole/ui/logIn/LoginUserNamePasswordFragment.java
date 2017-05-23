@@ -1,5 +1,4 @@
-package com.mdmobile.pocketconsole.ui;
-
+package com.mdmobile.pocketconsole.ui.logIn;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,14 +9,15 @@ import android.view.ViewGroup;
 
 import com.mdmobile.pocketconsole.R;
 
-public class LoginConfigureSecretIdFragment extends Fragment {
 
-    public LoginConfigureSecretIdFragment() {
+public class LoginUserNamePasswordFragment extends Fragment {
+
+    public LoginUserNamePasswordFragment() {
         //Empty constructor required
     }
 
-    public static LoginConfigureSecretIdFragment newInstance() {
-        return new LoginConfigureSecretIdFragment();
+    public static LoginUserNamePasswordFragment newInstance() {
+        return new LoginUserNamePasswordFragment();
     }
 
     @Override
@@ -28,6 +28,6 @@ public class LoginConfigureSecretIdFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.api_client_secret_fragment, container, false);
+        return inflater.inflate(R.layout.username_password_fragment, container, false);
     }
 }

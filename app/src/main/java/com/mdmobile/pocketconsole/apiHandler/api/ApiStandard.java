@@ -5,9 +5,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 
-import java.net.URLEncoder;
 import java.util.HashSet;
-import java.util.logging.Logger;
 
 /**
  * ApiStandard is an abstract class which provides the standard methods to append standard parameters
@@ -76,7 +74,7 @@ public abstract class ApiStandard {
 
     public String build() {
         String uri = Uri.decode(currentApi.build().toString());
-        com.mdmobile.pocketconsole.utils.Logger.log("ApiStandard.class", uri , Log.VERBOSE);
+        com.mdmobile.pocketconsole.utils.Logger.log("ApiStandard.class", uri, Log.VERBOSE);
         return uri;
     }
 

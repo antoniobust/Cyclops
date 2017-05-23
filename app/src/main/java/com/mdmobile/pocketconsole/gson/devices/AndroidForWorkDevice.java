@@ -5,7 +5,7 @@ package com.mdmobile.pocketconsole.gson.devices;
  */
 
 public class AndroidForWorkDevice extends AndroidPlusDevice {
-    private String	BluetoothMACAddress, BuildVersion, CellularTechnology;
+    private String BluetoothMACAddress, BuildVersion, CellularTechnology;
 
 //    TODO:Support this info
 //    DeviceUserIdentity[]	UserIdentities
@@ -33,7 +33,7 @@ public class AndroidForWorkDevice extends AndroidPlusDevice {
                 OEMVersion, phoneNumber, subscriberNumber, passcodeStatus, supportedApis, exchangeStatus, lastCheckInTime,
                 lastAgentConnectTime, lastAgentDisconnectTime, inRoaming, androidDeviceAdmin, canResetPassword,
                 exchangeBlocked, isAgentCompatible, isAgentless, isEncrypted, isOSSecure, passcodeEnabled, batteryStatus,
-                cellularSignalStrength, networkConnectionType, networkRSSI, hardwareEncryptionCaps,Platform);
+                cellularSignalStrength, networkConnectionType, networkRSSI, hardwareEncryptionCaps, Platform);
 
         BluetoothMACAddress = bluetoothMACAddress;
         BuildVersion = buildVersion;

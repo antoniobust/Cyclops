@@ -80,7 +80,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             ArrayList<BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
 
             //Parse devices to extract common properties and put other as extra string
-            for(int i = 0; i < devices.size(); i++){
+            for (int i = 0; i < devices.size(); i++) {
                 DbData.formatDeviceData(devices.get(i));
             }
 

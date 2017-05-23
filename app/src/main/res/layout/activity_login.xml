@@ -16,7 +16,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_horizontal_margin"
         android:weightSum="10"
-        tools:context="com.mdmobile.pocketconsole.ui.LoginActivity">
+        tools:context="com.mdmobile.pocketconsole.ui.logIn.LoginActivity">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="match_parent"

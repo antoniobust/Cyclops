@@ -1,9 +1,11 @@
-package com.mdmobile.pocketconsole.ui;
+package com.mdmobile.pocketconsole.ui.main;
 
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +15,7 @@ import android.view.ViewGroup;
 import com.mdmobile.pocketconsole.R;
 
 
-public class DevicesFragment extends Fragment {
+public class DevicesFragment extends Fragment  implements LoaderManager.LoaderCallbacks{
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
 
@@ -51,6 +53,22 @@ public class DevicesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+    }
+
+
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
 
     }
 }

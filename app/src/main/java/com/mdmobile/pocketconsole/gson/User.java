@@ -3,7 +3,7 @@ package com.mdmobile.pocketconsole.gson;
 
 public class User {
     private String name, displayName, kind, eulaAcceptanceDate;
-    private Boolean isEulaAccepted , isAccountLocked;
+    private Boolean isEulaAccepted, isAccountLocked;
     private int numberOfFailedLogins;
 
     public User(String name, String displayName, String kind, String eulaAcceptanceDate,

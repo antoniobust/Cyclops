@@ -97,7 +97,7 @@ public class McProvider extends ContentProvider {
                     getContext().getContentResolver().notifyChange(uri, null);
                     Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " devices in DB", Log.VERBOSE);
 
-                    return 1;
+                    return dataInserted;
                 } else {
                     Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);
                 }
@@ -165,6 +165,9 @@ public class McProvider extends ContentProvider {
                 String devId = McContract.Device.getDeviceIdFromUri(uri);
                 updated = database.update(McContract.DEVICE_TABLE_NAME, values, McContract.Device.COLUMN_DEVICE_ID + "=?", new String[]{devId});
                 Logger.log(LOG_TAG, "Devices Updated:" + updated, Log.VERBOSE);
+                if(updated > 0 ){
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());

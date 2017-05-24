@@ -5,7 +5,6 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
-import android.util.Pair;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,7 +26,6 @@ import com.mdmobile.pocketconsole.utils.UsersUtility;
 import org.json.JSONArray;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;

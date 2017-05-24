@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.mdmobile.pocketconsole.R;
 
 
-public class DevicesFragment extends Fragment  implements LoaderManager.LoaderCallbacks{
+public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks {
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
 

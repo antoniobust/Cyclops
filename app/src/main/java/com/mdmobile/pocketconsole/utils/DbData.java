@@ -16,18 +16,19 @@ import java.util.ArrayList;
 public class DbData {
 
     public static ContentValues[] bulkFormatDeviceData(ArrayList<BasicDevice> devices) {
+        //TODO: not sure why gson sometimes skips some indexes so need to check here if the object exists at this index
+        // Workaround: collect devices in an array list of content values and then convert it to content values array
+        // to pass it to content provider
+
         ArrayList<ContentValues> values1 = new ArrayList<>();
         for (BasicDevice device : devices) {
-            //TODO: not sure why gson sometimes skips some indexes so need to check here if the object exists at this index
-            // Workaround: collect devices in an array list of content values and then convert it to content values array
-            // to pass it to content provider
-            if (device!= null) {
+            if (device != null) {
                 values1.add(formatDeviceData(device));
             }
         }
         ContentValues[] values = new ContentValues[values1.size()];
         values1.toArray(values);
-        return  values;
+        return values;
     }
 
     public static ContentValues formatDeviceData(BasicDevice device) {

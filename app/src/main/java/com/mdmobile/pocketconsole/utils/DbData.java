@@ -1,7 +1,6 @@
 package com.mdmobile.pocketconsole.utils;
 
 import android.content.ContentValues;
-import android.support.annotation.NonNull;
 
 import com.mdmobile.pocketconsole.gson.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
@@ -17,17 +16,21 @@ import java.util.ArrayList;
 public class DbData {
 
     public static ContentValues[] bulkFormatDeviceData(ArrayList<BasicDevice> devices) {
-        ContentValues[] values = new ContentValues[devices.size()];
-        for (int i = 0; i < devices.size(); i++) {
-//            if(devices.get(i) == null){
-//                continue;
-//            }
-            values[i] = formatDeviceData(devices.get(i));
+        ArrayList<ContentValues> values1 = new ArrayList<>();
+        for (BasicDevice device : devices) {
+            //TODO: not sure why gson sometimes skips some indexes so need to check here if the object exists at this index
+            // Workaround: collect devices in an array list of content values and then convert it to content values array
+            // to pass it to content provider
+            if (device!= null) {
+                values1.add(formatDeviceData(device));
+            }
         }
-        return values;
+        ContentValues[] values = new ContentValues[values1.size()];
+        values1.toArray(values);
+        return  values;
     }
 
-    public static ContentValues formatDeviceData( BasicDevice device) {
+    public static ContentValues formatDeviceData(BasicDevice device) {
 
         ContentValues deviceBasicValues = getDeviceBasicValues(device);
 
@@ -71,6 +74,7 @@ public class DbData {
 
 
     private static ContentValues getDeviceBasicValues(BasicDevice device) {
+
         ContentValues deviceValues = new ContentValues();
 
         deviceValues.put(McContract.Device.COLUMN_KIND, device.getKind());
@@ -89,13 +93,17 @@ public class DbData {
         deviceValues.put(McContract.Device.COLUMN_OS_VERSION, device.getOSVersion());
         deviceValues.put(McContract.Device.COLUMN_PATH, device.getPath());
         deviceValues.put(McContract.Device.COLUMN_PLATFORM, device.getPlatform());
-        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, device.memory.getAvailableExternalStorage());
-        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, device.memory.getAvailableMemory());
-        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, device.memory.getAvailableSDCardStorage());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, device.memory.getTotalExternalStorage());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_MEMORY, device.memory.getTotalMemory());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, device.memory.getTotalSDCardStorage());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_STORAGE, device.memory.getTotalStorage());
+        //Memory info is not on some specific windows phone so I rather check here if is null than
+        // remove memory form basic device info just for windows phone platform
+        if (device.memory != null) {
+            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, device.memory.getAvailableExternalStorage());
+            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, device.memory.getAvailableMemory());
+            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, device.memory.getAvailableSDCardStorage());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, device.memory.getTotalExternalStorage());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_MEMORY, device.memory.getTotalMemory());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, device.memory.getTotalSDCardStorage());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_STORAGE, device.memory.getTotalStorage());
+        }
         deviceValues.put(McContract.Device.COLUMN_PLATFORM, device.getPlatform());
 
         return deviceValues;

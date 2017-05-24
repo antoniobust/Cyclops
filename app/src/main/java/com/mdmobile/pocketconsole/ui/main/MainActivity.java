@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         accountManager = AccountManager.get(getApplicationContext());
         accountManager.addOnAccountsUpdatedListener(accountsUpdateListener, null, true);
 
-        ApiRequestManager.getInstance(getApplicationContext()).getAndroidDevices();
+        ApiRequestManager.getInstance(getApplicationContext()).getDevices();
 
     }
 

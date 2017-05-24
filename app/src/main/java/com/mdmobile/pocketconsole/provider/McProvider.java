@@ -87,6 +87,7 @@ public class McProvider extends ContentProvider {
         switch (mcEnumUri) {
             case DEVICES:
                 for (ContentValues contentValues : values) {
+
                     if (database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME,
                             null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
                         //if data was inserted correctly increment data inserted value

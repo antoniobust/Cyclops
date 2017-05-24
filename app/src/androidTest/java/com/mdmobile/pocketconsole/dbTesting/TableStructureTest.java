@@ -60,6 +60,8 @@ public class TableStructureTest {
         do {
             testTableNames.remove(c.getString(0));
         } while (c.moveToNext());
+
+        c.close();
     }
 
 

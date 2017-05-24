@@ -31,6 +31,8 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import static com.mdmobile.pocketconsole.utils.DbData.formatDeviceData;
+
 /**
  * Request devices
  * Pass API request in the constructor
@@ -80,18 +82,14 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             ArrayList<BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
 
             //Parse devices to extract common properties and put other as extra string
-            for (int i = 0; i < devices.size(); i++) {
-                DbData.formatDeviceData(devices.get(i));
-            }
-
-
             if (devices.size() == 1) {
-                ContentValues device = DbData.formatDeviceData(devices.get(0));
+                ContentValues device = formatDeviceData(devices.get(0));
                 mContext.getContentResolver().insert(McContract.Device.CONTENT_URI, device);
             } else if (devices.size() > 1) {
                 ContentValues[] devicesValues = DbData.bulkFormatDeviceData(devices);
                 mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
             }
+
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));

@@ -85,14 +85,11 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             }
 
 
-            BasicDevice[] devicesArray = new BasicDevice[devices.size()];
-            devices.toArray(devicesArray);
-
-            if (devicesArray.length == 1) {
-                ContentValues device = DbData.formatDeviceData(devicesArray[0]);
+            if (devices.size() == 1) {
+                ContentValues device = DbData.formatDeviceData(devices.get(0));
                 mContext.getContentResolver().insert(McContract.Device.CONTENT_URI, device);
             } else if (devices.size() > 1) {
-                ContentValues[] devicesValues = DbData.bulkFormatDeviceData(devicesArray);
+                ContentValues[] devicesValues = DbData.bulkFormatDeviceData(devices);
                 mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
             }
 

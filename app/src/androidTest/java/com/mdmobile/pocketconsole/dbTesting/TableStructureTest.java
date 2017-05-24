@@ -21,8 +21,8 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class TableStructureTest {
 
-    Context mContext;
-    SQLiteDatabase db;
+    private Context mContext;
+    private SQLiteDatabase db;
 
     private void deleteExistingDB() {
         mContext.deleteDatabase(McHelper.DB_NAME);

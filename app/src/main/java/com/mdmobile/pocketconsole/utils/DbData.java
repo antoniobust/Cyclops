@@ -1,12 +1,14 @@
 package com.mdmobile.pocketconsole.utils;
 
 import android.content.ContentValues;
+import android.support.annotation.NonNull;
 
 import com.mdmobile.pocketconsole.gson.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * Helper methods to get data ready for DB
@@ -14,15 +16,18 @@ import java.lang.reflect.Method;
 
 public class DbData {
 
-    public static ContentValues[] bulkFormatDeviceData(BasicDevice[] devices) {
-        ContentValues[] values = new ContentValues[devices.length];
-        for (int i = 0; i < devices.length; i++) {
-            values[i] = formatDeviceData(devices[i]);
+    public static ContentValues[] bulkFormatDeviceData(ArrayList<BasicDevice> devices) {
+        ContentValues[] values = new ContentValues[devices.size()];
+        for (int i = 0; i < devices.size(); i++) {
+//            if(devices.get(i) == null){
+//                continue;
+//            }
+            values[i] = formatDeviceData(devices.get(i));
         }
         return values;
     }
 
-    public static ContentValues formatDeviceData(BasicDevice device) {
+    public static ContentValues formatDeviceData( BasicDevice device) {
 
         ContentValues deviceBasicValues = getDeviceBasicValues(device);
 

@@ -165,7 +165,7 @@ public class McProvider extends ContentProvider {
                 String devId = McContract.Device.getDeviceIdFromUri(uri);
                 updated = database.update(McContract.DEVICE_TABLE_NAME, values, McContract.Device.COLUMN_DEVICE_ID + "=?", new String[]{devId});
                 Logger.log(LOG_TAG, "Devices Updated:" + updated, Log.VERBOSE);
-                if(updated > 0 ){
+                if (updated > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
                 break;

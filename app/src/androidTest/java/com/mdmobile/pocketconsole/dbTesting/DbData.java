@@ -1,12 +1,12 @@
 package com.mdmobile.pocketconsole.dbTesting;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.runner.AndroidJUnitRunner;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,6 +30,7 @@ import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.provider.McHelper;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -45,28 +46,36 @@ import static junit.framework.Assert.assertTrue;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class DbData {
+public class DbData extends AndroidJUnitRunner {
 
-    private Context mContext;
-    private SQLiteDatabase db;
-
-    private void deleteExistingDB() {
-        mContext.deleteDatabase(McHelper.DB_NAME);
-    }
-
-    @Before
-    public void setUp() {
-        mContext = InstrumentationRegistry.getTargetContext();
-        deleteExistingDB();
-        db = new McHelper(mContext).getWritableDatabase();
-        assertTrue("Db was not created properly", db.isOpen());
+    @BeforeClass
+    public static void setUp() {
+        InstrumentationRegistry.getTargetContext().deleteDatabase(McHelper.DB_NAME);
+        SQLiteDatabase db = new McHelper(InstrumentationRegistry.getTargetContext()).getWritableDatabase();
+        assertTrue("DB didn't open", db.isOpen());
+        db.close();
 
     }
+
 
     @Test
     public void testInsertDevice() {
         createSingleNewDevice();
         createNewDevicesBulkImport();
+    }
+
+    @Test
+    public void TestDeviceSelection(){
+        createNewDevicesBulkImport();
+        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.Device.CONTENT_URI,null,null,null,null);
+        assertTrue("No device found", c.moveToNext());
+        int count = 0;
+        while(!c.isLast()){
+            count++;
+            c.moveToNext();
+        }
+        assertTrue("Device count: "+count , count > 1);
+
     }
 
 
@@ -75,16 +84,11 @@ public class DbData {
 
         ContentValues deviceValues = com.mdmobile.pocketconsole.utils.DbData.formatDeviceData(devicesArray.get(0));
 
-        Uri newDev = mContext.getApplicationContext().getContentResolver().insert(McContract.Device.CONTENT_URI, deviceValues);
+        Uri newDev = InstrumentationRegistry.getContext().getContentResolver().insert(McContract.Device.CONTENT_URI, deviceValues);
         assertNotNull("Device was not created", newDev);
         String id = McContract.Device.getDeviceIdFromUri(newDev);
         assertNotNull(id);
         assertFalse("New device id is not valid", id.equals("-1"));
-
-        Cursor c = db.rawQuery("SELECT * from " + McContract.DEVICE_TABLE_NAME, null);
-        assertTrue("No device found", c.moveToFirst());
-
-        c.close();
     }
 
     private void createNewDevicesBulkImport() {
@@ -93,7 +97,7 @@ public class DbData {
 
         if (devicesArray.size() > 1) {
             ContentValues[] devicesValues = com.mdmobile.pocketconsole.utils.DbData.bulkFormatDeviceData(devicesArray);
-            newDev = mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
+            newDev = InstrumentationRegistry.getTargetContext().getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
         }
         assertFalse("Not all devices have been inserted correctly", newDev == 0);
     }

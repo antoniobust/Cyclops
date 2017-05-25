@@ -29,7 +29,6 @@ import com.mdmobile.pocketconsole.gson.devices.WindowsRuntime;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.provider.McHelper;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,16 +64,16 @@ public class DbData extends AndroidJUnitRunner {
     }
 
     @Test
-    public void TestDeviceSelection(){
+    public void TestDeviceSelection() {
         createNewDevicesBulkImport();
-        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.Device.CONTENT_URI,null,null,null,null);
+        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.Device.CONTENT_URI, null, null, null, null);
         assertTrue("No device found", c.moveToNext());
         int count = 0;
-        while(!c.isLast()){
+        while (!c.isLast()) {
             count++;
             c.moveToNext();
         }
-        assertTrue("Device count: "+count , count > 1);
+        assertTrue("Device count: " + count, count > 1);
 
     }
 

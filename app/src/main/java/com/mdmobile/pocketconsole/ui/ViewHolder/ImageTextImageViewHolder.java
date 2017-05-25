@@ -14,8 +14,8 @@ import com.mdmobile.pocketconsole.R;
 
 public class ImageTextImageViewHolder extends RecyclerView.ViewHolder {
 
-    final ImageView image1View, image2View;
-    final TextView descriptionView;
+    public final ImageView image1View, image2View;
+    public final TextView descriptionView;
 
     public ImageTextImageViewHolder(View view) {
         super(view);

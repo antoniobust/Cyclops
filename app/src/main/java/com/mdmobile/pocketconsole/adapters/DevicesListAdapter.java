@@ -11,8 +11,6 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
 
-import static android.R.attr.data;
-
 /**
  * Adapter bound to list of devices in main activity
  */
@@ -22,21 +20,23 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
     private Cursor data;
 
     public DevicesListAdapter(@Nullable Cursor cursor) {
+        if(cursor == null){
+            return;
+        }
+        setHasStableIds(true);
         data = cursor;
+        swapCursor(cursor);
     }
 
     @Override
     public ImageTextImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_img_txt_img, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_img_txt_img, parent, false);
         return new ImageTextImageViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ImageTextImageViewHolder holder, int position) {
-        if(data == null){
-            return;
-        }
-        if (!data.move(position)) {
+        if (!data.moveToPosition(position)) {
             //Show error view
         } else {
             holder.descriptionView.setText(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
@@ -44,16 +44,20 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
     }
 
     @Override
+    public long getItemId(int position) {
+        return data.getLong(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+    @Override
     public int getItemCount() {
         return data == null ? 0 : data.getCount();
     }
 
-    public void changeCursor(Cursor cursor) {
-        Cursor old = swapCursor(cursor);
-        if (old != null) {
-            old.close();
-        }
-    }
 
     public Cursor swapCursor(Cursor cursor) {
         if (data == cursor) {

@@ -2,7 +2,9 @@ package com.mdmobile.pocketconsole.ui.main;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.OnAccountsUpdateListener;
+import android.content.Intent;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,11 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
+import com.mdmobile.pocketconsole.services.RefreshDataService;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
@@ -26,13 +27,6 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKE
 public class MainActivity extends AppCompatActivity {
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
 
-    OnAccountsUpdateListener accountsUpdateListener = new OnAccountsUpdateListener() {
-        @Override
-        public void onAccountsUpdated(Account[] accounts) {
-            String token = AccountManager.get(getApplicationContext()).peekAuthToken(accounts[0], getString(R.string.account_type));
-            Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT).show();
-        }
-    };
 
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -85,10 +79,11 @@ public class MainActivity extends AppCompatActivity {
 
         //Set account manager to be used in this activity
         accountManager = AccountManager.get(getApplicationContext());
-        accountManager.addOnAccountsUpdatedListener(accountsUpdateListener, null, true);
 
-        ApiRequestManager.getInstance(getApplicationContext()).getDevices();
-
+        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
+        serviceIntent.setAction(getString(R.string.download_devices_action));
+        serviceIntent.setPackage(this.getPackageName());
+        startService(serviceIntent);
     }
 
 
@@ -113,18 +108,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        accountManager.removeOnAccountsUpdatedListener(accountsUpdateListener);
     }
 
     private void refreshToken() {
 
-        AccountManager accountManager = AccountManager.get(getApplicationContext());
-        Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
-        String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
-        accountManager.invalidateAuthToken(getString(R.string.account_type), token);
-        accountManager.getAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY),
-                null, new LoginActivity(), null, null);
-
+//        Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
+//        String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
+//        accountManager.invalidateAuthToken(getString(R.string.account_type), token);
+//        accountManager.getAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY),
+//                null, new LoginActivity(), null, null);
+//
+        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
+        serviceIntent.setAction(getString(R.string.download_devices_action));
+        serviceIntent.setPackage(getPackageName());
+        startService(serviceIntent);
 
     }
 }

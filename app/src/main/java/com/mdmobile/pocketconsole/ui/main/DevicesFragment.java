@@ -22,10 +22,11 @@ import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
 
 
-public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+        public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
     private DevicesListAdapter mAdapter;
+    RecyclerView recyclerView;
 
     public DevicesFragment() {
         // Required empty public constructor
@@ -47,18 +48,14 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         View rootView = inflater.inflate(R.layout.fragment_devices, container, false);
 
         //Get recycler instance
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.devices_recycler);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.devices_recycler);
 
         recyclerView.setHasFixedSize(true);
-        //Set layout manager
+        //Set recycler layout manager
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLinearLayoutManager);
 
-        //Create an adapter
-        mAdapter = new DevicesListAdapter(null);
-        recyclerView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(1, null, this);
 
         return rootView;
     }
@@ -67,6 +64,10 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Create an adapter
+        mAdapter = new DevicesListAdapter(null);
+        recyclerView.setAdapter(mAdapter);
+        getLoaderManager().initLoader(1, null, this);
     }
 
 
@@ -86,4 +87,5 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
     }
+
 }

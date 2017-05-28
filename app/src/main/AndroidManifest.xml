@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mdmobile.pocketconsole">
+          package="com.mdmobile.pocketconsole">
 
     <!-- Permissions -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <uses-permission
         android:name="android.permission.MANAGE_ACCOUNTS"
-        android:maxSdkVersion="22" />
+        android:maxSdkVersion="22"/>
 
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
-        android:maxSdkVersion="22" />
+        android:maxSdkVersion="22"/>
 
     <application
         android:allowBackup="true"
@@ -21,36 +21,43 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".ui.logIn.LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main"/>
 
         <!-- Data provider -->
         <provider
             android:name=".provider.McProvider"
-            android:authorities="com.mdmobile.pocketconsole" />
+            android:authorities="com.mdmobile.pocketconsole"/>
+
+        <!--Services-->
+        <service
+            android:name=".services.RefreshDataService"
+            android:enabled="true"
+            android:exported="false"/>
 
         <!-- Account authenticator service -->
         <service android:name=".services.AuthenticationService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
+                <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
+                android:resource="@xml/authenticator"/>
         </service>
         <service
-            android:name=".services.RefreshInfo"
+            android:name=".services.RefreshDataBinder"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"/>
     </application>
 
 </manifest>

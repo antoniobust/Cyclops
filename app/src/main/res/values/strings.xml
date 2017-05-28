@@ -1,21 +1,27 @@
 <resources>
+
+    <!--Application strings-->
     <string name="app_name">Pocket Console</string>
-    <string name="MobiControl">MobiControl</string>
-    <string name="api_secret_hint">Api secret</string>
-    <string name="client_id_hint">Client ID</string>
-    <string name="server_address_hint">Server address</string>
-    <string name="password_hint">Password</string>
-    <string name="user_name_hint">User name</string>
     <string name="info_text">i</string>
-    <string name="logIn_label">LogIn</string>
-    <string name="test_connection_label">Test connection</string>
-    <string name="account_type">MobiControlAccount</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_server">Servers</string>
     <string name="title_devices">Devices</string>
     <string name="title_profile">Profiles</string>
     <string name="title_users">Users</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="MobiControl">MobiControl</string>
+    <string name="api_secret_hint">Api secret</string>
+    <string name="client_id_hint">Client ID</string>
+    <string name="server_address_hint">Server address</string>
+    <string name="password_hint">Password</string>
+    <string name="user_name_hint">User name</string>
+
+    <string name="logIn_label">LogIn</string>
+    <string name="test_connection_label">Test connection</string>
+    <string name="account_type">MobiControlAccount</string>
+
+    <!--Intents Actions-->
+    <string name="download_devices_action">com.mdmobile.pocketconsole.DOWNLOAD_DEVICES</string>
+
 </resources>

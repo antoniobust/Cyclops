@@ -20,12 +20,11 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
     private Cursor data;
 
     public DevicesListAdapter(@Nullable Cursor cursor) {
-        if(cursor == null){
-            return;
+        if(cursor!=null) {
+            setHasStableIds(true);
+            data = cursor;
+            swapCursor(cursor);
         }
-        setHasStableIds(true);
-        data = cursor;
-        swapCursor(cursor);
     }
 
     @Override
@@ -36,10 +35,23 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
 
     @Override
     public void onBindViewHolder(ImageTextImageViewHolder holder, int position) {
-        if (!data.moveToPosition(position)) {
-            //Show error view
-        } else {
+        if (data.moveToPosition(position)) {
             holder.descriptionView.setText(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
+            //TODO: column "kind" doesn't get populated from gson, check it
+//            String kind =data.getString(data.getColumnIndex(McContract.Device.COLUMN_KIND));
+            String platform = data.getString(data.getColumnIndex(McContract.Device.COLUMN_PLATFORM));
+            if (platform == null) {
+                holder.image1View.setImageResource(R.drawable.ic_phone_android);
+            } else switch (platform) {
+                case "Android":
+                    holder.image1View.setImageResource(R.drawable.ic_phone_android);
+                    break;
+                case "iOS":
+                    holder.image1View.setImageResource(R.drawable.ic_phone_iphone);
+                    break;
+                default:
+                    holder.image1View.setImageResource(R.drawable.ic_phone_android);
+            }
         }
     }
 

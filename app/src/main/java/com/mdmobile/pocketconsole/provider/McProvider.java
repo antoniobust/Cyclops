@@ -68,7 +68,7 @@ public class McProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }
-
+        c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
 
@@ -147,8 +147,24 @@ public class McProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        Logger.log(LOG_TAG, "Delete(uri: " + uri.toString() + " selection: " + selection + " values: " + Arrays.toString(selectionArgs), Log.VERBOSE);
+        SQLiteDatabase database = mcHelper.getWritableDatabase();
+
+        McEnumUri mcEnumUri = matcher.matchUri(uri);
+        int deleted = 0;
+
+        switch (mcEnumUri){
+            case DEVICES:
+                deleted = database.delete(McContract.DEVICE_TABLE_NAME,null,null);
+                if(deleted > 0){
+                    Logger.log(LOG_TAG, "Devices deleted:" + deleted, Log.VERBOSE);
+//                    getContext().getContentResolver().notifyChange(uri, null);
+                } else{
+                    Logger.log(LOG_TAG, "No device deleted", Log.VERBOSE);
+                }
+        }
+        return deleted;
     }
 
     @Override

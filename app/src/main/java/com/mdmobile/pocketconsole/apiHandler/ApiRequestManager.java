@@ -135,7 +135,7 @@ public class ApiRequestManager {
             public void onErrorResponse(VolleyError error) {
                 Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
             }
-        });
+        },DeviceRequest.ERASE_OLD_DEVICE_INFO);
 
         requestsQueue.add(deviceRequest);
     }

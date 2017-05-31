@@ -23,10 +23,9 @@ import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+    public final static String SEARCH_QUERY_KEY = "searchQueryKey";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
-
-
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -99,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(true);
         searchView.setQueryRefinementEnabled(true);
+        searchView.setQueryHint(getString(R.string.search_view_hint));
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -128,5 +129,24 @@ public class MainActivity extends AppCompatActivity {
 //        serviceIntent.setPackage(getPackageName());
 //        startService(serviceIntent);
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        //On text changed send an intent to devices list fragment so it refreshes the listView with results
+        Bundle args = new Bundle(1);
+        args.putString(SEARCH_QUERY_KEY, query);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        DevicesFragment devicesFragment = DevicesFragment.newInstance();
+        devicesFragment.setArguments(args);
+
+        ft.replace(R.id.main_activity_fragment_container, devicesFragment).commit();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newQuery) {
+
+        return false;
     }
 }

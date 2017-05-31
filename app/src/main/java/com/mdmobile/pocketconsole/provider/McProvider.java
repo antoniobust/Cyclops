@@ -44,7 +44,7 @@ public class McProvider extends ContentProvider {
                         @Nullable String sortOrder) {
 
         Logger.log(LOG_TAG, "Query( uri:" + uri.toString() + ", data selected: " + Arrays.toString(projection)
-                + " selection parameters: " + selection + "values:" + Arrays.toString(selectionArgs), Log.VERBOSE);
+                + " selection parameters: " + selection + " values:" + Arrays.toString(selectionArgs), Log.VERBOSE);
         //Get DB is an expensive operation check if we already have opened it
         if (database == null) {
             database = mcHelper.getWritableDatabase();

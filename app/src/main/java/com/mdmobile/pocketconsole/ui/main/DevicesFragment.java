@@ -13,20 +13,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
-import android.widget.SimpleCursorAdapter;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
-import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
+
+import static android.R.attr.data;
 
 
-        public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
-    private DevicesListAdapter mAdapter;
     RecyclerView recyclerView;
+    private DevicesListAdapter mAdapter;
+    private String searchQuery;
 
     public DevicesFragment() {
         // Required empty public constructor
@@ -39,6 +39,11 @@ import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null && getArguments().containsKey(MainActivity.SEARCH_QUERY_KEY)) {
+            searchQuery = getArguments().getString(MainActivity.SEARCH_QUERY_KEY);
+        }
+
     }
 
     @Override
@@ -73,9 +78,12 @@ import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-        return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null, null, null, null);
-
+        if(searchQuery != null) {
+            return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null, McContract.Device.COLUMN_DEVICE_NAME+"=?",
+                    new String[]{searchQuery}, McContract.Device.COLUMN_DEVICE_NAME);
+        } else {
+            return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null, null, null, null);
+        }
     }
 
     @Override

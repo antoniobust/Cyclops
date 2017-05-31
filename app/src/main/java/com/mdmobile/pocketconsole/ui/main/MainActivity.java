@@ -2,9 +2,8 @@ package com.mdmobile.pocketconsole.ui.main;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.SearchManager;
 import android.content.Intent;
-import android.database.ContentObserver;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -15,8 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
-import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.services.RefreshDataService;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
@@ -75,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setHomeButtonEnabled(true);
+            actionBar.setTitle(R.string.app_name);
         }
 
         //Set account manager to be used in this activity
@@ -89,12 +89,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (BuildConfig.DEBUG) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.main_activity_options, menu);
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        //TODO: create a debug version of menu for extra options
+        inflater.inflate(R.menu.main_activity_toolbar, menu);
+
+        //Get search view and set searchable conf
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.main_activity_search_button).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true);
+        searchView.setQueryRefinementEnabled(true);
+        return true;
     }
 
     @Override
@@ -112,16 +117,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshToken() {
 
-//        Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
-//        String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
-//        accountManager.invalidateAuthToken(getString(R.string.account_type), token);
-//        accountManager.getAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY),
-//                null, new LoginActivity(), null, null);
+        Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
+        String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
+        accountManager.invalidateAuthToken(getString(R.string.account_type), token);
+        accountManager.getAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY),
+                null, new LoginActivity(), null, null);
 //
-        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
-        serviceIntent.setAction(getString(R.string.download_devices_action));
-        serviceIntent.setPackage(getPackageName());
-        startService(serviceIntent);
+//        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
+//        serviceIntent.setAction(getString(R.string.download_devices_action));
+//        serviceIntent.setPackage(getPackageName());
+//        startService(serviceIntent);
 
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/debug_refresh_token"
+        android:title="@string/refresh_token"/>
+
+    <item
+        android:id="@+id/main_activity_search_button"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search_label"
+        app:showAsAction="collapseActionView|always"
+        app:actionViewClass="android.widget.SearchView"/>
+</menu>

@@ -63,7 +63,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.ManagementServer.PORT_NUMBER + " INTEGER, "
                 + McContract.ManagementServer.DESCRIPTION + " TEXT, "
                 + McContract.ManagementServer.STATUS_TIME + " TEXT, "
-                + McContract.ManagementServer.MAC_ADRESS + " TEXT, "
+                + McContract.ManagementServer.MAC_ADDRESS + " TEXT, "
                 + McContract.ManagementServer.TOTAL_USER_COUNT + " INTEGER, "
                 + McContract.ManagementServer.NAME + " TEXT, "
                 + McContract.ManagementServer.STATUS + " TEXT "

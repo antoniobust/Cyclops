@@ -23,5 +23,7 @@
 
     <!--Intents Actions-->
     <string name="download_devices_action">com.mdmobile.pocketconsole.DOWNLOAD_DEVICES</string>
+    <string name="search_label">Search..</string>
+    <string name="search_view_hint">Search for devices, properties, groups etc...</string>
 
 </resources>

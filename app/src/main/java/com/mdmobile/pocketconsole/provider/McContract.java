@@ -118,7 +118,7 @@ public class McContract {
         String PORT_NUMBER = "PortNumber";
         String DESCRIPTION = "Description";
         String STATUS_TIME = "StatusTime";
-        String MAC_ADRESS = "MacAddress";
+        String MAC_ADDRESS = "MacAddress";
         String TOTAL_USER_COUNT = "TotalConsoleUsers";
         String NAME = "Name";
         String STATUS = "Status";

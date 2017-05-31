@@ -10,11 +10,12 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.SearchView;
+import android.view.View;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.services.RefreshDataService;
@@ -23,7 +24,7 @@ import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnAttachStateChangeListener {
     public final static String SEARCH_QUERY_KEY = "searchQueryKey";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     //Bottom navigation bar, navigation listener
@@ -94,20 +95,26 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         //Get search view and set searchable conf
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.main_activity_search_button).getActionView();
+        SearchView searchView = (android.support.v7.widget.SearchView) menu.findItem(R.id.main_activity_search_button).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(true);
         searchView.setQueryRefinementEnabled(true);
         searchView.setQueryHint(getString(R.string.search_view_hint));
         searchView.setOnQueryTextListener(this);
+        searchView.addOnAttachStateChangeListener(this);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.debug_refresh_token) {
-            refreshToken();
+        switch (item.getItemId()) {
+            case R.id.debug_refresh_token:
+                refreshToken();
+                break;
+            case R.id.main_activity_search_button:
+                item.expandActionView();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -131,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     }
 
+
+    //********************* SearchView Interfaces ****************************************************************
     @Override
     public boolean onQueryTextSubmit(String query) {
         //On text changed send an intent to devices list fragment so it refreshes the listView with results
@@ -149,4 +158,16 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         return false;
     }
+
+    @Override
+    public void onViewAttachedToWindow(View view) {
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(View view) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_activity_fragment_container, DevicesFragment.newInstance()).commit();
+    }
+
+    //************************************************************************************************************
 }

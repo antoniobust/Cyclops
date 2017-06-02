@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -15,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.services.RefreshDataService;
@@ -24,7 +24,7 @@ import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnAttachStateChangeListener {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener {
     public final static String SEARCH_QUERY_KEY = "searchQueryKey";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     //Bottom navigation bar, navigation listener
@@ -101,7 +101,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         searchView.setQueryRefinementEnabled(true);
         searchView.setQueryHint(getString(R.string.search_view_hint));
         searchView.setOnQueryTextListener(this);
-        searchView.addOnAttachStateChangeListener(this);
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.main_activity_search_button), this);
+
         return true;
     }
 
@@ -160,13 +161,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     @Override
-    public void onViewAttachedToWindow(View view) {
+    public boolean onMenuItemActionExpand(MenuItem menuItem) {
+        return true;
     }
 
     @Override
-    public void onViewDetachedFromWindow(View view) {
+    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_activity_fragment_container, DevicesFragment.newInstance()).commit();
+        return true;
     }
 
     //************************************************************************************************************

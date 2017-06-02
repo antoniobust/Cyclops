@@ -18,8 +18,6 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
 
-import static android.R.attr.data;
-
 
 public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -78,9 +76,16 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if(searchQuery != null) {
-            return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null, McContract.Device.COLUMN_DEVICE_NAME+"=?",
-                    new String[]{searchQuery}, McContract.Device.COLUMN_DEVICE_NAME);
+        if (searchQuery != null) {
+            //TODO: search for devices properties name ecc
+//            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? " + " OR "
+//                    + McContract.Device.COLUMN_EXTRA_INFO + " LIKE ? ";
+//            String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery + "%"};
+
+            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? ";
+            String[] arguments = {"%" + searchQuery + "%"};
+            return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null,
+                    selection, arguments, McContract.Device.COLUMN_DEVICE_NAME);
         } else {
             return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null, null, null, null);
         }

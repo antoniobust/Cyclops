@@ -35,6 +35,8 @@ import org.junit.runner.RunWith;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -69,11 +71,14 @@ public class DbData extends AndroidJUnitRunner {
         Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.Device.CONTENT_URI, null, null, null, null);
         assertTrue("No device found", c.moveToNext());
         int count = 0;
+        HashSet<String> IDs = new HashSet<>(c.getCount());
         while (!c.isLast()) {
             count++;
+            IDs.add(c.getString(c.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)));
             c.moveToNext();
         }
         assertTrue("Device count: " + count, count > 1);
+        assertTrue("Some IDs are duplicated"+ IDs.toString(), IDs.size() == count);
 
     }
 

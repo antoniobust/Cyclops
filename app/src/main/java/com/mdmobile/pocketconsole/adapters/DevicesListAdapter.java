@@ -3,13 +3,16 @@ package com.mdmobile.pocketconsole.adapters;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 /**
  * Adapter bound to list of devices in main activity
@@ -18,9 +21,10 @@ import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
 public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewHolder> {
 
     private Cursor data;
+    private static String LOG_TAG = DevicesListAdapter.class.getSimpleName();
 
     public DevicesListAdapter(@Nullable Cursor cursor) {
-        if(cursor!=null) {
+        if (cursor != null) {
             setHasStableIds(true);
             data = cursor;
             swapCursor(cursor);
@@ -34,25 +38,41 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
     }
 
     @Override
-    public void onBindViewHolder(ImageTextImageViewHolder holder, int position) {
-        if (data.moveToPosition(position)) {
-            holder.descriptionView.setText(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
-            //TODO: column "kind" doesn't get populated from gson, check it
-//            String kind =data.getString(data.getColumnIndex(McContract.Device.COLUMN_KIND));
-            String platform = data.getString(data.getColumnIndex(McContract.Device.COLUMN_PLATFORM));
-            if (platform == null) {
-                holder.image1View.setImageResource(R.drawable.ic_phone_android);
-            } else switch (platform) {
-                case "Android":
-                    holder.image1View.setImageResource(R.drawable.ic_phone_android);
-                    break;
-                case "iOS":
-                    holder.image1View.setImageResource(R.drawable.ic_phone_iphone);
-                    break;
-                default:
-                    holder.image1View.setImageResource(R.drawable.ic_phone_android);
-            }
+    public void onBindViewHolder(final ImageTextImageViewHolder holder, int position) {
+        if (!data.moveToPosition(position)) {
+            //Error view
         }
+        holder.descriptionView.setText(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
+        //TODO: column "kind" doesn't get populated from gson, check it
+//            String kind =data.getString(data.getColumnIndex(McContract.Device.COLUMN_KIND));
+        String platform = data.getString(data.getColumnIndex(McContract.Device.COLUMN_PLATFORM));
+        if (platform == null) {
+            holder.image1View.setImageResource(R.drawable.ic_phone_android);
+        } else switch (platform) {
+            case "Android":
+                holder.image1View.setImageResource(R.drawable.ic_phone_android);
+                break;
+            case "iOS":
+                holder.image1View.setImageResource(R.drawable.ic_phone_iphone);
+                break;
+            default:
+                holder.image1View.setImageResource(R.drawable.ic_phone_android);
+        }
+
+        //Set click listener
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.moveToPosition(holder.getAdapterPosition());
+                Logger.log(LOG_TAG,"Clicked on item:"+ holder.getAdapterPosition()
+                        + " device name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)) , Log.VERBOSE);
+
+                Toast.makeText(view.getContext(),
+                        McContract.Device.builUriWithDeviceID(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID))).toString(),
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
     }
 
     @Override

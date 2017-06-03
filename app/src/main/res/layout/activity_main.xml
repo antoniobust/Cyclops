@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--Main Coordinator container to coordinate animations-->
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -13,17 +14,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/actionbar" />
+        <include layout="@layout/actionbar"/>
 
         <!--Main content container-->
         <FrameLayout
             android:id="@+id/main_activity_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="1"/>
 
-
-        </FrameLayout>
 
         <!--Bottom bar for platform filters-->
         <android.support.design.widget.BottomNavigationView
@@ -31,11 +34,11 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="start"
-            app:itemTextColor="@color/colorAccent"
             android:background="?android:attr/windowBackground"
             android:visibility="visible"
-            app:menu="@menu/navigation"
             app:elevation="8dp"
-            app:itemIconTint="@color/color_state_list"/>
+            app:itemIconTint="@color/color_state_list"
+            app:itemTextColor="@color/colorAccent"
+            app:menu="@menu/navigation"/>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -25,5 +25,7 @@
     <string name="download_devices_action">com.mdmobile.pocketconsole.DOWNLOAD_DEVICES</string>
     <string name="search_label">Search..</string>
     <string name="search_view_hint">devices, properties, groups etc…</string>
+    <string name="title_activity_device_details">DeviceDetailsActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

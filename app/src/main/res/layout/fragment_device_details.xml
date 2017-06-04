@@ -4,14 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivityFragment"
-    tools:showIn="@layout/activity_device_details">
-
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"/>
+    tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivityFragment">
 
     <ScrollView
         android:layout_width="match_parent"

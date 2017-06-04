@@ -69,8 +69,8 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
                         + " device name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)), Log.VERBOSE);
 
                 Intent intent = new Intent(view.getContext(), DeviceDetailsActivity.class);
-                intent.putExtra(DeviceDetailsActivity.DEVICE_NAME_INTENT_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
-                intent.putExtra(DeviceDetailsActivity.DEVICE_ID_INTENT_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)));
+                intent.putExtra(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
+                intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)));
 
                 view.getContext().startActivity(intent);
             }

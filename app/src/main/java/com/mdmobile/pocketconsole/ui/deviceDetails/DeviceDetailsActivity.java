@@ -9,15 +9,15 @@ import com.mdmobile.pocketconsole.R;
 
 public class DeviceDetailsActivity extends AppCompatActivity {
 
-    public final static String DEVICE_NAME_INTENT_EXTRA_KEY = "DeviceNameIntentExtraKey";
-    public final static String DEVICE_ID_INTENT_EXTRA_KEY = "DeviceUriIntentExtraKey";
+    public final static String DEVICE_NAME_EXTRA_KEY = "DeviceNameIntentExtraKey";
+    public final static String DEVICE_ID_EXTRA_KEY = "DeviceUriIntentExtraKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String deviceName = getIntent().getStringExtra(DEVICE_NAME_INTENT_EXTRA_KEY);
-        String deviceUri = getIntent().getStringExtra(DEVICE_ID_INTENT_EXTRA_KEY);
+        String deviceName = getIntent().getStringExtra(DEVICE_NAME_EXTRA_KEY);
+        String deviceId = getIntent().getStringExtra(DEVICE_ID_EXTRA_KEY);
 
         setContentView(R.layout.activity_device_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -34,13 +34,19 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            if(deviceName.length() > 16) {
-                actionBar.setTitle(deviceName.substring(0,16).concat(" ..."));
+            if(deviceName.length() > 20) {
+                actionBar.setTitle(deviceName.substring(0,20).concat(" ..."));
             } else{
                 actionBar.setTitle(deviceName);
             }
-
         }
-    }
 
+        //inflate device fragment
+        DeviceDetailsActivityFragment detailsActivityFragment = DeviceDetailsActivityFragment.newInstance();
+        Bundle args = new Bundle();
+        args.putString(DEVICE_NAME_EXTRA_KEY, deviceName);
+        args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
+        detailsActivityFragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction().replace(R.id.device_details_fragment_container, detailsActivityFragment).commit();
+    }
 }

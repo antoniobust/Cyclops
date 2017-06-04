@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.adapters;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -7,11 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
+import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 /**
@@ -20,8 +21,8 @@ import com.mdmobile.pocketconsole.utils.Logger;
 
 public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewHolder> {
 
-    private Cursor data;
     private static String LOG_TAG = DevicesListAdapter.class.getSimpleName();
+    private Cursor data;
 
     public DevicesListAdapter(@Nullable Cursor cursor) {
         if (cursor != null) {
@@ -64,13 +65,14 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
             @Override
             public void onClick(View view) {
                 data.moveToPosition(holder.getAdapterPosition());
-                Logger.log(LOG_TAG,"Clicked on item:"+ holder.getAdapterPosition()
-                        + " device name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)) , Log.VERBOSE);
+                Logger.log(LOG_TAG, "Clicked on item:" + holder.getAdapterPosition()
+                        + " device name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)), Log.VERBOSE);
 
-                Toast.makeText(view.getContext(),
-                        McContract.Device.builUriWithDeviceID(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID))).toString(),
-                        Toast.LENGTH_SHORT)
-                        .show();
+                Intent intent = new Intent(view.getContext(), DeviceDetailsActivity.class);
+                intent.putExtra(DeviceDetailsActivity.DEVICE_NAME_INTENT_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
+                intent.putExtra(DeviceDetailsActivity.DEVICE_ID_INTENT_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)));
+
+                view.getContext().startActivity(intent);
             }
         });
     }

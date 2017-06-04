@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole;
+package com.mdmobile.pocketconsole.ui.deviceDetails;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+import com.mdmobile.pocketconsole.R;
+
+
 public class DeviceDetailsActivityFragment extends Fragment {
 
     public DeviceDetailsActivityFragment() {

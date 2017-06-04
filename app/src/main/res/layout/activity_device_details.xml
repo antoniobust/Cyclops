@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mdmobile.pocketconsole.DeviceDetailsActivity">
+    tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity">
 
     <include layout="@layout/actionbar"/>
 
@@ -13,7 +13,7 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:id="@+id/device_details_fragment"
-              android:name="com.mdmobile.pocketconsole.DeviceDetailsActivityFragment"
+              android:name="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivityFragment"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_marginStart="@dimen/activity_horizontal_margin"

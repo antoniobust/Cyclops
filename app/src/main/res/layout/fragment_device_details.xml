@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.mdmobile.pocketconsole.DeviceDetailsActivityFragment"
+    tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivityFragment"
     tools:showIn="@layout/activity_device_details">
 
     <android.support.design.widget.FloatingActionButton
@@ -60,6 +59,7 @@
             </RelativeLayout>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/device_details_info_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -72,9 +72,11 @@
                     android:gravity="center"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     tools:text="Information"/>
+
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/device_details_profiles_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -90,6 +92,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/device_details_apps_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -101,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="Rules"/>
+                    tools:text="Installed apps"/>
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>

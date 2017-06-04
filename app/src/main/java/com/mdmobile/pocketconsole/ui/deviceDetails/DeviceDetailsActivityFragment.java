@@ -1,8 +1,8 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +16,19 @@ public class DeviceDetailsActivityFragment extends Fragment {
 
     private String deviceName;
     private String deviceId;
+
     public DeviceDetailsActivityFragment() {
     }
 
-    public static DeviceDetailsActivityFragment newInstance(){
+    public static DeviceDetailsActivityFragment newInstance() {
         return new DeviceDetailsActivityFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments().containsKey(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY)
-                && getArguments().containsKey(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY)){
+        if (getArguments().containsKey(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY)
+                && getArguments().containsKey(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY)) {
             deviceId = getArguments().getString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY);
             deviceName = getArguments().getString(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY);
 

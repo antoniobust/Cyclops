@@ -34,9 +34,9 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            if(deviceName.length() > 20) {
-                actionBar.setTitle(deviceName.substring(0,20).concat(" ..."));
-            } else{
+            if (deviceName.length() > 20) {
+                actionBar.setTitle(deviceName.substring(0, 20).concat(" ..."));
+            } else {
                 actionBar.setTitle(deviceName);
             }
         }

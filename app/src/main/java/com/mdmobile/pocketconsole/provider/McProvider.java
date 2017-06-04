@@ -154,13 +154,13 @@ public class McProvider extends ContentProvider {
         McEnumUri mcEnumUri = matcher.matchUri(uri);
         int deleted = 0;
 
-        switch (mcEnumUri){
+        switch (mcEnumUri) {
             case DEVICES:
-                deleted = database.delete(McContract.DEVICE_TABLE_NAME,null,null);
-                if(deleted > 0){
+                deleted = database.delete(McContract.DEVICE_TABLE_NAME, null, null);
+                if (deleted > 0) {
                     Logger.log(LOG_TAG, "Devices deleted:" + deleted, Log.VERBOSE);
 //                    getContext().getContentResolver().notifyChange(uri, null);
-                } else{
+                } else {
                     Logger.log(LOG_TAG, "No device deleted", Log.VERBOSE);
                 }
         }

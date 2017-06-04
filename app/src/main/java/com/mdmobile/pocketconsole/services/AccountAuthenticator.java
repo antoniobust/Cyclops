@@ -86,7 +86,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                                     result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
                                     result.putString(AUTH_TOKEN_TYPE_KEY, JsonToken.getToken_type());
                                     result.putString(AccountManager.KEY_AUTHTOKEN, JsonToken.getAccess_token());
-                                    
+
                                     authenticatorResponse.onResult(result);
                                 }
 

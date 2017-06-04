@@ -40,10 +40,10 @@ import static com.mdmobile.pocketconsole.utils.DbData.formatDeviceData;
 
 public class DeviceRequest<T> extends BasicRequest<T> {
 
+    public final static int ERASE_OLD_DEVICE_INFO = 1;
+    public final static int UPDATE_EXISTING_DEVICE_INFO = 2;
     private Response.Listener<T> listener;
     private Context mContext;
-    public final static int ERASE_OLD_DEVICE_INFO =1;
-    public final static int UPDATE_EXISTING_DEVICE_INFO = 2;
     private int inserInfoMethod;
 
     public DeviceRequest(Context context, int method, String url, Response.Listener<T> listener,
@@ -54,7 +54,6 @@ public class DeviceRequest<T> extends BasicRequest<T> {
         this.listener = listener;
         inserInfoMethod = insertDataMEthod;
     }
-
 
 
     @Override
@@ -87,7 +86,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             ArrayList<BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
 
             //If we are refreshing all device data delete the old info first
-            if(inserInfoMethod == ERASE_OLD_DEVICE_INFO) {
+            if (inserInfoMethod == ERASE_OLD_DEVICE_INFO) {
                 mContext.getContentResolver().delete(McContract.Device.CONTENT_URI, null, null);
 
                 //Parse devices to extract common properties and put other as extra string
@@ -98,7 +97,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                     ContentValues[] devicesValues = DbData.bulkFormatDeviceData(devices);
                     mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
                 }
-            } else if(inserInfoMethod == UPDATE_EXISTING_DEVICE_INFO){
+            } else if (inserInfoMethod == UPDATE_EXISTING_DEVICE_INFO) {
 //                TODO:implement old data update method
             }
 

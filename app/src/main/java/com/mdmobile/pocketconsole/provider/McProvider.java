@@ -112,6 +112,24 @@ public class McProvider extends ContentProvider {
                     return dataInserted;
                 } else {
                     Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);
+                    return dataInserted;
+                }
+            case INSTALLED_APPLICATION_PKG_NAME:
+                for (ContentValues contentValues : values) {
+                    if (database.insertWithOnConflict(McContract.INSTALLED_APPLICATION_TABLE_NAME,
+                            null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                        //if data was inserted correctly increment data inserted value
+                        dataInserted++;
+                    }
+                }
+                if (dataInserted == values.length) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " devices in DB", Log.VERBOSE);
+
+                    return dataInserted;
+                } else {
+                    Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);
+                    return dataInserted;
                 }
 
             default:

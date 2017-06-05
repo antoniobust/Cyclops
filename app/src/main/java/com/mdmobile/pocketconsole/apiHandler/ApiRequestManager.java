@@ -3,6 +3,7 @@ package com.mdmobile.pocketconsole.apiHandler;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
 
@@ -138,5 +139,11 @@ public class ApiRequestManager {
         }, DeviceRequest.ERASE_OLD_DEVICE_INFO);
 
         requestsQueue.add(deviceRequest);
+    }
+
+    public void getDeviceInstalledApps(@NonNull String devID){
+        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
+        String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
+        String api = ApiModels.DevicesApi.Builder(apiAuthority,devID).getInstalledApplications().build();
     }
 }

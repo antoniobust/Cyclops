@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 public class ApiModels {
 
-    public static final String MobiControl = "MobiControl";
+    private static final String MobiControl = "MobiControl";
 
     public static class DevicesApi {
 
@@ -63,7 +63,7 @@ public class ApiModels {
         public static class SelectDevice {
             private static Uri.Builder currentApi;
 
-            public SelectDevice(String authority, String deviceID) {
+            private SelectDevice(String authority, String deviceID) {
                 currentApi = Uri.parse(authority).buildUpon().appendPath(ApiTypes.devicesApi).appendPath(deviceID);
             }
 

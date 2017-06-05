@@ -145,5 +145,6 @@ public class ApiRequestManager {
         Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModels.DevicesApi.Builder(apiAuthority,devID).getInstalledApplications().build();
+
     }
 }

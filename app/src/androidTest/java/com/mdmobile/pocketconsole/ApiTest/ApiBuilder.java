@@ -7,8 +7,7 @@ import com.mdmobile.pocketconsole.apiHandler.api.ApiModels;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
+
 import static junit.framework.Assert.assertTrue;
 
 
@@ -35,11 +34,9 @@ public class ApiBuilder {
         assertTrue("URL returned: " + api, api.equals(expectedApi));
 
         //device installed Apps API
-        api =  ApiModels.DevicesApi.Builder(serverAuthority,devID).getInstalledApplications().build();
+        api = ApiModels.DevicesApi.Builder(serverAuthority, devID).getInstalledApplications().build();
         expectedApi = serverAuthority.concat("/MobiControl/api/devices/").concat(devID).concat("/installedApplications");
-        assertTrue("URL returned: " + api + "\n URL expected: " +expectedApi, api.equals(expectedApi));
-
-
+        assertTrue("URL returned: " + api + "\n URL expected: " + expectedApi, api.equals(expectedApi));
 
 
     }

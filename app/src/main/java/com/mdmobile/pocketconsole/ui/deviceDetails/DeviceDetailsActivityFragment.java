@@ -47,6 +47,7 @@ public class DeviceDetailsActivityFragment extends Fragment {
         titleIconView.setImageResource(R.drawable.ic_phone_android);
         titleView.setText(deviceName);
         subtitleView.setText(deviceId);
+
         return rootView;
     }
 }

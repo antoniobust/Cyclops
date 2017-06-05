@@ -34,14 +34,14 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            if (deviceName.length() > 20) {
-                actionBar.setTitle(deviceName.substring(0, 20).concat(" ..."));
+            if (deviceName.length() > 25) {
+                actionBar.setTitle(deviceName.substring(0, 25).concat(" ..."));
             } else {
                 actionBar.setTitle(deviceName);
             }
         }
 
-        //inflate device fragment
+        //attach device fragment
         DeviceDetailsActivityFragment detailsActivityFragment = DeviceDetailsActivityFragment.newInstance();
         Bundle args = new Bundle();
         args.putString(DEVICE_NAME_EXTRA_KEY, deviceName);

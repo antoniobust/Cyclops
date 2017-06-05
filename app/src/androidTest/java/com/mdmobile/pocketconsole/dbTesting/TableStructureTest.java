@@ -54,6 +54,7 @@ public class TableStructureTest {
         tableNames.add(McContract.CUSTOM_DATA_DEVICE_TABLE_NAME);
         tableNames.add(McContract.DEPLOYMENT_SERVER_TABLE_NAME);
         tableNames.add(McContract.MANAGEMENT_SERVER_TABLE_NAME);
+        tableNames.add(McContract.INSTALLED_APPLICATION_TABLE_NAME);
 
         //Remove from table name set table returned in the cursor
         HashSet<String> testTableNames = new HashSet<>(tableNames);

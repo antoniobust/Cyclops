@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 
+import com.mdmobile.pocketconsole.gson.InstalledApp;
+
 public class McContract {
 
     //Defines the schema
@@ -24,6 +26,7 @@ public class McContract {
     public static final String PROFILE_PACKAGE_TABLE_NAME = "ProfilePackage";
     public static final String CUSTOM_DATA_TABLE_NAME = "CustomData";
     public static final String CUSTOM_DATA_DEVICE_TABLE_NAME = "CustomDataDevice";
+    public static final String INSTALLED_APPLICATION_TABLE_NAME = "InstalledApps";
     public static final String MANAGEMENT_SERVER_TABLE_NAME = "ManagementServer";
     public static final String DEPLOYMENT_SERVER_TABLE_NAME = "DeploymentServer";
     //Content type
@@ -122,6 +125,17 @@ public class McContract {
         String TOTAL_USER_COUNT = "TotalConsoleUsers";
         String NAME = "Name";
         String STATUS = "Status";
+    }
+
+    interface InstalledAppsColumns{
+        String DEVICE_ID = "DeviceID";
+        String APPLICATION_ID = "ApplicationID";
+        String APPLICATION_NAME= "Name";
+        String APPLICATION_VERSION = "MajorVersion";
+        String APPLICATION_BUILD_NUMBER = "BuildVersion";
+        String APPLICATION_SIZE = "Size";
+        String APPLICATION_DATA_USED = "DataCached";
+        String APPLICATION_STATUS = "Status";
     }
     //***************************************************************
 
@@ -352,6 +366,16 @@ public class McContract {
 //
 //    }
 
+    public static class InstalledApplications implements BaseColumns, InstalledAppsColumns {
+        //Table URI
+        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(INSTALLED_APPLICATION_TABLE_NAME).build();
+
+        //Content type
+        public static final String DIR_CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY +
+                INSTALLED_APPLICATION_TABLE_NAME;
+        public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY +
+                INSTALLED_APPLICATION_TABLE_NAME;
+    }
 
     //Represent Management server table
     public static class ManagementServer implements ManagementServerColumns, BaseColumns {

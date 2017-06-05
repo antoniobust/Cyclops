@@ -65,6 +65,17 @@ public class McProvider extends ContentProvider {
                         new String[]{devID}, null, null, sortOrder);
                 break;
 
+            case INSTALLED_APPLICATIONS:
+                c = database.query(McContract.INSTALLED_APPLICATION_TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+
+            case INSTALLED_APPLICATION_PKG_NAME:
+                String packageName = McContract.InstalledApplications.getAppPackageNameFromUri(uri);
+                c = database.query(McContract.INSTALLED_APPLICATION_TABLE_NAME, projection,
+                        McContract.InstalledApplications.APPLICATION_ID + "=?", new String[]{packageName}, null, null, sortOrder);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }
@@ -137,8 +148,19 @@ public class McProvider extends ContentProvider {
 
                 return McContract.Device.buildUriWithID(newRowID);
             case CUSTOM_ATTRIBUTE:
-
+                return null;
             case CUSTOM_DATA:
+                return null;
+
+            case INSTALLED_APPLICATION_ID:
+                newRowID = database.insertWithOnConflict(McContract.INSTALLED_APPLICATION_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                if (newRowID < 1) {
+                    Logger.log(LOG_TAG, "Impossible to insert application in DB", Log.ERROR);
+                    return null;
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return McContract.InstalledApplications.buildUriWithId(newRowID);
+
 
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());

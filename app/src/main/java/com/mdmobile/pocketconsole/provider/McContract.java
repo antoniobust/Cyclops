@@ -375,6 +375,23 @@ public class McContract {
                 INSTALLED_APPLICATION_TABLE_NAME;
         public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY +
                 INSTALLED_APPLICATION_TABLE_NAME;
+
+        //Methods
+        public static String getAppIdFromUri(Uri uri){
+            return uri.getLastPathSegment();
+        }
+
+        public static String getAppPackageNameFromUri(Uri uri){
+            return uri.getLastPathSegment();
+        }
+
+        public static Uri buildUriWithId(long applicationId){
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(applicationId)).build();
+        }
+
+        public static Uri buildUriWithAppPackageName(String applicationId){
+            return CONTENT_URI.buildUpon().appendPath(applicationId).build();
+        }
     }
 
     //Represent Management server table

@@ -19,6 +19,7 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiHandler.api.ApiModels;
 import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
+import com.mdmobile.pocketconsole.networkRequests.DeviceInstalledAppRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
 import com.mdmobile.pocketconsole.utils.Logger;
@@ -44,15 +45,15 @@ public class ApiRequestManager {
     private Context mContext;
 
     private ApiRequestManager(Context context) {
-        //New Api server instance created, instantiate a volley request queue
-        //Getting the app context from the context provided will avoid memory leaks
-        requestsQueue = Volley.newRequestQueue(context.getApplicationContext());
+        requestsQueue = Volley.newRequestQueue(context);
         mContext = context;
     }
 
     public static synchronized ApiRequestManager getInstance(Context context) {
         if (server == null) {
-            server = new ApiRequestManager(context);
+            //New Api server instance needs to be created
+            //Getting the app context from the context provided will avoid memory leaks
+            server = new ApiRequestManager(context.getApplicationContext());
             return server;
         } else {
             return server;
@@ -141,10 +142,25 @@ public class ApiRequestManager {
         requestsQueue.add(deviceRequest);
     }
 
-    public void getDeviceInstalledApps(@NonNull String devID){
+    public void getDeviceInstalledApps(@NonNull String devID) {
         Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
-        String api = ApiModels.DevicesApi.Builder(apiAuthority,devID).getInstalledApplications().build();
+        String api = ApiModels.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
+
+        DeviceInstalledAppRequest installedAppRequest = new DeviceInstalledAppRequest(Request.Method.GET,
+                api, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }, mContext);
+
+        requestsQueue.add(installedAppRequest);
 
     }
 }

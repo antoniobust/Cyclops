@@ -1,6 +1,13 @@
 package com.mdmobile.pocketconsole.utils;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.TimeZone;
+
 public class GeneralUtility {
 
 
@@ -23,5 +30,28 @@ public class GeneralUtility {
 
         return serverUrl.toString();
     }
+
+    public static HashMap<String, String> formatDeviceExtraInfo(String extraInfo){
+
+        String[] extraValues = extraInfo.split(";|=");
+        HashMap<String,String> map = new HashMap<>();
+
+        for(int i = 0; i < extraValues.length/2; i=i+2){
+            if(extraValues[i+1].equals("")){
+                map.put(extraValues[i], "N/A");
+            }else {
+                map.put(extraValues[i], extraValues[i + 1]);
+            }
+        }
+        return map;
+    }
+
+//    public static String formatDate(String date){
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//        simpleDateFormat.setTimeZone(TimeZone.getDefault());
+//        simpleDateFormat.format(new Date(date));
+//        return "a";
+
+//    }
 
 }

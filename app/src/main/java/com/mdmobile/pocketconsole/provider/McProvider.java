@@ -65,9 +65,10 @@ public class McProvider extends ContentProvider {
                         new String[]{devID}, null, null, sortOrder);
                 break;
 
-            case INSTALLED_APPLICATIONS:
-                c = database.query(McContract.INSTALLED_APPLICATION_TABLE_NAME, projection, selection, selectionArgs,
-                        null, null, sortOrder);
+            case INSTALLED_APPLICATIONS_ON_DEVICE:
+                String devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
+                c = database.query(McContract.INSTALLED_APPLICATION_TABLE_NAME, projection,
+                        McContract.InstalledApplications.DEVICE_ID + "=?", new String[]{devId}, null, null, sortOrder);
                 break;
 
             case INSTALLED_APPLICATION_PKG_NAME:

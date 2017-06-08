@@ -19,10 +19,10 @@ public class BasicDevice {
             OSVersion, Path, Platform;
     private Boolean ComplianceStatus, IsAgentOnline, IsVirtual;
 
-    public BasicDevice(String Kind, String deviceId, String deviceName, String enrollmentTime, String family, String
+    public BasicDevice(String kind, String deviceId, String deviceName, String enrollmentTime, String family, String
             hostName, String MACAddress, String manufacturer, String mode, String model, String OSVersion,
                        String path, Boolean complianceStatus, Boolean isAgentOnline, Boolean isVirtual, String Platform) {
-        this.Kind = Kind;
+        this.Kind = kind;
         DeviceId = deviceId;
         DeviceName = deviceName;
         EnrollmentTime = enrollmentTime;

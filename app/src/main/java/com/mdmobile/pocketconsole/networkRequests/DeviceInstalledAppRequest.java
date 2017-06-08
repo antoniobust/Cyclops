@@ -9,7 +9,6 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.gson.InstalledApp;
-import com.mdmobile.pocketconsole.provider.McContract;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -20,13 +19,15 @@ import java.util.List;
  * Volley request to get installed application on a single device
  */
 
-public class DeviceInstalledAppRequest extends BasicRequest {
+public class DeviceInstalledAppRequest extends BasicRequest<String> {
 
+    private Response.Listener<String> listener;
     private Context mContext;
 
-    public DeviceInstalledAppRequest(int method, String url, Response.ErrorListener errorListener, Context context) {
+    public DeviceInstalledAppRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener, Context context) {
         super(method, url, errorListener, context);
         mContext = context;
+        this.listener = listener;
     }
 
     @Override
@@ -36,14 +37,11 @@ public class DeviceInstalledAppRequest extends BasicRequest {
             String jsonResponseString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
 
-            Type type = new TypeToken<List<InstalledApp[]>>() {
+            Type type = new TypeToken<List<InstalledApp>>() {
             }.getType();
 
             Gson gson = new Gson();
             ArrayList<InstalledApp> applications = gson.fromJson(jsonResponseString, type);
-
-            //If we are refreshing all device data delete the old info first
-            mContext.getContentResolver().delete(McContract.Device.CONTENT_URI, null, null);
 
             //Parse devices to extract common properties and put other as extra string
             if (applications.size() == 1) {
@@ -62,7 +60,8 @@ public class DeviceInstalledAppRequest extends BasicRequest {
     }
 
     @Override
-    protected void deliverResponse(Object response) {
-
+    protected void deliverResponse(String response) {
+        listener.onResponse(response);
     }
+
 }

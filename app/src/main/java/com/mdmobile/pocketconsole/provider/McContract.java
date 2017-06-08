@@ -389,6 +389,14 @@ public class McContract {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(applicationId)).build();
         }
 
+        public static Uri buildUriWithDevId(String deviceID){
+            return CONTENT_URI.buildUpon().appendPath(deviceID).build();
+        }
+
+        public static String getDeviceIdFromUri(Uri uri){
+            return uri.getLastPathSegment();
+        }
+
         public static Uri buildUriWithAppPackageName(String applicationId){
             return CONTENT_URI.buildUpon().appendPath(applicationId).build();
         }

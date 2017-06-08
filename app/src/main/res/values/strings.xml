@@ -30,5 +30,8 @@
     <string name="device_info_view_label">Device Info</string>
     <string name="details_profiles_view_label">Profiles</string>
     <string name="details_installed_apps_view_label">Installed Apps</string>
+    <string name="info_operating_system_label">Operating System</string>
+    <string name="info_last_agent_check_in_label">Last Agent Check-in</string>
+    <string name="info_hostname_label">HostName</string>
 
 </resources>

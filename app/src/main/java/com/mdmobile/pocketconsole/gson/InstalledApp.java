@@ -3,50 +3,50 @@ package com.mdmobile.pocketconsole.gson;
 
 public class InstalledApp {
 
-    private String deviceId, applicationId, name, version, shortVersion, sizeInBytes, dataSizeInBytes,
-            status;
+    private String DeviceId, ApplicationId, Name, Version, ShortVersion, SizeInBytes, DataSizeInBytes,
+            Status;
 
     public InstalledApp(String deviceId, String applicationId, String name, String version,
                         String shortVersion, String sizeInBytes, String dataSizeInBytes, String status) {
-        this.deviceId = deviceId;
-        this.applicationId = applicationId;
-        this.name = name;
-        this.version = version;
-        this.shortVersion = shortVersion;
-        this.sizeInBytes = sizeInBytes;
-        this.dataSizeInBytes = dataSizeInBytes;
-        this.status = status;
+        this.DeviceId = deviceId;
+        this.ApplicationId = applicationId;
+        this.Name = name;
+        this.Version = version;
+        this.ShortVersion = shortVersion;
+        this.SizeInBytes = sizeInBytes;
+        this.DataSizeInBytes = dataSizeInBytes;
+        this.Status = status;
     }
 
     public String getDeviceId() {
-        return deviceId;
+        return DeviceId;
     }
 
     public String getApplicationId() {
-        return applicationId;
+        return ApplicationId;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public String getVersion() {
-        return version;
+        return Version;
     }
 
     public String getShortVersion() {
-        return shortVersion;
+        return ShortVersion;
     }
 
     public String getSizeInBytes() {
-        return sizeInBytes;
+        return SizeInBytes;
     }
 
     public String getDataSizeInBytes() {
-        return dataSizeInBytes;
+        return DataSizeInBytes;
     }
 
     public String getStatus() {
-        return status;
+        return Status;
     }
 }

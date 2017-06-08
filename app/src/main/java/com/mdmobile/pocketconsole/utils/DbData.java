@@ -2,6 +2,7 @@ package com.mdmobile.pocketconsole.utils;
 
 import android.content.ContentValues;
 
+import com.mdmobile.pocketconsole.gson.InstalledApp;
 import com.mdmobile.pocketconsole.gson.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 
@@ -38,7 +39,7 @@ public class DbData {
 
         try {
             Class<?> c = Class.forName(device.getClass().getName());
-            Method[] methods = c.getDeclaredMethods();
+            Method[] methods = c.getMethods();
             String append, propertyName;
             StringBuilder extraStringBuilder = new StringBuilder();
 
@@ -47,6 +48,11 @@ public class DbData {
             for (Method method : methods) {
                 //Getter method form gson classes don't have any parameter
                 if (method.getGenericParameterTypes().length > 0) {
+                    continue;
+                }
+
+                //Skip BasicDevice methods and Objects methods
+                if(method.getDeclaringClass() == BasicDevice.class || method.getDeclaringClass() == Object.class){
                     continue;
                 }
 
@@ -62,7 +68,7 @@ public class DbData {
                 } else if (propertyName.startsWith("is")) {
                     propertyName = propertyName.substring(1);
                 }
-                extraStringBuilder.append(propertyName).append("=").append(append).append(",");
+                extraStringBuilder.append(propertyName).append("=").append(append).append(";");
             }
 
             deviceBasicValues.put(McContract.Device.COLUMN_EXTRA_INFO, extraStringBuilder.toString());
@@ -108,6 +114,34 @@ public class DbData {
         deviceValues.put(McContract.Device.COLUMN_PLATFORM, device.getPlatform());
 
         return deviceValues;
+    }
+
+    private static ContentValues getInstalledAppContentValue(InstalledApp app) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(McContract.InstalledApplications.APPLICATION_ID, app.getApplicationId());
+        contentValues.put(McContract.InstalledApplications.APPLICATION_NAME, app.getName());
+        contentValues.put(McContract.InstalledApplications.APPLICATION_VERSION, app.getShortVersion());
+        contentValues.put(McContract.InstalledApplications.APPLICATION_BUILD_NUMBER, app.getVersion());
+        contentValues.put(McContract.InstalledApplications.APPLICATION_SIZE, app.getSizeInBytes());
+        contentValues.put(McContract.InstalledApplications.APPLICATION_DATA_USED, app.getDataSizeInBytes());
+        contentValues.put(McContract.InstalledApplications.APPLICATION_STATUS, app.getStatus());
+
+        return contentValues;
+    }
+
+    public static ContentValues[] bulkRormatInstalledApp(ArrayList<InstalledApp> installedApps) {
+        ArrayList<ContentValues> values = new ArrayList<>(installedApps.size());
+        for (int i = 0; i < installedApps.size(); i++) {
+            values.add(getInstalledAppContentValue(installedApps.get(i)));
+        }
+        ContentValues[] values1 = new ContentValues[values.size()];
+        values.toArray(values1);
+        return values1;
+    }
+
+    public static ContentValues formatInstalledApp(InstalledApp installedApp) {
+        return getInstalledAppContentValue(installedApp);
     }
 
 

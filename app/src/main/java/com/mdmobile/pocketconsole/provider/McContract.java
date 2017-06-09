@@ -166,14 +166,6 @@ public class McContract {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEVICE_TABLE_NAME).build();
 
-
-        //Content Type
-        public static final String DIR_CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + DEVICE_TABLE_NAME;
-        public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + DEVICE_TABLE_NAME;
-
-
         public static Uri builUriWithDeviceID(@NonNull String deviceID) {
             return CONTENT_URI.buildUpon().appendPath(deviceID).build();
         }
@@ -198,12 +190,6 @@ public class McContract {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(COMPLIANCE_ITEM_TABLE_NAME).build();
 
-        //Content Type
-        public static final String DIR_CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + COMPLIANCE_ITEM_TABLE_NAME;
-        public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + COMPLIANCE_ITEM_TABLE_NAME;
-
         public static Uri buildUriWithID(long ID) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(ID)).build();
         }
@@ -223,12 +209,6 @@ public class McContract {
     public static class CustomAttribute implements CustomAttributeColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(CUSTOM_ATTRIBUTE_TABLE_NAME).build();
-
-        //Content Type
-        public static final String DIR_CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + CUSTOM_ATTRIBUTE_TABLE_NAME;
-        public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + CUSTOM_ATTRIBUTE_TABLE_NAME;
 
         public static Uri buildUriWithID(long ID) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(ID)).build();
@@ -270,12 +250,6 @@ public class McContract {
     public static class CustomData implements CustomDataColumns, BaseColumns {
         //Table URI
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(CUSTOM_DATA_TABLE_NAME).build();
-
-        //Content Type
-        public static final String DIR_CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + CUSTOM_DATA_TABLE_NAME;
-        public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + CUSTOM_DATA_TABLE_NAME;
 
         public final Uri buildUriWithName(@NonNull String customDataName) {
             return CONTENT_URI.buildUpon().appendPath(customDataName).build();
@@ -370,12 +344,6 @@ public class McContract {
         //Table URI
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(INSTALLED_APPLICATION_TABLE_NAME).build();
 
-        //Content type
-        public static final String DIR_CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY +
-                INSTALLED_APPLICATION_TABLE_NAME;
-        public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY +
-                INSTALLED_APPLICATION_TABLE_NAME;
-
         //Methods
         public static String getAppIdFromUri(Uri uri){
             return uri.getLastPathSegment();
@@ -407,12 +375,6 @@ public class McContract {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(MANAGEMENT_SERVER_TABLE_NAME).build();
 
-        //Content Type
-        public static final String DIR_CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + MANAGEMENT_SERVER_TABLE_NAME;
-        public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + MANAGEMENT_SERVER_TABLE_NAME;
-
     }
 
 
@@ -420,12 +382,6 @@ public class McContract {
     public static class DeploymentServer implements DeploymentServerColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEPLOYMENT_SERVER_TABLE_NAME).build();
-
-        //Content Type
-        public static final String DIR_CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + DEPLOYMENT_SERVER_TABLE_NAME;
-        public static final String SINGLE_CONTENT_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY
-                + DEPLOYMENT_SERVER_TABLE_NAME;
 
     }
 }

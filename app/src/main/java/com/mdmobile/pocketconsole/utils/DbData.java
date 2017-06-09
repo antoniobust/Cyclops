@@ -119,6 +119,7 @@ public class DbData {
     private static ContentValues getInstalledAppContentValue(InstalledApp app) {
         ContentValues contentValues = new ContentValues();
 
+        contentValues.put(McContract.InstalledApplications.DEVICE_ID, app.getDeviceId());
         contentValues.put(McContract.InstalledApplications.APPLICATION_ID, app.getApplicationId());
         contentValues.put(McContract.InstalledApplications.APPLICATION_NAME, app.getName());
         contentValues.put(McContract.InstalledApplications.APPLICATION_VERSION, app.getShortVersion());
@@ -130,7 +131,7 @@ public class DbData {
         return contentValues;
     }
 
-    public static ContentValues[] bulkRormatInstalledApp(ArrayList<InstalledApp> installedApps) {
+    public static ContentValues[] bulkFormatInstalledApp(ArrayList<InstalledApp> installedApps) {
         ArrayList<ContentValues> values = new ArrayList<>(installedApps.size());
         for (int i = 0; i < installedApps.size(); i++) {
             values.add(getInstalledAppContentValue(installedApps.get(i)));

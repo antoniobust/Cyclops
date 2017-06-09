@@ -15,7 +15,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.MANAGEMENT_SERVER_T
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 11;
+    private static final int DB_VERSION = 14;
 
     public McHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -140,12 +140,13 @@ public class McHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + McContract.INSTALLED_APPLICATION_TABLE_NAME + "("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + McContract.InstalledApplications.DEVICE_ID + " TEXT NOT NULL, "
-                + McContract.InstalledApplications.APPLICATION_NAME + " TEXT"
+                + McContract.InstalledApplications.APPLICATION_NAME + " TEXT,"
                 + McContract.InstalledApplications.APPLICATION_ID + " TEXT, "
                 + McContract.InstalledApplications.APPLICATION_SIZE + " TEXT, "
                 + McContract.InstalledApplications.APPLICATION_DATA_USED + " TEXT, "
                 + McContract.InstalledApplications.APPLICATION_VERSION + " TEXT, "
                 + McContract.InstalledApplications.APPLICATION_BUILD_NUMBER + " TEXT, "
+                + McContract.InstalledApplications.APPLICATION_STATUS + " TEXT, "
                 + "FOREIGN KEY(" + McContract.InstalledApplications.DEVICE_ID + ") REFERENCES "
                 + DEVICE_TABLE_NAME + " (" + McContract.Device.COLUMN_DEVICE_ID + ")"
                 + ");");

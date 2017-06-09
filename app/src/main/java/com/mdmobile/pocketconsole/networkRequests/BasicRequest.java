@@ -83,7 +83,7 @@ public abstract class BasicRequest<T> extends Request<T> {
 
     public BasicRequest(int method, String url, Response.ErrorListener errorListener, Context context) {
         super(method, url, errorListener);
-        mContext = context;
+        mContext = context.getApplicationContext();
     }
 
     @Override

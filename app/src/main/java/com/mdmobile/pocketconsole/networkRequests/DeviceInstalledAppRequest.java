@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.networkRequests;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import com.android.volley.NetworkResponse;
@@ -9,6 +10,8 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.gson.InstalledApp;
+import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.utils.DbData;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -26,7 +29,7 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
 
     public DeviceInstalledAppRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener, Context context) {
         super(method, url, errorListener, context);
-        mContext = context;
+        mContext = context.getApplicationContext();
         this.listener = listener;
     }
 
@@ -45,10 +48,11 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
 
             //Parse devices to extract common properties and put other as extra string
             if (applications.size() == 1) {
-                //TODO:insert in DB
-
+                ContentValues appValues = DbData.formatInstalledApp(applications.get(0));
+                mContext.getContentResolver().insert(McContract.InstalledApplications.CONTENT_URI, appValues);
             } else if (applications.size() > 1) {
-                //TODO: bulk Insert in DB
+                ContentValues[] appValues = DbData.bulkFormatInstalledApp(applications);
+                mContext.getContentResolver().bulkInsert(McContract.InstalledApplications.CONTENT_URI, appValues);
             }
 
             return Response.success(null,

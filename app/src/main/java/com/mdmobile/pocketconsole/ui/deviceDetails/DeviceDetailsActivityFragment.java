@@ -85,7 +85,7 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
                 return null;
             case 12:
                 uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
-                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
+                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, McContract.InstalledApplications.APPLICATION_NAME);
         }
         return null;
     }
@@ -99,6 +99,7 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
             case 11:
                 break;
             case 12:
+                setInstalledAppInfoCard(data);
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported id: " + loader.getId());
@@ -113,22 +114,38 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
     private void setDeviceInfoCard(Cursor c) {
         GridLayout infoGrid = (GridLayout) getActivity().findViewById(R.id.device_details_info_grid);
 
-        c.moveToFirst();
-        String platform = c.getString(c.getColumnIndex(McContract.Device.COLUMN_PLATFORM));
-        String osVersion = c.getString(c.getColumnIndex(McContract.Device.COLUMN_OS_VERSION));
-        String hostName = c.getString(c.getColumnIndex(McContract.Device.COLUMN_HOST_NAME));
-        HashMap<String,String> extraInfo = GeneralUtility
-                .formatDeviceExtraInfo(c.getString(c.getColumnIndex(McContract.Device.COLUMN_EXTRA_INFO)));
+        if(c.moveToFirst()) {
+            String platform = c.getString(c.getColumnIndex(McContract.Device.COLUMN_PLATFORM));
+            String osVersion = c.getString(c.getColumnIndex(McContract.Device.COLUMN_OS_VERSION));
+            String hostName = c.getString(c.getColumnIndex(McContract.Device.COLUMN_HOST_NAME));
+            HashMap<String, String> extraInfo = GeneralUtility
+                    .formatDeviceExtraInfo(c.getString(c.getColumnIndex(McContract.Device.COLUMN_EXTRA_INFO)));
 
 
-        ((TextView) infoGrid.getChildAt(1)).setText(getString(R.string.info_operating_system_label));
-        ((TextView) infoGrid.getChildAt(2)).setText(platform.concat(" ").concat(osVersion));
-        ((TextView) infoGrid.getChildAt(3)).setText(getString(R.string.info_last_agent_check_in_label));
-        ((TextView) infoGrid.getChildAt(4)).setText(extraInfo.get("tLastCheckInTime"));
-        ((TextView) infoGrid.getChildAt(5)).setText(getString(R.string.MobiControl));
-        ((TextView) infoGrid.getChildAt(6)).setText(extraInfo.get("tAgentVersion"));
-        ((TextView) infoGrid.getChildAt(7)).setText(getString(R.string.info_hostname_label));
-        ((TextView) infoGrid.getChildAt(8)).setText(hostName);
+            ((TextView) infoGrid.getChildAt(1)).setText(getString(R.string.info_operating_system_label));
+            ((TextView) infoGrid.getChildAt(2)).setText(platform.concat(" ").concat(osVersion));
+            ((TextView) infoGrid.getChildAt(3)).setText(getString(R.string.info_last_agent_check_in_label));
+            ((TextView) infoGrid.getChildAt(4)).setText(extraInfo.get("tLastCheckInTime"));
+            ((TextView) infoGrid.getChildAt(5)).setText(getString(R.string.MobiControl));
+            ((TextView) infoGrid.getChildAt(6)).setText(extraInfo.get("tAgentVersion"));
+            ((TextView) infoGrid.getChildAt(7)).setText(getString(R.string.info_hostname_label));
+            ((TextView) infoGrid.getChildAt(8)).setText(hostName);
+        }
+    }
 
+    private void setInstalledAppInfoCard(Cursor c){
+        GridLayout infoGrid = (GridLayout) getActivity().findViewById(R.id.device_details_apps_grid_view);
+
+        if(!c.moveToFirst()){
+         return;
+        }
+
+        for(int i = 1; i < infoGrid.getChildCount(); i = i+2){
+            ((TextView) infoGrid.getChildAt(i)).setText(c.getString(c.getColumnIndex(McContract.InstalledApplications.APPLICATION_NAME)));
+            ((TextView) infoGrid.getChildAt(i+1)).setText(c.getString(c.getColumnIndex(McContract.InstalledApplications.APPLICATION_STATUS)));
+            if(!c.moveToNext()){
+                break;
+            }
+        }
     }
 }

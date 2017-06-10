@@ -33,5 +33,8 @@
     <string name="info_operating_system_label">Operating System</string>
     <string name="info_last_agent_check_in_label">Last Agent Check-in</string>
     <string name="info_hostname_label">HostName</string>
+    <string name="pin_folder_menu_label">Pin folder</string>
+    <string name="sort_devices_menu_label">Sort devices by …</string>
+    <string name="devices_menu_filter_label">Filters</string>
 
 </resources>

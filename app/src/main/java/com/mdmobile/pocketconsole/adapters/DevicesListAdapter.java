@@ -3,7 +3,6 @@ package com.mdmobile.pocketconsole.adapters;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
@@ -51,15 +50,15 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
         holder.descriptionView.setText(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
         Drawable dot;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            dot = holder.descriptionView.getContext().getResources().getDrawable(R.drawable.dot_shape_selected,null);
+            dot = holder.descriptionView.getContext().getResources().getDrawable(R.drawable.connectivity_status_dot, null);
         } else {
-            dot = holder.descriptionView.getContext().getResources().getDrawable(R.drawable.dot_shape_selected);
+            dot = holder.descriptionView.getContext().getResources().getDrawable(R.drawable.connectivity_status_dot);
         }
         holder.descriptionView.setCompoundDrawablePadding(50);
 
-        if(data.getInt(data.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1) {
-            ((GradientDrawable) dot).setColor(Color.GREEN);
-        }else {
+        if (data.getInt(data.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1) {
+            ((GradientDrawable) dot).setColor(holder.descriptionView.getContext().getResources().getColor(R.color.onLineDot));
+        } else {
             ((GradientDrawable) dot).setColor(Color.LTGRAY);
         }
 

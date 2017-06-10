@@ -12,6 +12,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -40,6 +42,7 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments().containsKey(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY)
                 && getArguments().containsKey(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY)) {
             deviceId = getArguments().getString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY);

@@ -11,6 +11,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -37,6 +39,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         if (getArguments() != null && getArguments().containsKey(MainActivity.SEARCH_QUERY_KEY)) {
             searchQuery = getArguments().getString(MainActivity.SEARCH_QUERY_KEY);
@@ -71,6 +74,11 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         mAdapter = new DevicesListAdapter(null);
         recyclerView.setAdapter(mAdapter);
         getLoaderManager().initLoader(1, null, this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.devices_fragment_menu,menu);
     }
 
 

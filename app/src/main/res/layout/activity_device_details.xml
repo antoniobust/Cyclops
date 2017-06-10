@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,10 +25,39 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"/>
+        android:layout_margin="0dp"
+        android:padding="0dp">
 
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/sub_fab2"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--app:backgroundTint="@color/colorPrimary"-->
+            <!--android:layout_above="@id/details_main_fab"-->
+            <!--app:fabSize="mini"/>-->
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/sub_fab1"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_below="@id/sub_fab2"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--app:backgroundTint="@color/colorPrimary"-->
+            <!--app:fabSize="mini"/>-->
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/details_main_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:clickable="true"
+            android:focusable="true"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_settings"/>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

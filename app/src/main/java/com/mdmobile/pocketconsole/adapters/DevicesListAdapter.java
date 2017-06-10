@@ -2,6 +2,10 @@ package com.mdmobile.pocketconsole.adapters;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -43,7 +47,23 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
         if (!data.moveToPosition(position)) {
             //Error view
         }
+
         holder.descriptionView.setText(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
+        Drawable dot;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            dot = holder.descriptionView.getContext().getResources().getDrawable(R.drawable.dot_shape_selected,null);
+        } else {
+            dot = holder.descriptionView.getContext().getResources().getDrawable(R.drawable.dot_shape_selected);
+        }
+        holder.descriptionView.setCompoundDrawablePadding(50);
+
+        if(data.getInt(data.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1) {
+            ((GradientDrawable) dot).setColor(Color.GREEN);
+        }else {
+            ((GradientDrawable) dot).setColor(Color.LTGRAY);
+        }
+
+        holder.descriptionView.setCompoundDrawablesWithIntrinsicBounds(dot, null, null, null);
         //TODO: column "kind" doesn't get populated from gson, check it
 //            String kind =data.getString(data.getColumnIndex(McContract.Device.COLUMN_KIND));
         String platform = data.getString(data.getColumnIndex(McContract.Device.COLUMN_PLATFORM));

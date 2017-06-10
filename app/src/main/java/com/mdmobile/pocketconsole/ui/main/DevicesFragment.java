@@ -87,7 +87,8 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
             return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null,
                     selection, arguments, McContract.Device.COLUMN_DEVICE_NAME);
         } else {
-            String[] projection = {McContract.Device.COLUMN_DEVICE_ID, McContract.Device.COLUMN_DEVICE_NAME, McContract.Device.COLUMN_PLATFORM};
+            String[] projection = {McContract.Device.COLUMN_DEVICE_ID, McContract.Device.COLUMN_DEVICE_NAME,
+                    McContract.Device.COLUMN_PLATFORM, McContract.Device.COLUMN_AGENT_ONLINE};
             return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, projection, null, null, null);
         }
     }

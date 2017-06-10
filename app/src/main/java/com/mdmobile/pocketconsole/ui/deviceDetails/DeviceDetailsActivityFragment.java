@@ -5,9 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +22,10 @@ import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
-import java.sql.Array;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.regex.Pattern;
 
 
-public class DeviceDetailsActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DeviceDetailsActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     private String deviceName;
     private String deviceId;
@@ -57,6 +56,9 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
         ImageView titleIconView = (ImageView) rootView.findViewById(R.id.device_detail_icon);
         TextView titleView = (TextView) rootView.findViewById(R.id.device_detail_title_view);
         TextView subtitleView = (TextView) rootView.findViewById(R.id.device_detail_subtitle_view);
+        CardView infoCard = (CardView) rootView.findViewById(R.id.device_details_info_card);
+
+        infoCard.setOnClickListener(this);
 
         titleIconView.setImageResource(R.drawable.ic_phone_android);
         titleView.setText(deviceName);
@@ -114,7 +116,7 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
     private void setDeviceInfoCard(Cursor c) {
         GridLayout infoGrid = (GridLayout) getActivity().findViewById(R.id.device_details_info_grid);
 
-        if(c.moveToFirst()) {
+        if (c.moveToFirst()) {
             String platform = c.getString(c.getColumnIndex(McContract.Device.COLUMN_PLATFORM));
             String osVersion = c.getString(c.getColumnIndex(McContract.Device.COLUMN_OS_VERSION));
             String hostName = c.getString(c.getColumnIndex(McContract.Device.COLUMN_HOST_NAME));
@@ -133,19 +135,37 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
         }
     }
 
-    private void setInstalledAppInfoCard(Cursor c){
+    private void setInstalledAppInfoCard(Cursor c) {
         GridLayout infoGrid = (GridLayout) getActivity().findViewById(R.id.device_details_apps_grid_view);
 
-        if(!c.moveToFirst()){
-         return;
+        if (!c.moveToFirst()) {
+            return;
         }
 
-        for(int i = 1; i < infoGrid.getChildCount(); i = i+2){
+        for (int i = 1; i < infoGrid.getChildCount(); i = i + 2) {
             ((TextView) infoGrid.getChildAt(i)).setText(c.getString(c.getColumnIndex(McContract.InstalledApplications.APPLICATION_NAME)));
-            ((TextView) infoGrid.getChildAt(i+1)).setText(c.getString(c.getColumnIndex(McContract.InstalledApplications.APPLICATION_STATUS)));
-            if(!c.moveToNext()){
+            ((TextView) infoGrid.getChildAt(i + 1)).setText(c.getString(c.getColumnIndex(McContract.InstalledApplications.APPLICATION_STATUS)));
+            if (!c.moveToNext()) {
                 break;
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        FragmentTransaction transaction = (getActivity()).getSupportFragmentManager().beginTransaction();
+
+        switch (v.getId()) {
+            case R.id.device_details_info_card:
+                FullDeviceInfoFragment fragment = FullDeviceInfoFragment.newInstance();
+                transaction.addToBackStack(null);
+                transaction.replace(R.id.device_details_fragment_container, fragment).commit();
+
+                break;
+            case R.id.device_details_profiles_card:
+                break;
+            case R.id.device_details_apps_card:
+                break;
         }
     }
 }

@@ -36,6 +36,7 @@
             android:layout_gravity="start"
             android:background="?android:attr/windowBackground"
             android:visibility="visible"
+            android:foreground="?selectableItemBackgroundBorderless"
             app:elevation="8dp"
             app:itemIconTint="@color/color_state_list"
             app:itemTextColor="@color/colorAccent"

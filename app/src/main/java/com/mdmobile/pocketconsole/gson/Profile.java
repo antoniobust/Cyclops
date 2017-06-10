@@ -3,15 +3,15 @@ package com.mdmobile.pocketconsole.gson;
 
 public class Profile {
 
-    private String referenceId, name, status, assigmentDate;
+    private String referenceId, name, status, assignmentDate;
     private int versionNumber;
     private Boolean isMandatory;
 
-    public Profile(String referenceId, String name, String status, String assigmentDate, int versionNumber, Boolean isMandatory) {
+    public Profile(String referenceId, String name, String status, String assignmentDate, int versionNumber, Boolean isMandatory) {
         this.referenceId = referenceId;
         this.name = name;
         this.status = status;
-        this.assigmentDate = assigmentDate;
+        this.assignmentDate = assignmentDate;
         this.versionNumber = versionNumber;
         this.isMandatory = isMandatory;
     }
@@ -28,8 +28,8 @@ public class Profile {
         return status;
     }
 
-    public String getAssigmentDate() {
-        return assigmentDate;
+    public String getAssignmentDate() {
+        return assignmentDate;
     }
 
     public int getVersionNumber() {

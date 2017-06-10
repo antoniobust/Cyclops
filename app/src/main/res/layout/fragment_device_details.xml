@@ -56,6 +56,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:minHeight="150dp"
             app:contentPadding="8dp">
 
@@ -79,6 +82,7 @@
                 <TextView
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:maxLength="20"
                     android:text="@string/info_operating_system_label"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     app:layout_columnWeight="1"
@@ -96,6 +100,7 @@
                 <TextView
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:maxLength="20"
                     android:text="@string/MobiControl"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     app:layout_columnSpan="1"
@@ -162,6 +167,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:minHeight="150dp"
             app:contentPadding="8dp">
 
@@ -170,6 +178,7 @@
                 android:layout_height="match_parent"
                 android:longClickable="false"
                 app:columnCount="2"
+                app:contentPadding="8dp"
                 app:rowCount="1"
                 app:useDefaultMargins="true">
 
@@ -184,6 +193,7 @@
                 <TextView
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:maxLength="20"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -203,6 +213,7 @@
                 <TextView
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:maxLength="20"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -222,6 +233,7 @@
                 <TextView
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:maxLength="20"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -247,7 +259,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
-            android:minHeight="150dp">
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:minHeight="150dp"
+            app:contentPadding="8dp">
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/device_details_apps_grid_view"
@@ -270,6 +286,7 @@
                 <TextView
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:maxLength="20"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -289,6 +306,7 @@
                 <TextView
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:maxLength="20"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -308,6 +326,27 @@
                 <TextView
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:maxLength="20"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill"
+                    tools:text="YouTube"
+                    />
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                    app:layout_columnSpan="1"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill"
+                    app:layout_rowWeight="1"
+                    tools:text="Uninstalled"/>
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:maxLength="20"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"

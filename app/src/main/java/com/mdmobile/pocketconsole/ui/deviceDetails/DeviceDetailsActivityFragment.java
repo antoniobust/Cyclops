@@ -87,7 +87,7 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
                 return null;
             case 12:
                 uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
-                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, McContract.InstalledApplications.APPLICATION_NAME);
+                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
         }
         return null;
     }
@@ -142,7 +142,7 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
             return;
         }
 
-        for (int i = 1; i < infoGrid.getChildCount(); i = i + 2) {
+        for (int i = 1; i < infoGrid.getChildCount() - 1; i = i + 2) {
             ((TextView) infoGrid.getChildAt(i)).setText(c.getString(c.getColumnIndex(McContract.InstalledApplications.APPLICATION_NAME)));
             ((TextView) infoGrid.getChildAt(i + 1)).setText(c.getString(c.getColumnIndex(McContract.InstalledApplications.APPLICATION_STATUS)));
             if (!c.moveToNext()) {

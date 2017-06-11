@@ -4,7 +4,6 @@
 
     <item
         android:id="@+id/devices_menu_sort_action"
-        android:icon="@drawable/ic_search"
         android:title="@string/sort_devices_menu_label"
         android:orderInCategory="1"
         app:showAsAction="never"/>

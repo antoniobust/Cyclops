@@ -1,6 +1,9 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,8 +15,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -118,14 +119,30 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
 
     private void setDeviceInfoCard(Cursor c) {
         GridLayout infoGrid = (GridLayout) getActivity().findViewById(R.id.device_details_info_grid);
+        TextView devName = (TextView) getActivity().findViewById(R.id.device_detail_title_view);
 
         if (c.moveToFirst()) {
+            Boolean online = c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1;
             String platform = c.getString(c.getColumnIndex(McContract.Device.COLUMN_PLATFORM));
             String osVersion = c.getString(c.getColumnIndex(McContract.Device.COLUMN_OS_VERSION));
             String hostName = c.getString(c.getColumnIndex(McContract.Device.COLUMN_HOST_NAME));
             HashMap<String, String> extraInfo = GeneralUtility
                     .formatDeviceExtraInfo(c.getString(c.getColumnIndex(McContract.Device.COLUMN_EXTRA_INFO)));
 
+            Drawable dot;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot, null);
+            } else {
+                dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot);
+            }
+            devName.setCompoundDrawablePadding(50);
+
+            if (online) {
+                ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.onLineDot));
+            } else {
+                ((GradientDrawable) dot).setColor(Color.LTGRAY);
+            }
+            devName.setCompoundDrawablesWithIntrinsicBounds(null, null, dot, null);
 
             ((TextView) infoGrid.getChildAt(1)).setText(getString(R.string.info_operating_system_label));
             ((TextView) infoGrid.getChildAt(2)).setText(platform.concat(" ").concat(osVersion));

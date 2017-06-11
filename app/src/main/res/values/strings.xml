@@ -35,6 +35,6 @@
     <string name="info_hostname_label">HostName</string>
     <string name="pin_folder_menu_label">Pin folder</string>
     <string name="sort_devices_menu_label">Sort devices by …</string>
-    <string name="devices_menu_filter_label">Filters</string>
+    <string name="devices_menu_filter_label">Filter</string>
 
 </resources>

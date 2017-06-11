@@ -48,7 +48,6 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
                 && getArguments().containsKey(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY)) {
             deviceId = getArguments().getString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY);
             deviceName = getArguments().getString(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY);
-
         }
     }
 

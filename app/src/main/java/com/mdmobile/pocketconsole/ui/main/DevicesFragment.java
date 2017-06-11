@@ -1,6 +1,8 @@
 package com.mdmobile.pocketconsole.ui.main;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,20 +15,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.ui.SortingDeviceDialog;
 
 
-public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
+    private final String sortingOptionKey = "SortingOptionKey";
     RecyclerView recyclerView;
     private DevicesListAdapter mAdapter;
     private String searchQuery;
+    private SharedPreferences preferences;
+    private int currentSortingOption;
 
     public DevicesFragment() {
         // Required empty public constructor
@@ -45,6 +52,9 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
             searchQuery = getArguments().getString(MainActivity.SEARCH_QUERY_KEY);
         }
 
+        preferences = getActivity().getSharedPreferences(getString(R.string.shared_preference), Context.MODE_PRIVATE);
+        currentSortingOption = preferences.getInt(getString(R.string.sorting_shared_preference), 0);
+        preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -73,17 +83,54 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         //Create an adapter
         mAdapter = new DevicesListAdapter(null);
         recyclerView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(1, null, this);
+        Bundle args = new Bundle();
+        args.putInt(sortingOptionKey, currentSortingOption);
+        getLoaderManager().initLoader(1, args, this);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.devices_fragment_menu,menu);
+        inflater.inflate(R.menu.devices_fragment_menu, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.devices_menu_sort_action:
+                SortingDeviceDialog dialog = new SortingDeviceDialog();
+                dialog.show(getFragmentManager(), null);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        //Get sorting option from arguments and create query
+        String sortingParameter;
+        switch (args.getInt(sortingOptionKey)) {
+            case SortingDeviceDialog.DEVICE_NAME:
+                sortingParameter = McContract.Device.COLUMN_DEVICE_NAME + " ASC";
+                break;
+            case SortingDeviceDialog.DEVICE_NAME_INVERTED:
+                sortingParameter = McContract.Device.COLUMN_DEVICE_NAME + " DESC";
+                break;
+            case SortingDeviceDialog.DEVICE_ONLINE:
+                sortingParameter = McContract.Device.COLUMN_AGENT_ONLINE + " DESC";
+                break;
+            case SortingDeviceDialog.DEVICE_OFFLINE:
+                sortingParameter = McContract.Device.COLUMN_AGENT_ONLINE + " ASC";
+                break;
+            default:
+                sortingParameter = null;
+        }
+
         if (searchQuery != null) {
             //TODO: search for devices properties name ecc
 //            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? " + " OR "
@@ -93,11 +140,11 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
             String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? ";
             String[] arguments = {"%" + searchQuery + "%"};
             return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null,
-                    selection, arguments, McContract.Device.COLUMN_DEVICE_NAME);
+                    selection, arguments, sortingParameter);
         } else {
             String[] projection = {McContract.Device.COLUMN_DEVICE_ID, McContract.Device.COLUMN_DEVICE_NAME,
                     McContract.Device.COLUMN_PLATFORM, McContract.Device.COLUMN_AGENT_ONLINE};
-            return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, projection, null, null, null);
+            return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, projection, null, null, sortingParameter);
         }
     }
 
@@ -111,4 +158,17 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         mAdapter.swapCursor(null);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        //Check if preference changed is sorting one
+        if (!key.equals(getString(R.string.sorting_shared_preference))) {
+            return;
+        }
+        currentSortingOption = sharedPreferences.getInt(key, 0);
+        Bundle args = new Bundle();
+        args.putInt(sortingOptionKey, currentSortingOption);
+
+        //restart loader with new sorting option
+        getLoaderManager().restartLoader(1, args, this);
+    }
 }

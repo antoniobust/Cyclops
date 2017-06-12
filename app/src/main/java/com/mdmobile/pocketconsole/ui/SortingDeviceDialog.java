@@ -44,8 +44,8 @@ public class SortingDeviceDialog extends DialogFragment implements
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.sorting_dialog_fragment, null);
         AlertDialog dialog = new AlertDialog.Builder(getActivity()).setTitle(R.string.sort_devices_menu_label)
-                .setPositiveButton("Apply", this)
-                .setNegativeButton("Cancel", this)
+                .setPositiveButton(R.string.dialog_apply_label, this)
+                .setNegativeButton(R.string.dialog_cancel_label, this)
                 .setView(view).create();
 
         preferenceKey = getContext().getString(R.string.shared_preference);

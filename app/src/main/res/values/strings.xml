@@ -36,6 +36,9 @@
     <string name="sort_device_offline_first">Devices offline first</string>
     <string name="shared_preference">PocketConsoleSharedPref</string>
     <string name="sorting_shared_preference">sorting_devices_preference</string>
+    <string name="dialog_cancel_label">Cancel</string>
+    <string name="dialog_apply_label">Apply</string>
+    <string name="last_synced">Last synced: %1$d</string>
 
 
     <string-array name="sorting_options_radio_labels">

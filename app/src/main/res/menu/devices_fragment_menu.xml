@@ -8,12 +8,12 @@
         android:orderInCategory="1"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/devices_menu_filter_action"
-        android:icon="@drawable/ic_filter_list"
-        android:title="@string/devices_menu_filter_label"
-        android:orderInCategory="2"
-        app:showAsAction="ifRoom"/>
+    <!--<item-->
+        <!--android:id="@+id/devices_menu_filter_action"-->
+        <!--android:icon="@drawable/ic_filter_list"-->
+        <!--android:title="@string/devices_menu_filter_label"-->
+        <!--android:orderInCategory="2"-->
+        <!--app:showAsAction="ifRoom"/>-->
 
     <item
         android:id="@+id/devices_menu_pin_folder_action"

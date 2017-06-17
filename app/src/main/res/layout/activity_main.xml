@@ -16,6 +16,47 @@
 
         <include layout="@layout/actionbar"/>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="10dp">
+
+            <!--<TextView-->
+            <!--android:id="@+id/device_filters_view"-->
+            <!--style="@style/Base.TextAppearance.AppCompat.Caption"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:textSize="12sp"-->
+            <!--android:text="No filters..."-->
+            <!--tools:text="Android filter applied"-->
+            <!--android:visibility="gone"/>-->
+
+            <TextView
+                android:id="@+id/last_sync_view"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end|center_vertical"
+                android:background="@drawable/chips_shape"
+                android:clickable="true"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_restore"
+                android:maxLines="2"
+                android:maxWidth="160dp"
+                android:paddingBottom="8dp"
+                android:paddingEnd="12dp"
+                android:paddingStart="12dp"
+                android:paddingTop="8dp"
+                android:text="@string/last_synced"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="Synced few seconds ago"/>
+        </FrameLayout>
+
         <!--Main content container-->
         <FrameLayout
             android:id="@+id/main_activity_fragment_container"
@@ -35,8 +76,8 @@
             android:layout_height="56dp"
             android:layout_gravity="start"
             android:background="?android:attr/windowBackground"
-            android:visibility="visible"
             android:foreground="?selectableItemBackgroundBorderless"
+            android:visibility="visible"
             app:elevation="8dp"
             app:itemIconTint="@color/color_state_list"
             app:itemTextColor="@color/colorAccent"

@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
@@ -34,6 +35,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     private String searchQuery;
     private SharedPreferences preferences;
     private int currentSortingOption;
+    private TextView filtersView;
 
     public DevicesFragment() {
         // Required empty public constructor
@@ -51,6 +53,9 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         if (getArguments() != null && getArguments().containsKey(MainActivity.SEARCH_QUERY_KEY)) {
             searchQuery = getArguments().getString(MainActivity.SEARCH_QUERY_KEY);
         }
+
+//        filtersView = (TextView) getActivity().findViewById(R.id.device_filters_view);
+//        filtersView.setVisibility(View.VISIBLE);
 
         preferences = getActivity().getSharedPreferences(getString(R.string.shared_preference), Context.MODE_PRIVATE);
         currentSortingOption = preferences.getInt(getString(R.string.sorting_shared_preference), 0);
@@ -107,7 +112,8 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onDestroy() {
         super.onDestroy();
-        preferences.unregisterOnSharedPreferenceChangeListener(this);
+//        preferences.unregisterOnSharedPreferenceChangeListener(this);
+//        filtersView.setVisibility(View.GONE);
     }
 
     @Override

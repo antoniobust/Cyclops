@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Caption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/pin_folder_dialog_subtitle"
+        android:textAlignment="textStart"
+        android:textSize="18sp"/>
+
+    <EditText
+        style="@style/TextAppearance.Design.Hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/folder_path_hint"
+        android:maxLines="1"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"/>
+
+</LinearLayout>

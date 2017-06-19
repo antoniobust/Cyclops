@@ -23,7 +23,8 @@ import android.widget.TextView;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
-import com.mdmobile.pocketconsole.ui.SortingDeviceDialog;
+import com.mdmobile.pocketconsole.ui.Dialogs.PinFolderDialog;
+import com.mdmobile.pocketconsole.ui.Dialogs.SortingDeviceDialog;
 
 
 public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -104,6 +105,11 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
             case R.id.devices_menu_sort_action:
                 SortingDeviceDialog dialog = new SortingDeviceDialog();
                 dialog.show(getFragmentManager(), null);
+                return true;
+
+            case R.id.devices_menu_pin_folder_action:
+                PinFolderDialog dialog1 = new PinFolderDialog();
+                dialog1.show(getFragmentManager(),null);
                 return true;
         }
         return super.onOptionsItemSelected(item);

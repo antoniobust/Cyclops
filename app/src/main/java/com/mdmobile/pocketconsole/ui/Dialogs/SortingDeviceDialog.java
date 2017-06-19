@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui;
+package com.mdmobile.pocketconsole.ui.Dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -90,7 +90,4 @@ public class SortingDeviceDialog extends DialogFragment implements
         changed = true;
     }
 
-    public interface OnSortOptionChange {
-        void onSortingChanged();
-    }
 }

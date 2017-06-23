@@ -48,6 +48,7 @@ public class SortingDeviceDialog extends DialogFragment implements
                 .setNegativeButton(R.string.dialog_cancel_label, this)
                 .setView(view).create();
 
+
         preferenceKey = getContext().getString(R.string.shared_preference);
         sortPreferenceKey = getContext().getString(R.string.sorting_shared_preference);
         currentPreference = getContext().getSharedPreferences(preferenceKey, Context.MODE_PRIVATE).getInt(sortPreferenceKey, 0);

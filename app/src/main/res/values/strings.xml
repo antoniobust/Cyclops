@@ -42,6 +42,7 @@
     <string name="pin_a_folder_dialog_title">Pin a folder to main screen</string>
     <string name="pin_folder_dialog_subtitle">Only devices belonging to this folder will be displayed</string>
     <string name="folder_path_hint">Folder Path</string>
+    <string name="folder_preference">pinnedFolderPreferenceKey</string>
 
 
     <string-array name="sorting_options_radio_labels">

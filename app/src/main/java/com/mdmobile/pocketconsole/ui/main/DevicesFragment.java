@@ -27,15 +27,19 @@ import com.mdmobile.pocketconsole.ui.Dialogs.PinFolderDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.SortingDeviceDialog;
 
 
-public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
     private final String sortingOptionKey = "SortingOptionKey";
+    private final String pinnedFolderOptionKey = "PinnedFolderOptionKey";
+
     RecyclerView recyclerView;
     private DevicesListAdapter mAdapter;
     private String searchQuery;
     private SharedPreferences preferences;
     private int currentSortingOption;
+    private String currentPinnedPath;
     private TextView filtersView;
 
     public DevicesFragment() {
@@ -60,6 +64,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
         preferences = getActivity().getSharedPreferences(getString(R.string.shared_preference), Context.MODE_PRIVATE);
         currentSortingOption = preferences.getInt(getString(R.string.sorting_shared_preference), 0);
+        currentPinnedPath = preferences.getString(getString(R.string.folder_preference), "");
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -91,6 +96,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         recyclerView.setAdapter(mAdapter);
         Bundle args = new Bundle();
         args.putInt(sortingOptionKey, currentSortingOption);
+        args.putString(pinnedFolderOptionKey, currentPinnedPath);
         getLoaderManager().initLoader(1, args, this);
     }
 
@@ -109,7 +115,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
             case R.id.devices_menu_pin_folder_action:
                 PinFolderDialog dialog1 = new PinFolderDialog();
-                dialog1.show(getFragmentManager(),null);
+                dialog1.show(getFragmentManager(), null);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -125,7 +131,8 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //Get sorting option from arguments and create query
-        String sortingParameter;
+        String sortingParameter, pathSelection = "";
+
         switch (args.getInt(sortingOptionKey)) {
             case SortingDeviceDialog.DEVICE_NAME:
                 sortingParameter = McContract.Device.COLUMN_DEVICE_NAME + " ASC";
@@ -143,6 +150,11 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
                 sortingParameter = null;
         }
 
+        //Get Pinned folder if set
+        if (args.containsKey(pinnedFolderOptionKey)) {
+            pathSelection = args.getString(pinnedFolderOptionKey);
+        }
+
         if (searchQuery != null) {
             //TODO: search for devices properties name ecc
 //            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? " + " OR "
@@ -150,12 +162,26 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 //            String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery + "%"};
 
             String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? ";
+
             String[] arguments = {"%" + searchQuery + "%"};
+
             return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null,
                     selection, arguments, sortingParameter);
+
         } else {
+            String selection;
+
             String[] projection = {McContract.Device.COLUMN_DEVICE_ID, McContract.Device.COLUMN_DEVICE_NAME,
-                    McContract.Device.COLUMN_PLATFORM, McContract.Device.COLUMN_AGENT_ONLINE};
+                    McContract.Device.COLUMN_PLATFORM, McContract.Device.COLUMN_AGENT_ONLINE, McContract.Device.COLUMN_PATH};
+
+            if (pathSelection != null && !pathSelection.equals("")) {
+                if (!pathSelection.equals("")) {
+                    selection = McContract.Device.COLUMN_PATH + " = ?";
+                    String[] arguments = {pathSelection};
+                    return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, projection, selection, arguments, sortingParameter);
+                }
+            }
+
             return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, projection, null, null, sortingParameter);
         }
     }
@@ -173,14 +199,25 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         //Check if preference changed is sorting one
-        if (!key.equals(getString(R.string.sorting_shared_preference))) {
-            return;
-        }
-        currentSortingOption = sharedPreferences.getInt(key, 0);
-        Bundle args = new Bundle();
-        args.putInt(sortingOptionKey, currentSortingOption);
 
-        //restart loader with new sorting option
-        getLoaderManager().restartLoader(1, args, this);
+        if (isAdded()) {
+            if (key.equals(getString(R.string.sorting_shared_preference))) {
+                currentSortingOption = sharedPreferences.getInt(key, 0);
+                Bundle args = new Bundle();
+                args.putInt(sortingOptionKey, currentSortingOption);
+                args.putString(pinnedFolderOptionKey, currentPinnedPath);
+                //restart loader with new sorting option
+                getLoaderManager().restartLoader(1, args, this);
+
+            } else if (key.equals(getString(R.string.folder_preference))) {
+                currentPinnedPath = sharedPreferences.getString(key, "");
+                Bundle args = new Bundle();
+                args.putInt(sortingOptionKey, currentSortingOption);
+                args.putString(pinnedFolderOptionKey, currentPinnedPath);
+                //restart loader with new sorting option
+                getLoaderManager().restartLoader(1, args, this);
+            }
+        }
+
     }
 }

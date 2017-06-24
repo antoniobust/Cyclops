@@ -41,7 +41,7 @@
                 android:clickable="true"
                 android:drawableStart="@drawable/ic_restore"
                 android:text="@string/last_synced"
-                tools:text="1 minute ago"/>
+                tools:text="1 hour ago"/>
         </FrameLayout>
 
         <!--Main content container-->

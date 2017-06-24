@@ -78,6 +78,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         recyclerView = (RecyclerView) rootView.findViewById(R.id.devices_recycler);
 
         recyclerView.setHasFixedSize(true);
+        
         //Set recycler layout manager
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

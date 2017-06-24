@@ -25,39 +25,81 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/details_fabs_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="0dp"
         android:padding="0dp">
 
-        <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/sub_fab2"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--app:backgroundTint="@color/colorPrimary"-->
-            <!--android:layout_above="@id/details_main_fab"-->
-            <!--app:fabSize="mini"/>-->
-        <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/sub_fab1"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_below="@id/sub_fab2"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--app:backgroundTint="@color/colorPrimary"-->
-            <!--app:fabSize="mini"/>-->
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/details_main_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
+            android:layout_marginBottom="-18dp"
             android:clickable="true"
             android:focusable="true"
             app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:srcCompat="@drawable/ic_settings"/>
-    </RelativeLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/sub_fab1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/details_main_fab"
+            app:layout_constraintLeft_toLeftOf="@+id/details_main_fab"
+            app:layout_constraintRight_toRightOf="@+id/details_main_fab"
+            app:srcCompat="@drawable/ic_check"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/sub_fab2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/sub_fab1"
+            app:layout_constraintLeft_toLeftOf="@+id/details_main_fab"
+            app:layout_constraintRight_toRightOf="@+id/details_main_fab"
+            app:srcCompat="@drawable/ic_code"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/sub_fab3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/sub_fab2"
+            app:layout_constraintLeft_toLeftOf="@+id/details_main_fab"
+            app:layout_constraintRight_toRightOf="@+id/details_main_fab"
+            app:srcCompat="@drawable/ic_gps_fixed"/>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/sub_fab4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/sub_fab3"
+            app:layout_constraintLeft_toLeftOf="@+id/details_main_fab"
+            app:layout_constraintRight_toRightOf="@+id/details_main_fab"
+            app:srcCompat="@drawable/ic_message"/>
+
+    </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

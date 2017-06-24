@@ -1,6 +1,7 @@
 package com.mdmobile.pocketconsole.ui.main;
 
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -10,8 +11,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,17 +29,18 @@ import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.Dialogs.PinFolderDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.SortingDeviceDialog;
 
+import static android.content.Context.SEARCH_SERVICE;
+
 
 public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener, SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener {
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
+    private final static String SEARCH_QUERY_KEY = "searchQueryKey";
     private final String sortingOptionKey = "SortingOptionKey";
     private final String pinnedFolderOptionKey = "PinnedFolderOptionKey";
-
     RecyclerView recyclerView;
     private DevicesListAdapter mAdapter;
-    private String searchQuery;
     private SharedPreferences preferences;
     private int currentSortingOption;
     private String currentPinnedPath;
@@ -50,14 +54,12 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         return new DevicesFragment();
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        if (getArguments() != null && getArguments().containsKey(MainActivity.SEARCH_QUERY_KEY)) {
-            searchQuery = getArguments().getString(MainActivity.SEARCH_QUERY_KEY);
-        }
 
 //        filtersView = (TextView) getActivity().findViewById(R.id.device_filters_view);
 //        filtersView.setVisibility(View.VISIBLE);
@@ -78,7 +80,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         recyclerView = (RecyclerView) rootView.findViewById(R.id.devices_recycler);
 
         recyclerView.setHasFixedSize(true);
-        
+
         //Set recycler layout manager
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -104,6 +106,16 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.devices_fragment_menu, menu);
+        //Get search view and set searchable conf
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(SEARCH_SERVICE);
+        SearchView searchView = (android.support.v7.widget.SearchView) menu.findItem(R.id.main_activity_search_button).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setIconifiedByDefault(true);
+        searchView.setQueryRefinementEnabled(true);
+        searchView.setQueryHint(getString(R.string.search_view_hint));
+        searchView.setOnQueryTextListener(this);
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.main_activity_search_button), this);
+
     }
 
     @Override
@@ -132,7 +144,11 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //Get sorting option from arguments and create query
-        String sortingParameter, pathSelection = "";
+        String sortingParameter, pathSelection = "", searchQuery = "";
+
+        if (args.containsKey(SEARCH_QUERY_KEY)) {
+            searchQuery = args.getString(SEARCH_QUERY_KEY);
+        }
 
         switch (args.getInt(sortingOptionKey)) {
             case SortingDeviceDialog.DEVICE_NAME:
@@ -156,7 +172,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
             pathSelection = args.getString(pinnedFolderOptionKey);
         }
 
-        if (searchQuery != null) {
+        if (searchQuery != null && !searchQuery.equals("")) {
             //TODO: search for devices properties name ecc
 //            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? " + " OR "
 //                    + McContract.Device.COLUMN_EXTRA_INFO + " LIKE ? ";
@@ -221,4 +237,36 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         }
 
     }
+
+    //********************* SearchView Interfaces ****************************************************************
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        //On text changed send an intent to devices list fragment so it refreshes the listView with results
+        Bundle args = new Bundle(1);
+        args.putString(SEARCH_QUERY_KEY, query);
+
+        getLoaderManager().restartLoader(1, args, this);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newQuery) {
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem menuItem) {
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+        Bundle args = new Bundle();
+        args.putInt(sortingOptionKey, currentSortingOption);
+        args.putString(pinnedFolderOptionKey, currentPinnedPath);
+        getLoaderManager().restartLoader(1, args, this);
+        return true;
+    }
+
+    //************************************************************************************************************
 }

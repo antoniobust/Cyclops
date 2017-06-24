@@ -5,7 +5,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_server">Servers</string>
     <string name="title_devices">Devices</string>
-    <string name="title_profile">Profiles</string>
+    <string name="title_profile">Dashboard</string>
     <string name="title_users">Users</string>
     <string name="MobiControl">MobiControl</string>
     <string name="api_secret_hint">Api secret</string>

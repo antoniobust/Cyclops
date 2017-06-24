@@ -24,8 +24,7 @@ import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener {
-    public final static String SEARCH_QUERY_KEY = "searchQueryKey";
+public class MainActivity extends AppCompatActivity {
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     ft.replace(R.id.main_activity_fragment_container, DevicesFragment.newInstance());
                     ft.commit();
                     return true;
-                case R.id.navigation_profiles:
+                case R.id.navigation_dashboard:
                     ft.replace(R.id.main_activity_fragment_container, ProfilesFragment.newInstance());
                     ft.commit();
                     return true;
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         BottomNavigationView bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        bottomNavigation.setSelectedItemId(R.id.navigation_devices);
+        bottomNavigation.setSelectedItemId(R.id.navigation_dashboard);
 
         //Set action bar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -92,16 +91,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         MenuInflater inflater = getMenuInflater();
         //TODO: create a debug version of menu for extra options
         inflater.inflate(R.menu.main_activity_toolbar, menu);
-
-        //Get search view and set searchable conf
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        SearchView searchView = (android.support.v7.widget.SearchView) menu.findItem(R.id.main_activity_search_button).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(true);
-        searchView.setQueryRefinementEnabled(true);
-        searchView.setQueryHint(getString(R.string.search_view_hint));
-        searchView.setOnQueryTextListener(this);
-        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.main_activity_search_button), this);
 
         return true;
     }
@@ -139,38 +128,4 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     }
 
-
-    //********************* SearchView Interfaces ****************************************************************
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        //On text changed send an intent to devices list fragment so it refreshes the listView with results
-        Bundle args = new Bundle(1);
-        args.putString(SEARCH_QUERY_KEY, query);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        DevicesFragment devicesFragment = DevicesFragment.newInstance();
-        devicesFragment.setArguments(args);
-
-        ft.replace(R.id.main_activity_fragment_container, devicesFragment).commit();
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newQuery) {
-
-        return false;
-    }
-
-    @Override
-    public boolean onMenuItemActionExpand(MenuItem menuItem) {
-        return true;
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_activity_fragment_container, DevicesFragment.newInstance()).commit();
-        return true;
-    }
-
-    //************************************************************************************************************
 }

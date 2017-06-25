@@ -43,6 +43,8 @@
     <string name="pin_folder_dialog_subtitle">Only devices belonging to this folder will be displayed</string>
     <string name="folder_path_hint">Folder Path</string>
     <string name="folder_preference">pinnedFolderPreferenceKey</string>
+    <string name="device_count_chart_description">Devices enrolled</string>
+    <string name="no_data_found_chart">No Data available!!</string>
 
 
     <string-array name="sorting_options_radio_labels">

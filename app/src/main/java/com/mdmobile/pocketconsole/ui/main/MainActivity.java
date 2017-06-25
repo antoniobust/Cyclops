@@ -2,16 +2,13 @@ package com.mdmobile.pocketconsole.ui.main;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                     ft.commit();
                     return true;
                 case R.id.navigation_dashboard:
-                    ft.replace(R.id.main_activity_fragment_container, ProfilesFragment.newInstance());
+                    ft.replace(R.id.main_activity_fragment_container, DashboardFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_server:
@@ -65,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        bottomNavigation.setSelectedItemId(R.id.navigation_dashboard);
+        if (savedInstanceState == null) {
+            bottomNavigation.setSelectedItemId(R.id.navigation_dashboard);
+        }
 
         //Set action bar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));

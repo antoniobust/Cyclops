@@ -46,6 +46,7 @@ public class GeneralUtility {
         return map;
     }
 
+
 //    public static String formatDate(String date){
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 //        simpleDateFormat.setTimeZone(TimeZone.getDefault());

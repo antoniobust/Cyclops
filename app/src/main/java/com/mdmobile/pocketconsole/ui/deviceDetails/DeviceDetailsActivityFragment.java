@@ -137,7 +137,7 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
             devName.setCompoundDrawablePadding(50);
 
             if (online) {
-                ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.onLineDot));
+                ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.darkGreen));
             } else {
                 ((GradientDrawable) dot).setColor(Color.LTGRAY);
             }

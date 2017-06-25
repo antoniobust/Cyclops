@@ -57,7 +57,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
         holder.descriptionView.setCompoundDrawablePadding(50);
 
         if (data.getInt(data.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1) {
-            ((GradientDrawable) dot).setColor(holder.descriptionView.getContext().getResources().getColor(R.color.onLineDot));
+            ((GradientDrawable) dot).setColor(holder.descriptionView.getContext().getResources().getColor(R.color.darkGreen));
         } else {
             ((GradientDrawable) dot).setColor(Color.LTGRAY);
         }

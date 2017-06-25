@@ -1,16 +1,12 @@
 package com.mdmobile.pocketconsole.ui.main;
 
-import android.content.res.AssetManager;
 import android.database.Cursor;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +23,6 @@ import com.mdmobile.pocketconsole.provider.McContract;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.R.attr.description;
 
 
 public class DashboardFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -94,7 +88,7 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
 
 
     private void getDevicesCounters(Cursor data) {
-        int deviceCount = data== null ? 0 : data.getCount();
+        int deviceCount = data == null ? 0 : data.getCount();
         int onlineDeviceCounter = 0;
         int androidCounter = 0;
         int iosCounter = 0;
@@ -104,7 +98,7 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
         int printersCounter = 0;
         String deviceFamily;
 
-        if(data!= null && data.moveToFirst()) {
+        if (data != null && data.moveToFirst()) {
             //Get online device count
             do {
                 if (data.getInt(0) == 1) {
@@ -127,7 +121,7 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
             } while (data.moveToNext());
         }
         setDeviceCounterCharts(androidCounter, iosCounter, windowsDesktopCounter, windowsMobileCounter, windowsModernCounter, printersCounter);
-        setOnlineDevicesChart();
+        setOnlineDevicesChart(onlineDeviceCounter, deviceCount);
     }
 
     private void setDeviceCounterCharts(int androidCounter, int iosDevices, int windowsDesktop, int windowsMobile,
@@ -171,8 +165,7 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
         legend.setFormSize(8f);
         legend.setXEntrySpace(14f);
         legend.setPosition(Legend.LegendPosition.ABOVE_CHART_LEFT);
-        legend.setMaxSizePercent(0.05f);
-
+        legend.setMaxSizePercent(0.1f);
 
 
         devicesChart.setData(pieData);
@@ -180,14 +173,50 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
         devicesChart.setNoDataText(getString(R.string.no_data_found_chart));
         devicesChart.setNoDataTextColor(getResources().getColor(R.color.colorAccent));
         devicesChart.setCenterText(getString(R.string.device_count_chart_description));
-        devicesChart.setTransparentCircleRadius(60f);
         devicesChart.animateX(1500, Easing.EasingOption.EaseInOutCirc);
+        devicesChart.setHoleRadius(55f);
+        devicesChart.setTransparentCircleRadius(65f);
         devicesChart.invalidate();
 
     }
 
-    private void setOnlineDevicesChart() {
-//        onlineDevicesChart.setData(pieData);
-//        onlineDevicesChart.invalidate();
+    private void setOnlineDevicesChart(int onlineDevice, int totalDevices) {
+        //Set chart data
+        List<PieEntry> pieEntries = new ArrayList<>();
+
+        if (onlineDevice > 0) {
+            pieEntries.add(new PieEntry(onlineDevice, "Online"));
+            pieEntries.add(new PieEntry(totalDevices - onlineDevice, "Offline"));
+        }
+
+
+        //Style chart
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, null);
+        pieDataSet.setColors(new int[]{R.color.colorPrimaryDark, R.color.colorPrimary}, getContext());
+
+
+        PieData pieData = new PieData();
+        pieData.addDataSet(pieDataSet);
+
+        Legend legend = onlineDevicesChart.getLegend();
+        legend.setWordWrapEnabled(true);
+        legend.setForm(Legend.LegendForm.CIRCLE);
+        legend.setFormSize(8f);
+        legend.setXEntrySpace(14f);
+        legend.setPosition(Legend.LegendPosition.ABOVE_CHART_LEFT);
+        legend.setMaxSizePercent(0.1f);
+
+        Description description = new Description();
+        description.setText("Online device vs Offline");
+
+        onlineDevicesChart.setData(pieData);
+        onlineDevicesChart.setDescription(description);
+        onlineDevicesChart.setNoDataText(getString(R.string.no_data_found_chart));
+        onlineDevicesChart.setNoDataTextColor(getResources().getColor(R.color.colorAccent));
+        onlineDevicesChart.setCenterText(getString(R.string.device_count_chart_description));
+        onlineDevicesChart.animateX(1500, Easing.EasingOption.EaseInOutCirc);
+        onlineDevicesChart.setTransparentCircleRadius(60f);
+        onlineDevicesChart.invalidate();
+
     }
 }

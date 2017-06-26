@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.services.RefreshDataService;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
@@ -100,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.debug_refresh_token:
                 refreshToken();
                 break;
+            case R.id.debug_invalidate_token:
+                invalidateToken();
+                break;
             case R.id.main_activity_search_button:
                 item.expandActionView();
         }
@@ -119,11 +124,22 @@ public class MainActivity extends AppCompatActivity {
         accountManager.invalidateAuthToken(getString(R.string.account_type), token);
         accountManager.getAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY),
                 null, new LoginActivity(), null, null);
+        Logger.log(LOG_TAG, "Token refresh manually forced", Log.VERBOSE);
+
 //
 //        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
 //        serviceIntent.setAction(getString(R.string.download_devices_action));
 //        serviceIntent.setPackage(getPackageName());
 //        startService(serviceIntent);
+
+    }
+
+    private void invalidateToken() {
+
+        Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
+        String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
+        accountManager.invalidateAuthToken(getString(R.string.account_type), token);
+        Logger.log(LOG_TAG, "Token manually invalidated", Log.VERBOSE);
 
     }
 

@@ -50,12 +50,28 @@ public abstract class BasicRequest<T> extends Request<T> {
                     if (newInfo.containsKey(AccountManager.KEY_INTENT)) {
                         //TODO:after getting new credentials if we get token we need to save new password
                         //which is not getting saved -> stays null after clearPassword
-                        Intent intent = (Intent) newInfo.get(AccountManager.KEY_INTENT);
+                        Intent intent = newInfo.getParcelable(AccountManager.KEY_INTENT);
                         if (intent != null) {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             mContext.startActivity(intent);
+                        }
+                    } else {
+//                        result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+//                        result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+//                        result.putString(AUTH_TOKEN_TYPE_KEY, JsonToken.getToken_type());
+//                        result.putString(AccountManager.KEY_AUTHTOKEN, JsonToken.getAccess_token());
+                        String accountName = newInfo.getString(AccountManager.KEY_ACCOUNT_NAME);
+                        String accountType = newInfo.getString(AccountManager.KEY_ACCOUNT_TYPE);
+                        String authTokenType = newInfo.getString(AUTH_TOKEN_TYPE_KEY);
+                        String authToken = newInfo.getString(AccountManager.KEY_AUTHTOKEN);
+
+                        AccountManager accountManager = AccountManager.get(mContext);
+                        Account[] accounts = accountManager.getAccountsByType(accountType);
+                        if (accounts[0].name.equals(accountName)) {
+                            accountManager.setAuthToken(accounts[0], authTokenType, authToken);
+                            Logger.log(LOG_TAG,"Account " +accountName+ " new token saved: " + authToken, Log.VERBOSE);
                         }
                     }
                 }
@@ -97,6 +113,11 @@ public abstract class BasicRequest<T> extends Request<T> {
         //TODO: support multiple account
         String token = accountManager.peekAuthToken(accountAvailable[0], tokenType);
 
+        if (token == null) {
+            accountManager.getAuthToken(accountAvailable[0], tokenType, null, true, managerCallback, null);
+            return null;
+        }
+
         headers.put("Authorization", tokenType.concat(" ").concat(token));
 
         headers.put("Accept", "application/json");
@@ -114,6 +135,7 @@ public abstract class BasicRequest<T> extends Request<T> {
             return super.parseNetworkError(volleyError);
         }
 
+        //Log error message
         try {
             String errorResponse = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             Logger.log(LOG_TAG, errorResponse, Log.ERROR);
@@ -131,7 +153,15 @@ public abstract class BasicRequest<T> extends Request<T> {
             AccountManager manager = AccountManager.get(mContext);
 
             Account[] accounts = manager.getAccountsByType(mContext.getString(R.string.account_type));
+
+
             if (accounts.length == 1) {
+                String tokenType = manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY);
+                String token = manager.peekAuthToken(accounts[0], tokenType);
+                manager.invalidateAuthToken(mContext.getString(R.string.account_type),token );
+
+               token = manager.peekAuthToken(accounts[0], tokenType);
+
                 manager.getAuthToken(accounts[0],
                         manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
                         null, false, managerCallback, null);

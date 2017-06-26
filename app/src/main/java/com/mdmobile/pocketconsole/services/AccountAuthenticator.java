@@ -34,7 +34,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     public AccountAuthenticator(Context context) {
         super(context);
-        mContext = context;
+        mContext = context.getApplicationContext();
     }
 
     @Override
@@ -46,9 +46,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType,
                              String[] requiredFeatures, Bundle options) throws NetworkErrorException {
 
-
         return promptLoginActivity(response, accountType, authTokenType, true);
-
     }
 
     @Override

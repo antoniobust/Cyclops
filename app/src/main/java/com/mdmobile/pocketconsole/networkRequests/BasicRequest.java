@@ -26,6 +26,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 /**
@@ -112,9 +114,11 @@ public abstract class BasicRequest<T> extends Request<T> {
         //Assuming we only have 1 account
         //TODO: support multiple account
         String token = accountManager.peekAuthToken(accountAvailable[0], tokenType);
-        String psw = accountManager.getPassword(accountAvailable[0]);
 
         if (token == null) {
+            //TODO: stop request and launch account manager for a new token
+            //Instead of sending this request out which is gonna fail because of the token cancel this request
+            //and start the new token request procedure
             return super.getHeaders();
         }
 
@@ -142,29 +146,25 @@ public abstract class BasicRequest<T> extends Request<T> {
             e.printStackTrace();
         }
 
-        //If request returns 401 or 400 there could be a problem with the authentication token which
-        //may be expired
-        if (response.statusCode == 400 || response.statusCode == 401) {
+        //If error is in 400 range give it another try as it could be the token expired
+        if (response.statusCode == HttpsURLConnection.HTTP_UNAUTHORIZED ||
+                response.statusCode == HttpsURLConnection.HTTP_FORBIDDEN ||
+                response.statusCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
             //Allow max 1 attempt to get the token -> this will avoid recursive loop of requests
             Logger.log(LOG_TAG, "Attempt requesting a new Token", Log.VERBOSE);
 
             //Get current user data we have stored
             AccountManager manager = AccountManager.get(mContext);
-
             Account[] accounts = manager.getAccountsByType(mContext.getString(R.string.account_type));
-
 
             if (accounts.length == 1) {
                 String tokenType = manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY);
                 String token = manager.peekAuthToken(accounts[0], tokenType);
                 manager.invalidateAuthToken(mContext.getString(R.string.account_type), token);
 
-                token = manager.peekAuthToken(accounts[0], tokenType);
-
                 manager.getAuthToken(accounts[0],
                         manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
                         null, false, managerCallback, null);
-
             }
         }
         return super.parseNetworkError(volleyError);

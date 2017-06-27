@@ -45,6 +45,7 @@
     <string name="folder_preference">pinnedFolderPreferenceKey</string>
     <string name="device_count_chart_description">Devices enrolled</string>
     <string name="no_data_found_chart">No Data available!!</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 
     <string-array name="sorting_options_radio_labels">

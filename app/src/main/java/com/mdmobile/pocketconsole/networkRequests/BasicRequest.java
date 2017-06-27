@@ -71,7 +71,7 @@ public abstract class BasicRequest<T> extends Request<T> {
                         Account[] accounts = accountManager.getAccountsByType(accountType);
                         if (accounts[0].name.equals(accountName)) {
                             accountManager.setAuthToken(accounts[0], authTokenType, authToken);
-                            Logger.log(LOG_TAG,"Account " +accountName+ " new token saved: " + authToken, Log.VERBOSE);
+                            Logger.log(LOG_TAG, "Account " + accountName + " new token saved: " + authToken, Log.VERBOSE);
                         }
                     }
                 }
@@ -112,14 +112,13 @@ public abstract class BasicRequest<T> extends Request<T> {
         //Assuming we only have 1 account
         //TODO: support multiple account
         String token = accountManager.peekAuthToken(accountAvailable[0], tokenType);
+        String psw = accountManager.getPassword(accountAvailable[0]);
 
         if (token == null) {
-            accountManager.getAuthToken(accountAvailable[0], tokenType, null, true, managerCallback, null);
-            return null;
+            return super.getHeaders();
         }
 
         headers.put("Authorization", tokenType.concat(" ").concat(token));
-
         headers.put("Accept", "application/json");
 
         return headers;
@@ -158,9 +157,9 @@ public abstract class BasicRequest<T> extends Request<T> {
             if (accounts.length == 1) {
                 String tokenType = manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY);
                 String token = manager.peekAuthToken(accounts[0], tokenType);
-                manager.invalidateAuthToken(mContext.getString(R.string.account_type),token );
+                manager.invalidateAuthToken(mContext.getString(R.string.account_type), token);
 
-               token = manager.peekAuthToken(accounts[0], tokenType);
+                token = manager.peekAuthToken(accounts[0], tokenType);
 
                 manager.getAuthToken(accounts[0],
                         manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),

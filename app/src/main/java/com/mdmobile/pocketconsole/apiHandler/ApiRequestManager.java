@@ -116,7 +116,9 @@ public class ApiRequestManager {
             }
         };
 
-        requestsQueue.add(tokenRequest);
+        if (!tokenRequest.isCanceled()) {
+            requestsQueue.add(tokenRequest);
+        }
 
     }
 

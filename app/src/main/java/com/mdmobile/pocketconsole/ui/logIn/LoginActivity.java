@@ -260,6 +260,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             account = new Account(userName, accountType);
             //Create the accountsUpdateListener
             accountManager.addAccountExplicitly(account, psw, userInfo);
+            accountManager.setPassword(account, psw);
         } else {
             account = accountManager.getAccountsByType(getString(R.string.account_type))[0];
             //Update accountsUpdateListener with new info

@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.services.RefreshDataService;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
@@ -80,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
         //Set account manager to be used in this activity
         accountManager = AccountManager.get(getApplicationContext());
 
-        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
-        serviceIntent.setAction(getString(R.string.download_devices_action));
-        serviceIntent.setPackage(this.getPackageName());
-        startService(serviceIntent);
+//        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
+//        serviceIntent.setAction(getString(R.string.download_devices_action));
+//        serviceIntent.setPackage(this.getPackageName());
+//        startService(serviceIntent);
     }
 
 
@@ -99,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.debug_sync_devices_now:
+                syncDevicesNow();
+                break;
             case R.id.debug_refresh_token:
                 refreshToken();
                 break;
@@ -112,9 +116,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+
+    private void syncDevicesNow() {
+        Logger.log(LOG_TAG, "Immediate device syc manually requested... ", Log.VERBOSE);
+        Account account = accountManager.getAccountsByType(getString(R.string.account_type))[0];
+        DevicesSyncAdapter.syncImmediately(getApplicationContext(),account);
     }
 
     private void refreshToken() {

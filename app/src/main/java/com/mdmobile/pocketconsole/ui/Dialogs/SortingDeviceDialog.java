@@ -83,6 +83,8 @@ public class SortingDeviceDialog extends DialogFragment implements
                     break;
             }
             preferenceEditor.apply();
+        } else {
+            dialogInterface.dismiss();
         }
     }
 

@@ -1,12 +1,10 @@
 package com.mdmobile.pocketconsole.utils;
 
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 import java.util.HashMap;
-import java.util.TimeZone;
 
 public class GeneralUtility {
 
@@ -31,15 +29,15 @@ public class GeneralUtility {
         return serverUrl.toString();
     }
 
-    public static HashMap<String, String> formatDeviceExtraInfo(String extraInfo){
+    public static HashMap<String, String> formatDeviceExtraInfo(String extraInfo) {
 
         String[] extraValues = extraInfo.split(";|=");
-        HashMap<String,String> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
 
-        for(int i = 0; i < extraValues.length/2; i=i+2){
-            if(extraValues[i+1].equals("")){
+        for (int i = 0; i < extraValues.length / 2; i = i + 2) {
+            if (extraValues[i + 1].equals("")) {
                 map.put(extraValues[i], "N/A");
-            }else {
+            } else {
                 map.put(extraValues[i], extraValues[i + 1]);
             }
         }
@@ -54,5 +52,11 @@ public class GeneralUtility {
 //        return "a";
 
 //    }
+
+    public static boolean isOnline(Context c) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connectivityManager.getActiveNetworkInfo() != null
+                && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
 
 }

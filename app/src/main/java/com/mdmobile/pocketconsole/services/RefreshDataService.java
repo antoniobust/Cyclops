@@ -1,5 +1,7 @@
 package com.mdmobile.pocketconsole.services;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -33,6 +35,9 @@ public class RefreshDataService extends IntentService {
     }
 
     private void downloadDevices() {
-        ApiRequestManager.getInstance(getApplicationContext()).getDevices();
+        Account account = AccountManager.get(getApplicationContext())
+                .getAccountsByType(getApplicationContext().getString(R.string.account_type))[0];
+
+        ApiRequestManager.getInstance(getApplicationContext()).getDevices(account);
     }
 }

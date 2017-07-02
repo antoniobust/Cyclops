@@ -122,9 +122,9 @@ public class ApiRequestManager {
 
     }
 
-    public void getDevices() {
+    public void getDevices(Account account) {
 
-        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
+//        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModels.DevicesApi.Builder(apiAuthority).build();
 

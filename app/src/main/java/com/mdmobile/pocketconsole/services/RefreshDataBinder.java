@@ -15,6 +15,6 @@ public class RefreshDataBinder extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return new DevicesSyncAdapter(getApplicationContext(), true).getSyncAdapterBinder();
     }
 }

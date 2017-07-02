@@ -21,6 +21,7 @@ import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
 import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
+import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.UsersUtility;
@@ -271,6 +272,9 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
         //Set the token we have for this accountsUpdateListener
         accountManager.setAuthToken(account, tokenType, response.getAccess_token());
+
+        //Initialize SyncAdapter for periodic devices checks
+        DevicesSyncAdapter.initializeSync(account, getApplicationContext());
 
         //If activity was launched from accountsUpdateListener authenticator return data back
         if (authenticatorResponse != null) {

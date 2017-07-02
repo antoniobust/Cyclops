@@ -76,6 +76,8 @@ public class PinFolderDialog extends DialogFragment implements Dialog.OnClickLis
                 preferenceEditor.putString(folderPreferenceKey, folderPathView.getText().toString());
                 preferenceEditor.apply();
             }
+        } else {
+            dialogInterface.dismiss();
         }
     }
 

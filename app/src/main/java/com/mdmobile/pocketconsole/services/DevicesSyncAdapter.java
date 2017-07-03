@@ -2,6 +2,7 @@ package com.mdmobile.pocketconsole.services;
 
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
@@ -11,8 +12,11 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.android.volley.VolleyError;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
+import com.mdmobile.pocketconsole.gson.Token;
+import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
@@ -32,7 +36,6 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     public DevicesSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
-        mContext = context.getApplicationContext();
         mContentProvider = context.getContentResolver();
     }
 
@@ -77,10 +80,28 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     @Override
-    public void onPerformSync(Account account, Bundle bundle, String authority,
+    public void onPerformSync(final Account account, Bundle bundle, String authority,
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
-        ApiRequestManager.getInstance(mContext).getDevices(account);
+        String secret = AccountManager.get(getContext()).getUserData(account, AccountAuthenticator.API_SECRET_KEY);
+        String clientId = AccountManager.get(getContext()).getUserData(account, AccountAuthenticator.CLIENT_ID_KEY);
+        String serverUrl = AccountManager.get(getContext()).getUserData(account, AccountAuthenticator.SERVER_ADDRESS_KEY);
+        String password = AccountManager.get(getContext()).getPassword(account);
+
+        //TODO: request is not able to ask for a token and re-runt itself in case of failure so ask for a new token and run query
+        ApiRequestManager.getInstance(getContext()).getToken(serverUrl, clientId, secret, account.name, password, new NetworkCallBack() {
+            @Override
+            public void tokenReceived(Token JsonToken) {
+                ApiRequestManager.getInstance(getContext()).getDevices(account);
+            }
+
+            @Override
+            public void errorReceivingToken(VolleyError response) {
+
+            }
+        });
+
+
     }
 
     @Override

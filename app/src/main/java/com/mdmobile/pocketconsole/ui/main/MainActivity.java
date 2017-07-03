@@ -102,15 +102,16 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.debug_sync_devices_now:
                 syncDevicesNow();
-                break;
+                return true;
             case R.id.debug_refresh_token:
                 refreshToken();
-                break;
+                return true;
             case R.id.debug_invalidate_token:
                 invalidateToken();
-                break;
+                return true;
             case R.id.main_activity_search_button:
                 item.expandActionView();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

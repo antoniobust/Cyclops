@@ -37,6 +37,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
         super(context, autoInitialize);
 
         mContentProvider = context.getContentResolver();
+        mContext = context;
     }
 
     public static void initializeSync(Account account, Context mContext) {
@@ -45,6 +46,10 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     //When adding an account call this method to schedule device information updates
     private static void onNewAccountCreated(Context c, Account account) {
+
+        //Without calling setSyncAutomatically, our periodic sync will not be enabled.
+        ContentResolver.setSyncAutomatically(account, c.getString(R.string.content_authority), true);
+
         //Configure periodic sync
         DevicesSyncAdapter.configurePeriodicSync(c.getApplicationContext(), account);
 
@@ -66,6 +71,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
                 setExtras(new Bundle()).build();
 
         ContentResolver.requestSync(request);
+
     }
 
     public static void syncImmediately(Context context, Account account) {

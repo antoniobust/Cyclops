@@ -1,6 +1,8 @@
 package com.mdmobile.pocketconsole.ui.main;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,9 +14,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,14 +30,17 @@ import android.widget.TextView;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.Dialogs.PinFolderDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.SortingDeviceDialog;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 import static android.content.Context.SEARCH_SERVICE;
 
 
 public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        SharedPreferences.OnSharedPreferenceChangeListener, SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener {
+        SharedPreferences.OnSharedPreferenceChangeListener, SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
     private final static String SEARCH_QUERY_KEY = "searchQueryKey";
@@ -45,6 +52,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     private int currentSortingOption;
     private String currentPinnedPath;
     private TextView filtersView;
+    private SwipeRefreshLayout mSwipeToRefresh;
 
     public DevicesFragment() {
         // Required empty public constructor
@@ -54,6 +62,14 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         return new DevicesFragment();
     }
 
+    @Override
+    public void onRefresh() {
+        Logger.log(LOG_TAG, "Devices refresh manually requested... ", Log.VERBOSE);
+        Account account = AccountManager.get(getContext()).getAccountsByType(getString(R.string.account_type))[0];
+        DevicesSyncAdapter.syncImmediately(getContext(), account);
+        mSwipeToRefresh.setRefreshing(false);
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +102,9 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLinearLayoutManager);
 
+        //Set Swipe to refresh layout
+        mSwipeToRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.devices_swipe_refresh);
+        mSwipeToRefresh.setOnRefreshListener(this);
 
         return rootView;
     }

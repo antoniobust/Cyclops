@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="12dp">
+
+        <ImageView
+            android:id="@+id/device_detail_icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            tools:src="@drawable/ic_tablet_android"/>
+
+        <TextView
+            android:id="@+id/device_detail_title_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/device_detail_icon"
+            android:maxLines="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            tools:text="AndroidPlus 000100"/>
+
+        <TextView
+            android:id="@+id/device_detail_subtitle_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/device_detail_title_view"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/device_detail_icon"
+            android:maxLines="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+            tools:text="Samsung SM-T500"/>
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/installed_apps_gridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:longClickable="true"
+        android:columnCount="3"
+        android:padding="8dp"
+        android:useDefaultMargins="true"/>
+</LinearLayout>

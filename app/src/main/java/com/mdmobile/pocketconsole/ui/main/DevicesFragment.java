@@ -154,6 +154,17 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        //Workaround for fragments overlapping while swipe for update is loading new data
+        if (mSwipeToRefresh != null) {
+            mSwipeToRefresh.setRefreshing(false);
+            mSwipeToRefresh.destroyDrawingCache();
+            mSwipeToRefresh.clearAnimation();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 //        preferences.unregisterOnSharedPreferenceChangeListener(this);
@@ -257,7 +268,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
     }
 
-    //********************* SearchView Interfaces ****************************************************************
+    //********************* SearchView Interface methods ****************************************************************
     @Override
     public boolean onQueryTextSubmit(String query) {
         //On text changed send an intent to devices list fragment so it refreshes the listView with results

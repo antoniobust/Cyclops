@@ -42,7 +42,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         }
 
         //attach device fragment
-        DeviceDetailsActivityFragment detailsActivityFragment = DeviceDetailsActivityFragment.newInstance();
+        DeviceDetailsFragment detailsActivityFragment = DeviceDetailsFragment.newInstance();
         Bundle args = new Bundle();
         args.putString(DEVICE_NAME_EXTRA_KEY, deviceName);
         args.putString(DEVICE_ID_EXTRA_KEY, deviceId);

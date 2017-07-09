@@ -125,7 +125,7 @@ public class McProvider extends ContentProvider {
                 }
                 if (dataInserted == values.length) {
                     getContext().getContentResolver().notifyChange(uri, null);
-                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " devices in DB", Log.VERBOSE);
+                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " in DB", Log.VERBOSE);
 
                     return dataInserted;
                 } else {
@@ -200,10 +200,26 @@ public class McProvider extends ContentProvider {
                 deleted = database.delete(McContract.DEVICE_TABLE_NAME, null, null);
                 if (deleted > 0) {
                     Logger.log(LOG_TAG, "Devices deleted:" + deleted, Log.VERBOSE);
-//                    getContext().getContentResolver().notifyChange(uri, null);
                 } else {
                     Logger.log(LOG_TAG, "No device deleted", Log.VERBOSE);
                 }
+                break;
+            case INSTALLED_APPLICATIONS_ON_DEVICE:
+                String devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
+                deleted = database.delete(McContract.DEVICE_TABLE_NAME, McContract.InstalledApplications.DEVICE_ID + " =?",
+                        new String[]{devId});
+                if (deleted > 0) {
+                    Logger.log(LOG_TAG, "InstalledApps deleted:" + deleted, Log.VERBOSE);
+                } else {
+                    Logger.log(LOG_TAG, "No InstalledApps deleted", Log.VERBOSE);
+                }
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
+
+        }
+        if (deleted > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
         }
         return deleted;
     }

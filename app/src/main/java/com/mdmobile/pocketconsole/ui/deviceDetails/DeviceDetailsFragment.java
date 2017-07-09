@@ -28,16 +28,16 @@ import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import java.util.HashMap;
 
 
-public class DeviceDetailsActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
-
+public class DeviceDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+    public final static String DEVICE_ID_KEY = "Device_ID";
     private String deviceName;
     private String deviceId;
 
-    public DeviceDetailsActivityFragment() {
+    public DeviceDetailsFragment() {
     }
 
-    public static DeviceDetailsActivityFragment newInstance() {
-        return new DeviceDetailsActivityFragment();
+    public static DeviceDetailsFragment newInstance() {
+        return new DeviceDetailsFragment();
     }
 
     @Override
@@ -60,8 +60,11 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
         TextView titleView = (TextView) rootView.findViewById(R.id.device_detail_title_view);
         TextView subtitleView = (TextView) rootView.findViewById(R.id.device_detail_subtitle_view);
         CardView infoCard = (CardView) rootView.findViewById(R.id.device_details_info_card);
+        CardView appsCard = (CardView) rootView.findViewById(R.id.device_details_apps_card);
 
         infoCard.setOnClickListener(this);
+        appsCard.setOnClickListener(this);
+
 
         titleIconView.setImageResource(R.drawable.ic_phone_android);
         titleView.setText(deviceName);
@@ -176,14 +179,19 @@ public class DeviceDetailsActivityFragment extends Fragment implements LoaderMan
 
         switch (v.getId()) {
             case R.id.device_details_info_card:
-                FullDeviceInfoFragment fragment = FullDeviceInfoFragment.newInstance();
-                transaction.addToBackStack(null);
-                transaction.replace(R.id.device_details_fragment_container, fragment).commit();
-
+                transaction.replace(R.id.device_details_fragment_container, FullDeviceInfoFragment.newInstance())
+                        .commit();
                 break;
             case R.id.device_details_profiles_card:
                 break;
             case R.id.device_details_apps_card:
+                InstalledAppsFragment fragment = InstalledAppsFragment.newInstance();
+                Bundle args = new Bundle();
+                args.putString(DEVICE_ID_KEY, deviceId);
+                fragment.setArguments(args);
+                transaction.addToBackStack(DeviceDetailsFragment.class.getSimpleName());
+                transaction.replace(R.id.device_details_fragment_container, fragment)
+                        .commit();
                 break;
         }
     }

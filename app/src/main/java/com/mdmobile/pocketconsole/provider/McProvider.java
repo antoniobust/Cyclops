@@ -125,7 +125,7 @@ public class McProvider extends ContentProvider {
                 }
                 if (dataInserted == values.length) {
                     getContext().getContentResolver().notifyChange(uri, null);
-                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " in DB", Log.VERBOSE);
+                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " apps in DB", Log.VERBOSE);
 
                     return dataInserted;
                 } else {

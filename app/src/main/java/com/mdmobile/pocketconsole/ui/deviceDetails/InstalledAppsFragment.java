@@ -10,6 +10,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -33,6 +36,7 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         deviceId = getArguments().getString(DeviceDetailsFragment.DEVICE_ID_KEY, "");
         super.onCreate(savedInstanceState);
     }
@@ -53,6 +57,20 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
         getLoaderManager().initLoader(1, null, this);
 
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.installed_apps_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.show_info_action) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

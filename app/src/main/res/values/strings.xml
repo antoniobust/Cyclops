@@ -48,6 +48,11 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="content_authority">com.mdmobile.pocketconsole</string>
     <string name="show_more_info_menu_label">Show more info</string>
+    <string name="uninstall_app_dialog_title">Uninstall application</string>
+    <string name="uninstall_app_dialog_description">Are you sure you want to uninstall \"%1$s\" ?</string>
+    <string name="do_not_ask_again_label">Do not ask again</string>
+    <string name="uninstall_app_dialog_disabled_pref">uninstall_app_dialog_showing_pref</string>
+    <string name="uninstall_label">Uninstall</string>
 
 
     <string-array name="sorting_options_radio_labels">

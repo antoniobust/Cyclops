@@ -4,16 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:longClickable="true">
+
 
     <TextView
         android:id="@+id/installed_app_name_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:text="WhatsUp"/>
+        tools:text="WhatsUp"
+        android:clickable="false"/>
 
     <TextView
+        android:clickable="false"
         android:id="@+id/installed_app_id_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -21,6 +26,7 @@
         tools:text="com.example.whatsUp"/>
 
     <TextView
+        android:clickable="false"
         android:id="@+id/installed_app_status_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -28,6 +34,7 @@
         tools:text="Installed"/>
 
     <TextView
+        android:clickable="false"
         android:id="@+id/installed_app_size_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"

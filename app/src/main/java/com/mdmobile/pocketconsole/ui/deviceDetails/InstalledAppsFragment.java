@@ -1,6 +1,7 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,10 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.PopupMenu;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.InstalledAppsAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.ui.Dialogs.UninstallAppDialog;
 
 public class InstalledAppsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private String deviceId;
@@ -47,14 +50,15 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
         View rootView = inflater.inflate(R.layout.fragment_installed_apps, container, false);
         gridView = (GridView) rootView.findViewById(R.id.installed_apps_gridView);
 
+
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mAdapter = new InstalledAppsAdapter(getContext(), null, 0);
+        mAdapter = new InstalledAppsAdapter(getActivity(), null, 0);
         gridView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(1, null, this);
+        getLoaderManager().initLoader(100, null, this);
 
 
     }
@@ -113,4 +117,5 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
     }
 
     //********************************************************************************
+
 }

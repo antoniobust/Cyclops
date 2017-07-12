@@ -56,9 +56,9 @@
             android:visibility="gone"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/details_main_fab"
-            app:layout_constraintLeft_toLeftOf="@+id/details_main_fab"
-            app:layout_constraintRight_toRightOf="@+id/details_main_fab"
+            app:layout_constraintBottom_toTopOf="@id/details_main_fab"
+            app:layout_constraintLeft_toLeftOf="@id/details_main_fab"
+            app:layout_constraintRight_toRightOf="@id/details_main_fab"
             app:srcCompat="@drawable/ic_check"/>
 
         <android.support.design.widget.FloatingActionButton
@@ -69,9 +69,9 @@
             android:visibility="gone"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/sub_fab1"
-            app:layout_constraintLeft_toLeftOf="@+id/details_main_fab"
-            app:layout_constraintRight_toRightOf="@+id/details_main_fab"
+            app:layout_constraintBottom_toTopOf="@id/sub_fab1"
+            app:layout_constraintLeft_toLeftOf="@id/details_main_fab"
+            app:layout_constraintRight_toRightOf="@id/details_main_fab"
             app:srcCompat="@drawable/ic_code"/>
 
         <android.support.design.widget.FloatingActionButton
@@ -83,8 +83,8 @@
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini"
             app:layout_constraintBottom_toTopOf="@+id/sub_fab2"
-            app:layout_constraintLeft_toLeftOf="@+id/details_main_fab"
-            app:layout_constraintRight_toRightOf="@+id/details_main_fab"
+            app:layout_constraintLeft_toLeftOf="@id/details_main_fab"
+            app:layout_constraintRight_toRightOf="@id/details_main_fab"
             app:srcCompat="@drawable/ic_gps_fixed"/>
 
 
@@ -96,10 +96,90 @@
             android:visibility="gone"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/sub_fab3"
-            app:layout_constraintLeft_toLeftOf="@+id/details_main_fab"
-            app:layout_constraintRight_toRightOf="@+id/details_main_fab"
+            app:layout_constraintBottom_toTopOf="@id/sub_fab3"
+            app:layout_constraintLeft_toLeftOf="@id/details_main_fab"
+            app:layout_constraintRight_toRightOf="@id/details_main_fab"
             app:srcCompat="@drawable/ic_message"/>
+
+        <TextView
+            android:id="@+id/fab_label4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="0dp"
+            android:background="@drawable/label_shape"
+            android:padding="12dp"
+            android:text="@string/message_label"
+            android:textAlignment="viewEnd"
+            android:visibility="gone"
+            app:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/sub_fab4"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/sub_fab4"
+            app:layout_constraintTop_toTopOf="@+id/sub_fab4"
+            app:layout_constraintVertical_bias="0.555"/>
+
+        <TextView
+            android:id="@+id/fab_label3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="0dp"
+            android:background="@drawable/label_shape"
+            android:padding="12dp"
+            android:text="@string/locate_label"
+            android:textAlignment="viewEnd"
+            android:visibility="gone"
+            app:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="@id/sub_fab3"
+            app:layout_constraintEnd_toStartOf="@id/sub_fab1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/sub_fab3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sub_fab3"/>
+
+        <TextView
+            android:id="@+id/fab_label1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/label_shape"
+            android:padding="12dp"
+            android:text="@string/checkin_label"
+            android:textAlignment="viewEnd"
+            android:visibility="gone"
+            app:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/sub_fab1"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/sub_fab1"
+            app:layout_constraintTop_toTopOf="@+id/sub_fab1"
+            app:layout_constraintVertical_bias="0.444"/>
+
+        <TextView
+            android:id="@+id/fab_label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="0dp"
+            android:background="@drawable/label_shape"
+            android:padding="12dp"
+            android:text="@string/script_label"
+            android:textAlignment="viewEnd"
+            android:visibility="gone"
+            app:elevation="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/sub_fab2"
+            app:layout_constraintEnd_toStartOf="@id/sub_fab3"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/sub_fab2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sub_fab2"/>
 
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -5,10 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import static com.mdmobile.pocketconsole.provider.McContract.COMPLIANCE_ITEM_TABLE_NAME;
+import static com.mdmobile.pocketconsole.provider.McContract.CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.CUSTOM_ATTRIBUTE_TABLE_NAME;
+import static com.mdmobile.pocketconsole.provider.McContract.CUSTOM_DATA_DEVICE_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.CUSTOM_DATA_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.CustomAttributeDevice.CUSTOM_ATTRIBUTE_ID;
+import static com.mdmobile.pocketconsole.provider.McContract.DEPLOYMENT_SERVER_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.DEVICE_TABLE_NAME;
+import static com.mdmobile.pocketconsole.provider.McContract.INSTALLED_APPLICATION_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.MANAGEMENT_SERVER_TABLE_NAME;
 
 
@@ -70,7 +75,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + ");");
 
         //Create DeploymentServer table
-        db.execSQL(" CREATE TABLE " + McContract.DEPLOYMENT_SERVER_TABLE_NAME
+        db.execSQL(" CREATE TABLE " + DEPLOYMENT_SERVER_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                 + McContract.DeploymentServer.NAME + " TEXT, "
                 + McContract.DeploymentServer.STATUS + " TEXT, "
@@ -98,7 +103,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.CustomData.TIME + " TEXT"
                 + ");");
 
-        db.execSQL(" CREATE TABLE " + McContract.CUSTOM_DATA_DEVICE_TABLE_NAME
+        db.execSQL(" CREATE TABLE " + CUSTOM_DATA_DEVICE_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                 + McContract.CustomDataDevice.DEVICE_ID + " INTEGER, "
                 + McContract.CustomDataDevice.CUSTOM_DATA_ID + " INTEGER, "
@@ -116,7 +121,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.CustomAttribute.DATA_TYPE + " INTEGER"
                 + ");");
 
-        db.execSQL(" CREATE TABLE " + McContract.CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME
+        db.execSQL(" CREATE TABLE " + CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                 + McContract.CustomAttributeDevice.DEVICE_ID + " INTEGER, "
                 + McContract.CustomAttributeDevice.CUSTOM_ATTRIBUTE_ID + " INTEGER, "
@@ -154,7 +159,18 @@ public class McHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP DATABASE " + DB_NAME);
+
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DEVICE_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MANAGEMENT_SERVER_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DEPLOYMENT_SERVER_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CUSTOM_DATA_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CUSTOM_DATA_DEVICE_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CUSTOM_ATTRIBUTE_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPLIANCE_ITEM_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + INSTALLED_APPLICATION_TABLE_NAME + ";");
+
+
         onCreate(sqLiteDatabase);
     }
 

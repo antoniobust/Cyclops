@@ -1,5 +1,9 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.animation.StateListAnimator;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -7,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
@@ -17,6 +22,8 @@ import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +33,10 @@ import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
 import java.util.HashMap;
+
+import static android.R.attr.stateListAnimator;
+import static android.animation.AnimatorInflater.loadAnimator;
+import static android.view.animation.AnimationUtils.loadAnimation;
 
 
 public class DeviceDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
@@ -61,6 +72,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         TextView subtitleView = (TextView) rootView.findViewById(R.id.device_detail_subtitle_view);
         CardView infoCard = (CardView) rootView.findViewById(R.id.device_details_info_card);
         CardView appsCard = (CardView) rootView.findViewById(R.id.device_details_apps_card);
+        FloatingActionButton mainFab = (FloatingActionButton) rootView.findViewById(R.id.details_main_fab);
+        final FloatingActionButton subFab1 = (FloatingActionButton) rootView.findViewById(R.id.sub_fab1);
+
 
         infoCard.setOnClickListener(this);
         appsCard.setOnClickListener(this);

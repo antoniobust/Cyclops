@@ -67,7 +67,6 @@ private Context mContext;
     }
 
 
-
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.uninstall_app_action) {

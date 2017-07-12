@@ -163,6 +163,11 @@ public class ApiRequestManager {
         }, mContext);
 
         requestsQueue.add(installedAppRequest);
+    }
+
+    public void uninstallApplication(@NonNull String devID){
 
     }
+
+
 }

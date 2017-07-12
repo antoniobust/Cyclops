@@ -53,6 +53,10 @@
     <string name="do_not_ask_again_label">Do not ask again</string>
     <string name="uninstall_app_dialog_disabled_pref">uninstall_app_dialog_showing_pref</string>
     <string name="uninstall_label">Uninstall</string>
+    <string name="locate_label">Locate</string>
+    <string name="checkin_label">CheckIn</string>
+    <string name="script_label">Script</string>
+    <string name="message_label">Message</string>
 
 
     <string-array name="sorting_options_radio_labels">

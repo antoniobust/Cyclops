@@ -1,11 +1,14 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -70,6 +73,13 @@ public class DeviceDetailsActivity extends AppCompatActivity {
                     label3.setAnimation(labelAnimation);
                     label4.setVisibility(View.VISIBLE);
                     label4.setAnimation(labelAnimation);
+
+//                    WindowManager wm = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
+//                    ViewGroup parent = (ViewGroup) view.getParent();
+//                    WindowManager.LayoutParams p = (WindowManager.LayoutParams) parent.getLayoutParams();
+//                    p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//                    p.dimAmount = 0.4f;
+//                    wm.updateViewLayout(parent, p);
 
 
                 } else {

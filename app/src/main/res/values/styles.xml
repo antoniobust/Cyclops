@@ -38,5 +38,27 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="DetailsMiniFAB">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="android:visibility">gone</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="fabSize">mini</item>
+    </style>
+
+    <style name="DetailsMiniFabLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:background">@drawable/label_shape</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textAlignment">viewEnd</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
 
 </resources>

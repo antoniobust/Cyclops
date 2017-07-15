@@ -2,7 +2,9 @@ package com.mdmobile.pocketconsole.ui.deviceDetails;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,10 +13,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
+
+import static android.support.v4.view.ViewCompat.animate;
 
 public class DeviceDetailsActivity extends AppCompatActivity {
 
@@ -43,28 +50,37 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         final TextView label4 = (TextView) findViewById(R.id.fab_label4);
 
 
-
         //Set up fabs
         mainFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Animation fabAnimation = AnimationUtils.loadAnimation(view.getContext(), R.anim.show_mini_fabs);
-                Animation labelAnimation = new TranslateAnimation(100, 0, 0, 0);
-                labelAnimation.setInterpolator(view.getContext(), android.R.anim.accelerate_decelerate_interpolator);
-                labelAnimation.setDuration(400);
-                labelAnimation.setRepeatMode(Animation.REVERSE);
 
-                fabAnimation.setRepeatMode(Animation.REVERSE);
+
                 if (subFab1.getVisibility() == View.GONE) {
-                    subFab1.setVisibility(View.VISIBLE);
-                    subFab2.setVisibility(View.VISIBLE);
-                    subFab3.setVisibility(View.VISIBLE);
-                    subFab4.setVisibility(View.VISIBLE);
-                    subFab1.startAnimation(fabAnimation);
-                    subFab2.startAnimation(fabAnimation);
-                    subFab3.startAnimation(fabAnimation);
-                    subFab4.startAnimation(fabAnimation);
+                    Animation miniFabAnimation = AnimationUtils.loadAnimation(view.getContext(), R.anim.show_mini_fabs);
+                    Animation labelAnimation = new TranslateAnimation(100, 0, 0, 0);
+                    labelAnimation.setInterpolator(view.getContext(), android.R.anim.accelerate_decelerate_interpolator);
+                    labelAnimation.setDuration(400);
+                    labelAnimation.setRepeatMode(Animation.REVERSE);
+                    miniFabAnimation.setRepeatMode(Animation.REVERSE);
 
+                    animate(mainFab)
+                            .rotation(360.0F)
+                            .withLayer()
+                            .setDuration(700L)
+                            .setInterpolator(new DecelerateInterpolator(5.0f))
+                            .start();
+                    //Show and animate mini fabs
+                    subFab1.setVisibility(View.VISIBLE);
+                    subFab1.startAnimation(miniFabAnimation);
+                    subFab2.setVisibility(View.VISIBLE);
+                    subFab2.startAnimation(miniFabAnimation);
+                    subFab3.setVisibility(View.VISIBLE);
+                    subFab3.startAnimation(miniFabAnimation);
+                    subFab4.setVisibility(View.VISIBLE);
+                    subFab4.startAnimation(miniFabAnimation);
+
+                    //SHow and animate fab's labels
                     label1.setVisibility(View.VISIBLE);
                     label1.setAnimation(labelAnimation);
                     label2.setVisibility(View.VISIBLE);
@@ -74,15 +90,21 @@ public class DeviceDetailsActivity extends AppCompatActivity {
                     label4.setVisibility(View.VISIBLE);
                     label4.setAnimation(labelAnimation);
 
-//                    WindowManager wm = (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
-//                    ViewGroup parent = (ViewGroup) view.getParent();
-//                    WindowManager.LayoutParams p = (WindowManager.LayoutParams) parent.getLayoutParams();
-//                    p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//                    p.dimAmount = 0.4f;
-//                    wm.updateViewLayout(parent, p);
+                    //dim brightness for content behind
+                    WindowManager.LayoutParams parameters = ((DeviceDetailsActivity)view.getContext()).getWindow().getAttributes();
+                    parameters.dimAmount=0.4f;
+                    getWindow().setAttributes(parameters);
+                    getWindowManager().updateViewLayout(view.getRootView(),parameters);
 
 
                 } else {
+                    ViewCompat.animate(mainFab)
+                            .rotation(0.0F)
+                            .withLayer()
+                            .setDuration(700L)
+                            .setInterpolator(new DecelerateInterpolator(5.0f))
+                            .start();
+                    //Hide labels and fabs
                     subFab1.setVisibility(View.GONE);
                     label1.setVisibility(View.GONE);
                     subFab2.setVisibility(View.GONE);
@@ -91,7 +113,6 @@ public class DeviceDetailsActivity extends AppCompatActivity {
                     label3.setVisibility(View.GONE);
                     subFab4.setVisibility(View.GONE);
                     label4.setVisibility(View.GONE);
-
                 }
             }
         });

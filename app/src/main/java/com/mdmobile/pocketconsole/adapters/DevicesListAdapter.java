@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +18,10 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
+import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 /**
  * Adapter bound to list of devices in main activity
@@ -91,7 +96,12 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
                 intent.putExtra(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
                 intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)));
 
-                view.getContext().startActivity(intent);
+
+                Pair<View, String> p1 = Pair.create((View)holder.descriptionView, "sharedDevNameTransition");
+                Pair<View, String> p2 = Pair.create((View)holder.image1View, "sharedDevIconTransition");
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation((MainActivity)view.getContext(),p1,p2);
+                view.getContext().startActivity(intent, options.toBundle());
             }
         });
     }

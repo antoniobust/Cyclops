@@ -9,6 +9,15 @@
         <!--Enable window content shared_element_transition-->
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
 
+        <!-- specify enter and exit transitions -->
+        <!-- options are: explode, slide, fade -->
+        <item name="android:windowEnterTransition" tools:targetApi="lollipop">@transition/auto_transition</item>
+        <item name="android:windowExitTransition" tools:targetApi="lollipop">@transition/auto_transition</item>
+
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition" tools:targetApi="lollipop">@transition/auto_transition</item>
+        <item name="android:windowSharedElementExitTransition" tools:targetApi="lollipop">@transition/auto_transition</item>
+
 
         <!--Support library-->
         <item name="colorPrimary">@color/colorPrimary</item>

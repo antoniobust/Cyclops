@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-    android:id="@+id/device_details_activity_main_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/device_details_activity_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity">
@@ -49,6 +49,7 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/sub_fab1"
             style="@style/DetailsMiniFAB"
+            android:onClick="executeAction"
             app:layout_constraintBottom_toTopOf="@id/details_main_fab"
             app:layout_constraintLeft_toLeftOf="@id/details_main_fab"
             app:layout_constraintRight_toRightOf="@id/details_main_fab"
@@ -57,6 +58,7 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/sub_fab2"
             style="@style/DetailsMiniFAB"
+            android:onClick="executeAction"
             app:layout_constraintBottom_toTopOf="@id/sub_fab1"
             app:layout_constraintLeft_toLeftOf="@id/details_main_fab"
             app:layout_constraintRight_toRightOf="@id/details_main_fab"
@@ -65,6 +67,7 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/sub_fab3"
             style="@style/DetailsMiniFAB"
+            android:onClick="executeAction"
             app:layout_constraintBottom_toTopOf="@+id/sub_fab2"
             app:layout_constraintLeft_toLeftOf="@id/details_main_fab"
             app:layout_constraintRight_toRightOf="@id/details_main_fab"
@@ -73,6 +76,7 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/sub_fab4"
             style="@style/DetailsMiniFAB"
+            android:onClick="executeAction"
             app:layout_constraintBottom_toTopOf="@id/sub_fab3"
             app:layout_constraintEnd_toEndOf="@id/details_main_fab"
             app:layout_constraintStart_toStartOf="@id/details_main_fab"

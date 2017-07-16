@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.apiHandler.api;
+package com.mdmobile.pocketconsole.apiManager.api;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -109,7 +109,7 @@ public class ApiModels {
                 return SelectDevice.this;
             }
 
-            public SelectDevice sendAction() {
+            public SelectDevice actionRequest() {
                 String path = "actions";
                 currentApi.appendPath(path);
                 return SelectDevice.this;

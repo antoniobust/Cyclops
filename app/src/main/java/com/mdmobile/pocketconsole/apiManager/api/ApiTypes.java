@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.apiHandler.api;
+package com.mdmobile.pocketconsole.apiManager.api;
 
 
 public class ApiTypes {

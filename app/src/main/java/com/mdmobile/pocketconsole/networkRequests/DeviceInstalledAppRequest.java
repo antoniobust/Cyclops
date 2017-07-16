@@ -34,7 +34,7 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
     }
 
     @Override
-    protected Response parseNetworkResponse(NetworkResponse response) {
+    protected Response<String> parseNetworkResponse(NetworkResponse response) {
         try {
 
             String jsonResponseString = new String(response.data,

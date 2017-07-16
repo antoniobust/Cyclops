@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.apiHandler.ApiRequestManager;
+import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 
 /**
  * Alert dialog shown to uninstall an application

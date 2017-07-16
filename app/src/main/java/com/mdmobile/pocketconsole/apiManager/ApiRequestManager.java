@@ -1,11 +1,13 @@
-package com.mdmobile.pocketconsole.apiHandler;
+package com.mdmobile.pocketconsole.apiManager;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -16,9 +18,12 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.apiHandler.api.ApiModels;
+import com.mdmobile.pocketconsole.apiManager.api.ApiModels;
+import com.mdmobile.pocketconsole.dataTypes.ApiActions;
+import com.mdmobile.pocketconsole.gson.Action;
 import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
+import com.mdmobile.pocketconsole.networkRequests.ActionRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceInstalledAppRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
@@ -144,7 +149,7 @@ public class ApiRequestManager {
         requestsQueue.add(deviceRequest);
     }
 
-    public void getDeviceInstalledApps(@NonNull String devID) {
+    public void getDeviceInstalledApps(@NonNull final String devID) {
         Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModels.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
@@ -153,19 +158,47 @@ public class ApiRequestManager {
                 api, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Logger.log(LOG_TAG, "Error requesting installed Apps for:" + devID, Log.ERROR);
             }
         }, mContext);
 
         requestsQueue.add(installedAppRequest);
     }
 
-    public void uninstallApplication(@NonNull String devID){
+    public void uninstallApplication(@NonNull String devID) {
+
+    }
+
+    public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
+                              @Nullable String message, @Nullable String phoneNumber) {
+        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
+        String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
+        String api = ApiModels.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
+
+        String jsonPayload = new Gson().toJson(new Action(action, message, phoneNumber));
+
+        ActionRequest actionRequest = new ActionRequest(api, jsonPayload, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Logger.log(LOG_TAG, "Request( " + action + ") successfully sent to: " + deviceID, Log.VERBOSE);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.log(LOG_TAG, "Error sending action:" + action + " to device= " + deviceID, Log.ERROR);
+            }
+        }, mContext);
+
+
+        requestsQueue.add(actionRequest);
+        Logger.log(LOG_TAG, "Request( " + action + ") requested to device: " + deviceID, Log.VERBOSE);
+        Toast.makeText(mContext, action + " request sent",Toast.LENGTH_SHORT).show();
+
 
     }
 

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
+import com.mdmobile.pocketconsole.ui.Dialogs.MessageDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.ScriptDialog;
 
 import static android.support.v4.view.ViewCompat.animate;
@@ -178,6 +179,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
                 break;
             case R.id.sub_fab4:
                 //send message action
+                MessageDialog.newInstance(deviceId).show(getSupportFragmentManager(),null);
                 break;
         }
         hideFabs();

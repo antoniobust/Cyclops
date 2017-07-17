@@ -26,21 +26,21 @@ import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment.
  * Dialog shown to let the user send a script to a device
  */
 
-public class ScriptDialog extends android.support.v4.app.DialogFragment implements DialogInterface.OnClickListener, TextWatcher {
+public class MessageDialog extends android.support.v4.app.DialogFragment implements DialogInterface.OnClickListener, TextWatcher {
 
-    Spinner spinner;
+
     EditText editText;
     AlertDialog alertDialog;
     String deviceID;
 
-    public ScriptDialog() {
+    public MessageDialog() {
 
     }
 
-    public static ScriptDialog newInstance(String devID) {
+    public static MessageDialog newInstance(String devID) {
         Bundle args = new Bundle();
         args.putString(DEVICE_ID_KEY, devID);
-        ScriptDialog dialog = new ScriptDialog();
+        MessageDialog dialog = new MessageDialog();
         dialog.setArguments(args);
         return dialog;
     }
@@ -58,19 +58,17 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
         ViewGroup container = (ViewGroup) ((DeviceDetailsActivity) getContext()).getWindow().getDecorView();
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.dialog_send_script, container, false);
+        View view = inflater.inflate(R.layout.dialog_send_message, container, false);
 
-        spinner = (Spinner) view.findViewById(R.id.preset_scripts_spinner);
-        editText = (EditText) view.findViewById(R.id.script_edit_text);
+        editText = (EditText) view.findViewById(R.id.message_edit_text);
         editText.addTextChangedListener(this);
 
         Dialog dialog = new AlertDialog.Builder(getContext())
                 .setView(view)
-                .setTitle(R.string.send_script_dialog_title)
+                .setTitle(R.string.send_message_dialog_title)
+                .setMessage(R.string.message_dialog_description)
                 .setPositiveButton(R.string.dialog_send_button_label, this)
-                .setNegativeButton(R.string.dialog_cancel_label, this)
-                .setMessage(R.string.script_dialog_description)
-                .create();
+                .setNegativeButton(R.string.dialog_cancel_label, this).create();
 
 //        alertDialog = (AlertDialog) getDialog();
 //        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
@@ -82,8 +80,8 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         if (i == DialogInterface.BUTTON_POSITIVE) {
-            String script = editText.getText().toString();
-            ApiRequestManager.getInstance(getContext()).requestAction(deviceID, ApiActions.SEND_SCRIPT, script, null);
+            String message = editText.getText().toString();
+            ApiRequestManager.getInstance(getContext()).requestAction(deviceID, ApiActions.SEND_MESSAGE, message, null);
         } else {
             dialogInterface.dismiss();
         }

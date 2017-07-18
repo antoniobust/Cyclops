@@ -74,6 +74,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
 
+
         ImageView titleIconView = (ImageView) rootView.findViewById(R.id.device_detail_icon);
         TextView titleView = (TextView) rootView.findViewById(R.id.device_detail_title_view);
         TextView subtitleView = (TextView) rootView.findViewById(R.id.device_detail_subtitle_view);
@@ -94,13 +95,20 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         titleView.setText(deviceName);
         subtitleView.setText(deviceId);
 
+
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        getActivity().supportStartPostponedEnterTransition();
         getLoaderManager().initLoader(10, null, this);
         getLoaderManager().initLoader(11, null, this);
         getLoaderManager().initLoader(12, null, this);
 
         ApiRequestManager.getInstance(getContext()).getDeviceInstalledApps(deviceId);
-
-        return rootView;
     }
 
     @Override

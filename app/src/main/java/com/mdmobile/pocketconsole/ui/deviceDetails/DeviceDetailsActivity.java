@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
@@ -16,7 +17,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.ui.Dialogs.MessageDialog;
@@ -28,7 +28,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     public final static String DEVICE_NAME_EXTRA_KEY = "DeviceNameIntentExtraKey";
     public final static String DEVICE_ID_EXTRA_KEY = "DeviceIdIntentExtraKey";
-    public static final String EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY ="DeviceIconTransition";
+    public static final String EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY = "DeviceIconTransition";
     public static final String EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY = "DeviceNameTransition";
     FloatingActionButton mainFab;
     FloatingActionButton subFab1;
@@ -47,6 +47,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        supportStartPostponedEnterTransition();
 
         deviceName = getIntent().getStringExtra(DEVICE_NAME_EXTRA_KEY);
         deviceId = getIntent().getStringExtra(DEVICE_ID_EXTRA_KEY);
@@ -103,6 +105,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 //        args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
 //        detailsActivityFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction().replace(R.id.device_details_fragment_container, detailsActivityFragment).commit();
+
     }
 
     @Override
@@ -195,5 +198,14 @@ public class DeviceDetailsActivity extends AppCompatActivity {
                 break;
         }
         hideFabs();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAfterTransition();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

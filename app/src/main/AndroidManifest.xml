@@ -51,7 +51,7 @@
             android:name=".ui.deviceDetails.DeviceDetailsActivity"
             android:label="@string/title_activity_device_details"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.DeviceDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mdmobile.pocketconsole.ui.main.MainActivity"/>

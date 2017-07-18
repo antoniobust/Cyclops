@@ -9,14 +9,6 @@
         <!--Enable window content shared_element_transition-->
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
 
-        <!-- specify enter and exit transitions -->
-        <!-- options are: explode, slide, fade -->
-        <item name="android:windowEnterTransition" tools:targetApi="lollipop">
-            @transition/device_details_content_transition
-        </item>
-        <item name="android:windowExitTransition" tools:targetApi="lollipop">
-            @transition/device_details_content_transition
-        </item>
 
         <!-- specify shared element transitions -->
         <item name="android:windowSharedElementEnterTransition" tools:targetApi="lollipop">
@@ -34,9 +26,18 @@
 
     </style>
 
+    <!--Specific Main activity style-->
+    <style name="AppTheme.MainActivity">
+        <item name="android:windowExitTransition" tools:targetApi="lollipop">
+            @transition/fade_out_transition
+        </item>
+    </style>
     <!--Specific device details activity style-->
     <style name="AppTheme.DeviceDetailsActivity" parent="AppTheme">
         <item name="android:windowEnterTransition" tools:targetApi="lollipop">
+            @transition/device_details_content_transition
+        </item>
+        <item name="android:windowExitTransition" tools:targetApi="lollipop">
             @transition/device_details_content_transition
         </item>
     </style>

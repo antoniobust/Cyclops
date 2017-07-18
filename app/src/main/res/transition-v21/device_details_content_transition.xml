@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
-               android:duration="@android:integer/config_shortAnimTime"
-               android:transitionOrdering="together">
-
-    <fade>
-        <targets>
-            <target android:excludeId="@id/toolbar"/>
-            <target android:excludeId="@android:id/statusBarBackground"/>
-            <target android:excludeId="@android:id/navigationBarBackground"/>
-        </targets>
-    </fade>
-
-    <slide android:slideEdge="bottom">
-        <targets>
-            <target android:targetId="@id/details_main_fab"/>
-        </targets>
-    </slide>
-
-
+               android:duration="@android:integer/config_mediumAnimTime"
+               android:transitionOrdering="together"
+    android:interpolator="@android:interpolator/accelerate_decelerate">
+    <changeTransform/>
+    <changeBounds />
+    <fade android:fadingMode="fade_in"/>
 </transitionSet>

@@ -45,7 +45,8 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.MainActivity"/>
 
         <activity
             android:name=".ui.deviceDetails.DeviceDetailsActivity"

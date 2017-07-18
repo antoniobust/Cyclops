@@ -20,7 +20,8 @@ import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 
-import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment.DEVICE_ID_KEY;
+import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
+
 
 /**
  * Dialog shown to let the user send a script to a device
@@ -39,7 +40,7 @@ public class MessageDialog extends android.support.v4.app.DialogFragment impleme
 
     public static MessageDialog newInstance(String devID) {
         Bundle args = new Bundle();
-        args.putString(DEVICE_ID_KEY, devID);
+        args.putString(DEVICE_ID_EXTRA_KEY, devID);
         MessageDialog dialog = new MessageDialog();
         dialog.setArguments(args);
         return dialog;
@@ -48,7 +49,7 @@ public class MessageDialog extends android.support.v4.app.DialogFragment impleme
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        deviceID = getArguments().getString(DEVICE_ID_KEY);
+        deviceID = getArguments().getString(DEVICE_ID_EXTRA_KEY);
     }
 
     @NonNull

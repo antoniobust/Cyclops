@@ -5,9 +5,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
@@ -28,28 +29,44 @@ import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
 import java.util.HashMap;
 
+import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
+import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
+import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY;
+import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY;
+
 
 public class DeviceDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
-    public final static String DEVICE_ID_KEY = "Device_ID";
     private String deviceName;
     private String deviceId;
+    private String iconTransitionName;
+    private String nameTransitionName;
 
     public DeviceDetailsFragment() {
     }
 
-    public static DeviceDetailsFragment newInstance() {
-        return new DeviceDetailsFragment();
+    public static DeviceDetailsFragment newInstance(@NonNull String deviceId, @NonNull String deviceName,
+                                                    @Nullable String iconSharedTransactionName, @Nullable String devNameSharedTransactionNAme) {
+        Bundle args = new Bundle();
+        args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
+        args.putString(DEVICE_NAME_EXTRA_KEY, deviceName);
+        if (iconSharedTransactionName != null && devNameSharedTransactionNAme != null) {
+            args.putString(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY, iconSharedTransactionName);
+            args.putString(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY, devNameSharedTransactionNAme);
+        }
+        DeviceDetailsFragment fragment = new DeviceDetailsFragment();
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (getArguments().containsKey(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY)
-                && getArguments().containsKey(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY)) {
-            deviceId = getArguments().getString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY);
-            deviceName = getArguments().getString(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY);
-        }
+        deviceId = getArguments().getString(DEVICE_ID_EXTRA_KEY);
+        deviceName = getArguments().getString(DEVICE_NAME_EXTRA_KEY);
+        nameTransitionName = getArguments().getString(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY, null);
+        iconTransitionName = getArguments().getString(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY, null);
     }
 
     @Override
@@ -62,8 +79,11 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         TextView subtitleView = (TextView) rootView.findViewById(R.id.device_detail_subtitle_view);
         CardView infoCard = (CardView) rootView.findViewById(R.id.device_details_info_card);
         CardView appsCard = (CardView) rootView.findViewById(R.id.device_details_apps_card);
-        FloatingActionButton mainFab = (FloatingActionButton) rootView.findViewById(R.id.details_main_fab);
-        final FloatingActionButton subFab1 = (FloatingActionButton) rootView.findViewById(R.id.sub_fab1);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            titleIconView.setTransitionName(iconTransitionName);
+            titleView.setTransitionName(nameTransitionName);
+        }
 
 
         infoCard.setOnClickListener(this);
@@ -191,7 +211,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             case R.id.device_details_apps_card:
                 InstalledAppsFragment fragment = InstalledAppsFragment.newInstance();
                 Bundle args = new Bundle();
-                args.putString(DEVICE_ID_KEY, deviceId);
+                args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
                 fragment.setArguments(args);
                 transaction.addToBackStack(DeviceDetailsFragment.class.getSimpleName());
                 transaction.replace(R.id.device_details_fragment_container, fragment)

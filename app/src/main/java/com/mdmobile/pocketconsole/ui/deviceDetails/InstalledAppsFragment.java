@@ -1,7 +1,6 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
 
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,12 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.PopupMenu;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.InstalledAppsAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
-import com.mdmobile.pocketconsole.ui.Dialogs.UninstallAppDialog;
+
+import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
 
 public class InstalledAppsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private String deviceId;
@@ -40,7 +39,7 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        deviceId = getArguments().getString(DeviceDetailsFragment.DEVICE_ID_KEY, "");
+        deviceId = getArguments().getString(DEVICE_ID_EXTRA_KEY, "");
         super.onCreate(savedInstanceState);
     }
 

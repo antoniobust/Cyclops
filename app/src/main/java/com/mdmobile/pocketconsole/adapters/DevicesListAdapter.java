@@ -5,9 +5,11 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +23,8 @@ import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
+import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY;
+import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY;
 
 /**
  * Adapter bound to list of devices in main activity
@@ -84,6 +87,13 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
                 holder.image1View.setImageResource(R.drawable.ic_phone_android);
         }
 
+        //Set transition name for shared element transition
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String devID = data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
+            holder.image1View.setTransitionName("icon_" + devID);
+            holder.descriptionView.setTransitionName("name_" + devID);
+        }
+
         //Set click listener
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,17 +101,22 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
                 data.moveToPosition(holder.getAdapterPosition());
                 Logger.log(LOG_TAG, "Clicked on item:" + holder.getAdapterPosition()
                         + " device name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)), Log.VERBOSE);
-
                 Intent intent = new Intent(view.getContext(), DeviceDetailsActivity.class);
                 intent.putExtra(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
                 intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)));
+                intent.putExtra(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY, ViewCompat.getTransitionName(holder.image1View));
+                intent.putExtra(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY, ViewCompat.getTransitionName(holder.descriptionView));
 
 
-                Pair<View, String> p1 = Pair.create((View)holder.descriptionView, "sharedDevNameTransition");
-                Pair<View, String> p2 = Pair.create((View)holder.image1View, "sharedDevIconTransition");
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation((MainActivity)view.getContext(),p1,p2);
-                view.getContext().startActivity(intent, options.toBundle());
+                Pair<View, String> p1;
+                Pair<View, String> p2;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    p1 = Pair.create((View) holder.descriptionView, holder.descriptionView.getTransitionName());
+                    p2 = Pair.create((View) holder.image1View, holder.image1View.getTransitionName());
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation((MainActivity) view.getContext(), p1, p2);
+                    view.getContext().startActivity(intent, options.toBundle());
+                }
             }
         });
     }

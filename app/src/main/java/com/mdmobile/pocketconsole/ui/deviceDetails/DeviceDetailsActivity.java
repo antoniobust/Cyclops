@@ -16,6 +16,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.ui.Dialogs.MessageDialog;
@@ -26,7 +27,9 @@ import static android.support.v4.view.ViewCompat.animate;
 public class DeviceDetailsActivity extends AppCompatActivity {
 
     public final static String DEVICE_NAME_EXTRA_KEY = "DeviceNameIntentExtraKey";
-    public final static String DEVICE_ID_EXTRA_KEY = "DeviceUriIntentExtraKey";
+    public final static String DEVICE_ID_EXTRA_KEY = "DeviceIdIntentExtraKey";
+    public static final String EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY ="DeviceIconTransition";
+    public static final String EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY = "DeviceNameTransition";
     FloatingActionButton mainFab;
     FloatingActionButton subFab1;
     FloatingActionButton subFab2;
@@ -38,13 +41,21 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     TextView label4;
     String deviceName;
     String deviceId;
+    private String nameTransitionName;
+    private String iconTransitionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-         deviceName = getIntent().getStringExtra(DEVICE_NAME_EXTRA_KEY);
-         deviceId = getIntent().getStringExtra(DEVICE_ID_EXTRA_KEY);
+        deviceName = getIntent().getStringExtra(DEVICE_NAME_EXTRA_KEY);
+        deviceId = getIntent().getStringExtra(DEVICE_ID_EXTRA_KEY);
+
+        if (getIntent().hasExtra(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY)
+                && getIntent().hasExtra(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY)) {
+            nameTransitionName = getIntent().getStringExtra(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY);
+            iconTransitionName = getIntent().getStringExtra(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY);
+        }
 
         setContentView(R.layout.activity_device_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,11 +96,12 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         }
 
         //attach device fragment
-        DeviceDetailsFragment detailsActivityFragment = DeviceDetailsFragment.newInstance();
-        Bundle args = new Bundle();
-        args.putString(DEVICE_NAME_EXTRA_KEY, deviceName);
-        args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
-        detailsActivityFragment.setArguments(args);
+        DeviceDetailsFragment detailsActivityFragment = DeviceDetailsFragment.newInstance(deviceId, deviceName,
+                iconTransitionName, nameTransitionName);
+//        Bundle args = new Bundle();
+//        args.putString(DEVICE_NAME_EXTRA_KEY, deviceName);
+//        args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
+//        detailsActivityFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction().replace(R.id.device_details_fragment_container, detailsActivityFragment).commit();
     }
 
@@ -163,23 +175,23 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         label4.setVisibility(View.GONE);
     }
 
-    public void executeAction(View view){
-        switch(view.getId()){
+    public void executeAction(View view) {
+        switch (view.getId()) {
             case R.id.sub_fab1:
                 //Check in action
-                ApiRequestManager.getInstance(getApplicationContext()).requestAction(deviceId, ApiActions.CHECKIN,null,null);
+                ApiRequestManager.getInstance(getApplicationContext()).requestAction(deviceId, ApiActions.CHECKIN, null, null);
                 break;
             case R.id.sub_fab2:
                 //Script action
-                ScriptDialog.newInstance(deviceId).show(getSupportFragmentManager(),null);
+                ScriptDialog.newInstance(deviceId).show(getSupportFragmentManager(), null);
                 break;
             case R.id.sub_fab3:
                 //Localize action
-                ApiRequestManager.getInstance(getApplicationContext()).requestAction(deviceId, ApiActions.LOCATE,null,null);
+                ApiRequestManager.getInstance(getApplicationContext()).requestAction(deviceId, ApiActions.LOCATE, null, null);
                 break;
             case R.id.sub_fab4:
                 //send message action
-                MessageDialog.newInstance(deviceId).show(getSupportFragmentManager(),null);
+                MessageDialog.newInstance(deviceId).show(getSupportFragmentManager(), null);
                 break;
         }
         hideFabs();

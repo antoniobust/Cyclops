@@ -14,8 +14,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -217,10 +219,17 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             case R.id.device_details_profiles_card:
                 break;
             case R.id.device_details_apps_card:
+
+
                 InstalledAppsFragment fragment = InstalledAppsFragment.newInstance();
                 Bundle args = new Bundle();
                 args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
                 fragment.setArguments(args);
+
+//                fragment.setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.explode));
+
+//                transaction.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_in_left);
+                transaction.addSharedElement(v, ViewCompat.getTransitionName(v));
                 transaction.addToBackStack(DeviceDetailsFragment.class.getSimpleName());
                 transaction.replace(R.id.device_details_fragment_container, fragment)
                         .commit();

@@ -2,21 +2,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:layout_marginBottom="@dimen/activity_vertical_margin"
-             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-             android:layout_marginStart="@dimen/activity_horizontal_margin"
-             android:layout_marginTop="@dimen/activity_vertical_margin">
+             android:padding="?attr/dialogPreferredPadding">
 
     <RadioGroup
         android:id="@+id/sorting_option_radio_group"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <RadioButton
             android:id="@+id/sort_option_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:layout_marginBottom="12dp"
             android:text="@string/sort_device_a_z"
             android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle"/>
 
@@ -24,7 +21,7 @@
             android:id="@+id/sort_option_name_inverted"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:layout_marginBottom="12dp"
             android:text="@string/sort_device_z_a"
             android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle"/>
 
@@ -32,15 +29,15 @@
             android:id="@+id/sort_option_online"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:layout_marginBottom="12dp"
             android:text="@string/sort_device_online_first"
             android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle"/>
 
         <RadioButton
             android:id="@+id/sort_option_offline"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:layout_marginBottom="12dp"
             android:text="@string/sort_device_offline_first"
             android:textAppearance="@style/Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle"/>
 

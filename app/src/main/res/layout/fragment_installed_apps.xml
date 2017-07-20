@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:transitionName="application_card_transition_name"
     tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment">
 
     <RelativeLayout

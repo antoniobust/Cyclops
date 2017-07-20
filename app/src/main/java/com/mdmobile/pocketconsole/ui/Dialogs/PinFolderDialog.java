@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
+import com.mdmobile.pocketconsole.ui.main.MainActivity;
 
 /**
  * Dialog to set a folder to be displayed in main screen
@@ -36,8 +38,9 @@ public class PinFolderDialog extends DialogFragment implements Dialog.OnClickLis
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        ViewGroup container = (ViewGroup) getActivity().getWindow().getDecorView();
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.pin_folder_dialog,null);
+        View view = inflater.inflate(R.layout.pin_folder_dialog,container,false);
 
 
 

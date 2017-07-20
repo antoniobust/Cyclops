@@ -8,6 +8,7 @@
         <item name="android:colorAccent" tools:targetApi="lollipop">@color/colorAccent</item>
         <!--Enable window content shared_element_transition-->
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
 
 
         <!-- specify shared element transitions -->
@@ -15,6 +16,12 @@
             @transition/shared_element_transition
         </item>
         <item name="android:windowSharedElementExitTransition" tools:targetApi="lollipop">
+            @transition/shared_element_transition
+        </item>
+        <item name="android:windowSharedElementReenterTransition" tools:targetApi="lollipop">
+            @transition/shared_element_transition
+        </item>
+        <item name="android:windowSharedElementReturnTransition" tools:targetApi="lollipop">
             @transition/shared_element_transition
         </item>
 
@@ -28,18 +35,16 @@
 
     <!--Specific Main activity style-->
     <style name="AppTheme.MainActivity">
-        <item name="android:windowExitTransition" tools:targetApi="lollipop">
-            @transition/fade_out_transition
-        </item>
+        <item name="android:windowExitTransition" tools:targetApi="lollipop">@transition/activity_fade_transition</item>
+        <item name="android:windowReenterTransition" tools:targetApi="lollipop">@transition/activity_fade_transition</item>
     </style>
+
     <!--Specific device details activity style-->
     <style name="AppTheme.DeviceDetailsActivity" parent="AppTheme">
         <item name="android:windowEnterTransition" tools:targetApi="lollipop">
             @transition/device_details_content_transition
         </item>
-        <item name="android:windowExitTransition" tools:targetApi="lollipop">
-            @transition/device_details_content_transition
-        </item>
+        <item name="android:windowExitTransition" tools:targetApi="lollipop">@transition/activity_fade_transition</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.mdmobile.pocketconsole.R;
@@ -41,8 +42,9 @@ public class SortingDeviceDialog extends DialogFragment implements
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        ViewGroup container = (ViewGroup) getActivity().getWindow().getDecorView();
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.sorting_dialog_fragment, null);
+        View view = inflater.inflate(R.layout.sorting_dialog_fragment, container);
         AlertDialog dialog = new AlertDialog.Builder(getActivity()).setTitle(R.string.sort_devices_menu_label)
                 .setPositiveButton(R.string.dialog_apply_label, this)
                 .setNegativeButton(R.string.dialog_cancel_label, this)

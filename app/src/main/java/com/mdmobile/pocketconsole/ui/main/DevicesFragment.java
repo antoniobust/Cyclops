@@ -18,6 +18,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -97,6 +98,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
         recyclerView.setHasFixedSize(true);
 
+
         //Set recycler layout manager
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -106,6 +108,9 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         mSwipeToRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.devices_swipe_refresh);
         mSwipeToRefresh.setOnRefreshListener(this);
 
+        //Create an adapter for recycler
+        mAdapter = new DevicesListAdapter(null);
+
         return rootView;
     }
 
@@ -113,8 +118,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Create an adapter
-        mAdapter = new DevicesListAdapter(null);
+        //Set the adapter to the recycler
         recyclerView.setAdapter(mAdapter);
         Bundle args = new Bundle();
         args.putInt(sortingOptionKey, currentSortingOption);

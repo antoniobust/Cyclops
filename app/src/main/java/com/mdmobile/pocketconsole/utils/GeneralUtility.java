@@ -59,4 +59,9 @@ public class GeneralUtility {
                 && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
+    public static int dpTopx(Context c, int dp){
+        final float scale = c.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
+
 }

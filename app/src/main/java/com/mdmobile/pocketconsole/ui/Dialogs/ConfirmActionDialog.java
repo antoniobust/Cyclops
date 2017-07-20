@@ -8,9 +8,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
+import com.mdmobile.pocketconsole.utils.GeneralUtility;
+
+import static android.R.attr.padding;
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static com.google.gson.internal.UnsafeAllocator.create;
 
 /**
  * Alert dialog shown to uninstall an application
@@ -29,6 +43,7 @@ public class ConfirmActionDialog extends DialogFragment implements
     private String title, description, positiveButtonLabel, negativeButtonLabel;
     private boolean doNotShowEnabled;
     private int iconResource;
+    private CheckBox checkBox;
 
     public ConfirmActionDialog() {
 
@@ -80,8 +95,36 @@ public class ConfirmActionDialog extends DialogFragment implements
         if (iconResource != -1) {
             dialogBuilder.setIcon(iconResource);
         }
+        if (doNotShowEnabled) {
+            int padding = GeneralUtility.dpTopx(getContext(), 24);
+            //Create container with check box
+            FrameLayout viewContainer = new FrameLayout(getContext());
+            FrameLayout.LayoutParams frameLayoutParam = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            frameLayoutParam.setMargins(padding,padding,padding,padding);
+            viewContainer.setLayoutParams(frameLayoutParam);
+
+            checkBox = new CheckBox(getContext());
+            checkBox.setChecked(false);
+            checkBox.setText(R.string.do_not_ask_again_label);
+
+            viewContainer.addView(checkBox,frameLayoutParam);
+            if(savedInstanceState!= null && savedInstanceState.containsKey(DO_NOT_SHOW_ARG_KEY)){
+                checkBox.setChecked(savedInstanceState.getBoolean(DO_NOT_SHOW_ARG_KEY));
+            }
+            //Add container to dialog
+            dialogBuilder.setView(viewContainer);
+        }
+
 
         return dialogBuilder.create();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(checkBox != null) {
+            outState.putBoolean(DO_NOT_SHOW_ARG_KEY, checkBox.isChecked());
+        }
     }
 
     @Override

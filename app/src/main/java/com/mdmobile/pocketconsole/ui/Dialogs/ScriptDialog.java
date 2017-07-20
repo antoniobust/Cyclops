@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.ui.Dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -55,7 +56,7 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        ViewGroup container = (ViewGroup) ((DeviceDetailsActivity) getContext()).getWindow().getDecorView();
+        ViewGroup container = (ViewGroup) ((Activity) getContext()).getWindow().getDecorView();
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.dialog_send_script, container, false);

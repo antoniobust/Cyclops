@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -12,14 +13,22 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
+import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.ui.Dialogs.MessageDialog;
+import com.mdmobile.pocketconsole.ui.Dialogs.ScriptDialog;
 import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
+import com.mdmobile.pocketconsole.ui.main.DevicesFragment;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 
@@ -34,6 +43,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
 
     private static String LOG_TAG = DevicesListAdapter.class.getSimpleName();
     private Cursor data;
+    private String selected;
 
     public DevicesListAdapter(@Nullable Cursor cursor) {
         if (cursor != null) {
@@ -117,11 +127,24 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
 //                }
             }
         });
+
+        holder.image2View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(data.moveToPosition(holder.getAdapterPosition())) {
+                    selected = data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
+                    showActionsMenu(view);
+                }
+            }
+        });
     }
 
     @Override
     public long getItemId(int position) {
-        return data.getLong(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
+        if(data.move(position)){
+            return data.getInt(data.getColumnIndex(McContract.Device._ID));
+        }
+        return -1;
     }
 
     @Override
@@ -145,5 +168,37 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
             this.notifyDataSetChanged();
         }
         return oldCursor;
+    }
+
+    private void showActionsMenu(final View view) {
+        PopupMenu menu = new PopupMenu(view.getContext(), view, Gravity.START);
+        menu.inflate(R.menu.device_action_menu);
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                        Context mContext = view.getContext();
+        switch (menuItem.getItemId()){
+            case R.id.action_checkin:
+                //Check in action
+                ApiRequestManager.getInstance(mContext).requestAction(selected, ApiActions.CHECKIN, null, null);
+                break;
+            case R.id.action_send_script:
+                //Script action
+                ScriptDialog.newInstance(selected).show(((MainActivity)mContext).getSupportFragmentManager(), null);
+                break;
+            case R.id.action_locate:
+                //Localize action
+                ApiRequestManager.getInstance(mContext).requestAction(selected, ApiActions.LOCATE, null, null);
+                break;
+            case R.id.action_send_message:
+                //send message action
+                MessageDialog.newInstance(selected)
+                        .show(((MainActivity)mContext).getSupportFragmentManager(), null);
+                break;
+        }
+                return false;
+            }
+        });
+        menu.show();
     }
 }

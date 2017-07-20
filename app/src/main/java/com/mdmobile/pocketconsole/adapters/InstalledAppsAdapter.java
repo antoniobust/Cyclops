@@ -1,11 +1,8 @@
 package com.mdmobile.pocketconsole.adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
-import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,20 +11,14 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.gson.InstalledApp;
-import com.mdmobile.pocketconsole.ui.Dialogs.UninstallAppDialog;
+import com.mdmobile.pocketconsole.ui.Dialogs.ConfirmActionDialog;
 import com.mdmobile.pocketconsole.ui.ViewHolder.InstalledAppViewHolder;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
-import com.mdmobile.pocketconsole.ui.deviceDetails.InstalledAppsFragment;
-
-import static android.R.attr.dial;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
-import static java.security.AccessController.getContext;
 
 
-public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnMenuItemClickListener{
+public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnMenuItemClickListener {
 
-private Context mContext;
+    private Context mContext;
     private String selected;
 
     public InstalledAppsAdapter(Context context, Cursor c, int flags) {
@@ -57,7 +48,7 @@ private Context mContext;
             @Override
             public boolean onLongClick(View view) {
                 selected = viewHolder.appIdView.getText().toString();
-                PopupMenu menu = new PopupMenu(view.getContext(),view, Gravity.CENTER_HORIZONTAL);
+                PopupMenu menu = new PopupMenu(view.getContext(), view, Gravity.CENTER_HORIZONTAL);
                 menu.inflate(R.menu.uninstall_app_context_menu);
                 menu.setOnMenuItemClickListener(InstalledAppsAdapter.this);
                 menu.show();
@@ -73,12 +64,12 @@ private Context mContext;
             //Check for alert dialog showing preference
             if (mContext.getSharedPreferences(mContext.getString(R.string.shared_preference), Context.MODE_PRIVATE)
                     .getBoolean(mContext.getString(R.string.uninstall_app_dialog_disabled_pref), true)) {
-                UninstallAppDialog dialog = new UninstallAppDialog();
-                Bundle args = new Bundle(1);
-                args.putString(UninstallAppDialog.APP_NAME_ARG_KEY,selected);
-                dialog.setArguments(args);
-
-                dialog.show(((DeviceDetailsActivity) mContext).getSupportFragmentManager(), null);
+                ConfirmActionDialog.newInstance(
+                        mContext.getString(R.string.uninstall_app_dialog_title),
+                        String.format(mContext.getString(R.string.uninstall_app_dialog_description),selected),
+                        R.drawable.ic_delete_forever, mContext.getString(R.string.uninstall_label),
+                        mContext.getString(R.string.dialog_cancel_label), true)
+                        .show(((DeviceDetailsActivity) mContext).getSupportFragmentManager(), null);
             }
             return true;
         }

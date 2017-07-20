@@ -39,10 +39,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="12dp"
             android:scaleType="centerInside"
             android:tint="@color/colorPrimaryDark"
-            app:srcCompat="@drawable/ic_option_24dp"/>
+            app:srcCompat="@drawable/ic_option_24dp"
+            android:onClick="showActionsMenu"/>
 
     </LinearLayout>
 

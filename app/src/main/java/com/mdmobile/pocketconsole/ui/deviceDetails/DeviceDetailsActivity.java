@@ -7,6 +7,9 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.Gravity;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,13 +17,16 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.adapters.InstalledAppsAdapter;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.ui.Dialogs.MessageDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.ScriptDialog;
+import com.mdmobile.pocketconsole.ui.main.DevicesFragment;
 
 import static android.support.v4.view.ViewCompat.animate;
 
@@ -108,14 +114,6 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            supportFinishAfterTransition();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     //SHow And animate fabs and label helper method
     private void showFabs(View view) {
@@ -199,6 +197,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         }
         hideFabs();
     }
+
 
 //    @Override
 //    public void onBackPressed() {

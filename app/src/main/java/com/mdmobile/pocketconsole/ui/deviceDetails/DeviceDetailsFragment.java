@@ -105,7 +105,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        getActivity().supportStartPostponedEnterTransition();
+//        getActivity().supportStartPostponedEnterTransition();
         getLoaderManager().initLoader(10, null, this);
         getLoaderManager().initLoader(11, null, this);
         getLoaderManager().initLoader(12, null, this);
@@ -226,9 +226,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                 args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
                 fragment.setArguments(args);
 
-//                fragment.setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.explode));
-
-//                transaction.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_in_left);
                 transaction.addSharedElement(v, ViewCompat.getTransitionName(v));
                 transaction.addToBackStack(DeviceDetailsFragment.class.getSimpleName());
                 transaction.replace(R.id.device_details_fragment_container, fragment)

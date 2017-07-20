@@ -18,7 +18,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -240,6 +239,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
+//        getActivity().supportStartPostponedEnterTransition();
     }
 
     @Override

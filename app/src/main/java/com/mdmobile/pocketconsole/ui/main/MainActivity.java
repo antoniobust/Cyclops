@@ -66,10 +66,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setExitTransition(new Explode());
-            getWindow().setReenterTransition(new ChangeBounds());
-        }
+//        supportPostponeEnterTransition();
 
         BottomNavigationView bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

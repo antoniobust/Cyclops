@@ -108,15 +108,13 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
                 intent.putExtra(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY, ViewCompat.getTransitionName(holder.descriptionView));
 
 
-                Pair<View, String> p1;
-                Pair<View, String> p2;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    p1 = Pair.create((View) holder.descriptionView, holder.descriptionView.getTransitionName());
-                    p2 = Pair.create((View) holder.image1View, holder.image1View.getTransitionName());
-                    ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation((MainActivity) view.getContext(), p1, p2);
-                    view.getContext().startActivity(intent, options.toBundle());
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    ActivityOptionsCompat options = ActivityOptionsCompat.
+//                            makeSceneTransitionAnimation((MainActivity) view.getContext(), holder.image1View, holder.image1View.getTransitionName());
+//                    view.getContext().startActivity(intent, options.toBundle());
+//                } else {
+                    view.getContext().startActivity(intent);
+//                }
             }
         });
     }

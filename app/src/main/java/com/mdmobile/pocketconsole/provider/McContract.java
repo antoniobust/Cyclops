@@ -6,8 +6,6 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 
-import com.mdmobile.pocketconsole.gson.InstalledApp;
-
 public class McContract {
 
     //Defines the schema
@@ -29,6 +27,7 @@ public class McContract {
     public static final String INSTALLED_APPLICATION_TABLE_NAME = "InstalledApps";
     public static final String MANAGEMENT_SERVER_TABLE_NAME = "ManagementServer";
     public static final String DEPLOYMENT_SERVER_TABLE_NAME = "DeploymentServer";
+    public static final String SCRIPT_TABLE_NAME = "Script";
     //Content type
     private static final String CONTENT_TYPE_BASE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
     private static final String CONTENT_TYPE_ITEM_BASE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
@@ -137,7 +136,7 @@ public class McContract {
         String APPLICATION_DATA_USED = "DataCached";
         String APPLICATION_STATUS = "Status";
     }
-    //***************************************************************
+
 
     interface DeploymentServerColumns {
         //Columns
@@ -159,6 +158,14 @@ public class McContract {
         String MANAGERS_CONNECTED = "ManagersConnectedCount";
         String QUEUE_LENGTH = "QueueLength";
     }
+
+    interface ScriptColumns {
+        String TITLE = "Title";
+        String DESCRIPTION = "Description";
+        String SCRIPT = "Script";
+    }
+
+    //***************************************************************
 
 
     //Represent Device table
@@ -383,5 +390,17 @@ public class McContract {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEPLOYMENT_SERVER_TABLE_NAME).build();
 
+    }
+
+    public static class Script implements ScriptColumns, BaseColumns {
+        //Table Uri
+        public static Uri CONTENT_URI = DB_URI.buildUpon().appendPath(SCRIPT_TABLE_NAME).build();
+        //Helper uri methods
+        public static Uri buildUriWithId(long id){
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+        public static String getScriptIdFromUri(Uri uri){
+            return uri.getLastPathSegment();
+        }
     }
 }

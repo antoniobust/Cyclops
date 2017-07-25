@@ -119,6 +119,7 @@ public class DbData {
         return deviceValues;
     }
 
+    //return content values for installed app
     private static ContentValues getInstalledAppContentValue(InstalledApp app) {
         ContentValues contentValues = new ContentValues();
 
@@ -134,6 +135,7 @@ public class DbData {
         return contentValues;
     }
 
+    //Return Content values Array to bulk insert installed app in DB
     public static ContentValues[] bulkFormatInstalledApp(ArrayList<InstalledApp> installedApps) {
         ArrayList<ContentValues> values = new ArrayList<>(installedApps.size());
         for (int i = 0; i < installedApps.size(); i++) {
@@ -144,7 +146,18 @@ public class DbData {
         return values1;
     }
 
+
     public static ContentValues formatInstalledApp(InstalledApp installedApp) {
         return getInstalledAppContentValue(installedApp);
+    }
+
+    //return content values for installed app
+    public static ContentValues getSavedScriptContentValues(String name, String description, String script) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(McContract.Script.TITLE, name);
+        contentValues.put(McContract.Script.DESCRIPTION, description);
+        contentValues.put(McContract.Script.SCRIPT, script);
+        return contentValues;
     }
 }

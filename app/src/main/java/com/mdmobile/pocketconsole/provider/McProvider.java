@@ -77,6 +77,16 @@ public class McProvider extends ContentProvider {
                         McContract.InstalledApplications.APPLICATION_ID + "=?", new String[]{packageName}, null, null, sortOrder);
                 break;
 
+            case SCRIPTS:
+                c = database.query(McContract.SCRIPT_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+
+            case SCRIPT_ID:
+                String scriptId = McContract.Script.getScriptIdFromUri(uri);
+                c = database.query(McContract.SCRIPT_TABLE_NAME, projection,
+                        McContract.Script._ID + "=?", selectionArgs, null, null, sortOrder);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }
@@ -164,8 +174,8 @@ public class McProvider extends ContentProvider {
                     return null;
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
-
                 return McContract.Device.buildUriWithID(newRowID);
+
             case CUSTOM_ATTRIBUTE:
                 return null;
             case CUSTOM_DATA:
@@ -180,6 +190,13 @@ public class McProvider extends ContentProvider {
                 getContext().getContentResolver().notifyChange(uri, null);
                 return McContract.InstalledApplications.buildUriWithId(newRowID);
 
+            case SCRIPTS:
+                newRowID = database.insert(McContract.SCRIPT_TABLE_NAME, null, contentValues);
+                if (newRowID < 1) {
+                    Logger.log(LOG_TAG, "Impossible to insert script in DB", Log.ERROR);
+                    return null;
+                }
+                return McContract.Script.buildUriWithId(newRowID);
 
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());

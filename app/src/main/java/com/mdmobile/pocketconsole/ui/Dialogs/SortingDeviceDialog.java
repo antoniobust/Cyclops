@@ -17,6 +17,8 @@ import android.widget.RadioGroup;
 
 import com.mdmobile.pocketconsole.R;
 
+import static com.mdmobile.pocketconsole.R.id.container;
+
 /**
  * Dialog displayed to select how to sort devices displayed in main list
  */
@@ -42,9 +44,9 @@ public class SortingDeviceDialog extends DialogFragment implements
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ViewGroup container = (ViewGroup) getActivity().getWindow().getDecorView();
+//        ViewGroup container = (ViewGroup) getActivity().getWindow().getDecorView(;
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.sorting_dialog_fragment, container);
+        View view = inflater.inflate(R.layout.sorting_dialog_fragment, null);
         AlertDialog dialog = new AlertDialog.Builder(getActivity()).setTitle(R.string.sort_devices_menu_label)
                 .setPositiveButton(R.string.dialog_apply_label, this)
                 .setNegativeButton(R.string.dialog_cancel_label, this)

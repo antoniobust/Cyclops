@@ -11,6 +11,7 @@ import android.support.test.runner.AndroidJUnitRunner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
 import com.mdmobile.pocketconsole.fakeData.FakeJSON;
 import com.mdmobile.pocketconsole.gson.RuntimeTypeAdapterFactory;
@@ -33,10 +34,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -69,7 +71,7 @@ public class DbData extends AndroidJUnitRunner {
     public void TestDeviceSelection() {
         createNewDevicesBulkImport();
         Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.Device.CONTENT_URI, null, null, null, null);
-        assertTrue("No device found", c.moveToNext());
+        assertTrue("No device found", c!=null && c.moveToNext());
         int count = 0;
         HashSet<String> IDs = new HashSet<>(c.getCount());
         while (!c.isLast()) {
@@ -78,8 +80,27 @@ public class DbData extends AndroidJUnitRunner {
             c.moveToNext();
         }
         assertTrue("Device count: " + count, count > 1);
-        assertTrue("Some IDs are duplicated"+ IDs.toString(), IDs.size() == count);
+        assertTrue("Some IDs are duplicated" + IDs.toString(), IDs.size() == count);
 
+    }
+
+    @Test
+    public void TestStandardScript() {
+
+        Cursor c = InstrumentationRegistry.getContext().getContentResolver().query(McContract.Script.CONTENT_URI, null, null, null, null);
+        assertTrue("No script found", c != null && c.moveToFirst());
+        String[] scripts = InstrumentationRegistry.getTargetContext().getResources().getStringArray(R.array.default_script_titles);
+        HashSet<String> titleSet = new HashSet<>(Arrays.asList(scripts));
+
+        int initialCount = titleSet.size();
+        assertTrue("Saved scripts do not match the standard ones",initialCount == c.getCount());
+
+        do{
+            titleSet.add(c.getString(c.getColumnIndex(McContract.Script.TITLE)));
+            c.moveToNext();
+        }while(c.isLast());
+
+        assertTrue("Additional scripts found in DB" + titleSet.toString(), titleSet.size() == initialCount);
     }
 
 

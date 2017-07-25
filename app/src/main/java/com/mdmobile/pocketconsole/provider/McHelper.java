@@ -1,9 +1,14 @@
 package com.mdmobile.pocketconsole.provider;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+
+import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.utils.DbData;
 
 import static com.mdmobile.pocketconsole.provider.McContract.COMPLIANCE_ITEM_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME;
@@ -15,15 +20,21 @@ import static com.mdmobile.pocketconsole.provider.McContract.DEPLOYMENT_SERVER_T
 import static com.mdmobile.pocketconsole.provider.McContract.DEVICE_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.INSTALLED_APPLICATION_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.MANAGEMENT_SERVER_TABLE_NAME;
+import static com.mdmobile.pocketconsole.provider.McContract.SCRIPT_TABLE_NAME;
+import static com.mdmobile.pocketconsole.provider.McContract.ScriptColumns.DESCRIPTION;
+import static com.mdmobile.pocketconsole.provider.McContract.ScriptColumns.SCRIPT;
+import static com.mdmobile.pocketconsole.provider.McContract.ScriptColumns.TITLE;
 
 
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 15;
+    private static final int DB_VERSION = 18;
+    private Context mContext;
 
     public McHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        mContext = context.getApplicationContext();
     }
 
     @Override
@@ -155,6 +166,24 @@ public class McHelper extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + McContract.InstalledApplications.DEVICE_ID + ") REFERENCES "
                 + DEVICE_TABLE_NAME + " (" + McContract.Device.COLUMN_DEVICE_ID + ")"
                 + ");");
+
+        //Create Script table
+        db.execSQL("CREATE TABLE " + McContract.SCRIPT_TABLE_NAME + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TITLE + " TEXT NOT NULL, "
+                + DESCRIPTION + " TEXT, "
+                + SCRIPT + " TEXT NOT NULL );");
+
+        //Insert standard script in Script table
+        Resources res = mContext.getResources();
+        String[] titles = res.getStringArray(R.array.default_script_titles);
+        String[] descriptions = res.getStringArray(R.array.default_script_descriptions);
+        String[] scripts = res.getStringArray(R.array.default_script);
+        ContentValues scriptValues;
+        for (int i = 0; i < titles.length; i++) {
+            scriptValues = DbData.getSavedScriptContentValues(titles[i], descriptions[i], scripts[i]);
+            db.insert(McContract.SCRIPT_TABLE_NAME, null, scriptValues);
+        }
     }
 
     @Override
@@ -169,6 +198,7 @@ public class McHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CUSTOM_ATTRIBUTE_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPLIANCE_ITEM_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + INSTALLED_APPLICATION_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SCRIPT_TABLE_NAME + ";");
 
 
         onCreate(sqLiteDatabase);

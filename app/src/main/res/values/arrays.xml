@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="default_script_titles">
+        <item>Reboot</item>
+        <item>Activate connection</item>
+        <item>Log Event</item>
+        <item>Show message</item>
+        <item>Wipe device</item>
+    </string-array>
+    <string-array name="default_script_descriptions">
+        <item>Reboot devices</item>
+        <item>Device connects to MobiControl and activates data connection if not present</item>
+        <item>Create server log record with a custom message</item>
+        <item>Show message to device user</item>
+        <item>Wipe device (only applies to WM5 and later devices)</item>
+    </string-array>
+    <string-array name="default_script">
+        <item>reset -s</item>
+        <item>"%MCAPP%" -connect -connmgr -inet \n connect</item>
+        <item>log -i "ENTER YOUR LOG MESSAGE HERE!"</item>
+        <item>showmessagebox "ENTER YOUR MESSAGE HERE!"</item>
+        <item>reset /w /delay 0</item>
+    </string-array>
+</resources>
+
+
+
+
+

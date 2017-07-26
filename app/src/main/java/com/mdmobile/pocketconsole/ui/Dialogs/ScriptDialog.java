@@ -102,6 +102,11 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
     public void onClick(DialogInterface dialogInterface, int i) {
         if (i == DialogInterface.BUTTON_POSITIVE) {
             String script = editText.getText().toString();
+            if (script.startsWith("/**")){
+                final int finalIndex = script.indexOf("**/");
+                final String comment = script.substring(0,finalIndex+5);
+                script = script.substring(comment.length(), script.length());
+            }
             ApiRequestManager.getInstance(getContext()).requestAction(deviceID, ApiActions.SEND_SCRIPT, script, null);
         } else {
             dialogInterface.dismiss();
@@ -154,9 +159,10 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
             if (editText.getText().length() > 0) {
                 editText.setText("");
             }
-            editText.setText(description.concat("\n\n").concat(script));
+            editText.setText(commentOutDescription(description).concat("\n\n").concat(script));
         }
     }
+
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
@@ -164,6 +170,11 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
             editText.setText("");
         }
     }
+
+    private String commentOutDescription(String description){
+        return  "/**\n".concat(description).concat("\n**/");
+    }
+
 }
 
 

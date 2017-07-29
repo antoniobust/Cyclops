@@ -15,7 +15,7 @@
         <item>Wipe device (only applies to WM5 and later devices)</item>
     </string-array>
     <string-array name="default_script">
-        <item>reset -s</item>
+        <item>reset /s</item>
         <item>"%MCAPP%" -connect -connmgr -inet \n connect</item>
         <item>log -i "ENTER YOUR LOG MESSAGE HERE!"</item>
         <item>showmessagebox "ENTER YOUR MESSAGE HERE!"</item>

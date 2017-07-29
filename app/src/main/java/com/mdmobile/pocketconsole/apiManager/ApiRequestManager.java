@@ -175,7 +175,7 @@ public class ApiRequestManager {
     }
 
     public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
-                              @Nullable String message, @Nullable String phoneNumber) {
+                              @Nullable final String message, @Nullable String phoneNumber) {
         Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModels.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
@@ -196,8 +196,8 @@ public class ApiRequestManager {
 
 
         requestsQueue.add(actionRequest);
-        Logger.log(LOG_TAG, "Request( " + action + ") requested to device: " + deviceID, Log.VERBOSE);
-        Toast.makeText(mContext, action + " request sent",Toast.LENGTH_SHORT).show();
+        Logger.log(LOG_TAG, "RRequest( " + action + " -> " + message + ") requested to device: " + deviceID, Log.VERBOSE);
+        Toast.makeText(mContext, action + " request sent", Toast.LENGTH_SHORT).show();
 
 
     }

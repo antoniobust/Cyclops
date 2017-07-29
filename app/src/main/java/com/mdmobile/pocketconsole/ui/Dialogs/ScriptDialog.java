@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -84,13 +85,14 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
 //        alertDialog = (AlertDialog) getDialog();
 //        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
+        //Populate spinner with saved scripts -> pass null cursor for now while loaders load data from DB
         spinnerAdapter = new SimpleCursorAdapter(getContext().getApplicationContext(), R.layout.spinner_item,
                 null, new String[]{McContract.Script.TITLE}, new int[]{R.id.spinner_item}, 0);
 
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
         spinner.setAdapter(spinnerAdapter);
-
         spinner.setOnItemSelectedListener(this);
+
 
         getLoaderManager().initLoader(100, null, this);
 
@@ -102,9 +104,9 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
     public void onClick(DialogInterface dialogInterface, int i) {
         if (i == DialogInterface.BUTTON_POSITIVE) {
             String script = editText.getText().toString();
-            if (script.startsWith("/**")){
+            if (script.startsWith("/**")) {
                 final int finalIndex = script.indexOf("**/");
-                final String comment = script.substring(0,finalIndex+5);
+                final String comment = script.substring(0, finalIndex + 5);
                 script = script.substring(comment.length(), script.length());
             }
             ApiRequestManager.getInstance(getContext()).requestAction(deviceID, ApiActions.SEND_SCRIPT, script, null);
@@ -134,14 +136,34 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        //Changing projection change references in On Finished
+        String[] projection = {McContract.Script._ID, McContract.Script.TITLE, McContract.Script.DESCRIPTION, McContract.Script.SCRIPT};
         return new CursorLoader(getContext().getApplicationContext(),
-                McContract.Script.CONTENT_URI, null, null, null, McContract.Script.TITLE + " ASC ");
+                McContract.Script.CONTENT_URI, projection, null, null, McContract.Script.TITLE + " ASC ");
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data.getCount() > 0)
-            spinnerAdapter.swapCursor(data);
+        if (data == null) {
+            //TODO:inflate empty view
+            return;
+        }
+        //Add column to give the first empty choice
+        Object[] addObject = new Object[]{-1, getString(R.string.spinner_hint_label), null, null};
+        MatrixCursor matrixCursor = new MatrixCursor(data.getColumnNames());
+        matrixCursor.addRow(addObject);
+        if (data.moveToFirst()) {
+            do {
+                addObject[0] = data.getInt(0);
+                addObject[1] = data.getString(1);
+                addObject[2] = data.getString(2);
+                addObject[3] = data.getString(3);
+                matrixCursor.addRow(addObject);
+                data.moveToNext();
+            } while (!data.isLast());
+        }
+        //Pass new cursor to adapter
+        spinnerAdapter.swapCursor(matrixCursor);
     }
 
     @Override
@@ -153,13 +175,15 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         Cursor mCursor = spinnerAdapter.getCursor();
         if (mCursor.moveToPosition(position)) {
-            spinner.setSelection(position,true);
+            spinner.setSelection(position, true);
             String description = mCursor.getString(mCursor.getColumnIndex(McContract.Script.DESCRIPTION));
             String script = mCursor.getString(mCursor.getColumnIndex(McContract.Script.SCRIPT));
             if (editText.getText().length() > 0) {
                 editText.setText("");
             }
-            editText.setText(commentOutDescription(description).concat("\n\n").concat(script));
+            if (script != null && script.length() > 0) {
+                editText.setText(commentOutDescription(description).concat("\n\n").concat(script));
+            }
         }
     }
 
@@ -171,8 +195,8 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
         }
     }
 
-    private String commentOutDescription(String description){
-        return  "/**\n".concat(description).concat("\n**/");
+    private String commentOutDescription(String description) {
+        return "/**\n".concat(description).concat("\n**/");
     }
 
 }

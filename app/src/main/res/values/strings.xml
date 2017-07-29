@@ -64,6 +64,7 @@
     <string name="dialog_send_button_label">Send</string>
     <string name="message_dialog_description">Requires the presence of MobiControl agent</string>
     <string name="message_edit_text_hint">Type the message here…</string>
+    <string name="spinner_hint_label">Select a script...</string>
 
 
     <string-array name="sorting_options_radio_labels">

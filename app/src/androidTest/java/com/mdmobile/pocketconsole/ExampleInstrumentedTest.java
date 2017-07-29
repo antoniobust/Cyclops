@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
-import com.mdmobile.pocketconsole.apiManager.api.ApiModels;
+import com.mdmobile.pocketconsole.apiManager.api.ApiModel;
 import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
 import com.mdmobile.pocketconsole.dataTypes.DeviceAttributes;
 import com.mdmobile.pocketconsole.dataTypes.ParameterKeys;
@@ -51,13 +51,13 @@ public class ExampleInstrumentedTest {
 
 
         String apiReq =
-                ApiModels.DevicesApi.Builder(authority).skip(20).take(10).order(order).filter(filter).build();
+                ApiModel.DevicesApi.Builder(authority).skip(20).take(10).order(order).filter(filter).build();
         assertTrue("\nUrl created does not match with the test one: " + apiReq, apiReq.equalsIgnoreCase(testReq));
 
         //test api with user filter
         testReq = "https://uk.mobicontrolcloud.com/MobiControl/api/devices?userFilter=UserName:acalabrese";
         Pair<String, String> userFilter = new Pair<>(ParameterKeys.UserName.toString(), "acalabrese");
-        apiReq = ApiModels.DevicesApi.Builder(authority).addUserFilter(userFilter).build();
+        apiReq = ApiModel.DevicesApi.Builder(authority).addUserFilter(userFilter).build();
 
         assertTrue("Url created does not match with the test one: " + apiReq, apiReq.equals(testReq));
     }
@@ -67,7 +67,7 @@ public class ExampleInstrumentedTest {
         String testReq =
                 "https://uk.mobicontrolcloud.com/MobiControl/api/devices/AndroidPlus0001";
 
-        String apiReq = ApiModels.DevicesApi.Builder(authority, "AndroidPlus0001").build();
+        String apiReq = ApiModel.DevicesApi.Builder(authority, "AndroidPlus0001").build();
         String msg = "\n" + this.getClass().getSimpleName() + "\nUrl created does not match with the test one: ";
         assertTrue(msg + apiReq, apiReq.equals(testReq));
     }
@@ -80,7 +80,7 @@ public class ExampleInstrumentedTest {
                 "&builtInDataType=SuccessCalls&skip=10&take=50";
 
 
-        String apiReq = ApiModels.DevicesApi.Builder(authority)
+        String apiReq = ApiModel.DevicesApi.Builder(authority)
                 .getCollectedData("2015-12-19T16:39:57-02:00","2015-12-19T16:39:57-02:00", ComplexDataType.BuiltInDataType.SuccessCalls,null)
                 .skip(10).take(50).build();
 
@@ -102,7 +102,7 @@ public class ExampleInstrumentedTest {
         String msg = "\n" + this.getClass().getSimpleName() + "\nUrl created does not match with the test one: ";
 
 
-        String apiReq = ApiModels.DevicesApi.Builder(authority, devId)
+        String apiReq = ApiModel.DevicesApi.Builder(authority, devId)
                 .getCollectedData(startDate, endDate, null, null).build();
 
 

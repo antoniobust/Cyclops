@@ -95,9 +95,10 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
     //********************* LOADERS CALLBACKS ****************************************
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        //Changing projection elements remember to change GETS method in the adapter
+        //Changing projection elements remember to change data access methods in the adapter
         final String projection[] = {McContract.InstalledApplications._ID, McContract.InstalledApplications.APPLICATION_NAME,
-                McContract.InstalledApplications.APPLICATION_STATUS, McContract.InstalledApplications.APPLICATION_ID};
+                McContract.InstalledApplications.APPLICATION_STATUS, McContract.InstalledApplications.APPLICATION_ID,
+                McContract.InstalledApplications.DEVICE_ID};
         final String selection = McContract.InstalledApplications.DEVICE_ID.concat(" = ?");
         final String[] selectionArgs = {deviceId};
         Uri uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);

@@ -18,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.apiManager.api.ApiModels;
+import com.mdmobile.pocketconsole.apiManager.api.ApiModel;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.gson.Action;
 import com.mdmobile.pocketconsole.gson.Token;
@@ -131,7 +131,7 @@ public class ApiRequestManager {
 
 //        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
-        String api = ApiModels.DevicesApi.Builder(apiAuthority).build();
+        String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(mContext, Request.Method.GET, api,
                 new Response.Listener<JSONArray>() {
@@ -152,7 +152,7 @@ public class ApiRequestManager {
     public void getDeviceInstalledApps(@NonNull final String devID) {
         Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
-        String api = ApiModels.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
+        String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
         DeviceInstalledAppRequest installedAppRequest = new DeviceInstalledAppRequest(Request.Method.GET,
                 api, new Response.Listener<String>() {
@@ -170,15 +170,16 @@ public class ApiRequestManager {
         requestsQueue.add(installedAppRequest);
     }
 
-    public void uninstallApplication(@NonNull String devID) {
-
+    public void uninstallApplication(@NonNull String devID, @NonNull String packageName) {
+        String script = "uninstall \"".concat(packageName).concat("\"");
+        requestAction(devID, ApiActions.SEND_SCRIPT, script, null);
     }
 
     public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
         Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
         String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
-        String api = ApiModels.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
+        String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 
         String jsonPayload = new Gson().toJson(new Action(action, message, phoneNumber));
 
@@ -196,7 +197,7 @@ public class ApiRequestManager {
 
 
         requestsQueue.add(actionRequest);
-        Logger.log(LOG_TAG, "RRequest( " + action + " -> " + message + ") requested to device: " + deviceID, Log.VERBOSE);
+        Logger.log(LOG_TAG, "Request( " + action + " -> " + message + ") requested to device: " + deviceID, Log.VERBOSE);
         Toast.makeText(mContext, action + " request sent", Toast.LENGTH_SHORT).show();
 
 

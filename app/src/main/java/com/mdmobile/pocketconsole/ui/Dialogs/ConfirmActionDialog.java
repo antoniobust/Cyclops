@@ -16,6 +16,8 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
+import static android.R.attr.action;
+
 /**
  * Alert dialog shown to uninstall an application
  */
@@ -34,14 +36,19 @@ public class ConfirmActionDialog extends DialogFragment implements
     private boolean doNotShowEnabled;
     private int iconResource;
     private CheckBox checkBox;
+    private static ConfirmAction actionCallback;
 
     public ConfirmActionDialog() {
 
     }
+    public interface ConfirmAction{
+        void actionConfirmed();
+        void actionCanceled();
+    }
 
     public static ConfirmActionDialog newInstance(@NonNull String dialogTitle, @NonNull String message,
                                                   int iconResource, @Nullable String positiveButtonLabel,
-                                                  @Nullable String negativeButtonLabel, boolean doNotShowOption) {
+                                                  @Nullable String negativeButtonLabel, boolean doNotShowOption, @NonNull ConfirmAction callback) {
         final ConfirmActionDialog dialog = new ConfirmActionDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE_ARG_KEY, dialogTitle);
@@ -51,6 +58,7 @@ public class ConfirmActionDialog extends DialogFragment implements
         args.putString(NEGATIVE_BUTTON_LABEL_ARG_KEY, negativeButtonLabel);
         args.putBoolean(DO_NOT_SHOW_ARG_KEY, doNotShowOption);
         dialog.setArguments(args);
+        actionCallback = callback;
         return dialog;
     }
 
@@ -129,11 +137,12 @@ public class ConfirmActionDialog extends DialogFragment implements
                         .putBoolean(uninstallAppDialogPreference, true).apply();
             }
 
-            //Send uninstall app request
-            ApiRequestManager.getInstance(getContext());
-
+            //Send confirmation back to the creator
+            actionCallback.actionConfirmed();
         } else {
             dialogInterface.dismiss();
+            //Send action canceled back to creator
+            actionCallback.actionCanceled();
         }
     }
 

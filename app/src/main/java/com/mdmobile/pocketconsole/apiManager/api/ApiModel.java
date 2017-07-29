@@ -14,7 +14,7 @@ import java.util.Arrays;
  * ApiModel contains the difference kind of API available represented as classes
  */
 
-public class ApiModels {
+public class ApiModel {
 
     private static final String MobiControl = "MobiControl";
 
@@ -133,10 +133,10 @@ public class ApiModels {
                 return SelectDevice.this;
             }
 
-
             public String build() {
                 return Uri.decode(currentApi.build().toString());
             }
+
         }
     }
 

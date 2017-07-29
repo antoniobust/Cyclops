@@ -2,7 +2,7 @@ package com.mdmobile.pocketconsole.ApiTest;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.mdmobile.pocketconsole.apiManager.api.ApiModels;
+import com.mdmobile.pocketconsole.apiManager.api.ApiModel;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,18 +29,18 @@ public class ApiBuilder {
     @Test
     public void devicesApis() {
         //All devices api
-        String api = ApiModels.DevicesApi.Builder(serverAuthority).build();
+        String api = ApiModel.DevicesApi.Builder(serverAuthority).build();
         String expectedApi = serverAuthority.concat("/MobiControl/api/devices");
         assertTrue("URL returned: " + api, api.equals(expectedApi));
 
         //device installed Apps API
-        api = ApiModels.DevicesApi.Builder(serverAuthority, devID).getInstalledApplications().build();
+        api = ApiModel.DevicesApi.Builder(serverAuthority, devID).getInstalledApplications().build();
         expectedApi = serverAuthority.concat("/MobiControl/api/devices/").concat(devID).concat("/installedApplications");
         assertTrue("URL returned: " + api + "\n URL expected: " + expectedApi, api.equals(expectedApi));
 
 
         //CheckIn action api
-        api = ApiModels.DevicesApi.Builder(serverAuthority,devID).actionRequest().build();
+        api = ApiModel.DevicesApi.Builder(serverAuthority,devID).actionRequest().build();
         expectedApi = serverAuthority.concat("/MobiControl/api/devices/").concat(devID).concat("/actions");
         assertTrue("URL returned: " + api + "\n URL expected: " + expectedApi, api.equals(expectedApi));
 

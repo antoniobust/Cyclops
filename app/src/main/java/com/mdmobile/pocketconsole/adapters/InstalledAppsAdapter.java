@@ -11,15 +11,17 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.ui.Dialogs.ConfirmActionDialog;
 import com.mdmobile.pocketconsole.ui.ViewHolder.InstalledAppViewHolder;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 
 
-public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnMenuItemClickListener {
+public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnMenuItemClickListener, ConfirmActionDialog.ConfirmAction {
 
     private Context mContext;
-    private String selected;
+    private String packageName;
+    private String devId;
 
     public InstalledAppsAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -36,7 +38,7 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
     }
 
     @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
 
         final InstalledAppViewHolder viewHolder = (InstalledAppViewHolder) view.getTag();
 
@@ -47,7 +49,9 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                selected = viewHolder.appIdView.getText().toString();
+                //Store info required in case user press uninstall app
+                packageName = viewHolder.appIdView.getText().toString();
+                devId = cursor.getString(4);
                 PopupMenu menu = new PopupMenu(view.getContext(), view, Gravity.CENTER_HORIZONTAL);
                 menu.inflate(R.menu.uninstall_app_context_menu);
                 menu.setOnMenuItemClickListener(InstalledAppsAdapter.this);
@@ -66,13 +70,23 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
                     .getBoolean(mContext.getString(R.string.uninstall_app_dialog_disabled_pref), true)) {
                 ConfirmActionDialog.newInstance(
                         mContext.getString(R.string.uninstall_app_dialog_title),
-                        String.format(mContext.getString(R.string.uninstall_app_dialog_description),selected),
+                        String.format(mContext.getString(R.string.uninstall_app_dialog_description), packageName),
                         R.drawable.ic_delete_forever, mContext.getString(R.string.uninstall_label),
-                        mContext.getString(R.string.dialog_cancel_label), true)
+                        mContext.getString(R.string.dialog_cancel_label), true, this)
                         .show(((DeviceDetailsActivity) mContext).getSupportFragmentManager(), null);
             }
             return true;
         }
         return false;
+    }
+
+    //Confirmation dialog callback
+    @Override
+    public void actionConfirmed() {
+        ApiRequestManager.getInstance(mContext).uninstallApplication(devId, packageName);
+    }
+
+    @Override
+    public void actionCanceled() {
     }
 }

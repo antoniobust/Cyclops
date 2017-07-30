@@ -14,14 +14,16 @@ import com.mdmobile.pocketconsole.R;
 
 public class ImageTextImageViewHolder extends RecyclerView.ViewHolder {
 
-    public final ImageView image1View, image2View;
-    public final TextView descriptionView;
+    public final ImageView deviceIconView, optionIconView;
+    public final TextView deviceNameView;
+    public final View coloredMarkerView;
 
     public ImageTextImageViewHolder(View view) {
         super(view);
-        image1View = (ImageView) view.findViewById(R.id.list_item_icon1);
-        image2View = (ImageView) view.findViewById(R.id.list_item_icon2);
-        descriptionView = (TextView) view.findViewById(R.id.list_item_description);
+        coloredMarkerView = view.findViewById(R.id.list_item_colored_marker);
+        deviceIconView = (ImageView) view.findViewById(R.id.list_item_device_icon);
+        optionIconView = (ImageView) view.findViewById(R.id.list_item_menu_icon);
+        deviceNameView = (TextView) view.findViewById(R.id.list_item_device_name);
     }
 
 

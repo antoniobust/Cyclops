@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.ui.main;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -48,6 +49,11 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Apply style to fragment
+        final Context contextThemeWrapper = new android.view.ContextThemeWrapper(getActivity(), R.style.AppTheme_MainActivity_Fragment);
+        //Clone inflater using the contextTHemeWrapper
+        inflater = inflater.cloneInContext(contextThemeWrapper);
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
@@ -150,8 +156,8 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
 
         //Style chart
         PieDataSet pieDataSet = new PieDataSet(pieEntries, null);
-        pieDataSet.setColors(new int[]{R.color.androidColor, R.color.iosColor, R.color.windowsDesktopColor,
-                        R.color.windowsMobileColor, R.color.printerColor},
+        pieDataSet.setColors(new int[]{R.color.androidColor, R.color.iosSpaceGrey, R.color.windowsColor,
+                        R.color.windowsColor, R.color.printerColor},
                 getContext());
 
         pieDataSet.setSelectionShift(12.0f);

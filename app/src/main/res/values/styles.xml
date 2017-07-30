@@ -89,5 +89,11 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    <!--Fragments in main activity style-->
+    <style name="AppTheme.MainActivity.Fragment" parent="AppTheme">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 
 </resources>

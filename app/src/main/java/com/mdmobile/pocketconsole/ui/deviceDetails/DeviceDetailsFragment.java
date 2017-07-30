@@ -220,7 +220,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                 break;
             case R.id.device_details_apps_card:
 
-
                 InstalledAppsFragment fragment = InstalledAppsFragment.newInstance();
                 Bundle args = new Bundle();
                 args.putString(DEVICE_ID_EXTRA_KEY, deviceId);

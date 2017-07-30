@@ -76,7 +76,6 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-
 //        filtersView = (TextView) getActivity().findViewById(R.id.device_filters_view);
 //        filtersView.setVisibility(View.VISIBLE);
 
@@ -89,6 +88,11 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Apply style to fragment
+        final Context contextThemeWrapper = new android.view.ContextThemeWrapper(getActivity(), R.style.AppTheme_MainActivity_Fragment);
+        //Clone inflater using the contextTHemeWrapper
+        inflater = inflater.cloneInContext(contextThemeWrapper);
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_devices, container, false);
 

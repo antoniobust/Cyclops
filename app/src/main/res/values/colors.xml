@@ -4,10 +4,9 @@
     <color name="colorPrimaryDark">#37474F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="darkGreen">@android:color/holo_green_dark</color>
-    <color name="androidColor">#4CAF50</color>
-    <color name="windowsDesktopColor">#03A9F4</color>
-    <color name="iosColor">#BDBDBD</color>
-    <color name="windowsMobileColor">#388E3C</color>
+    <color name="androidColor">#96c22d</color>
+    <color name="iosSpaceGrey">#A7ADBA</color>
+    <color name="windowsColor">#0b61cd</color>
     <color name="printerColor">#616161</color>
 
 

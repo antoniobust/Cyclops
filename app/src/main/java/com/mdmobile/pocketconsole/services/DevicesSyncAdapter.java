@@ -29,15 +29,10 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     // Update schedule is 2h by default
     private static int UPDATE_SCHEDULE = 60 * 60;
     private static int SYNC_FLEXTIME = UPDATE_SCHEDULE / 3;
-    private ContentResolver mContentProvider;
-    private Context mContext;
 
 
-    public DevicesSyncAdapter(Context context, boolean autoInitialize) {
+    DevicesSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-
-        mContentProvider = context.getContentResolver();
-        mContext = context;
     }
 
     public static void initializeSync(Account account, Context mContext) {

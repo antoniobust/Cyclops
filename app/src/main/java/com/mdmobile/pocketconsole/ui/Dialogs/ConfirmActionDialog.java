@@ -2,7 +2,6 @@ package com.mdmobile.pocketconsole.ui.Dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,10 +12,7 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
-
-import static android.R.attr.action;
 
 /**
  * Alert dialog shown to uninstall an application
@@ -31,19 +27,14 @@ public class ConfirmActionDialog extends DialogFragment implements
     private final static String POSITIVE_BUTTON_LABEL_ARG_KEY = "positiveButtonArgKey";
     private final static String NEGATIVE_BUTTON_LABEL_ARG_KEY = "negativeButtonArgKey";
     private final static String ICON_RESOURCE_ID = "iconResourceID";
-    boolean doNotShow = false;
+    private static ConfirmAction actionCallback;
     private String title, description, positiveButtonLabel, negativeButtonLabel;
     private boolean doNotShowEnabled;
     private int iconResource;
     private CheckBox checkBox;
-    private static ConfirmAction actionCallback;
 
     public ConfirmActionDialog() {
 
-    }
-    public interface ConfirmAction{
-        void actionConfirmed();
-        void actionCanceled();
     }
 
     public static ConfirmActionDialog newInstance(@NonNull String dialogTitle, @NonNull String message,
@@ -61,7 +52,6 @@ public class ConfirmActionDialog extends DialogFragment implements
         actionCallback = callback;
         return dialog;
     }
-
 
     @NonNull
     @Override
@@ -81,14 +71,7 @@ public class ConfirmActionDialog extends DialogFragment implements
                 .setNegativeButton(negativeButtonLabel, this)
                 .setTitle(title)
                 .setMessage(description)
-                .setMultiChoiceItems(new CharSequence[]{getString(R.string.do_not_ask_again_label)}, new boolean[]{false}, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int selectedIndex, boolean checked) {
-                        if (selectedIndex == 0) {
-                            doNotShow = checked;
-                        }
-                    }
-                }).create();
+                .setMultiChoiceItems(new CharSequence[]{getString(R.string.do_not_ask_again_label)}, new boolean[]{false}, null).create();
 
         if (iconResource != -1) {
             dialogBuilder.setIcon(iconResource);
@@ -128,17 +111,8 @@ public class ConfirmActionDialog extends DialogFragment implements
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         if (i == Dialog.BUTTON_POSITIVE) {
-            //Set show dialog preference
-            if (doNotShow) {
-                String preferenceKey = getContext().getString(R.string.shared_preference);
-                String uninstallAppDialogPreference = getContext().getString(R.string.uninstall_app_dialog_disabled_pref);
-                getContext().getApplicationContext()
-                        .getSharedPreferences(preferenceKey, Context.MODE_PRIVATE).edit()
-                        .putBoolean(uninstallAppDialogPreference, true).apply();
-            }
-
             //Send confirmation back to the creator
-            actionCallback.actionConfirmed();
+            actionCallback.actionConfirmed(checkBox.isChecked());
         } else {
             dialogInterface.dismiss();
             //Send action canceled back to creator
@@ -146,5 +120,9 @@ public class ConfirmActionDialog extends DialogFragment implements
         }
     }
 
+    public interface ConfirmAction {
+        void actionConfirmed(boolean doNotShowAgain);
 
+        void actionCanceled();
+    }
 }

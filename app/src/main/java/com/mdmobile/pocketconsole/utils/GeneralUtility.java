@@ -4,6 +4,8 @@ package com.mdmobile.pocketconsole.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
+import com.mdmobile.pocketconsole.R;
+
 import java.util.HashMap;
 
 public class GeneralUtility {
@@ -64,4 +66,12 @@ public class GeneralUtility {
         return (int) (dp * scale + 0.5f);
     }
 
+    public static void setSharedPreference(Context mContext, String prefKey, boolean prefValue ){
+        String pocketConsolePref = mContext.getString(R.string.shared_preference);
+        mContext
+                .getSharedPreferences(pocketConsolePref, Context.MODE_PRIVATE).edit()
+                .putBoolean(prefKey, prefValue).apply();
+    }
+
 }
+

@@ -15,6 +15,7 @@ import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.ui.Dialogs.ConfirmActionDialog;
 import com.mdmobile.pocketconsole.ui.ViewHolder.InstalledAppViewHolder;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
+import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
 
 public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnMenuItemClickListener, ConfirmActionDialog.ConfirmAction {
@@ -65,9 +66,11 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.uninstall_app_action) {
-            //Check for alert dialog showing preference
+            //Check for alert dialog showing preference - Show confirmation or execute action
             if (mContext.getSharedPreferences(mContext.getString(R.string.shared_preference), Context.MODE_PRIVATE)
-                    .getBoolean(mContext.getString(R.string.uninstall_app_dialog_disabled_pref), true)) {
+                    .getBoolean(mContext.getString(R.string.uninstall_app_confirm_disabled_pref), false)) {
+                actionConfirmed(true);
+            } else {
                 ConfirmActionDialog.newInstance(
                         mContext.getString(R.string.uninstall_app_dialog_title),
                         String.format(mContext.getString(R.string.uninstall_app_dialog_description), packageName),
@@ -82,8 +85,13 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
 
     //Confirmation dialog callback
     @Override
-    public void actionConfirmed() {
+    public void actionConfirmed(boolean doNotShowAgain) {
         ApiRequestManager.getInstance(mContext).uninstallApplication(devId, packageName);
+        //Set show dialog preference
+        if (doNotShowAgain) {
+            String prefKey = mContext.getString(R.string.uninstall_app_confirm_disabled_pref);
+            GeneralUtility.setSharedPreference(mContext, prefKey, true);
+        }
     }
 
     @Override

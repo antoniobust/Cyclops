@@ -26,8 +26,8 @@ import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
  */
 
 public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
-    // Update schedule is 3h by default
-    private static int UPDATE_SCHEDULE = 60 * 180;
+    // Update schedule is 2h by default
+    private static int UPDATE_SCHEDULE = 60 * 60;
     private static int SYNC_FLEXTIME = UPDATE_SCHEDULE / 3;
     private ContentResolver mContentProvider;
     private Context mContext;

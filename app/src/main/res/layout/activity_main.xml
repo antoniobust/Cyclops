@@ -54,29 +54,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="12dp"
             android:layout_weight="1"
-            android:animateLayoutChanges="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <FrameLayout
-                    android:id="@+id/main_activity_fragment_sub_container"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:animateLayoutChanges="true"/>
-                <!--Only used in tablet Mode so we can display selected device details-->
-                <FrameLayout
-                    android:id="@+id/main_activity_details_fragment_container"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:visibility="gone"
-                    tools:visibility="visible"/>
-            </LinearLayout>
-        </FrameLayout>
+            android:animateLayoutChanges="true" />
 
 
         <!--Bottom bar for platform filters-->

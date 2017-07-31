@@ -43,19 +43,19 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_devices:
-                    ft.replace(R.id.main_activity_fragment_sub_container, DevicesFragment.newInstance());
+                    ft.replace(R.id.main_activity_fragment_container, DevicesFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_dashboard:
-                    ft.replace(R.id.main_activity_fragment_sub_container, DashboardFragment.newInstance());
+                    ft.replace(R.id.main_activity_fragment_container, DashboardFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_server:
-                    ft.replace(R.id.main_activity_fragment_sub_container, ServerFragment.newInstance());
+                    ft.replace(R.id.main_activity_fragment_container, ServerFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_users:
-                    ft.replace(R.id.main_activity_fragment_sub_container, UsersFragment.newInstance());
+                    ft.replace(R.id.main_activity_fragment_container, UsersFragment.newInstance());
                     ft.commit();
                     return true;
             }
@@ -184,10 +184,10 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         //Look if a fragment is already visible then replace it or resize device list and show details
         Fragment detailsFrag = fm.findFragmentByTag(getString(R.string.details_fragment_tag));
         if (detailsFrag != null && detailsFrag.isAdded() && detailsFrag.isVisible()) {
-            fragmentTransaction.replace(R.id.main_activity_details_fragment_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
+            fragmentTransaction.replace(R.id.main_activity_details_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
         } else {
 
-            FrameLayout detailsContainer = (FrameLayout) findViewById(R.id.main_activity_details_fragment_container);
+            FrameLayout detailsContainer = (FrameLayout) findViewById(R.id.main_activity_details_container);
             detailsContainer.setVisibility(View.VISIBLE);
 
             fragmentTransaction.add(detailsContainer.getId(), DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();

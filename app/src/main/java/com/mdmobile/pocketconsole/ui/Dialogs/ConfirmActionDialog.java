@@ -77,7 +77,7 @@ public class ConfirmActionDialog extends DialogFragment implements
             dialogBuilder.setIcon(iconResource);
         }
         if (doNotShowEnabled) {
-            int padding = GeneralUtility.dpTopx(getContext(), 24);
+            int padding = GeneralUtility.dpToPx(getContext(), 24);
             //Create container with check box
             FrameLayout viewContainer = new FrameLayout(getContext());
             FrameLayout.LayoutParams frameLayoutParam = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

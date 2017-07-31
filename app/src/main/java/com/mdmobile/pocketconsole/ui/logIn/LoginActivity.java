@@ -23,6 +23,7 @@ import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
+import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.UsersUtility;
 
@@ -36,6 +37,7 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.PASSWORD_
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.REFRESH_AUTH_TOKEN_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.USER_NAME_KEY;
+import static com.mdmobile.pocketconsole.utils.GeneralUtility.getLayoutMode;
 
 public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack {
 
@@ -68,6 +70,9 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //Set constant tablet Mode as first thing
+        MainActivity.TABLET_MODE = GeneralUtility.getLayoutMode(getApplicationContext());
 
         //Instantiate views
         viewPager = (ViewPager) findViewById(R.id.login_view_pager);

@@ -3,36 +3,37 @@ package com.mdmobile.pocketconsole.ui.main;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.ChangeBounds;
-import android.transition.Explode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
-import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
-import com.mdmobile.pocketconsole.services.RefreshDataService;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
+import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 
-import static android.R.attr.data;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 
 public class MainActivity extends AppCompatActivity implements DevicesListAdapter.DeviceSelected {
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
+    //Define a flag if we are in tablet layout or not
+    public static boolean TABLET_MODE;
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -42,19 +43,19 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_devices:
-                    ft.replace(R.id.main_activity_fragment_container, DevicesFragment.newInstance());
+                    ft.replace(R.id.main_activity_fragment_sub_container, DevicesFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_dashboard:
-                    ft.replace(R.id.main_activity_fragment_container, DashboardFragment.newInstance());
+                    ft.replace(R.id.main_activity_fragment_sub_container, DashboardFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_server:
-                    ft.replace(R.id.main_activity_fragment_container, ServerFragment.newInstance());
+                    ft.replace(R.id.main_activity_fragment_sub_container, ServerFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_users:
-                    ft.replace(R.id.main_activity_fragment_container, UsersFragment.newInstance());
+                    ft.replace(R.id.main_activity_fragment_sub_container, UsersFragment.newInstance());
                     ft.commit();
                     return true;
             }
@@ -62,11 +63,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         }
 
     };
-
     private AccountManager accountManager;
-
-    //Device selected callback
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     }
 
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -140,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     private void syncDevicesNow() {
         Logger.log(LOG_TAG, "Immediate device syc manually requested... ", Log.VERBOSE);
         Account account = accountManager.getAccountsByType(getString(R.string.account_type))[0];
-        DevicesSyncAdapter.syncImmediately(getApplicationContext(),account);
+        DevicesSyncAdapter.syncImmediately(getApplicationContext(), account);
     }
 
     private void refreshToken() {
@@ -172,14 +168,37 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     //On device selected open details view
     @Override
     public void onDeviceSelected(String devId, String devName) {
+
+        if (TABLET_MODE) {
+            showDetailsFragment(devId, devName);
+        } else {
+            startDetailsActivity(devId, devName);
+        }
+    }
+
+
+    private void showDetailsFragment(String devId, String devName) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+
+        //Look if a fragment is already visible then replace it or resize device list and show details
+        Fragment detailsFrag = fm.findFragmentByTag(getString(R.string.details_fragment_tag));
+        if (detailsFrag != null && detailsFrag.isAdded() && detailsFrag.isVisible()) {
+            fragmentTransaction.replace(R.id.main_activity_details_fragment_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
+        } else {
+
+            FrameLayout detailsContainer = (FrameLayout) findViewById(R.id.main_activity_details_fragment_container);
+            detailsContainer.setVisibility(View.VISIBLE);
+
+            fragmentTransaction.add(detailsContainer.getId(), DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
+
+        }
+    }
+
+    private void startDetailsActivity(String devId, String devName) {
         Intent intent = new Intent(this, DeviceDetailsActivity.class);
         intent.putExtra(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY, devName);
         intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);
-
         startActivity(intent);
-
-
-
-
     }
 }

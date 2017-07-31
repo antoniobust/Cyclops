@@ -12,12 +12,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.mdmobile.pocketconsole.R;
-
-import static com.mdmobile.pocketconsole.R.id.container;
 
 /**
  * Dialog displayed to select how to sort devices displayed in main list

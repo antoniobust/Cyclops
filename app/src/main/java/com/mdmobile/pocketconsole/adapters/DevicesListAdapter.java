@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -41,13 +42,18 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
     private static String LOG_TAG = DevicesListAdapter.class.getSimpleName();
     private Cursor data;
     private String selected;
+    private DeviceSelected mSelectionCallback;
 
-    public DevicesListAdapter(@Nullable Cursor cursor) {
+    public DevicesListAdapter(@Nullable Cursor cursor, DeviceSelected callback) {
         if (cursor != null) {
             setHasStableIds(true);
             data = cursor;
             swapCursor(cursor);
         }
+        if(callback != null) {
+            mSelectionCallback = callback;
+        }
+
     }
 
     @Override
@@ -94,12 +100,12 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
                 holder.deviceIconView.setImageResource(R.drawable.ic_phone_android);
         }
 
-        //Set transition name for shared element transition
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String devID = data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
-            holder.deviceIconView.setTransitionName("icon_" + devID);
-            holder.deviceNameView.setTransitionName("name_" + devID);
-        }
+//        //Set transition name for shared element transition
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            String devID = data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
+//            holder.deviceIconView.setTransitionName("icon_" + devID);
+//            holder.deviceNameView.setTransitionName("name_" + devID);
+//        }
 
         //Set click listener
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -108,19 +114,20 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
                 data.moveToPosition(holder.getAdapterPosition());
                 Logger.log(LOG_TAG, "Clicked on item:" + holder.getAdapterPosition()
                         + " device name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)), Log.VERBOSE);
-                Intent intent = new Intent(view.getContext(), DeviceDetailsActivity.class);
-                intent.putExtra(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
-                intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)));
-                intent.putExtra(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY, ViewCompat.getTransitionName(holder.deviceIconView));
-                intent.putExtra(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY, ViewCompat.getTransitionName(holder.deviceNameView));
 
+                //Report back to main activity item selected
+                if(mSelectionCallback != null) {
+                    mSelectionCallback.onDeviceSelected(
+                            data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)),
+                            data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
+                }
 
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                    ActivityOptionsCompat options = ActivityOptionsCompat.
 //                            makeSceneTransitionAnimation((MainActivity) view.getContext(), holder.deviceIconView, holder.deviceIconView.getTransitionName());
 //                    view.getContext().startActivity(intent, options.toBundle());
 //                } else {
-                    view.getContext().startActivity(intent);
+//                    view.getContext().startActivity(intent);
 //                }
             }
         });
@@ -197,5 +204,9 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
             }
         });
         menu.show();
+    }
+
+    public interface DeviceSelected {
+        void onDeviceSelected(String devId, String devName);
     }
 }

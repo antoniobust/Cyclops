@@ -19,15 +19,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
+import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.services.RefreshDataService;
+import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 
+import static android.R.attr.data;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DevicesListAdapter.DeviceSelected {
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -60,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private AccountManager accountManager;
+
+    //Device selected callback
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,4 +169,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //On device selected open details view
+    @Override
+    public void onDeviceSelected(String devId, String devName) {
+        Intent intent = new Intent(this, DeviceDetailsActivity.class);
+        intent.putExtra(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY, devName);
+        intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);
+
+        startActivity(intent);
+
+
+
+
+    }
 }

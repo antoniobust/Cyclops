@@ -66,8 +66,6 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_device_details);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         mainFab = (FloatingActionButton) findViewById(R.id.details_main_fab);
         subFab1 = (FloatingActionButton) findViewById(R.id.sub_fab1);

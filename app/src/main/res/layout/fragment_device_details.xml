@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/device_details_fragment_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include layout="@layout/actionbar"/>
+
+    <ScrollView
+        android:id="@+id/device_details_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment">
 
 
     <LinearLayout
@@ -15,10 +25,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
             tools:targetApi="lollipop">
 
             <ImageView
@@ -63,6 +75,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:minHeight="150dp"
             android:transitionName="details_card_transition"
+            app:cardBackgroundColor="@android:color/white"
             app:contentPadding="8dp">
 
             <android.support.v7.widget.GridLayout
@@ -175,6 +188,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:minHeight="150dp"
             android:transitionName="profiles_card_transition"
+            app:cardBackgroundColor="@android:color/white"
             app:contentPadding="8dp">
 
             <android.support.v7.widget.GridLayout
@@ -267,8 +281,9 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:minHeight="150dp"
-            app:contentPadding="8dp"
-            android:transitionName="application_card_transition">
+            android:transitionName="application_card_transition"
+            app:cardBackgroundColor="@android:color/white"
+            app:contentPadding="8dp">
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/device_details_apps_grid_view"
@@ -371,5 +386,6 @@
             </android.support.v7.widget.GridLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
 

@@ -16,33 +16,6 @@
 
         <include layout="@layout/actionbar"/>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin">
-
-            <!--<TextView-->
-            <!--android:id="@+id/device_filters_view"-->
-            <!--style="@style/Base.TextAppearance.AppCompat.Caption"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:textSize="12sp"-->
-            <!--android:text="No filters..."-->
-            <!--tools:text="Android filter applied"-->
-            <!--android:visibility="gone"/>-->
-
-            <TextView
-                android:id="@+id/last_sync_view"
-                style="@style/ChipsTheme"
-                android:layout_gravity="end|center_vertical"
-                android:clickable="true"
-                android:drawableStart="@drawable/ic_restore"
-                android:text="@string/last_synced"
-                tools:text="1 hour ago"/>
-        </FrameLayout>
 
         <!--Main content container-->
         <FrameLayout
@@ -54,7 +27,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="12dp"
             android:layout_weight="1"
-            android:animateLayoutChanges="true" />
+            android:animateLayoutChanges="true"/>
 
 
         <!--Bottom bar for platform filters-->

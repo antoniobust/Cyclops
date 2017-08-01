@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
+import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -15,10 +16,14 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
+import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,6 +32,7 @@ import android.widget.TextView;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
 import java.util.HashMap;
@@ -77,6 +83,20 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         View rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
 
 
+        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        //Handle different context if in tablet layout or smartphone
+        if(MainActivity.TABLET_MODE){
+            ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+            ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+            if(actionBar != null) {
+                actionBar.setTitle(deviceName);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        }else {
+            ((DeviceDetailsActivity) getActivity()).setSupportActionBar(toolbar);
+        }
+
+
         ImageView titleIconView = (ImageView) rootView.findViewById(R.id.device_detail_icon);
         TextView titleView = (TextView) rootView.findViewById(R.id.device_detail_title_view);
         TextView subtitleView = (TextView) rootView.findViewById(R.id.device_detail_subtitle_view);
@@ -100,6 +120,12 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.device_action_menu,menu);
     }
 
     @Override

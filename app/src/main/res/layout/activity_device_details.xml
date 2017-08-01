@@ -8,23 +8,13 @@
     android:layout_height="match_parent"
     tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity">
 
-    <LinearLayout
+
+    <FrameLayout
+        android:id="@+id/device_details_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        tools:layout="@layout/fragment_device_details"/>
 
-        <include layout="@layout/actionbar"/>
-
-        <FrameLayout
-            android:id="@+id/device_details_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            tools:layout="@layout/fragment_device_details"/>
-
-    </LinearLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/details_fabs_container"

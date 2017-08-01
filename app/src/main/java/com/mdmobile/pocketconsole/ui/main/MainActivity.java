@@ -6,18 +6,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
@@ -182,17 +184,14 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
         //Look if a fragment is already visible then replace it or resize device list and show details
-        Fragment detailsFrag = fm.findFragmentByTag(getString(R.string.details_fragment_tag));
-        if (detailsFrag != null && detailsFrag.isAdded() && detailsFrag.isVisible()) {
-            fragmentTransaction.replace(R.id.main_activity_details_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
-        } else {
+        FrameLayout detailsContainer = (FrameLayout) findViewById(R.id.main_activity_details_container);
 
-            FrameLayout detailsContainer = (FrameLayout) findViewById(R.id.main_activity_details_container);
+        if (detailsContainer.getVisibility() == View.GONE) {
             detailsContainer.setVisibility(View.VISIBLE);
-
-            fragmentTransaction.add(detailsContainer.getId(), DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
-
         }
+        //Remove standard margins and expands the views to the whole screen
+        ((LinearLayout)detailsContainer.getParent()).setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fragmentTransaction.replace(R.id.main_activity_details_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
     }
 
     private void startDetailsActivity(String devId, String devName) {

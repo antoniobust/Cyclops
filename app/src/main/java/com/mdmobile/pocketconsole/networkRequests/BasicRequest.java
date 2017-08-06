@@ -134,7 +134,7 @@ public abstract class BasicRequest<T> extends Request<T> {
         //TODO:support Multiple account
 
         NetworkResponse response = volleyError.networkResponse;
-        if (response.data == null) {
+        if (response == null ) {
             return super.parseNetworkError(volleyError);
         }
 

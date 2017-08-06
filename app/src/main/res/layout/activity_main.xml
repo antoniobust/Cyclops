@@ -18,6 +18,7 @@
 
 
         <!--Main content container-->
+        <!--TODO: fina a solution to merge layout with parent in activity-->
         <FrameLayout
             android:id="@+id/main_activity_fragment_container"
             android:layout_width="match_parent"

@@ -8,9 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -27,9 +28,12 @@ import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
+import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
 
+import static com.mdmobile.pocketconsole.R.id.main_activity_fragment_container;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
+import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
 
 
 public class MainActivity extends AppCompatActivity implements DevicesListAdapter.DeviceSelected {
@@ -45,19 +49,19 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_devices:
-                    ft.replace(R.id.main_activity_fragment_container, DevicesFragment.newInstance());
+                    ft.replace(main_activity_fragment_container, DevicesFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_dashboard:
-                    ft.replace(R.id.main_activity_fragment_container, DashboardFragment.newInstance());
+                    ft.replace(main_activity_fragment_container, DashboardFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_server:
-                    ft.replace(R.id.main_activity_fragment_container, ServerFragment.newInstance());
+                    ft.replace(main_activity_fragment_container, ServerFragment.newInstance());
                     ft.commit();
                     return true;
                 case R.id.navigation_users:
-                    ft.replace(R.id.main_activity_fragment_container, UsersFragment.newInstance());
+                    ft.replace(main_activity_fragment_container, UsersFragment.newInstance());
                     ft.commit();
                     return true;
             }
@@ -66,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
 
     };
     private AccountManager accountManager;
+    String devId, devName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         //Set account manager to be used in this activity
         accountManager = AccountManager.get(getApplicationContext());
 
+        if (TABLET_MODE && savedInstanceState != null && savedInstanceState.containsKey(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY)) {
+            showDetailsFragment(savedInstanceState.getString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY), savedInstanceState.getString(DEVICE_NAME_EXTRA_KEY));
+        }
 //        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
 //        serviceIntent.setAction(getString(R.string.download_devices_action));
 //        serviceIntent.setPackage(this.getPackageName());
@@ -134,6 +142,13 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         super.onPause();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (TABLET_MODE && devName !=null && devId != null) {
+            outState.putString(DEVICE_NAME_EXTRA_KEY, devName);
+            outState.putString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);        }
+    }
 
     private void syncDevicesNow() {
         Logger.log(LOG_TAG, "Immediate device syc manually requested... ", Log.VERBOSE);
@@ -170,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     //On device selected open details view
     @Override
     public void onDeviceSelected(String devId, String devName) {
+        this.devId =devId;
+        this.devName = devName;
 
         if (TABLET_MODE) {
             showDetailsFragment(devId, devName);
@@ -183,20 +200,30 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
-        //Look if a fragment is already visible then replace it or resize device list and show details
-        FrameLayout detailsContainer = (FrameLayout) findViewById(R.id.main_activity_details_container);
+        LinearLayout mainContainer = (LinearLayout) findViewById(R.id.main_activity_linear_layout);
+        SwipeRefreshLayout deviceList = (SwipeRefreshLayout) mainContainer.findViewById(R.id.devices_swipe_refresh);
+        CardView detailsContainer = (CardView) mainContainer.findViewById(R.id.main_activity_device_details_container);
+
 
         if (detailsContainer.getVisibility() == View.GONE) {
             detailsContainer.setVisibility(View.VISIBLE);
         }
-        //Remove standard margins and expands the views to the whole screen
-        ((LinearLayout)detailsContainer.getParent()).setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        fragmentTransaction.replace(R.id.main_activity_details_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
+
+        mainContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f);
+        layoutParams.setMarginEnd(GeneralUtility.dpToPx(getApplicationContext(), 12));
+        layoutParams.setMarginStart(GeneralUtility.dpToPx(getApplicationContext(), 0));
+        deviceList.setLayoutParams(layoutParams);
+        detailsContainer.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 4f));
+        detailsContainer.requestLayout();
+        deviceList.requestLayout();
+
+        fragmentTransaction.replace(R.id.main_activity_device_details_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
     }
 
     private void startDetailsActivity(String devId, String devName) {
         Intent intent = new Intent(this, DeviceDetailsActivity.class);
-        intent.putExtra(DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY, devName);
+        intent.putExtra(DEVICE_NAME_EXTRA_KEY, devName);
         intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);
         startActivity(intent);
     }

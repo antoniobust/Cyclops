@@ -195,14 +195,4 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         }
         hideFabs();
     }
-
-
-//    @Override
-//    public void onBackPressed() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            finishAfterTransition();
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
 }

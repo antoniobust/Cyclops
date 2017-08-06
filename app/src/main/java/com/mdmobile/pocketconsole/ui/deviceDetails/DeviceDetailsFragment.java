@@ -1,6 +1,5 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -16,17 +15,21 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
-import android.transition.TransitionInflater;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
@@ -137,6 +140,18 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         getLoaderManager().initLoader(12, null, this);
 
         ApiRequestManager.getInstance(getContext()).getDeviceInstalledApps(deviceId);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            if(MainActivity.TABLET_MODE){
+                hideDetailsFragment();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -258,4 +273,22 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                 break;
         }
     }
+
+    private void hideDetailsFragment() {
+        LinearLayout mainContainer = (LinearLayout) getActivity().findViewById(R.id.main_activity_linear_layout);
+        SwipeRefreshLayout deviceList = (SwipeRefreshLayout) mainContainer.findViewById(R.id.devices_swipe_refresh);
+        CardView detailsContainer = (CardView) mainContainer.findViewById(R.id.main_activity_device_details_container);
+
+        if (detailsContainer.getVisibility() == View.VISIBLE) {
+            detailsContainer.setVisibility(View.GONE);
+        }
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.main_fragment_with), ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER;
+        mainContainer.setLayoutParams(layoutParams);
+
+        deviceList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        deviceList.requestLayout();
+    }
+
 }

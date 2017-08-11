@@ -1,36 +1,38 @@
-<ScrollView
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/dashboard_recycler_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/AppTheme.MainActivity.Fragment">
+    style="@style/AppTheme.MainActivity.Fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <!--<android.support.constraint.ConstraintLayout-->
 
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".ui.main.DashboardFragment">
-
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/devices_chart"
-            android:layout_width="0dp"
-            android:layout_height="300dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintRight_creator="1" />
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/online_devices_chart"
-            android:layout_width="0dp"
-            android:layout_height="350dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/devices_chart"
-            tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintRight_creator="1" />
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--tools:context=".ui.main.DashboardFragment">-->
 
 
-    </android.support.constraint.ConstraintLayout>
-</ScrollView>
+    <!--<com.github.mikephil.charting.charts.PieChart-->
+    <!--android:id="@+id/devices_chart"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="300dp"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--tools:layout_constraintLeft_creator="1"-->
+    <!--tools:layout_constraintRight_creator="1" />-->
+
+    <!--<com.github.mikephil.charting.charts.PieChart-->
+    <!--android:id="@+id/online_devices_chart"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="350dp"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/devices_chart"-->
+    <!--tools:layout_constraintLeft_creator="1"-->
+    <!--tools:layout_constraintRight_creator="1" />-->
+
+
+    <!--</android.support.constraint.ConstraintLayout>-->
+</android.support.v7.widget.RecyclerView>

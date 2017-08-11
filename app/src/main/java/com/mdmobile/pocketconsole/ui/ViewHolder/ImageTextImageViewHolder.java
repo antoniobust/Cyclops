@@ -25,6 +25,4 @@ public class ImageTextImageViewHolder extends RecyclerView.ViewHolder {
         optionIconView = (ImageView) view.findViewById(R.id.list_item_menu_icon);
         deviceNameView = (TextView) view.findViewById(R.id.list_item_device_name);
     }
-
-
 }

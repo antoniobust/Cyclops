@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +23,22 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.adapters.ChartsAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.ui.ViewHolder.ChartViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.R.attr.data;
 
 
 public class DashboardFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private PieChart devicesChart;
     private PieChart onlineDevicesChart;
+    private RecyclerView recyclerView;
+    private ChartsAdapter recyclerAdapter;
 
 
     public DashboardFragment() {
@@ -49,18 +58,26 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //Apply style to fragment
         final Context contextThemeWrapper = new android.view.ContextThemeWrapper(getActivity(), R.style.AppTheme_MainActivity_Fragment);
-        //Clone inflater using the contextTHemeWrapper
         inflater = inflater.cloneInContext(contextThemeWrapper);
 
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        //Get devices pie chart
-        devicesChart = (PieChart) rootView.findViewById(R.id.devices_chart);
-        //Get Online devices chart
-        onlineDevicesChart = (PieChart) rootView.findViewById(R.id.online_devices_chart);
+         recyclerView = (RecyclerView) rootView.findViewById(R.id.dashboard_recycler_view);
+
+        if (MainActivity.TABLET_MODE) {
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2,LinearLayoutManager.VERTICAL,false));
+        } else {
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
+
+        recyclerAdapter = new ChartsAdapter(null);
+        recyclerView.setAdapter(recyclerAdapter);
+
+//        //Get devices pie chart
+//        devicesChart = (PieChart) rootView.findViewById(R.id.devices_chart);
+//        //Get Online devices chart
+//        onlineDevicesChart = (PieChart) rootView.findViewById(R.id.online_devices_chart);
 
         return rootView;
     }
@@ -74,21 +91,21 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        String[] projection = {McContract.Device.COLUMN_AGENT_ONLINE, McContract.Device.COLUMN_FAMILY,
-                McContract.Device.COLUMN_KIND};
+//        String[] projection = {McContract.Device.COLUMN_AGENT_ONLINE, McContract.Device.COLUMN_FAMILY,
+//                McContract.Device.COLUMN_KIND};
 
-        return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, projection, null, null, null);
+        return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null, null, null, null);
 
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        getDevicesCounters(data);
+        recyclerAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        getDevicesCounters(null);
+        recyclerAdapter.swapCursor(null);
 
     }
 

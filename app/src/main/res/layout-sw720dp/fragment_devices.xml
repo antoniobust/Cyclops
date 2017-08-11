@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
-                tools:listitem="@layout/list_item_img_txt_img"/>
+                tools:listitem="@layout/device_list_item"/>
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 

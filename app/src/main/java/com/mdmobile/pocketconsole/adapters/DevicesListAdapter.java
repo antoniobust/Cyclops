@@ -1,15 +1,11 @@
 package com.mdmobile.pocketconsole.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
@@ -25,19 +23,14 @@ import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.Dialogs.MessageDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.ScriptDialog;
-import com.mdmobile.pocketconsole.ui.ViewHolder.ImageTextImageViewHolder;
-import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
-
-import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY;
-import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY;
 
 /**
  * Adapter bound to list of devices in main activity
  */
 
-public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewHolder> {
+public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.ViewHolder> {
 
     private static String LOG_TAG = DevicesListAdapter.class.getSimpleName();
     private Cursor data;
@@ -50,20 +43,20 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
             data = cursor;
             swapCursor(cursor);
         }
-        if(callback != null) {
+        if (callback != null) {
             mSelectionCallback = callback;
         }
 
     }
 
     @Override
-    public ImageTextImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_img_txt_img, parent, false);
-        return new ImageTextImageViewHolder(view);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_list_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ImageTextImageViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         if (!data.moveToPosition(position)) {
             //Error view
         }
@@ -106,46 +99,11 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
 //            holder.deviceIconView.setTransitionName("icon_" + devID);
 //            holder.deviceNameView.setTransitionName("name_" + devID);
 //        }
-
-        //Set click listener
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                data.moveToPosition(holder.getAdapterPosition());
-                Logger.log(LOG_TAG, "Clicked on item:" + holder.getAdapterPosition()
-                        + " device name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)), Log.VERBOSE);
-
-                //Report back to main activity item selected
-                if(mSelectionCallback != null) {
-                    mSelectionCallback.onDeviceSelected(
-                            data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)),
-                            data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
-                }
-
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                    ActivityOptionsCompat options = ActivityOptionsCompat.
-//                            makeSceneTransitionAnimation((MainActivity) view.getContext(), holder.deviceIconView, holder.deviceIconView.getTransitionName());
-//                    view.getContext().startActivity(intent, options.toBundle());
-//                } else {
-//                    view.getContext().startActivity(intent);
-//                }
-            }
-        });
-
-        holder.optionIconView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(data.moveToPosition(holder.getAdapterPosition())) {
-                    selected = data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
-                    showActionsMenu(view);
-                }
-            }
-        });
     }
 
     @Override
     public long getItemId(int position) {
-        if(data.move(position)){
+        if (data.move(position)) {
             return data.getInt(data.getColumnIndex(McContract.Device._ID));
         }
         return -1;
@@ -180,26 +138,26 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                        Context mContext = view.getContext();
-        switch (menuItem.getItemId()){
-            case R.id.action_checkin:
-                //Check in action
-                ApiRequestManager.getInstance(mContext).requestAction(selected, ApiActions.CHECKIN, null, null);
-                break;
-            case R.id.action_send_script:
-                //Script action
-                ScriptDialog.newInstance(selected).show(((MainActivity)mContext).getSupportFragmentManager(), null);
-                break;
-            case R.id.action_locate:
-                //Localize action
-                ApiRequestManager.getInstance(mContext).requestAction(selected, ApiActions.LOCATE, null, null);
-                break;
-            case R.id.action_send_message:
-                //send message action
-                MessageDialog.newInstance(selected)
-                        .show(((MainActivity)mContext).getSupportFragmentManager(), null);
-                break;
-        }
+                Context mContext = view.getContext();
+                switch (menuItem.getItemId()) {
+                    case R.id.action_checkin:
+                        //Check in action
+                        ApiRequestManager.getInstance(mContext).requestAction(selected, ApiActions.CHECKIN, null, null);
+                        break;
+                    case R.id.action_send_script:
+                        //Script action
+                        ScriptDialog.newInstance(selected).show(((MainActivity) mContext).getSupportFragmentManager(), null);
+                        break;
+                    case R.id.action_locate:
+                        //Localize action
+                        ApiRequestManager.getInstance(mContext).requestAction(selected, ApiActions.LOCATE, null, null);
+                        break;
+                    case R.id.action_send_message:
+                        //send message action
+                        MessageDialog.newInstance(selected)
+                                .show(((MainActivity) mContext).getSupportFragmentManager(), null);
+                        break;
+                }
                 return false;
             }
         });
@@ -208,5 +166,58 @@ public class DevicesListAdapter extends RecyclerView.Adapter<ImageTextImageViewH
 
     public interface DeviceSelected {
         void onDeviceSelected(String devId, String devName);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        final ImageView deviceIconView, optionIconView, arrowIconView;
+        final TextView deviceNameView;
+        final View coloredMarkerView;
+        //Set click listener
+        View.OnClickListener deviceClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data.moveToPosition(getAdapterPosition());
+                Logger.log(LOG_TAG, "Clicked on item:" + getAdapterPosition()
+                        + " device name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)), Log.VERBOSE);
+
+                //Report back to main activity item selected
+                if (mSelectionCallback != null) {
+                    mSelectionCallback.onDeviceSelected(
+                            data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)),
+                            data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
+                }
+
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    ActivityOptionsCompat options = ActivityOptionsCompat.
+//                            makeSceneTransitionAnimation((MainActivity) view.getContext(), holder.deviceIconView, holder.deviceIconView.getTransitionName());
+//                    view.getContext().startActivity(intent, options.toBundle());
+//                } else {
+//                    view.getContext().startActivity(intent);
+//                }
+            }
+        };
+        View.OnClickListener optionClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (data.moveToPosition(getAdapterPosition())) {
+                    selected = data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
+                    showActionsMenu(view);
+                }
+            }
+        };
+
+        ViewHolder(View view) {
+            super(view);
+            coloredMarkerView = view.findViewById(R.id.device_list_item_colored_marker);
+            deviceIconView = (ImageView) view.findViewById(R.id.list_item_device_icon);
+            optionIconView = (ImageView) view.findViewById(R.id.list_item_menu_icon);
+            deviceNameView = (TextView) view.findViewById(R.id.list_item_device_name);
+            arrowIconView = (ImageView) view.findViewById(R.id.list_item_arrow_icon);
+
+            view.setOnClickListener(deviceClickListener);
+            arrowIconView.setOnClickListener(deviceClickListener);
+            optionIconView.setOnClickListener(optionClickListener);
+        }
     }
 }

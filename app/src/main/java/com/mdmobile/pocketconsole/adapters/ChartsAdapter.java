@@ -53,6 +53,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
 
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_item, parent,false);
         ChartViewHolder holder = new ChartViewHolder(item);
+        holder.setIsRecyclable(false);
         return holder;
     }
 
@@ -71,7 +72,6 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
         switch (position) {
             case 0:
                 //Online vs offline devices
-
                 pieEntries = new ArrayList<>();
                 pieEntries.add(new PieEntry((int) result.get(0), "OnLine"));
                 pieEntries.add(new PieEntry(mCursor.getCount() - (int) result.get(0), "OffLine"));
@@ -123,7 +123,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 10;
     }
 
     public Cursor swapCursor(Cursor cursor) {

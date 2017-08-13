@@ -47,18 +47,16 @@ public class ApiRequestManager {
     private final static String LOG_TAG = ApiRequestManager.class.getSimpleName();
     private static ApiRequestManager server;
     private RequestQueue requestsQueue;
-    private Context mContext;
+    private static Context mContext;
 
-    private ApiRequestManager(Context context) {
-        requestsQueue = Volley.newRequestQueue(context);
-        mContext = context;
+    private ApiRequestManager() {
+        requestsQueue = Volley.newRequestQueue(mContext);
     }
 
     public static synchronized ApiRequestManager getInstance(Context context) {
         if (server == null) {
-            //New Api server instance needs to be created
-            //Getting the app context from the context provided will avoid memory leaks
-            server = new ApiRequestManager(context.getApplicationContext());
+            mContext = context.getApplicationContext();
+            server = new ApiRequestManager();
             return server;
         } else {
             return server;

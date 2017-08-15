@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
@@ -142,7 +143,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
         //Request token through ApiRequestManager
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
-        ApiRequestManager.getInstance(getApplicationContext()).getToken(
+        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).getToken(
                 userInfo.getString(SERVER_ADDRESS_KEY),
                 userInfo.getString(CLIENT_ID_KEY),
                 userInfo.getString(API_SECRET_KEY),

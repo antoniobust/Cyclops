@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.ui.Dialogs.ConfirmActionDialog;
@@ -86,7 +87,7 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
     //Confirmation dialog callback
     @Override
     public void actionConfirmed(boolean doNotShowAgain) {
-        ApiRequestManager.getInstance(mContext).uninstallApplication(devId, packageName);
+        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).uninstallApplication(devId, packageName);
         //Set show dialog preference
         if (doNotShowAgain) {
             String prefKey = mContext.getString(R.string.uninstall_app_confirm_disabled_pref);

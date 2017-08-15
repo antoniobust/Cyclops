@@ -20,6 +20,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.InstalledAppsAdapter;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
@@ -178,7 +179,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.sub_fab1:
                 //Check in action
-                ApiRequestManager.getInstance(getApplicationContext()).requestAction(deviceId, ApiActions.CHECKIN, null, null);
+                ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(deviceId, ApiActions.CHECKIN, null, null);
                 break;
             case R.id.sub_fab2:
                 //Script action
@@ -186,7 +187,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
                 break;
             case R.id.sub_fab3:
                 //Localize action
-                ApiRequestManager.getInstance(getApplicationContext()).requestAction(deviceId, ApiActions.LOCATE, null, null);
+                ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(deviceId, ApiActions.LOCATE, null, null);
                 break;
             case R.id.sub_fab4:
                 //send message action

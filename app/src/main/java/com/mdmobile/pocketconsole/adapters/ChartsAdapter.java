@@ -50,7 +50,6 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
 
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_item, parent, false);
         ChartViewHolder holder = new ChartViewHolder(item);
-        holder.setIsRecyclable(false);
         return holder;
     }
 

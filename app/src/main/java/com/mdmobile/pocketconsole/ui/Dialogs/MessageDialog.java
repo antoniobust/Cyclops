@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
@@ -83,7 +84,7 @@ public class MessageDialog extends android.support.v4.app.DialogFragment impleme
     public void onClick(DialogInterface dialogInterface, int i) {
         if (i == DialogInterface.BUTTON_POSITIVE) {
             String message = editText.getText().toString();
-            ApiRequestManager.getInstance(getContext()).requestAction(deviceID, ApiActions.SEND_MESSAGE, message, null);
+            ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(deviceID, ApiActions.SEND_MESSAGE, message, null);
         } else {
             dialogInterface.dismiss();
         }

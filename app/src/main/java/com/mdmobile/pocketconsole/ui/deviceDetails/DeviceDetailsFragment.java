@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
@@ -139,7 +140,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         getLoaderManager().initLoader(11, null, this);
         getLoaderManager().initLoader(12, null, this);
 
-        ApiRequestManager.getInstance(getContext()).getDeviceInstalledApps(deviceId);
+        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).getDeviceInstalledApps(deviceId);
     }
 
 

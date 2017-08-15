@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
@@ -142,7 +143,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                 switch (menuItem.getItemId()) {
                     case R.id.action_checkin:
                         //Check in action
-                        ApiRequestManager.getInstance(mContext).requestAction(selected, ApiActions.CHECKIN, null, null);
+                        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(selected, ApiActions.CHECKIN, null, null);
                         break;
                     case R.id.action_send_script:
                         //Script action
@@ -150,7 +151,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                         break;
                     case R.id.action_locate:
                         //Localize action
-                        ApiRequestManager.getInstance(mContext).requestAction(selected, ApiActions.LOCATE, null, null);
+                        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(selected, ApiActions.LOCATE, null, null);
                         break;
                     case R.id.action_send_message:
                         //send message action

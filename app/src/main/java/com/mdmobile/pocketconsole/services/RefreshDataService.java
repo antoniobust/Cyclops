@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.utils.Logger;
@@ -38,6 +39,6 @@ public class RefreshDataService extends IntentService {
         Account account = AccountManager.get(getApplicationContext())
                 .getAccountsByType(getApplicationContext().getString(R.string.account_type))[0];
 
-        ApiRequestManager.getInstance(getApplicationContext()).getDevices(account);
+        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).getDevices(account);
     }
 }

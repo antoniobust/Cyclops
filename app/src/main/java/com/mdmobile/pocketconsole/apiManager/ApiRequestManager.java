@@ -2,7 +2,6 @@ package com.mdmobile.pocketconsole.apiManager;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Base64;
@@ -16,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.api.ApiModel;
@@ -47,15 +47,13 @@ public class ApiRequestManager {
     private final static String LOG_TAG = ApiRequestManager.class.getSimpleName();
     private static ApiRequestManager server;
     private RequestQueue requestsQueue;
-    private static Context mContext;
 
     private ApiRequestManager() {
-        requestsQueue = Volley.newRequestQueue(mContext);
+        requestsQueue = Volley.newRequestQueue(ApplicationLoader.applicationContext);
     }
 
-    public static synchronized ApiRequestManager getInstance(Context context) {
+    public static synchronized ApiRequestManager getInstance() {
         if (server == null) {
-            mContext = context.getApplicationContext();
             server = new ApiRequestManager();
             return server;
         } else {
@@ -72,11 +70,11 @@ public class ApiRequestManager {
 
         //if debug discard input and use debugging info
         if (BuildConfig.DEBUG) {
-            serverUrl = mContext.getString(R.string.mc_server_url).concat("/MobiControl/api/token");
-            clientID = mContext.getString(R.string.mc_clientID);
-            clientSecret = mContext.getString(R.string.mc_client_secret);
-            userName = mContext.getString(R.string.mc_user_name);
-            password = mContext.getString(R.string.mc_password);
+            serverUrl = ApplicationLoader.applicationContext.getString(R.string.mc_server_url).concat("/MobiControl/api/token");
+            clientID = ApplicationLoader.applicationContext.getString(R.string.mc_clientID);
+            clientSecret = ApplicationLoader.applicationContext.getString(R.string.mc_client_secret);
+            userName = ApplicationLoader.applicationContext.getString(R.string.mc_user_name);
+            password = ApplicationLoader.applicationContext.getString(R.string.mc_password);
         } else {
             //If not debug take the url input from user and attach the token request
             serverUrl = serverUrl.concat("/MobiControl/api/token");
@@ -105,7 +103,7 @@ public class ApiRequestManager {
                 Log.e(LOG_TAG, "Error receiving token");
                 error.printStackTrace();
             }
-        }, mContext) {
+        }, ApplicationLoader.applicationContext) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -128,10 +126,10 @@ public class ApiRequestManager {
     public void getDevices(Account account) {
 
 //        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
-        String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UsersUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
 
-        DeviceRequest deviceRequest = new DeviceRequest<>(mContext, Request.Method.GET, api,
+        DeviceRequest deviceRequest = new DeviceRequest<>(ApplicationLoader.applicationContext, Request.Method.GET, api,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -148,8 +146,8 @@ public class ApiRequestManager {
     }
 
     public void getDeviceInstalledApps(@NonNull final String devID) {
-        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
-        String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
+        Account account = AccountManager.get(ApplicationLoader.applicationContext).getAccountsByType(ApplicationLoader.applicationContext.getString(R.string.account_type))[0];
+        String apiAuthority = UsersUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
         DeviceInstalledAppRequest installedAppRequest = new DeviceInstalledAppRequest(Request.Method.GET,
@@ -163,7 +161,7 @@ public class ApiRequestManager {
             public void onErrorResponse(VolleyError error) {
                 Logger.log(LOG_TAG, "Error requesting installed Apps for:" + devID, Log.ERROR);
             }
-        }, mContext);
+        }, ApplicationLoader.applicationContext);
 
         requestsQueue.add(installedAppRequest);
     }
@@ -175,8 +173,8 @@ public class ApiRequestManager {
 
     public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
-        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
-        String apiAuthority = UsersUtility.getUserInfo(mContext, account).get(SERVER_ADDRESS_KEY);
+        Account account = AccountManager.get(ApplicationLoader.applicationContext).getAccountsByType(ApplicationLoader.applicationContext.getString(R.string.account_type))[0];
+        String apiAuthority = UsersUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 
         String jsonPayload = new Gson().toJson(new Action(action, message, phoneNumber));
@@ -191,12 +189,12 @@ public class ApiRequestManager {
             public void onErrorResponse(VolleyError error) {
                 Logger.log(LOG_TAG, "Error sending action:" + action + " to device= " + deviceID, Log.ERROR);
             }
-        }, mContext);
+        }, ApplicationLoader.applicationContext);
 
 
         requestsQueue.add(actionRequest);
         Logger.log(LOG_TAG, "Request( " + action + " -> " + message + ") requested to device: " + deviceID, Log.VERBOSE);
-        Toast.makeText(mContext, action + " request sent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ApplicationLoader.applicationContext, action + " request sent", Toast.LENGTH_SHORT).show();
 
 
     }

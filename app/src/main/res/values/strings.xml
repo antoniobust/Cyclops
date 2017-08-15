@@ -66,6 +66,8 @@
     <string name="message_edit_text_hint">Type the message here…</string>
     <string name="spinner_hint_label">Select a script...</string>
     <string name="details_fragment_tag">detailsFragmentStringTag</string>
+    <string name="offline_chart_label">Online vs Offline</string>
+    <string name="platform_chart_label">Platforms</string>
 
 
     <string-array name="sorting_options_radio_labels">

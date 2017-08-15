@@ -140,7 +140,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         getLoaderManager().initLoader(11, null, this);
         getLoaderManager().initLoader(12, null, this);
 
-        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).getDeviceInstalledApps(deviceId);
+        ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
     }
 
 

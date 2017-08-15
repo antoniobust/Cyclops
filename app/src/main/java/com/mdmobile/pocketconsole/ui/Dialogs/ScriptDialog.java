@@ -110,7 +110,7 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
                 final String comment = script.substring(0, finalIndex + 5);
                 script = script.substring(comment.length(), script.length());
             }
-            ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(deviceID, ApiActions.SEND_SCRIPT, script, null);
+            ApiRequestManager.getInstance().requestAction(deviceID, ApiActions.SEND_SCRIPT, script, null);
         } else {
             dialogInterface.dismiss();
         }

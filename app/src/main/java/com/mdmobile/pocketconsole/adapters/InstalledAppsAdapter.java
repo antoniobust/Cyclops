@@ -87,7 +87,7 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
     //Confirmation dialog callback
     @Override
     public void actionConfirmed(boolean doNotShowAgain) {
-        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).uninstallApplication(devId, packageName);
+        ApiRequestManager.getInstance().uninstallApplication(devId, packageName);
         //Set show dialog preference
         if (doNotShowAgain) {
             String prefKey = mContext.getString(R.string.uninstall_app_confirm_disabled_pref);

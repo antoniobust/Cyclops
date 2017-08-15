@@ -179,7 +179,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.sub_fab1:
                 //Check in action
-                ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(deviceId, ApiActions.CHECKIN, null, null);
+                ApiRequestManager.getInstance().requestAction(deviceId, ApiActions.CHECKIN, null, null);
                 break;
             case R.id.sub_fab2:
                 //Script action
@@ -187,7 +187,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
                 break;
             case R.id.sub_fab3:
                 //Localize action
-                ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(deviceId, ApiActions.LOCATE, null, null);
+                ApiRequestManager.getInstance().requestAction(deviceId, ApiActions.LOCATE, null, null);
                 break;
             case R.id.sub_fab4:
                 //send message action

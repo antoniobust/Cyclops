@@ -39,6 +39,6 @@ public class RefreshDataService extends IntentService {
         Account account = AccountManager.get(getApplicationContext())
                 .getAccountsByType(getApplicationContext().getString(R.string.account_type))[0];
 
-        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).getDevices(account);
+        ApiRequestManager.getInstance().getDevices(account);
     }
 }

@@ -143,7 +143,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                 switch (menuItem.getItemId()) {
                     case R.id.action_checkin:
                         //Check in action
-                        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(selected, ApiActions.CHECKIN, null, null);
+                        ApiRequestManager.getInstance().requestAction(selected, ApiActions.CHECKIN, null, null);
                         break;
                     case R.id.action_send_script:
                         //Script action
@@ -151,7 +151,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                         break;
                     case R.id.action_locate:
                         //Localize action
-                        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(selected, ApiActions.LOCATE, null, null);
+                        ApiRequestManager.getInstance().requestAction(selected, ApiActions.LOCATE, null, null);
                         break;
                     case R.id.action_send_message:
                         //send message action

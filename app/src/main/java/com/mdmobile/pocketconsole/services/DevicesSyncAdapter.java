@@ -91,10 +91,10 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
         String password = AccountManager.get(getContext()).getPassword(account);
 
         //TODO: request is not able to ask for a token and re-runt itself in case of failure so ask for a new token and run query
-        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).getToken(serverUrl, clientId, secret, account.name, password, new NetworkCallBack() {
+        ApiRequestManager.getInstance().getToken(serverUrl, clientId, secret, account.name, password, new NetworkCallBack() {
             @Override
             public void tokenReceived(Token JsonToken) {
-                ApiRequestManager.getInstance(ApplicationLoader.applicationContext).getDevices(account);
+                ApiRequestManager.getInstance().getDevices(account);
             }
 
             @Override

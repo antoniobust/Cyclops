@@ -2,7 +2,6 @@ package com.mdmobile.pocketconsole.ui.main;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,12 +11,10 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.mikephil.charting.charts.PieChart;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.ChartsAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
@@ -28,8 +25,6 @@ import java.util.ArrayList;
 
 public class DashboardFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, DevicesStatsCalculator.Listener {
 
-    private PieChart devicesChart;
-    private PieChart onlineDevicesChart;
     private RecyclerView recyclerView;
 
 

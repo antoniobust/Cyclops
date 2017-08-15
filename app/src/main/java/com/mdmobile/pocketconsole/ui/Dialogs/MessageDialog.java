@@ -84,7 +84,7 @@ public class MessageDialog extends android.support.v4.app.DialogFragment impleme
     public void onClick(DialogInterface dialogInterface, int i) {
         if (i == DialogInterface.BUTTON_POSITIVE) {
             String message = editText.getText().toString();
-            ApiRequestManager.getInstance(ApplicationLoader.applicationContext).requestAction(deviceID, ApiActions.SEND_MESSAGE, message, null);
+            ApiRequestManager.getInstance().requestAction(deviceID, ApiActions.SEND_MESSAGE, message, null);
         } else {
             dialogInterface.dismiss();
         }

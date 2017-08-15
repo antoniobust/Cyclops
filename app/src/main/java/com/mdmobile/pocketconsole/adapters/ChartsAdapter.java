@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -75,9 +76,9 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
                 pieDataSet.setColors(new int[]{R.color.colorPrimaryDark, R.color.colorPrimary}, holder.chartContainer.getContext());
                 PieData pieData = new PieData();
                 pieData.addDataSet(pieDataSet);
-                createPieChart(holder.chartContainer.getContext(), pieData);
+                pieData.setValueTextSize(22f);
 
-                chart = createPieChart(holder.chartContainer.getContext(), pieData);
+                chart = createPieChart(holder.chartContainer.getContext(), pieData, position);
                 holder.chartContainer.addView(chart);
                 chart.invalidate();
                 break;
@@ -89,7 +90,6 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
                 ArrayMap<String, Integer> platforms = (ArrayMap) statistics.get(2);
                 pieEntries.add(new PieEntry(platforms.get("Android"), "Android"));
                 pieEntries.add(new PieEntry(platforms.get("iOS"), "iOS"));
-                pieEntries.add(new PieEntry(platforms.get("WindowsCE"), "WindowsCE"));
                 pieEntries.add(new PieEntry(platforms.get("Desktop"), "Desktop"));
                 pieEntries.add(new PieEntry(platforms.get("Windows CE / Mobile"), "Windows CE / Mobile"));
                 pieEntries.add(new PieEntry(platforms.get("Zebra Printers"), "Zebra Printers"));
@@ -100,9 +100,9 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
                                 R.color.darkGreen, R.color.printerColor}, holder.chartContainer.getContext());
                 pieData = new PieData();
                 pieData.addDataSet(pieDataSet);
-                createPieChart(holder.chartContainer.getContext(), pieData);
+                pieData.setValueTextSize(16f);
 
-                chart = createPieChart(holder.chartContainer.getContext(), pieData);
+                chart = createPieChart(holder.chartContainer.getContext(), pieData, position);
                 holder.chartContainer.addView(chart);
                 chart.invalidate();
                 break;
@@ -121,7 +121,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
         return 4;
     }
 
-    private PieChart createPieChart(Context mContext, PieData data) {
+    private PieChart createPieChart(Context mContext, PieData data, int position) {
 
         PieChart pieChart = new PieChart(mContext);
         pieChart.setData(data);
@@ -138,6 +138,21 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         legend.setMaxSizePercent(0.1f);
+
+        Description descriptionLabel = new Description();
+        descriptionLabel.setEnabled(true);
+        descriptionLabel.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+        descriptionLabel.setTextSize(16f);
+
+        switch (position) {
+            case 0:
+                descriptionLabel.setText(mContext.getString(R.string.offline_chart_label));
+                break;
+            case 1:
+                descriptionLabel.setText(mContext.getString(R.string.platform_chart_label));
+                break;
+        }
+        pieChart.setDescription(descriptionLabel);
 
         return pieChart;
     }

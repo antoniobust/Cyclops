@@ -143,7 +143,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
         //Request token through ApiRequestManager
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
-        ApiRequestManager.getInstance(ApplicationLoader.applicationContext).getToken(
+        ApiRequestManager.getInstance().getToken(
                 userInfo.getString(SERVER_ADDRESS_KEY),
                 userInfo.getString(CLIENT_ID_KEY),
                 userInfo.getString(API_SECRET_KEY),

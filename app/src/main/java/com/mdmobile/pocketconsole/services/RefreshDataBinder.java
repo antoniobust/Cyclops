@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class RefreshDataBinder extends Service {
-    // Storage for an instance of the sync adapter
-    private static DevicesSyncAdapter sSyncAdapter = null;
     // Object to use as a thread-safe lock
     private static final Object sSyncAdapterLock = new Object();
+    // Storage for an instance of the sync adapter
+    private static DevicesSyncAdapter sSyncAdapter = null;
 
     public RefreshDataBinder() {
     }

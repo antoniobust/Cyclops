@@ -1,7 +1,6 @@
 package com.mdmobile.pocketconsole.ui.ViewHolder;
 
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -9,7 +8,7 @@ import android.widget.ImageView;
 import com.mdmobile.pocketconsole.R;
 
 
-public class ChartViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+public class ChartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public ImageView refreshButton;
     public FrameLayout chartContainer;
 

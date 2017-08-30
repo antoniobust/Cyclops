@@ -97,7 +97,7 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void OnFinished(ArrayList<Object> result) {
+    public void OnFinished(Bundle result) {
         recyclerView.swapAdapter(new ChartsAdapter(result), true);
     }
 }

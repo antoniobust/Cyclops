@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
@@ -38,7 +37,6 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.PASSWORD_
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.REFRESH_AUTH_TOKEN_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.USER_NAME_KEY;
-import static com.mdmobile.pocketconsole.utils.GeneralUtility.getLayoutMode;
 
 public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack {
 

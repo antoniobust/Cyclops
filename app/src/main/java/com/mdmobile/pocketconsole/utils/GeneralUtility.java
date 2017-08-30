@@ -3,9 +3,7 @@ package com.mdmobile.pocketconsole.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.os.Build;
 
-import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 
 import java.util.HashMap;
@@ -63,19 +61,19 @@ public class GeneralUtility {
                 && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
-    public static int dpToPx(Context c, int dp){
+    public static int dpToPx(Context c, int dp) {
         final float scale = c.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
 
-    public static void setSharedPreference(Context mContext, String prefKey, boolean prefValue ){
+    public static void setSharedPreference(Context mContext, String prefKey, boolean prefValue) {
         String pocketConsolePref = mContext.getString(R.string.shared_preference);
         mContext
                 .getSharedPreferences(pocketConsolePref, Context.MODE_PRIVATE).edit()
                 .putBoolean(prefKey, prefValue).apply();
     }
 
-    public static boolean getLayoutMode(Context mContext){
+    public static boolean getLayoutMode(Context mContext) {
         return mContext.getResources().getConfiguration().smallestScreenWidthDp >= 720;
     }
 

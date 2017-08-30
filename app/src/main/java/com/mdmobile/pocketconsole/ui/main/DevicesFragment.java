@@ -283,7 +283,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         Bundle args = new Bundle(1);
         args.putString(SEARCH_QUERY_KEY, query);
 
-        if(isAdded()) {
+        if (isAdded()) {
             getLoaderManager().restartLoader(1, args, this);
             return true;
         }

@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     //Define a flag if we are in tablet layout or not
     public static boolean TABLET_MODE;
+    String devId, devName;
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
 
     };
     private AccountManager accountManager;
-    String devId, devName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,9 +145,10 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (TABLET_MODE && devName !=null && devId != null) {
+        if (TABLET_MODE && devName != null && devId != null) {
             outState.putString(DEVICE_NAME_EXTRA_KEY, devName);
-            outState.putString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);        }
+            outState.putString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);
+        }
     }
 
     private void syncDevicesNow() {
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     //On device selected open details view
     @Override
     public void onDeviceSelected(String devId, String devName) {
-        this.devId =devId;
+        this.devId = devId;
         this.devName = devName;
 
         if (TABLET_MODE) {

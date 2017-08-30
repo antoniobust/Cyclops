@@ -1,6 +1,7 @@
 package com.mdmobile.pocketconsole.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.ArrayMap;
@@ -27,9 +28,9 @@ import java.util.List;
 
 public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
 
-    private ArrayList<Object> statistics;
+    private Bundle statistics;
 
-    public ChartsAdapter(@Nullable ArrayList<Object> data) {
+    public ChartsAdapter(@Nullable Bundle data) {
         if (data != null) {
             statistics = data;
         }
@@ -69,8 +70,8 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
             case 0:
                 //Online vs offline devices
                 pieEntries = new ArrayList<>();
-                pieEntries.add(new PieEntry((int) statistics.get(0), "OnLine"));
-                pieEntries.add(new PieEntry((int) statistics.get(1), "OffLine"));
+                pieEntries.add(new PieEntry(statistics.getInt("OnlineDevs"), "OnLine"));
+                pieEntries.add(new PieEntry(statistics.getInt("OfflineDevs"), "OffLine"));
 
                 pieDataSet = new PieDataSet(pieEntries, null);
                 pieDataSet.setColors(new int[]{R.color.colorPrimaryDark, R.color.colorPrimary}, holder.chartContainer.getContext());
@@ -87,12 +88,12 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
                 //Device platforms
                 pieEntries = new ArrayList<>();
 
-                ArrayMap<String, Integer> platforms = (ArrayMap) statistics.get(2);
-                pieEntries.add(new PieEntry(platforms.get("Android"), "Android"));
-                pieEntries.add(new PieEntry(platforms.get("iOS"), "iOS"));
-                pieEntries.add(new PieEntry(platforms.get("Desktop"), "Desktop"));
-                pieEntries.add(new PieEntry(platforms.get("Windows CE / Mobile"), "Windows CE / Mobile"));
-                pieEntries.add(new PieEntry(platforms.get("Zebra Printers"), "Zebra Printers"));
+                pieEntries.add(new PieEntry(statistics.getInt("Android"), "Android"));
+                pieEntries.add(new PieEntry(statistics.getInt("Apple"), "iOS"));
+                pieEntries.add(new PieEntry(statistics.getInt("WindowsDesktop"), "Desktop"));
+                pieEntries.add(new PieEntry(statistics.getInt("WindowsCE"), "Windows CE / Mobile"));
+                pieEntries.add(new PieEntry(statistics.getInt("WindowsModern"), "Windows Modern"));
+                pieEntries.add(new PieEntry(statistics.getInt("Printer"), "Zebra Printers"));
 
                 pieDataSet = new PieDataSet(pieEntries, null);
                 pieDataSet.setColors(

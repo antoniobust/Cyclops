@@ -126,10 +126,10 @@ public class McContract {
         String STATUS = "Status";
     }
 
-    interface InstalledAppsColumns{
+    interface InstalledAppsColumns {
         String DEVICE_ID = "DeviceID";
         String APPLICATION_ID = "ApplicationID";
-        String APPLICATION_NAME= "Name";
+        String APPLICATION_NAME = "Name";
         String APPLICATION_VERSION = "MajorVersion";
         String APPLICATION_BUILD_NUMBER = "BuildVersion";
         String APPLICATION_SIZE = "Size";
@@ -352,27 +352,27 @@ public class McContract {
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(INSTALLED_APPLICATION_TABLE_NAME).build();
 
         //Methods
-        public static String getAppIdFromUri(Uri uri){
+        public static String getAppIdFromUri(Uri uri) {
             return uri.getLastPathSegment();
         }
 
-        public static String getAppPackageNameFromUri(Uri uri){
+        public static String getAppPackageNameFromUri(Uri uri) {
             return uri.getLastPathSegment();
         }
 
-        public static Uri buildUriWithId(long applicationId){
+        public static Uri buildUriWithId(long applicationId) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(applicationId)).build();
         }
 
-        public static Uri buildUriWithDevId(String deviceID){
+        public static Uri buildUriWithDevId(String deviceID) {
             return CONTENT_URI.buildUpon().appendPath(deviceID).build();
         }
 
-        public static String getDeviceIdFromUri(Uri uri){
+        public static String getDeviceIdFromUri(Uri uri) {
             return uri.getLastPathSegment();
         }
 
-        public static Uri buildUriWithAppPackageName(String applicationId){
+        public static Uri buildUriWithAppPackageName(String applicationId) {
             return CONTENT_URI.buildUpon().appendPath(applicationId).build();
         }
     }
@@ -395,11 +395,13 @@ public class McContract {
     public static class Script implements ScriptColumns, BaseColumns {
         //Table Uri
         public static Uri CONTENT_URI = DB_URI.buildUpon().appendPath(SCRIPT_TABLE_NAME).build();
+
         //Helper uri methods
-        public static Uri buildUriWithId(long id){
+        public static Uri buildUriWithId(long id) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
         }
-        public static String getScriptIdFromUri(Uri uri){
+
+        public static String getScriptIdFromUri(Uri uri) {
             return uri.getLastPathSegment();
         }
     }

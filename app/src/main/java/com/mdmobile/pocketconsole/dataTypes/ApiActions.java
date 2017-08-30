@@ -1,6 +1,5 @@
 package com.mdmobile.pocketconsole.dataTypes;
 
-import android.support.annotation.IntDef;
 import android.support.annotation.StringDef;
 
 import java.lang.annotation.Retention;

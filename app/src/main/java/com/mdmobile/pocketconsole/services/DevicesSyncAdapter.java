@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
-import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.gson.Token;

@@ -32,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
@@ -89,14 +88,14 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
         Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         //Handle different context if in tablet layout or smartphone
-        if(MainActivity.TABLET_MODE){
+        if (MainActivity.TABLET_MODE) {
             ((MainActivity) getActivity()).setSupportActionBar(toolbar);
             ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-            if(actionBar != null) {
+            if (actionBar != null) {
                 actionBar.setTitle(deviceName);
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
-        }else {
+        } else {
             ((DeviceDetailsActivity) getActivity()).setSupportActionBar(toolbar);
         }
 
@@ -122,14 +121,13 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         subtitleView.setText(deviceId);
 
 
-
         return rootView;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.device_action_menu,menu);
+        inflater.inflate(R.menu.device_action_menu, menu);
     }
 
     @Override
@@ -146,8 +144,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            if(MainActivity.TABLET_MODE){
+        if (item.getItemId() == android.R.id.home) {
+            if (MainActivity.TABLET_MODE) {
                 hideDetailsFragment();
                 return true;
             }

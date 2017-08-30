@@ -1,11 +1,8 @@
 package com.mdmobile.pocketconsole.utils;
 
 import android.content.ContentValues;
-import android.view.View;
 
-import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.gson.InstalledApp;
-import com.mdmobile.pocketconsole.gson.Profile;
 import com.mdmobile.pocketconsole.gson.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 
@@ -55,7 +52,7 @@ public class DbData {
                 }
 
                 //Skip BasicDevice methods and Objects methods
-                if(method.getDeclaringClass() == BasicDevice.class || method.getDeclaringClass() == Object.class){
+                if (method.getDeclaringClass() == BasicDevice.class || method.getDeclaringClass() == Object.class) {
                     continue;
                 }
 

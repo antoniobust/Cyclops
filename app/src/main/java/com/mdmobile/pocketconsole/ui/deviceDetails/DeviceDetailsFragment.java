@@ -87,18 +87,20 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
 
         Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        ActionBar actionBar;
         //Handle different context if in tablet layout or smartphone
         if (MainActivity.TABLET_MODE) {
             ((MainActivity) getActivity()).setSupportActionBar(toolbar);
-            ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setTitle(deviceName);
-                actionBar.setDisplayHomeAsUpEnabled(true);
-            }
+            actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         } else {
             ((DeviceDetailsActivity) getActivity()).setSupportActionBar(toolbar);
+            actionBar = ((DeviceDetailsActivity) getActivity()).getSupportActionBar();
         }
 
+        if (actionBar != null) {
+            actionBar.setTitle(deviceName);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         ImageView titleIconView = (ImageView) rootView.findViewById(R.id.device_detail_icon);
         TextView titleView = (TextView) rootView.findViewById(R.id.device_detail_title_view);
@@ -111,10 +113,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             titleView.setTransitionName(nameTransitionName);
         }
 
-
         infoCard.setOnClickListener(this);
         appsCard.setOnClickListener(this);
-
 
         titleIconView.setImageResource(R.drawable.ic_phone_android);
         titleView.setText(deviceName);

@@ -48,21 +48,37 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
             switch (item.getItemId()) {
                 case R.id.navigation_devices:
-                    ft.replace(main_activity_fragment_container, DevicesFragment.newInstance());
+                    if(getSupportFragmentManager().findFragmentByTag("DevicesFragment") != null){
+                        break;
+                    }
+                    ft.replace(main_activity_fragment_container, DevicesFragment.newInstance(), "DevicesFragment");
                     ft.commit();
                     return true;
+
                 case R.id.navigation_dashboard:
-                    ft.replace(main_activity_fragment_container, DashboardFragment.newInstance());
+                    if(getSupportFragmentManager().findFragmentByTag("DashboardFragment") != null){
+                        break;
+                    }
+                    ft.replace(main_activity_fragment_container, DashboardFragment.newInstance(), "DashboardFragment");
                     ft.commit();
                     return true;
+
                 case R.id.navigation_server:
-                    ft.replace(main_activity_fragment_container, ServerFragment.newInstance());
+                    if(getSupportFragmentManager().findFragmentByTag("ServerFragment") != null){
+                        break;
+                    }
+                    ft.replace(main_activity_fragment_container, ServerFragment.newInstance(), "ServerFragment");
                     ft.commit();
                     return true;
+
                 case R.id.navigation_users:
-                    ft.replace(main_activity_fragment_container, UsersFragment.newInstance());
+                    if(getSupportFragmentManager().findFragmentByTag("UserFragment") != null){
+                        break;
+                    }
+                    ft.replace(main_activity_fragment_container, UsersFragment.newInstance(), "UserFragment");
                     ft.commit();
                     return true;
             }

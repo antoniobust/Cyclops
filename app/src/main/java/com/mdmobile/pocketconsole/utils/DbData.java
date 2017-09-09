@@ -3,6 +3,7 @@ package com.mdmobile.pocketconsole.utils;
 import android.content.ContentValues;
 
 import com.mdmobile.pocketconsole.gson.InstalledApp;
+import com.mdmobile.pocketconsole.gson.ServerInfo;
 import com.mdmobile.pocketconsole.gson.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 public class DbData {
 
-    public static ContentValues[] bulkFormatDeviceData(ArrayList<BasicDevice> devices) {
+    public static ContentValues[] prepareDeviceValues(ArrayList<BasicDevice> devices) {
         //TODO: not sure why gson sometimes skips some indexes so need to check here if the object exists at this index
         // Workaround: collect devices in an array list of content values and then convert it to content values array
         // to pass it to content provider
@@ -24,7 +25,7 @@ public class DbData {
         ArrayList<ContentValues> values1 = new ArrayList<>();
         for (BasicDevice device : devices) {
             if (device != null) {
-                values1.add(formatDeviceData(device));
+                values1.add(prepareDeviceValues(device));
             }
         }
         ContentValues[] values = new ContentValues[values1.size()];
@@ -32,7 +33,7 @@ public class DbData {
         return values;
     }
 
-    public static ContentValues formatDeviceData(BasicDevice device) {
+    public static ContentValues prepareDeviceValues(BasicDevice device) {
 
         ContentValues deviceBasicValues = getDeviceBasicValues(device);
 
@@ -79,7 +80,6 @@ public class DbData {
         return deviceBasicValues;
     }
 
-
     private static ContentValues getDeviceBasicValues(BasicDevice device) {
 
         ContentValues deviceValues = new ContentValues();
@@ -116,8 +116,8 @@ public class DbData {
         return deviceValues;
     }
 
-    //return content values for installed app
-    private static ContentValues getInstalledAppContentValue(InstalledApp app) {
+
+    private static ContentValues getInstalledAppContentValues(InstalledApp app) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(McContract.InstalledApplications.DEVICE_ID, app.getDeviceId());
@@ -132,29 +132,89 @@ public class DbData {
         return contentValues;
     }
 
-    //Return Content values Array to bulk insert installed app in DB
-    public static ContentValues[] bulkFormatInstalledApp(ArrayList<InstalledApp> installedApps) {
+    public static ContentValues[] prepareInstalledAppValues(ArrayList<InstalledApp> installedApps) {
         ArrayList<ContentValues> values = new ArrayList<>(installedApps.size());
         for (int i = 0; i < installedApps.size(); i++) {
-            values.add(getInstalledAppContentValue(installedApps.get(i)));
+            values.add(getInstalledAppContentValues(installedApps.get(i)));
         }
         ContentValues[] values1 = new ContentValues[values.size()];
         values.toArray(values1);
         return values1;
     }
 
-
-    public static ContentValues formatInstalledApp(InstalledApp installedApp) {
-        return getInstalledAppContentValue(installedApp);
+    public static ContentValues prepareInstalledAppValues(InstalledApp installedApp) {
+        return getInstalledAppContentValues(installedApp);
     }
 
-    //return content values for installed app
-    public static ContentValues getSavedScriptContentValues(String name, String description, String script) {
-        ContentValues contentValues = new ContentValues();
 
+    public static ContentValues prepareScriptValues(String name, String description, String script) {
+        ContentValues contentValues = new ContentValues();
         contentValues.put(McContract.Script.TITLE, name);
         contentValues.put(McContract.Script.DESCRIPTION, description);
         contentValues.put(McContract.Script.SCRIPT, script);
         return contentValues;
+    }
+
+
+    private static ContentValues getMsContentValues(ServerInfo.ManagementServer server) {
+        ContentValues msValues = new ContentValues();
+        msValues.put(McContract.ManagementServer.NAME, server.getName());
+        msValues.put(McContract.ManagementServer.FULLY_QUALIFIED_NAME, server.getFqdn());
+        msValues.put(McContract.ManagementServer.DESCRIPTION, server.getDescription());
+        msValues.put(McContract.ManagementServer.MAC_ADDRESS, server.getMacAddress());
+        msValues.put(McContract.ManagementServer.PORT_NUMBER, server.getPortNumber());
+        msValues.put(McContract.ManagementServer.STATUS_TIME, server.getStatusTime());
+        msValues.put(McContract.ManagementServer.STATUS, server.getStatus());
+        msValues.put(McContract.ManagementServer.TOTAL_USER_COUNT, server.getTotalConsoleUsers());
+        return msValues;
+    }
+
+    public static ContentValues prepareMsValues(ServerInfo.ManagementServer server) {
+        return getMsContentValues(server);
+    }
+
+    public static ContentValues[] prepareMsValues(ArrayList<ServerInfo.ManagementServer> servers) {
+        ContentValues[] msValuesArray = new ContentValues[servers.size()];
+        for (int i = 0; i < servers.size(); i++) {
+            msValuesArray[i] = getMsContentValues(servers.get(i));
+        }
+        return msValuesArray;
+    }
+
+
+    private static ContentValues getDsContentValues(ServerInfo.DeploymentServer server) {
+        ContentValues values = new ContentValues();
+        values.put(McContract.DeploymentServer.NAME, server.getName());
+        values.put(McContract.DeploymentServer.STATUS, server.getStatus());
+        values.put(McContract.DeploymentServer.CONNECTED, server.getConnected());
+        values.put(McContract.DeploymentServer.PRIMARY_AGENT_ADDRESS, server.getPrimaryAgentAddress());
+        values.put(McContract.DeploymentServer.SECONDARY_AGENT_ADDRESS, server.getSecondaryAgentAddress());
+        values.put(McContract.DeploymentServer.DEVICE_MANAGEMENT_ADDRESS, server.getDeviceManagementAddress());
+        values.put(McContract.DeploymentServer.PRIMARY_MANAGEMENT_ADDRESS, server.getPrimaryManagementAddress());
+        values.put(McContract.DeploymentServer.SECONDARY_MANAGEMENT_ADDRESS, server.getSecondaryManagementAddress());
+        values.put(McContract.DeploymentServer.RULE_RELOAD, server.getRuleReload());
+        values.put(McContract.DeploymentServer.SCHEDULE_INTERVAL, server.getScheduleInterval());
+        values.put(McContract.DeploymentServer.MIN_THREADS, server.getMinThreads());
+        values.put(McContract.DeploymentServer.MAX_THREADS, server.getMaxThread());
+        values.put(McContract.DeploymentServer.MAX_BURST_THREADS, server.getMaxBurstThreads());
+        values.put(McContract.DeploymentServer.DEVICES_CONNECTED, server.getConnectedDeviceCount());
+        values.put(McContract.DeploymentServer.MANAGERS_CONNECTED, server.getConnectedManagerCount());
+        values.put(McContract.DeploymentServer.QUEUE_LENGTH, server.getMsgQueueLength());
+        values.put(McContract.DeploymentServer.CURRENT_THREAD_COUNT, server.getMsgQueueLength());
+        values.put(McContract.DeploymentServer.PULSE_WAIT_INTERVAL, server.getPulseWaitInterval());
+
+        return values;
+    }
+
+    public static ContentValues prepareDsValues(ServerInfo.DeploymentServer server) {
+        return getDsContentValues(server);
+    }
+
+    public static ContentValues[] prepareDsValues(ArrayList<ServerInfo.DeploymentServer> servers) {
+        ContentValues[] dsValuesArray = new ContentValues[servers.size()];
+        for (int i = 0; i < servers.size(); i++) {
+            dsValuesArray[i] = getDsContentValues(servers.get(i));
+        }
+        return dsValuesArray;
     }
 }

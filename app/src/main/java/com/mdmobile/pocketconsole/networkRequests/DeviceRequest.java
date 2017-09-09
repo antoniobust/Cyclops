@@ -25,13 +25,12 @@ import com.mdmobile.pocketconsole.gson.devices.WindowsDesktopLegacy;
 import com.mdmobile.pocketconsole.gson.devices.WindowsPhone;
 import com.mdmobile.pocketconsole.gson.devices.WindowsRuntime;
 import com.mdmobile.pocketconsole.provider.McContract;
-import com.mdmobile.pocketconsole.utils.DbData;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import static com.mdmobile.pocketconsole.utils.DbData.formatDeviceData;
+import static com.mdmobile.pocketconsole.utils.DbData.prepareDeviceValues;
 
 /**
  * Request devices
@@ -91,10 +90,10 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
                 //Parse devices to extract common properties and put other as extra string
                 if (devices.size() == 1) {
-                    ContentValues device = formatDeviceData(devices.get(0));
+                    ContentValues device = prepareDeviceValues(devices.get(0));
                     mContext.getContentResolver().insert(McContract.Device.CONTENT_URI, device);
                 } else if (devices.size() > 1) {
-                    ContentValues[] devicesValues = DbData.bulkFormatDeviceData(devices);
+                    ContentValues[] devicesValues = prepareDeviceValues(devices);
                     mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
                 }
             } else if (insertInfoMethod == UPDATE_EXISTING_DEVICE_INFO) {

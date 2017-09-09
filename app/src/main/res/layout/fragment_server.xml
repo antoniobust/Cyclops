@@ -1,30 +1,74 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-            style="@style/AppTheme.MainActivity.Fragment">
+            style="@style/AppTheme.MainActivity.Fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="top|center">
 
-        <FrameLayout
-            android:id="@+id/ds_info_section"
-            android:layout_width="0dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1">
 
-        <FrameLayout
-            android:id="@+id/ms_info_section"
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/ds_title_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:drawablePadding="8dp"
+                android:text="@string/deployment_servers_label"
+                android:drawableStart="@drawable/ic_server_black_24dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
+                tools:text="Deployment Servers"/>
+
+            <GridView
+                android:id="@+id/ds_grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ds_title_view"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:numColumns="2"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dp">
+            </GridView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ds_info_section"
-            tools:layout_editor_absoluteX="8dp"/>
-    </android.support.constraint.ConstraintLayout>
+            android:layout_marginTop="8dp"
+            android:layout_weight="1">
 
+            <TextView
+                android:id="@+id/ms_title_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:drawablePadding="8dp"
+                android:text="@string/management_servers_label"
+                android:drawableStart="@drawable/ic_server_black_24dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
+                tools:text="Management Servers"/>
 
+            <GridView
+                android:id="@+id/ms_grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ms_title_view"
+                android:gravity="center"
+                android:numColumns="2"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dp">
+            </GridView>
+        </RelativeLayout>
+    </LinearLayout>
 </ScrollView>

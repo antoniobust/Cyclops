@@ -48,10 +48,10 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
 
             //Parse devices to extract common properties and put other as extra string
             if (applications.size() == 1) {
-                ContentValues appValues = DbData.formatInstalledApp(applications.get(0));
+                ContentValues appValues = DbData.prepareInstalledAppValues(applications.get(0));
                 mContext.getContentResolver().insert(McContract.InstalledApplications.CONTENT_URI, appValues);
             } else if (applications.size() > 1) {
-                ContentValues[] appValues = DbData.bulkFormatInstalledApp(applications);
+                ContentValues[] appValues = DbData.prepareInstalledAppValues(applications);
                 mContext.getContentResolver().bulkInsert(McContract.InstalledApplications.CONTENT_URI, appValues);
             }
 

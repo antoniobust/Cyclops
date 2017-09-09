@@ -15,6 +15,7 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
 import com.mdmobile.pocketconsole.fakeData.FakeJSON;
 import com.mdmobile.pocketconsole.gson.RuntimeTypeAdapterFactory;
+import com.mdmobile.pocketconsole.gson.ServerInfo;
 import com.mdmobile.pocketconsole.gson.devices.AndroidForWorkDevice;
 import com.mdmobile.pocketconsole.gson.devices.AndroidGenericDevice;
 import com.mdmobile.pocketconsole.gson.devices.AndroidPlusDevice;
@@ -34,7 +35,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,16 +62,27 @@ public class DbData extends AndroidJUnitRunner {
 
 
     @Test
-    public void testInsertDevice() {
+    public void InsertDevice() {
         createSingleNewDevice();
         createNewDevicesBulkImport();
     }
 
     @Test
-    public void TestDeviceSelection() {
+    public void DeleteDevice() {
         createNewDevicesBulkImport();
         Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.Device.CONTENT_URI, null, null, null, null);
-        assertTrue("No device found", c!=null && c.moveToNext());
+        assertTrue(c != null);
+        c.moveToFirst();
+        String devId = c.getString(c.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
+        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.Device.buildUriWithDeviceID(devId), null, null);
+        assertTrue("Device (" + devId + ") not deleted from DB ", deleted == 1);
+    }
+
+    @Test
+    public void DeviceSelection() {
+        createNewDevicesBulkImport();
+        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.Device.CONTENT_URI, null, null, null, null);
+        assertTrue("No device found", c != null && c.moveToNext());
         int count = 0;
         HashSet<String> IDs = new HashSet<>(c.getCount());
         while (!c.isLast()) {
@@ -81,7 +92,28 @@ public class DbData extends AndroidJUnitRunner {
         }
         assertTrue("Device count: " + count, count > 1);
         assertTrue("Some IDs are duplicated" + IDs.toString(), IDs.size() == count);
+    }
 
+    @Test
+    public void managementServer() {
+        insertMs();
+        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.ManagementServer.CONTENT_URI, null, null, null, null);
+        assertNotNull("Null cursor returned for MS ", c);
+        assertTrue("No MS info found", c.moveToFirst());
+
+        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.ManagementServer.CONTENT_URI, null, null);
+        assertTrue("MS not deleted properly, deleted: " + deleted + " records", deleted > 0);
+    }
+
+    @Test
+    public void deploymentServer() {
+        insertDs();
+        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.DeploymentServer.CONTENT_URI, null, null, null, null);
+        assertNotNull("Null cursor returned for DS ", c);
+        assertTrue("No DS info found", c.moveToFirst());
+
+        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.DeploymentServer.CONTENT_URI, null, null);
+        assertTrue("DS not deleted properly, deleted: " + deleted + " records", deleted > 0);
     }
 
     @Test
@@ -93,12 +125,12 @@ public class DbData extends AndroidJUnitRunner {
         HashSet<String> titleSet = new HashSet<>(Arrays.asList(scripts));
 
         int initialCount = titleSet.size();
-        assertTrue("Saved scripts do not match the standard ones",initialCount == c.getCount());
+        assertTrue("Saved scripts do not match the standard ones", initialCount == c.getCount());
 
-        do{
+        do {
             titleSet.add(c.getString(c.getColumnIndex(McContract.Script.TITLE)));
             c.moveToNext();
-        }while(c.isLast());
+        } while (c.isLast());
 
         assertTrue("Additional scripts found in DB" + titleSet.toString(), titleSet.size() == initialCount);
     }
@@ -107,7 +139,7 @@ public class DbData extends AndroidJUnitRunner {
     private void createSingleNewDevice() {
         ArrayList<BasicDevice> devicesArray = getDeviceFromJson();
 
-        ContentValues deviceValues = com.mdmobile.pocketconsole.utils.DbData.formatDeviceData(devicesArray.get(0));
+        ContentValues deviceValues = com.mdmobile.pocketconsole.utils.DbData.prepareDeviceValues(devicesArray.get(0));
 
         Uri newDev = InstrumentationRegistry.getContext().getContentResolver().insert(McContract.Device.CONTENT_URI, deviceValues);
         assertNotNull("Device was not created", newDev);
@@ -121,7 +153,7 @@ public class DbData extends AndroidJUnitRunner {
         int newDev = -1;
 
         if (devicesArray.size() > 1) {
-            ContentValues[] devicesValues = com.mdmobile.pocketconsole.utils.DbData.bulkFormatDeviceData(devicesArray);
+            ContentValues[] devicesValues = com.mdmobile.pocketconsole.utils.DbData.prepareDeviceValues(devicesArray);
             newDev = InstrumentationRegistry.getTargetContext().getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
         }
         assertFalse("Not all devices have been inserted correctly", newDev == 0);
@@ -150,8 +182,30 @@ public class DbData extends AndroidJUnitRunner {
         Gson gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();
 
         return gson.fromJson(FakeJSON.devicesJson, deviceCollectionType);
+    }
 
+    private void insertMs() {
+        ArrayList<ServerInfo.ManagementServer> msArray = getMsFromJson();
+        ContentValues[] msValues = com.mdmobile.pocketconsole.utils.DbData.prepareMsValues(msArray);
+        int inserted = InstrumentationRegistry.getContext().getContentResolver().bulkInsert(McContract.ManagementServer.CONTENT_URI, msValues);
+        assertTrue("MS not inserted", inserted > 0);
+    }
 
+    private void insertDs() {
+        ArrayList<ServerInfo.DeploymentServer> dsArray = getDsFromJson();
+        ContentValues[] dsValues = com.mdmobile.pocketconsole.utils.DbData.prepareDsValues(dsArray);
+        int inserted = InstrumentationRegistry.getContext().getContentResolver().bulkInsert(McContract.DeploymentServer.CONTENT_URI, dsValues);
+        assertTrue("DS not inserted", inserted > 0);
+    }
+
+    private ArrayList<ServerInfo.ManagementServer> getMsFromJson() {
+        ServerInfo servers = new Gson().fromJson(FakeJSON.serverJson, ServerInfo.class);
+        return new ArrayList<>(servers.getManagementServers());
+    }
+
+    private ArrayList<ServerInfo.DeploymentServer> getDsFromJson() {
+        ServerInfo servers = new Gson().fromJson(FakeJSON.serverJson, ServerInfo.class);
+        return new ArrayList<>(servers.getDeploymentServers());
     }
 }
 

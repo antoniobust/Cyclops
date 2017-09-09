@@ -116,7 +116,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"iPad\",\n" +
             "    \"OSVersion\": \"9.3.5\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\iOS Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\iOS Devices\",\n" +
             "    \"Platform\": \"iOS\"\n" +
             "  },\n" +
             "  {\n" +
@@ -310,7 +310,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"70e Black\",\n" +
             "    \"OSVersion\": \"5.2\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Windows Mobile Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Windows Mobile Devices\",\n" +
             "    \"Platform\": \"WindowsMobile\"\n" +
             "  },\n" +
             "  {\n" +
@@ -390,7 +390,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"CN70\",\n" +
             "    \"OSVersion\": \"5.2\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Windows Mobile Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Windows Mobile Devices\",\n" +
             "    \"Platform\": \"WindowsMobile\"\n" +
             "  },\n" +
             "  {\n" +
@@ -504,7 +504,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"iPad\",\n" +
             "    \"OSVersion\": \"9.3.5\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\iOS Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\iOS Devices\",\n" +
             "    \"Platform\": \"iOS\"\n" +
             "  },\n" +
             "  {\n" +
@@ -603,7 +603,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"Lenovo TB3-X70L\",\n" +
             "    \"OSVersion\": \"6.0\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Android++ Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Android++ Devices\",\n" +
             "    \"Platform\": \"AndroidPlus\"\n" +
             "  },\n" +
             "  {\n" +
@@ -702,7 +702,7 @@ public class FakeJSON {
             "    \"Mode\": \"UnenrolledByUser\",\n" +
             "    \"Model\": \"LG-D855\",\n" +
             "    \"OSVersion\": \"5.0\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Android++ Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Android++ Devices\",\n" +
             "    \"Platform\": \"AndroidPlus\"\n" +
             "  },\n" +
             "  {\n" +
@@ -801,7 +801,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"LG-D722\",\n" +
             "    \"OSVersion\": \"5.0.2\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Android++ Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Android++ Devices\",\n" +
             "    \"Platform\": \"AndroidPlus\"\n" +
             "  },\n" +
             "  {\n" +
@@ -881,7 +881,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"ES400\",\n" +
             "    \"OSVersion\": \"5.2\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Windows Mobile Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Windows Mobile Devices\",\n" +
             "    \"Platform\": \"WindowsMobile\"\n" +
             "  },\n" +
             "  {\n" +
@@ -961,7 +961,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"ES400\",\n" +
             "    \"OSVersion\": \"5.2\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Windows Mobile Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Windows Mobile Devices\",\n" +
             "    \"Platform\": \"WindowsMobile\"\n" +
             "  },\n" +
             "  {\n" +
@@ -1041,7 +1041,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"MC659B\",\n" +
             "    \"OSVersion\": \"5.2\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Windows Mobile Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Windows Mobile Devices\",\n" +
             "    \"Platform\": \"WindowsMobile\"\n" +
             "  },\n" +
             "  {\n" +
@@ -1201,7 +1201,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"WT41N0\",\n" +
             "    \"OSVersion\": \"7.0\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Windows CE Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Windows CE Devices\",\n" +
             "    \"Platform\": \"WindowsCEDotNet\"\n" +
             "  },\n" +
             "  {\n" +
@@ -1281,7 +1281,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"ATHE400\",\n" +
             "    \"OSVersion\": \"5.2\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Windows Mobile Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Windows Mobile Devices\",\n" +
             "    \"Platform\": \"WindowsMobile\"\n" +
             "  },\n" +
             "  {\n" +
@@ -1380,7 +1380,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"VF-795\",\n" +
             "    \"OSVersion\": \"5.1\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Javier Group\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Javier Group\",\n" +
             "    \"Platform\": \"AndroidPlus\"\n" +
             "  },\n" +
             "  {\n" +
@@ -1583,7 +1583,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"ONEPLUS A3003\",\n" +
             "    \"OSVersion\": \"7.0\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Android++ Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Android++ Devices\",\n" +
             "    \"Platform\": \"Android\"\n" +
             "  },\n" +
             "  {\n" +
@@ -1682,7 +1682,7 @@ public class FakeJSON {
             "    \"Mode\": \"Active\",\n" +
             "    \"Model\": \"TC8000\",\n" +
             "    \"OSVersion\": \"4.4.3\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Android++ Devices\\\\Kevin\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Android++ Devices\\\\Kevin\",\n" +
             "    \"Platform\": \"AndroidPlus\"\n" +
             "  },\n" +
             "  {\n" +
@@ -1781,8 +1781,66 @@ public class FakeJSON {
             "    \"Mode\": \"UnenrollPendingAdmin\",\n" +
             "    \"Model\": \"TC51\",\n" +
             "    \"OSVersion\": \"6.0.1\",\n" +
-            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD Server\\\\Android++ Devices\",\n" +
+            "    \"Path\": \"\\\\\\\\SOTI UK CLOUD ServerInfo\\\\Android++ Devices\",\n" +
             "    \"Platform\": \"AndroidPlus\"\n" +
             "  }\n" +
             "]";
+
+    public static final String serverJson ="{\n" +
+            "  \"DeploymentServers\": [\n" +
+            "    {\n" +
+            "      \"IsConnected\": true,\n" +
+            "      \"PrimaryManagementAddress\": \"uk.mobicontrolcloud.com:5494\",\n" +
+            "      \"SecondaryManagementAddress\": null,\n" +
+            "      \"PrimaryAgentAddress\": \"uk.mobicontrolcloud.com:5494\",\n" +
+            "      \"SecondaryAgentAddress\": null,\n" +
+            "      \"PulseTimeout\": 60,\n" +
+            "      \"RuleReload\": 10,\n" +
+            "      \"ScheduleInterval\": 30,\n" +
+            "      \"MinThreads\": 2,\n" +
+            "      \"MaxThreads\": 16,\n" +
+            "      \"MaxBurstThreads\": 256,\n" +
+            "      \"PulseWaitInterval\": 0,\n" +
+            "      \"ConnectedDeviceCount\": 2,\n" +
+            "      \"ConnectedManagerCount\": 0,\n" +
+            "      \"MsgQueueLength\": 0,\n" +
+            "      \"CurrentThreadCount\": 2,\n" +
+            "      \"DeviceManagementAddress\": \"uk.mobicontrolcloud.com\",\n" +
+            "      \"Name\": \"UK\",\n" +
+            "      \"Status\": \"Started\"\n" +
+            "    }\n,{\n" +
+            "      \"IsConnected\": true,\n" +
+            "      \"PrimaryManagementAddress\": \"uk.mobicontrolcloud.com:5494\",\n" +
+            "      \"SecondaryManagementAddress\": null,\n" +
+            "      \"PrimaryAgentAddress\": \"uk.mobicontrolcloud.com:5494\",\n" +
+            "      \"SecondaryAgentAddress\": null,\n" +
+            "      \"PulseTimeout\": 60,\n" +
+            "      \"RuleReload\": 10,\n" +
+            "      \"ScheduleInterval\": 30,\n" +
+            "      \"MinThreads\": 2,\n" +
+            "      \"MaxThreads\": 16,\n" +
+            "      \"MaxBurstThreads\": 256,\n" +
+            "      \"PulseWaitInterval\": 0,\n" +
+            "      \"ConnectedDeviceCount\": 2,\n" +
+            "      \"ConnectedManagerCount\": 0,\n" +
+            "      \"MsgQueueLength\": 0,\n" +
+            "      \"CurrentThreadCount\": 2,\n" +
+            "      \"DeviceManagementAddress\": \"uk.mobicontrolcloud.com\",\n" +
+            "      \"Name\": \"UK2\",\n" +
+            "      \"Status\": \"Started\"\n" +
+            "    }\n" +
+            "  ],\n" +
+            "  \"ManagementServers\": [\n" +
+            "    {\n" +
+            "      \"Fqdn\": \"uk\",\n" +
+            "      \"PortNumber\": 443,\n" +
+            "      \"Description\": null,\n" +
+            "      \"StatusTime\": \"2017-09-09T18:09:24.69\",\n" +
+            "      \"MacAddress\": \"0AD3F06ECE09\",\n" +
+            "      \"TotalConsoleUsers\": 0,\n" +
+            "      \"Name\": \"uk\",\n" +
+            "      \"Status\": \"Started\"\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
 }

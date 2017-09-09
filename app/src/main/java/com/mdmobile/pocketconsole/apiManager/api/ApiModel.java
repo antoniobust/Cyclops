@@ -241,7 +241,7 @@ public class ApiModel {
         private static Uri.Builder currentApi;
 
         public static ServerApi Builder(@NonNull String authority) {
-            currentApi = Uri.parse(authority).buildUpon().appendPath(MobiControl).appendPath(ApiTypes.usersResource);
+            currentApi = Uri.parse(authority).buildUpon().appendPath(MobiControl).appendPath(ApiTypes.serverResource);
             return new ServerApi();
         }
 

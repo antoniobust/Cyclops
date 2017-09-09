@@ -17,10 +17,10 @@ public class ActionRequest extends BasicRequest<String> {
     private Response.Listener<String> responseListener;
     private String actionPayload;
 
-    public ActionRequest(String url, @NonNull String actionPyload, Response.Listener<String> listener, Response.ErrorListener errorListener, Context context) {
+    public ActionRequest(String url, @NonNull String actionPayload, Response.Listener<String> listener, Response.ErrorListener errorListener, Context context) {
         super(Method.POST, url, errorListener, context);
         responseListener = listener;
-        this.actionPayload = actionPyload;
+        this.actionPayload = actionPayload;
     }
 
     @Override

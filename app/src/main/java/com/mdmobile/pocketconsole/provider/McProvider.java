@@ -84,7 +84,15 @@ public class McProvider extends ContentProvider {
             case SCRIPT_ID:
                 String scriptId = McContract.Script.getScriptIdFromUri(uri);
                 c = database.query(McContract.SCRIPT_TABLE_NAME, projection,
-                        McContract.Script._ID + "=?", selectionArgs, null, null, sortOrder);
+                        McContract.Script._ID + "=?", new String[]{scriptId}, null, null, sortOrder);
+                break;
+
+            case MANAGEMENT_SERVERS:
+                c = database.query(McContract.MANAGEMENT_SERVER_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+
+            case DEPLOYMENT_SERVERS:
+                c = database.query(McContract.DEPLOYMENT_SERVER_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
             default:
@@ -112,7 +120,6 @@ public class McProvider extends ContentProvider {
 
                     if (database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME,
                             null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
-                        //if data was inserted correctly increment data inserted value
                         dataInserted++;
                     }
                 }
@@ -129,7 +136,6 @@ public class McProvider extends ContentProvider {
                 for (ContentValues contentValues : values) {
                     if (database.insertWithOnConflict(McContract.INSTALLED_APPLICATION_TABLE_NAME,
                             null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
-                        //if data was inserted correctly increment data inserted value
                         dataInserted++;
                     }
                 }
@@ -140,6 +146,40 @@ public class McProvider extends ContentProvider {
                     return dataInserted;
                 } else {
                     Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);
+                    return dataInserted;
+                }
+
+            case MANAGEMENT_SERVERS:
+                for (ContentValues contentValues : values) {
+                    if (database.insertWithOnConflict(McContract.MANAGEMENT_SERVER_TABLE_NAME,
+                            null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                        dataInserted++;
+                    }
+                }
+                if (dataInserted == values.length) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " MS in DB", Log.VERBOSE);
+
+                    return dataInserted;
+                } else {
+                    Logger.log(LOG_TAG, "MS bulk insert didn't insert values correctly", Log.ERROR);
+                    return dataInserted;
+                }
+
+            case DEPLOYMENT_SERVERS:
+                for (ContentValues contentValues : values) {
+                    if (database.insertWithOnConflict(McContract.DEPLOYMENT_SERVER_TABLE_NAME,
+                            null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                        dataInserted++;
+                    }
+                }
+                if (dataInserted == values.length) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " DS in DB", Log.VERBOSE);
+
+                    return dataInserted;
+                } else {
+                    Logger.log(LOG_TAG, "DS bulk insert didn't insert values correctly", Log.ERROR);
                     return dataInserted;
                 }
 
@@ -198,6 +238,25 @@ public class McProvider extends ContentProvider {
                 }
                 return McContract.Script.buildUriWithId(newRowID);
 
+            case MANAGEMENT_SERVERS:
+                newRowID = database.insertWithOnConflict(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                if (newRowID < 1) {
+                    Logger.log(LOG_TAG, "Impossible to insert MS in DB", Log.ERROR);
+                    return null;
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return McContract.ManagementServer.buildUriWithMsId(newRowID);
+
+            case DEPLOYMENT_SERVERS:
+                newRowID = database.insertWithOnConflict(McContract.DEPLOYMENT_SERVER_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                if (newRowID < 1) {
+                    Logger.log(LOG_TAG, "Impossible to insert DS in DB", Log.ERROR);
+                    return null;
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return McContract.DeploymentServer.buildUriWithDsId(newRowID);
+
+
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }
@@ -221,6 +280,18 @@ public class McProvider extends ContentProvider {
                     Logger.log(LOG_TAG, "No device deleted", Log.VERBOSE);
                 }
                 break;
+            case DEVICES_ID:
+                String deviceId = McContract.Device.getDeviceIdFromUri(uri);
+                String where = McContract.Device.COLUMN_DEVICE_ID + " = ?";
+                String[] parameters = {deviceId};
+                deleted = database.delete(McContract.DEVICE_TABLE_NAME, where, parameters);
+                if (deleted > 0) {
+                    Logger.log(LOG_TAG, "Device (" + deviceId + ") deleted", Log.VERBOSE);
+                } else {
+                    Logger.log(LOG_TAG, "Device (" + deviceId + ") not deleted", Log.VERBOSE);
+                }
+                break;
+
             case INSTALLED_APPLICATIONS_ON_DEVICE:
                 String devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
                 deleted = database.delete(McContract.DEVICE_TABLE_NAME, McContract.InstalledApplications.DEVICE_ID + " =?",
@@ -229,6 +300,22 @@ public class McProvider extends ContentProvider {
                     Logger.log(LOG_TAG, "InstalledApps deleted:" + deleted, Log.VERBOSE);
                 } else {
                     Logger.log(LOG_TAG, "No InstalledApps deleted", Log.VERBOSE);
+                }
+                break;
+            case MANAGEMENT_SERVERS:
+                deleted = database.delete(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, null);
+                if (deleted > 0) {
+                    Logger.log(LOG_TAG, "MS deleted:" + deleted, Log.VERBOSE);
+                } else {
+                    Logger.log(LOG_TAG, "No MS deleted", Log.VERBOSE);
+                }
+                break;
+            case DEPLOYMENT_SERVERS:
+                deleted = database.delete(McContract.DEPLOYMENT_SERVER_TABLE_NAME, null, null);
+                if (deleted > 0) {
+                    Logger.log(LOG_TAG, "DS deleted:" + deleted, Log.VERBOSE);
+                } else {
+                    Logger.log(LOG_TAG, "No DS deleted", Log.VERBOSE);
                 }
                 break;
             default:
@@ -262,9 +349,7 @@ public class McProvider extends ContentProvider {
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
-
         }
-
         return updated;
     }
 }

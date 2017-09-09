@@ -1,7 +1,6 @@
 package com.mdmobile.pocketconsole.apiManager;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Base64;
@@ -26,9 +25,10 @@ import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.networkRequests.ActionRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceInstalledAppRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceRequest;
+import com.mdmobile.pocketconsole.networkRequests.ServerInfoRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
 import com.mdmobile.pocketconsole.utils.Logger;
-import com.mdmobile.pocketconsole.utils.UsersUtility;
+import com.mdmobile.pocketconsole.utils.UserUtility;
 
 import org.json.JSONArray;
 
@@ -126,7 +126,7 @@ public class ApiRequestManager {
     public void getDevices(Account account) {
 
 //        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
-        String apiAuthority = UsersUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(ApplicationLoader.applicationContext, Request.Method.GET, api,
@@ -146,8 +146,8 @@ public class ApiRequestManager {
     }
 
     public void getDeviceInstalledApps(@NonNull final String devID) {
-        Account account = AccountManager.get(ApplicationLoader.applicationContext).getAccountsByType(ApplicationLoader.applicationContext.getString(R.string.account_type))[0];
-        String apiAuthority = UsersUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
+        Account account = UserUtility.getUser(ApplicationLoader.applicationContext);
+        String apiAuthority = UserUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
         DeviceInstalledAppRequest installedAppRequest = new DeviceInstalledAppRequest(Request.Method.GET,
@@ -173,8 +173,8 @@ public class ApiRequestManager {
 
     public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
-        Account account = AccountManager.get(ApplicationLoader.applicationContext).getAccountsByType(ApplicationLoader.applicationContext.getString(R.string.account_type))[0];
-        String apiAuthority = UsersUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
+        Account account = UserUtility.getUser(ApplicationLoader.applicationContext);
+        String apiAuthority = UserUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 
         String jsonPayload = new Gson().toJson(new Action(action, message, phoneNumber));
@@ -195,8 +195,26 @@ public class ApiRequestManager {
         requestsQueue.add(actionRequest);
         Logger.log(LOG_TAG, "Request( " + action + " -> " + message + ") requested to device: " + deviceID, Log.VERBOSE);
         Toast.makeText(ApplicationLoader.applicationContext, action + " request sent", Toast.LENGTH_SHORT).show();
+    }
 
+    public void getServerInfo() {
+        Account account = UserUtility.getUser(ApplicationLoader.applicationContext);
+        String apiAuthority = UserUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
+        String api = ApiModel.ServerApi.Builder(apiAuthority).getServerInfo().build();
 
+        ServerInfoRequest request = new ServerInfoRequest(api, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Logger.log(LOG_TAG, "Done with server info request", Log.VERBOSE);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.log(LOG_TAG, "Error requesting servers info", Log.ERROR);
+            }
+        }, ApplicationLoader.applicationContext);
+
+        requestsQueue.add(request);
     }
 
 

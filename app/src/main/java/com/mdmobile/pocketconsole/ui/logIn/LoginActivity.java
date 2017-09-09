@@ -25,7 +25,7 @@ import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
-import com.mdmobile.pocketconsole.utils.UsersUtility;
+import com.mdmobile.pocketconsole.utils.UserUtility;
 
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.ACCOUNT_TYPE_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.ADDING_NEW_ACCOUNT_KEY;
@@ -83,7 +83,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         //Check if activity was launched from authenticator(to add a new accountsUpdateListener),
         // if not check if there is any user already logged in
         if (authenticatorResponse == null) {
-            if (UsersUtility.checkAnyUserLoggedIn(getApplicationContext())) {
+            if (UserUtility.checkAnyUserLoggedIn(getApplicationContext())) {
                 //user found, launch main activity
                 startMainActivity();
             }
@@ -98,7 +98,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         super.onResume();
         //Check if a user was added while the activity was paused
         if (authenticatorResponse == null) {
-            if (UsersUtility.checkAnyUserLoggedIn(getApplicationContext())) {
+            if (UserUtility.checkAnyUserLoggedIn(getApplicationContext())) {
                 //user found, launch main activity
                 startMainActivity();
             }
@@ -271,7 +271,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             //Update accountsUpdateListener with new info
             accountManager.setPassword(account, psw);
             //Update account with new user data (token type would be teh same, the others may have changed)
-            UsersUtility.updateUserData(getApplicationContext(), userInfo, account);
+            UserUtility.updateUserData(getApplicationContext(), userInfo, account);
         }
 
         //Set the token we have for this accountsUpdateListener

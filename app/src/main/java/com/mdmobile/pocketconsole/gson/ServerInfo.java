@@ -1,20 +1,38 @@
 package com.mdmobile.pocketconsole.gson;
 
 
-public class Server {
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+public class ServerInfo {
+
+    @SerializedName("DeploymentServers")
+    List<DeploymentServer> deploymentServers;
+    @SerializedName("ManagementServers")
+    List<ManagementServer> managementServers;
+
+    public List<DeploymentServer> getDeploymentServers() {
+        return deploymentServers;
+    }
+
+    public List<ManagementServer> getManagementServers() {
+        return managementServers;
+    }
 
     public final class DeploymentServer {
         private String primaryManagementAddress, secondaryManagementAddress, primaryAgentAddress, secondaryAgentAddress,
                 deviceManagementAddress, name, status;
         private Boolean isConnected;
         private int pulseTimeout, ruleReload, scheduleInterval, minThreads, maxThread, maxBurstThreads, pulseWaitInterval,
-                connectedDeviceCount, connectedManagerCount;
+                connectedDeviceCount, connectedManagerCount,msgQueueLength, currentThreadCount;
 
         public DeploymentServer(String primaryManagementAddress, String secondaryManagementAddress,
                                 String primaryAgentAddress, String secondaryAgentAddress, String deviceManagementAddress,
                                 String name, String status, Boolean isConnected, int pulseTimeout,
                                 int ruleReload, int scheduleInterval, int minThreads, int maxThread,
-                                int maxBurstThreads, int pulseWaitInterval, int connectedDeviceCount, int connectedManagerCount) {
+                                int maxBurstThreads, int pulseWaitInterval, int connectedDeviceCount, int connectedManagerCount,
+                                int msgQueueLength, int currentThreadCount) {
             this.primaryManagementAddress = primaryManagementAddress;
             this.secondaryManagementAddress = secondaryManagementAddress;
             this.primaryAgentAddress = primaryAgentAddress;
@@ -32,6 +50,8 @@ public class Server {
             this.pulseWaitInterval = pulseWaitInterval;
             this.connectedDeviceCount = connectedDeviceCount;
             this.connectedManagerCount = connectedManagerCount;
+            this.msgQueueLength = msgQueueLength;
+            this.currentThreadCount = currentThreadCount;
         }
 
         public String getPrimaryManagementAddress() {
@@ -100,6 +120,14 @@ public class Server {
 
         public int getConnectedManagerCount() {
             return connectedManagerCount;
+        }
+
+        public int getMsgQueueLength() {
+            return msgQueueLength;
+        }
+
+        public int getCurrentThreadCount() {
+            return currentThreadCount;
         }
     }
 

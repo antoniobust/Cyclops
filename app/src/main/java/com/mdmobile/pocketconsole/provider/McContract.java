@@ -114,8 +114,6 @@ public class McContract {
 
     interface ManagementServerColumns {
         //Columns
-        String PRIMARY_MANAGEMENT_ADDRESS = "PrimaryManagementAddress";
-        String SECONDARY_MANAGEMENT_ADDRESS = "SecondaryManagementAddress";
         String FULLY_QUALIFIED_NAME = "Fqdn";
         String PORT_NUMBER = "PortNumber";
         String DESCRIPTION = "Description";
@@ -146,6 +144,8 @@ public class McContract {
         String PRIMARY_AGENT_ADDRESS = "PrimaryAgentAddress";
         String SECONDARY_AGENT_ADDRESS = "SecondaryAgentAddress";
         String DEVICE_MANAGEMENT_ADDRESS = "DeviceManagementAddress";
+        String PRIMARY_MANAGEMENT_ADDRESS = "PrimaryManagementAddress";
+        String SECONDARY_MANAGEMENT_ADDRESS = "SecondaryManagementAddress";
         String PULSE_TIMEOUT = "PulseTimeout";
         String RULE_RELOAD = "RuleReload";
         String SCHEDULE_INTERVAL = "ScheduleInterval";
@@ -173,7 +173,7 @@ public class McContract {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEVICE_TABLE_NAME).build();
 
-        public static Uri builUriWithDeviceID(@NonNull String deviceID) {
+        public static Uri buildUriWithDeviceID(@NonNull String deviceID) {
             return CONTENT_URI.buildUpon().appendPath(deviceID).build();
         }
 
@@ -381,6 +381,9 @@ public class McContract {
     public static class ManagementServer implements ManagementServerColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(MANAGEMENT_SERVER_TABLE_NAME).build();
+        public static Uri buildUriWithMsId(long id){
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
 
     }
 
@@ -389,7 +392,9 @@ public class McContract {
     public static class DeploymentServer implements DeploymentServerColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEPLOYMENT_SERVER_TABLE_NAME).build();
-
+        public static Uri buildUriWithDsId(long id){
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
     }
 
     public static class Script implements ScriptColumns, BaseColumns {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 
 import java.util.HashMap;
@@ -21,9 +22,9 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_AD
  * Helper methods to deal with users
  */
 
-public class UsersUtility {
+public class UserUtility {
 
-    private static final String LOG_TAG = UsersUtility.class.getSimpleName();
+    private static final String LOG_TAG = UserUtility.class.getSimpleName();
 
     public static Account checkUserExists(Context context, String userName) {
         Logger.log(LOG_TAG, "Checking any users exists", Log.VERBOSE);
@@ -42,6 +43,11 @@ public class UsersUtility {
 
         //If we are out the cycle there is no user already registered with same userName
         return null;
+    }
+
+    public static Account getUser(Context context){
+       return AccountManager.get(ApplicationLoader.applicationContext)
+               .getAccountsByType(ApplicationLoader.applicationContext.getString(R.string.account_type))[0];
     }
 
     public static Boolean checkAnyUserLoggedIn(Context context) {
@@ -98,5 +104,4 @@ public class UsersUtility {
             manager.setUserData(account, AUTH_TOKEN_TYPE_KEY, userInfo.getString(AUTH_TOKEN_TYPE_KEY));
         }
     }
-
 }

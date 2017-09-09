@@ -159,7 +159,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         switch (id) {
             case 10:
                 //Return device information
-                uri = McContract.Device.builUriWithDeviceID(deviceId);
+                uri = McContract.Device.buildUriWithDeviceID(deviceId);
                 return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
             case 11:
                 //Return Profiles information

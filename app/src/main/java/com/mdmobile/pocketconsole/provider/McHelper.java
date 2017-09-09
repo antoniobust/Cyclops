@@ -29,7 +29,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.ScriptColumns.TITLE
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 18;
+    private static final int DB_VERSION = 23;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -73,8 +73,6 @@ public class McHelper extends SQLiteOpenHelper {
         //Create ManagementServer table
         db.execSQL(" CREATE TABLE " + MANAGEMENT_SERVER_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + McContract.ManagementServer.PRIMARY_MANAGEMENT_ADDRESS + " TEXT, "
-                + McContract.ManagementServer.SECONDARY_MANAGEMENT_ADDRESS + " TEXT, "
                 + McContract.ManagementServer.FULLY_QUALIFIED_NAME + " TEXT, "
                 + McContract.ManagementServer.PORT_NUMBER + " INTEGER, "
                 + McContract.ManagementServer.DESCRIPTION + " TEXT, "
@@ -94,17 +92,19 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.DeploymentServer.PRIMARY_AGENT_ADDRESS + " TEXT, "
                 + McContract.DeploymentServer.SECONDARY_AGENT_ADDRESS + " TEXT, "
                 + McContract.DeploymentServer.DEVICE_MANAGEMENT_ADDRESS + " TEXT, "
-                + McContract.DeploymentServer.PULSE_TIMEOUT + " TEXT, "
+                + McContract.DeploymentServer.PRIMARY_MANAGEMENT_ADDRESS + " TEXT, "
+                + McContract.DeploymentServer.SECONDARY_MANAGEMENT_ADDRESS + " TEXT, "
+                + McContract.DeploymentServer.PULSE_TIMEOUT + " INTEGER, "
                 + McContract.DeploymentServer.RULE_RELOAD + " INTEGER, "
-                + McContract.DeploymentServer.SCHEDULE_INTERVAL + " TEXT, "
-                + McContract.DeploymentServer.MIN_THREADS + " TEXT "
+                + McContract.DeploymentServer.SCHEDULE_INTERVAL + " INTEGER, "
+                + McContract.DeploymentServer.MIN_THREADS + " INTEGER, "
                 + McContract.DeploymentServer.MAX_THREADS + " INTEGER, "
-                + McContract.DeploymentServer.MAX_BURST_THREADS + " TEXT, "
-                + McContract.DeploymentServer.CURRENT_THREAD_COUNT + " TEXT, "
-                + McContract.DeploymentServer.PULSE_WAIT_INTERVAL + " TEXT, "
+                + McContract.DeploymentServer.MAX_BURST_THREADS + " INTEGER, "
+                + McContract.DeploymentServer.CURRENT_THREAD_COUNT + " INTEGER, "
+                + McContract.DeploymentServer.PULSE_WAIT_INTERVAL + " INTEGER, "
                 + McContract.DeploymentServer.DEVICES_CONNECTED + " INTEGER, "
-                + McContract.DeploymentServer.MANAGERS_CONNECTED + " TEXT, "
-                + McContract.DeploymentServer.QUEUE_LENGTH + " TEXT "
+                + McContract.DeploymentServer.MANAGERS_CONNECTED + " INTEGER, "
+                + McContract.DeploymentServer.QUEUE_LENGTH + " INTEGER "
                 + ");");
 
         //Create CustomData tables
@@ -181,7 +181,7 @@ public class McHelper extends SQLiteOpenHelper {
         String[] scripts = res.getStringArray(R.array.default_script);
         ContentValues scriptValues;
         for (int i = 0; i < titles.length; i++) {
-            scriptValues = DbData.getSavedScriptContentValues(titles[i], descriptions[i], scripts[i]);
+            scriptValues = DbData.prepareScriptValues(titles[i], descriptions[i], scripts[i]);
             db.insert(McContract.SCRIPT_TABLE_NAME, null, scriptValues);
         }
     }

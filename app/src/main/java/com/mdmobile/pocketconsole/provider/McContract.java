@@ -381,7 +381,8 @@ public class McContract {
     public static class ManagementServer implements ManagementServerColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(MANAGEMENT_SERVER_TABLE_NAME).build();
-        public static Uri buildUriWithMsId(long id){
+
+        public static Uri buildUriWithMsId(long id) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
         }
 
@@ -392,7 +393,8 @@ public class McContract {
     public static class DeploymentServer implements DeploymentServerColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEPLOYMENT_SERVER_TABLE_NAME).build();
-        public static Uri buildUriWithDsId(long id){
+
+        public static Uri buildUriWithDsId(long id) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
         }
     }

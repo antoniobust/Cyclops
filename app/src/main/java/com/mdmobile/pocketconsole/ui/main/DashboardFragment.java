@@ -20,8 +20,6 @@ import com.mdmobile.pocketconsole.adapters.ChartsAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.DevicesStatsCalculator;
 
-import java.util.ArrayList;
-
 
 public class DashboardFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, DevicesStatsCalculator.Listener {
 

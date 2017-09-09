@@ -75,6 +75,7 @@ public class DbData extends AndroidJUnitRunner {
         c.moveToFirst();
         String devId = c.getString(c.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
         int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.Device.buildUriWithDeviceID(devId), null, null);
+        c.close();
         assertTrue("Device (" + devId + ") not deleted from DB ", deleted == 1);
     }
 
@@ -90,6 +91,7 @@ public class DbData extends AndroidJUnitRunner {
             IDs.add(c.getString(c.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID)));
             c.moveToNext();
         }
+        c.close();
         assertTrue("Device count: " + count, count > 1);
         assertTrue("Some IDs are duplicated" + IDs.toString(), IDs.size() == count);
     }
@@ -131,6 +133,7 @@ public class DbData extends AndroidJUnitRunner {
             titleSet.add(c.getString(c.getColumnIndex(McContract.Script.TITLE)));
             c.moveToNext();
         } while (c.isLast());
+        c.close();
 
         assertTrue("Additional scripts found in DB" + titleSet.toString(), titleSet.size() == initialCount);
     }

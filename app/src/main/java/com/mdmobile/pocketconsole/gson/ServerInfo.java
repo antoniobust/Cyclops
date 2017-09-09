@@ -25,7 +25,7 @@ public class ServerInfo {
                 deviceManagementAddress, name, status;
         private Boolean isConnected;
         private int pulseTimeout, ruleReload, scheduleInterval, minThreads, maxThread, maxBurstThreads, pulseWaitInterval,
-                connectedDeviceCount, connectedManagerCount,msgQueueLength, currentThreadCount;
+                connectedDeviceCount, connectedManagerCount, msgQueueLength, currentThreadCount;
 
         public DeploymentServer(String primaryManagementAddress, String secondaryManagementAddress,
                                 String primaryAgentAddress, String secondaryAgentAddress, String deviceManagementAddress,

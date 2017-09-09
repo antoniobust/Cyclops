@@ -45,9 +45,9 @@ public class UserUtility {
         return null;
     }
 
-    public static Account getUser(Context context){
-       return AccountManager.get(ApplicationLoader.applicationContext)
-               .getAccountsByType(ApplicationLoader.applicationContext.getString(R.string.account_type))[0];
+    public static Account getUser(Context context) {
+        return AccountManager.get(ApplicationLoader.applicationContext)
+                .getAccountsByType(ApplicationLoader.applicationContext.getString(R.string.account_type))[0];
     }
 
     public static Boolean checkAnyUserLoggedIn(Context context) {

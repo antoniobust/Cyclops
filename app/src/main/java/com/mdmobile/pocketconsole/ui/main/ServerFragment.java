@@ -10,7 +10,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
+import android.widget.ListView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.ServerDetailsAdapter;
@@ -21,7 +21,7 @@ import com.mdmobile.pocketconsole.provider.McContract;
 public class ServerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     ServerDetailsAdapter detailsAdapter;
-    GridView dsInfoGrid, msInfoGrid;
+    ListView dsInfoListView, msInfoListView;
 
     public ServerFragment() {
         // Required empty public constructor
@@ -44,8 +44,8 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
         inflater = inflater.cloneInContext(contextThemeWrapper);
         View rootView = inflater.inflate(R.layout.fragment_server, container, false);
 
-        dsInfoGrid = (GridView) rootView.findViewById(R.id.ds_grid_view);
-        msInfoGrid = (GridView) rootView.findViewById(R.id.ms_grid_view);
+        dsInfoListView = (ListView) rootView.findViewById(R.id.ds_list_view);
+        msInfoListView = (ListView) rootView.findViewById(R.id.ms_list_view);
 
         getLoaderManager().initLoader(50, null, this);
         getLoaderManager().initLoader(51, null, this);
@@ -71,9 +71,9 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (loader.getId() == 50) {
-            dsInfoGrid.setAdapter(new ServerDetailsAdapter(getContext(), data, 0));
+            dsInfoListView.setAdapter(new ServerDetailsAdapter(getContext(), data, 0));
         } else {
-            msInfoGrid.setAdapter(new ServerDetailsAdapter(getContext(), data, 0));
+            msInfoListView.setAdapter(new ServerDetailsAdapter(getContext(), data, 0));
         }
     }
 

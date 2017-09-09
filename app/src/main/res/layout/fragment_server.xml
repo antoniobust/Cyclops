@@ -7,8 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="top|center">
+        android:layout_gravity="top|center"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,22 +23,20 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:drawablePadding="8dp"
-                android:text="@string/deployment_servers_label"
                 android:drawableStart="@drawable/ic_server_black_24dp"
+                android:text="@string/deployment_servers_label"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
                 tools:text="Deployment Servers"/>
 
-            <GridView
-                android:id="@+id/ds_grid_view"
+            <ListView
+                android:id="@+id/ds_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ds_title_view"
                 android:layout_margin="8dp"
                 android:gravity="center"
-                android:numColumns="2"
-                android:stretchMode="columnWidth"
                 android:verticalSpacing="8dp">
-            </GridView>
+            </ListView>
         </RelativeLayout>
 
         <RelativeLayout
@@ -54,21 +52,19 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:drawablePadding="8dp"
-                android:text="@string/management_servers_label"
                 android:drawableStart="@drawable/ic_server_black_24dp"
+                android:text="@string/management_servers_label"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
                 tools:text="Management Servers"/>
 
-            <GridView
-                android:id="@+id/ms_grid_view"
+            <ListView
+                android:id="@+id/ms_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ms_title_view"
                 android:gravity="center"
-                android:numColumns="2"
-                android:stretchMode="columnWidth"
                 android:verticalSpacing="8dp">
-            </GridView>
+            </ListView>
         </RelativeLayout>
     </LinearLayout>
 </ScrollView>

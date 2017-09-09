@@ -3,8 +3,6 @@ package com.mdmobile.pocketconsole.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -62,21 +60,13 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
         }
 
         holder.deviceNameView.setText(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
-        Drawable dot;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            dot = holder.deviceNameView.getContext().getResources().getDrawable(R.drawable.connectivity_status_dot, null);
-        } else {
-            dot = holder.deviceNameView.getContext().getResources().getDrawable(R.drawable.connectivity_status_dot);
-        }
-        holder.deviceNameView.setCompoundDrawablePadding(50);
 
         if (data.getInt(data.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1) {
-            ((GradientDrawable) dot).setColor(holder.deviceNameView.getContext().getResources().getColor(R.color.darkGreen));
+            holder.coloredMarkerView.setBackgroundColor(holder.deviceNameView.getContext().getResources().getColor(R.color.darkGreen));
         } else {
-            ((GradientDrawable) dot).setColor(Color.LTGRAY);
+            holder.coloredMarkerView.setBackgroundColor(Color.LTGRAY);
         }
 
-        holder.deviceNameView.setCompoundDrawablesWithIntrinsicBounds(dot, null, null, null);
         //TODO: column "kind" doesn't get populated from gson, check it
 //            String kind =data.getString(data.getColumnIndex(McContract.Device.COLUMN_KIND));
         String platform = data.getString(data.getColumnIndex(McContract.Device.COLUMN_PLATFORM));

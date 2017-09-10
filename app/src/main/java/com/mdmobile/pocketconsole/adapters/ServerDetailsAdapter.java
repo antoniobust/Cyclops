@@ -1,53 +1,84 @@
 package com.mdmobile.pocketconsole.adapters;
 
-import android.content.Context;
 import android.database.Cursor;
+import android.provider.BaseColumns;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
-import android.widget.GridView;
-import android.widget.ListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.utils.Logger;
+
+import static android.R.attr.data;
 
 /**
  * Abstract class to be implemented form MS and DS adapters
  */
 
-public  abstract class ServerDetailsAdapter extends CursorAdapter implements ListAdapter {
+public abstract class ServerDetailsAdapter extends RecyclerView.Adapter<ServerDetailsAdapter.Holder> {
+
+    private static String LOG_TAG = ServerDetailsAdapter.class.getSimpleName();
+    private Cursor mCursor;
 
 
-    public ServerDetailsAdapter(Context context, Cursor c, int flags) {
-        super(context, c, flags);
-    }
-
-
-    @Override
-    public Object getItem(int position) {
-        return super.getItem(position);
+    public ServerDetailsAdapter(Cursor c) {
+        mCursor = c;
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-        TextView textView = new TextView(context);
-        textView.setTag("listViewItem");
-        textView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        return textView;
+    public long getItemId(int position) {
+        if (mCursor != null && mCursor.moveToPosition(position)) {
+            return mCursor.getLong(mCursor.getColumnIndex(BaseColumns._ID));
+        }
+        return super.getItemId(position);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        return super.getView(position, convertView, parent);
+    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.server_list_item, parent, false);
+        return new Holder(view);
     }
 
     @Override
-    public abstract void bindView(View view, Context context, Cursor cursor);
+    public abstract void onBindViewHolder(Holder holder, int position);
+
+    public Cursor getCursor(){
+        return mCursor;
+    }
 
     @Override
-    public int getCount() {
-        return getCursor() == null ? 0 : getCursor().getCount();
+    public int getItemCount() {
+        return mCursor == null ? 0 : mCursor.getCount();
+    }
+
+    class Holder extends RecyclerView.ViewHolder {
+
+        TextView serverNameView;
+        View statusIndicator;
+        ImageView imageView;
+
+        public Holder(View itemView) {
+            super(itemView);
+            serverNameView = (TextView) itemView.findViewById(R.id.server_list_item_server_name);
+            statusIndicator = itemView.findViewById(R.id.server_list_item_colored_marker);
+            imageView = (ImageView) itemView.findViewById(R.id.list_item_arrow_icon);
+        }
+    }
+
+
+    public Cursor swapCursor(Cursor cursor) {
+        if (mCursor == cursor) {
+            return null;
+        }
+        Cursor oldCursor = mCursor;
+        this.mCursor = cursor;
+        if (cursor != null) {
+            this.notifyDataSetChanged();
+        }
+        return oldCursor;
     }
 
 

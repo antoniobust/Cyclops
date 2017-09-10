@@ -1,20 +1,22 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-            style="@style/AppTheme.MainActivity.Fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|center"
-        android:orientation="vertical">
+        android:layout_gravity="top|center">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1">
+            android:id="@+id/ds_relative_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="8dp">
 
             <TextView
                 android:id="@+id/ds_title_view"
@@ -28,21 +30,26 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
                 tools:text="Deployment Servers"/>
 
-            <ListView
-                android:id="@+id/ds_list_view"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ds_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@id/ds_title_view"
                 android:gravity="center"
                 android:verticalSpacing="8dp">
-            </ListView>
+            </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:id="@+id/ms_relative_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_weight="1">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ds_relative_layout"
+            tools:layout_editor_absoluteX="0dp">
 
             <TextView
                 android:id="@+id/ms_title_view"
@@ -56,14 +63,14 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
                 tools:text="Management Servers"/>
 
-            <ListView
-                android:id="@+id/ms_list_view"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ms_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ms_title_view"
                 android:gravity="center"
                 android:verticalSpacing="8dp">
-            </ListView>
+            </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 </ScrollView>

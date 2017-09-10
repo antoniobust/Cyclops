@@ -103,8 +103,8 @@ public class DbData extends AndroidJUnitRunner {
         assertNotNull("Null cursor returned for MS ", c);
         assertTrue("No MS info found", c.moveToFirst());
 
-        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.ManagementServer.CONTENT_URI, null, null);
-        assertTrue("MS not deleted properly, deleted: " + deleted + " records", deleted > 0);
+//        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.ManagementServer.CONTENT_URI, null, null);
+//        assertTrue("MS not deleted properly, deleted: " + deleted + " records", deleted > 0);
     }
 
     @Test
@@ -114,8 +114,8 @@ public class DbData extends AndroidJUnitRunner {
         assertNotNull("Null cursor returned for DS ", c);
         assertTrue("No DS info found", c.moveToFirst());
 
-        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.DeploymentServer.CONTENT_URI, null, null);
-        assertTrue("DS not deleted properly, deleted: " + deleted + " records", deleted > 0);
+//        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.DeploymentServer.CONTENT_URI, null, null);
+//        assertTrue("DS not deleted properly, deleted: " + deleted + " records", deleted > 0);
     }
 
     @Test

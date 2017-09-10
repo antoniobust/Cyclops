@@ -64,12 +64,6 @@
             android:name=".provider.McProvider"
             android:authorities="com.mdmobile.pocketconsole"/>
 
-        <!-- Services -->
-        <!--<service-->
-        <!--android:name=".services.RefreshDataService"-->
-        <!--android:enabled="true"-->
-        <!--android:exported="false"/>-->
-
         <!--Device Sync Adapter-->
         <service
             android:name="com.mdmobile.pocketconsole.services.RefreshDataBinder"

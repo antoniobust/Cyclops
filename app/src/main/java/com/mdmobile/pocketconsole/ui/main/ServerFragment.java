@@ -7,10 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DsInfoAdapter;
@@ -23,7 +24,7 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
 
     DsInfoAdapter dsInfoAdapter;
     MsInfoAdapter msInfoAdapter;
-    ListView dsInfoListView, msInfoListView;
+    RecyclerView dsInfoRecycler, msInfoRecycler;
 
     public ServerFragment() {
         // Required empty public constructor
@@ -46,17 +47,20 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
         inflater = inflater.cloneInContext(contextThemeWrapper);
         View rootView = inflater.inflate(R.layout.fragment_server, container, false);
 
-        dsInfoListView = (ListView) rootView.findViewById(R.id.ds_list_view);
-        msInfoListView = (ListView) rootView.findViewById(R.id.ms_list_view);
+        dsInfoRecycler = (RecyclerView) rootView.findViewById(R.id.ds_recycler);
+        msInfoRecycler = (RecyclerView) rootView.findViewById(R.id.ms_recycler);
+
+        dsInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        msInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
         getLoaderManager().initLoader(50, null, this);
         getLoaderManager().initLoader(51, null, this);
 
-        dsInfoAdapter = new DsInfoAdapter(getContext(), null, 0);
-        msInfoAdapter = new MsInfoAdapter(getContext(), null, 0);
+        dsInfoAdapter = new DsInfoAdapter(getContext(), null);
+        msInfoAdapter = new MsInfoAdapter(getContext(), null);
 
-        dsInfoListView.setAdapter(dsInfoAdapter);
-        msInfoListView.setAdapter(msInfoAdapter);
+        dsInfoRecycler.setAdapter(dsInfoAdapter);
+        msInfoRecycler.setAdapter(msInfoAdapter);
 
         ApiRequestManager.getInstance().getServerInfo();
 

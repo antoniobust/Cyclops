@@ -8,6 +8,8 @@
     <color name="iosSpaceGrey">#A7ADBA</color>
     <color name="windowsColor">#0b61cd</color>
     <color name="printerColor">#616161</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="grey">#9E9E9E</color>
 
 
 </resources>

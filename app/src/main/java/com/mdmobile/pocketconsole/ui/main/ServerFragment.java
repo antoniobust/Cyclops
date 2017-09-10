@@ -13,14 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.adapters.ServerDetailsAdapter;
+import com.mdmobile.pocketconsole.adapters.DsInfoAdapter;
+import com.mdmobile.pocketconsole.adapters.MsInfoAdapter;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 
 public class ServerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    ServerDetailsAdapter detailsAdapter;
+    DsInfoAdapter dsInfoAdapter;
+    MsInfoAdapter msInfoAdapter;
     ListView dsInfoListView, msInfoListView;
 
     public ServerFragment() {
@@ -50,6 +52,12 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
         getLoaderManager().initLoader(50, null, this);
         getLoaderManager().initLoader(51, null, this);
 
+        dsInfoAdapter = new DsInfoAdapter(getContext(), null, 0);
+        msInfoAdapter = new MsInfoAdapter(getContext(), null, 0);
+
+        dsInfoListView.setAdapter(dsInfoAdapter);
+        msInfoListView.setAdapter(msInfoAdapter);
+
         ApiRequestManager.getInstance().getServerInfo();
 
         return rootView;
@@ -71,14 +79,18 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (loader.getId() == 50) {
-            dsInfoListView.setAdapter(new ServerDetailsAdapter(getContext(), data, 0));
+            dsInfoAdapter.swapCursor(data);
         } else {
-            msInfoListView.setAdapter(new ServerDetailsAdapter(getContext(), data, 0));
+            msInfoAdapter.swapCursor(data);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        if(loader.getId() == 50) {
+            dsInfoAdapter.swapCursor(null);
+        } else{
+            msInfoAdapter.swapCursor(null);
+        }
     }
 }

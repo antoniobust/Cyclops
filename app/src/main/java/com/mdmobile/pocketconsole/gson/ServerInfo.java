@@ -21,163 +21,163 @@ public class ServerInfo {
     }
 
     public final class DeploymentServer {
-        private String primaryManagementAddress, secondaryManagementAddress, primaryAgentAddress, secondaryAgentAddress,
-                deviceManagementAddress, name, status;
-        private Boolean isConnected;
-        private int pulseTimeout, ruleReload, scheduleInterval, minThreads, maxThread, maxBurstThreads, pulseWaitInterval,
-                connectedDeviceCount, connectedManagerCount, msgQueueLength, currentThreadCount;
+        private String PrimaryManagementAddress, SecondaryManagementAddress, PrimaryAgentAddress, SecondaryAgentAddress,
+                DeviceManagementAddress, Name, Status;
+        private Boolean IsConnected;
+        private int PulseTimeout, RuleReload, ScheduleInterval, MinThreads, MaxThread, MaxBurstThreads, PulseWaitInterval,
+                ConnectedDeviceCount, ConnectedManagerCount, MsgQueueLength, CurrentThreadCount;
 
-        public DeploymentServer(String primaryManagementAddress, String secondaryManagementAddress,
-                                String primaryAgentAddress, String secondaryAgentAddress, String deviceManagementAddress,
-                                String name, String status, Boolean isConnected, int pulseTimeout,
-                                int ruleReload, int scheduleInterval, int minThreads, int maxThread,
-                                int maxBurstThreads, int pulseWaitInterval, int connectedDeviceCount, int connectedManagerCount,
-                                int msgQueueLength, int currentThreadCount) {
-            this.primaryManagementAddress = primaryManagementAddress;
-            this.secondaryManagementAddress = secondaryManagementAddress;
-            this.primaryAgentAddress = primaryAgentAddress;
-            this.secondaryAgentAddress = secondaryAgentAddress;
-            this.deviceManagementAddress = deviceManagementAddress;
-            this.name = name;
-            this.status = status;
-            this.isConnected = isConnected;
-            this.pulseTimeout = pulseTimeout;
-            this.ruleReload = ruleReload;
-            this.scheduleInterval = scheduleInterval;
-            this.minThreads = minThreads;
-            this.maxThread = maxThread;
-            this.maxBurstThreads = maxBurstThreads;
-            this.pulseWaitInterval = pulseWaitInterval;
-            this.connectedDeviceCount = connectedDeviceCount;
-            this.connectedManagerCount = connectedManagerCount;
-            this.msgQueueLength = msgQueueLength;
-            this.currentThreadCount = currentThreadCount;
+        public DeploymentServer(String PrimaryManagementAddress, String SecondaryManagementAddress,
+                                String PrimaryAgentAddress, String SecondaryAgentAddress, String DeviceManagementAddress,
+                                String Name, String Status, Boolean IsConnected, int PulseTimeout,
+                                int RuleReload, int ScheduleInterval, int MinThreads, int MaxThread,
+                                int MaxBurstThreads, int PulseWaitInterval, int ConnectedDeviceCount, int ConnectedManagerCount,
+                                int MsgQueueLength, int CurrentThreadCount) {
+            this.PrimaryManagementAddress = PrimaryManagementAddress;
+            this.SecondaryManagementAddress = SecondaryManagementAddress;
+            this.PrimaryAgentAddress = PrimaryAgentAddress;
+            this.SecondaryAgentAddress = SecondaryAgentAddress;
+            this.DeviceManagementAddress = DeviceManagementAddress;
+            this.Name = Name;
+            this.Status = Status;
+            this.IsConnected = IsConnected;
+            this.PulseTimeout = PulseTimeout;
+            this.RuleReload = RuleReload;
+            this.ScheduleInterval = ScheduleInterval;
+            this.MinThreads = MinThreads;
+            this.MaxThread = MaxThread;
+            this.MaxBurstThreads = MaxBurstThreads;
+            this.PulseWaitInterval = PulseWaitInterval;
+            this.ConnectedDeviceCount = ConnectedDeviceCount;
+            this.ConnectedManagerCount = ConnectedManagerCount;
+            this.MsgQueueLength = MsgQueueLength;
+            this.CurrentThreadCount = CurrentThreadCount;
         }
 
         public String getPrimaryManagementAddress() {
-            return primaryManagementAddress;
+            return PrimaryManagementAddress;
         }
 
         public String getSecondaryManagementAddress() {
-            return secondaryManagementAddress;
+            return SecondaryManagementAddress;
         }
 
         public String getPrimaryAgentAddress() {
-            return primaryAgentAddress;
+            return PrimaryAgentAddress;
         }
 
         public String getSecondaryAgentAddress() {
-            return secondaryAgentAddress;
+            return SecondaryAgentAddress;
         }
 
         public String getDeviceManagementAddress() {
-            return deviceManagementAddress;
+            return DeviceManagementAddress;
         }
 
         public String getName() {
-            return name;
+            return Name;
         }
 
         public String getStatus() {
-            return status;
+            return Status;
         }
 
         public Boolean getConnected() {
-            return isConnected;
+            return IsConnected;
         }
 
         public int getPulseTimeout() {
-            return pulseTimeout;
+            return PulseTimeout;
         }
 
         public int getRuleReload() {
-            return ruleReload;
+            return RuleReload;
         }
 
         public int getScheduleInterval() {
-            return scheduleInterval;
+            return ScheduleInterval;
         }
 
         public int getMinThreads() {
-            return minThreads;
+            return MinThreads;
         }
 
         public int getMaxThread() {
-            return maxThread;
+            return MaxThread;
         }
 
         public int getMaxBurstThreads() {
-            return maxBurstThreads;
+            return MaxBurstThreads;
         }
 
         public int getPulseWaitInterval() {
-            return pulseWaitInterval;
+            return PulseWaitInterval;
         }
 
         public int getConnectedDeviceCount() {
-            return connectedDeviceCount;
+            return ConnectedDeviceCount;
         }
 
         public int getConnectedManagerCount() {
-            return connectedManagerCount;
+            return ConnectedManagerCount;
         }
 
         public int getMsgQueueLength() {
-            return msgQueueLength;
+            return MsgQueueLength;
         }
 
         public int getCurrentThreadCount() {
-            return currentThreadCount;
+            return CurrentThreadCount;
         }
     }
 
 
     public final class ManagementServer {
-        private String fqdn, description, statusTime, macAddress, name, status;
-        private int portNumber, totalConsoleUsers;
+        private String Fqdn, Description, StatusTime, MacAddress, Name, Status;
+        private int PortNumber, TotalConsoleUsers;
 
         public ManagementServer(String fqdn, String description, String statusTime,
                                 String macAddress, String name, String status, int portNumber, int totalConsoleUsers) {
-            this.fqdn = fqdn;
-            this.description = description;
-            this.statusTime = statusTime;
-            this.macAddress = macAddress;
-            this.name = name;
-            this.status = status;
-            this.portNumber = portNumber;
-            this.totalConsoleUsers = totalConsoleUsers;
+            this.Fqdn = fqdn;
+            this.Description = description;
+            this.StatusTime = statusTime;
+            this.MacAddress = macAddress;
+            this.Name = name;
+            this.Status = status;
+            this.PortNumber = portNumber;
+            this.TotalConsoleUsers = totalConsoleUsers;
         }
 
         public String getFqdn() {
-            return fqdn;
+            return Fqdn;
         }
 
         public String getDescription() {
-            return description;
+            return Description;
         }
 
         public String getStatusTime() {
-            return statusTime;
+            return StatusTime;
         }
 
         public String getMacAddress() {
-            return macAddress;
+            return MacAddress;
         }
 
         public String getName() {
-            return name;
+            return Name;
         }
 
         public String getStatus() {
-            return status;
+            return Status;
         }
 
         public int getPortNumber() {
-            return portNumber;
+            return PortNumber;
         }
 
         public int getTotalConsoleUsers() {
-            return totalConsoleUsers;
+            return TotalConsoleUsers;
         }
     }
 }

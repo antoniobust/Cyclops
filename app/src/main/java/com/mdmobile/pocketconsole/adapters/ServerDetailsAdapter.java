@@ -9,8 +9,14 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.provider.McContract;
 
-public class ServerDetailsAdapter extends CursorAdapter implements ListAdapter {
+/**
+ * Abstract class to be implemented form MS and DS adapters
+ */
+
+public  abstract class ServerDetailsAdapter extends CursorAdapter implements ListAdapter {
 
 
     public ServerDetailsAdapter(Context context, Cursor c, int flags) {
@@ -26,14 +32,22 @@ public class ServerDetailsAdapter extends CursorAdapter implements ListAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
         TextView textView = new TextView(context);
+        textView.setTag("listViewItem");
         textView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        viewGroup.addView(textView);
         return textView;
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-//        ((TextView)view).setText(cursor.getPosition());
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return super.getView(position, convertView, parent);
+    }
+
+    @Override
+    public abstract void bindView(View view, Context context, Cursor cursor);
+
+    @Override
+    public int getCount() {
+        return getCursor() == null ? 0 : getCursor().getCount();
     }
 
 

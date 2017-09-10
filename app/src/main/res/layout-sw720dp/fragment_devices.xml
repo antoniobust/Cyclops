@@ -1,23 +1,20 @@
 <LinearLayout
-    android:id="@+id/main_activity_linear_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity_linear_layout"
     android:layout_width="@dimen/main_fragment_with"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:animateLayoutChanges="true"
     android:orientation="horizontal"
-    tools:context=".ui.main.MainActivity"
-    android:animateLayoutChanges="true">
+    tools:context=".ui.main.MainActivity">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/devices_swipe_refresh"
         style="@style/AppTheme.MainActivity.Fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,9 +62,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_weight="3"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_weight="3"
         android:visibility="gone"
         app:cardBackgroundColor="@android:color/white"
         app:cardElevation="2dp"

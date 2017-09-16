@@ -4,14 +4,12 @@ package com.mdmobile.pocketconsole.ApiTest;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.android.volley.VolleyLog;
 import com.mdmobile.pocketconsole.ApiTest.TestClass.FakeApiManager;
 import com.mdmobile.pocketconsole.R;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 

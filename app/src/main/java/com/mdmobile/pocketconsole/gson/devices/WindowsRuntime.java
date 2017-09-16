@@ -1,8 +1,5 @@
 package com.mdmobile.pocketconsole.gson.devices;
 
-/**
- * Created by Antonio on 21/05/2017.
- */
 
 public class WindowsRuntime extends BasicDevice {
 

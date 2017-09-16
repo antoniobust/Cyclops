@@ -3,27 +3,20 @@ package com.mdmobile.pocketconsole.ApiTest.TestClass;
 
 import android.content.Context;
 import android.util.Base64;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import static android.R.attr.y;
 
 /**
  * Copy of ApiRequestManager, it has same methods but is not a singleton class.
@@ -72,7 +65,7 @@ public class FakeApiManager {
 
         try {
             response = requestFuture.get(20, TimeUnit.SECONDS);
-            return response.toString();
+            return response;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
             return "Error receiving token";

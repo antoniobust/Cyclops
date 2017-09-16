@@ -1,8 +1,5 @@
 package com.mdmobile.pocketconsole.gson;
 
-/**
- * Created by Antonio on 24/04/2017.
- */
 
 public class Group {
 

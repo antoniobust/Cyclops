@@ -10,9 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.utils.Logger;
-
-import static android.R.attr.data;
 
 /**
  * Abstract class to be implemented form MS and DS adapters

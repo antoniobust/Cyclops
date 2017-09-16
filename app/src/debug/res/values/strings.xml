@@ -2,5 +2,5 @@
 <resources>
     <string name="refresh_token">Refresh Token</string>
     <string name="invalidate_token">invalidate token</string>
-    <string name="sync_now">Sync now ...</string>
+    <string name="sync_now">Sync now …</string>
 </resources>

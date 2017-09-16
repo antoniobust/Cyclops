@@ -62,7 +62,8 @@
         <!-- Data provider -->
         <provider
             android:name=".provider.McProvider"
-            android:authorities="com.mdmobile.pocketconsole"/>
+            android:authorities="com.mdmobile.pocketconsole"
+            android:exported="false"/>
 
         <!--Device Sync Adapter-->
         <service

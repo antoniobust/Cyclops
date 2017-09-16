@@ -69,11 +69,8 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.show_info_action) {
-            return true;
-        }
+        return item.getItemId() == R.id.show_info_action || super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

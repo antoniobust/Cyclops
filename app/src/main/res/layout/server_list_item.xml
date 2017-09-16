@@ -9,7 +9,9 @@
     android:background="@android:color/white"
     android:orientation="horizontal"
     tools:targetApi="lollipop"
-    android:weightSum="5">
+    android:weightSum="5"
+    android:clickable="true"
+    android:focusable="true">
 
     <View
         android:id="@+id/server_list_item_colored_marker"
@@ -27,7 +29,8 @@
         android:layout_weight="4"
         android:gravity="center_vertical"
         android:textStyle="bold"
-        tools:text="UK-MS"/>
+        tools:text="UK-MS"
+        android:textAllCaps="true"/>
 
     <ImageView
         android:id="@+id/list_item_arrow_icon"

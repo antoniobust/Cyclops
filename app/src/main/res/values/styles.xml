@@ -35,7 +35,8 @@
     <!--Specific Main activity style-->
     <style name="AppTheme.MainActivity">
         <item name="android:windowExitTransition" tools:targetApi="lollipop">@transition/activity_fade_transition</item>
-        <item name="android:windowReenterTransition" tools:targetApi="lollipop">@transition/activity_fade_transition</item>
+        <item name="android:windowReenterTransition" tools:targetApi="lollipop">@transition/activity_fade_transition
+        </item>
     </style>
 
     <!--Specific device details activity style-->

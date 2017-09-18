@@ -7,8 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.main.MainActivity"
-    >
+    tools:context=".ui.main.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,8 +20,9 @@
         <!--Main content container-->
         <!--TODO: fina a solution to merge layout with parent in activity-->
         <FrameLayout
+            android:layout_gravity="center_horizontal"
             android:id="@+id/main_activity_fragment_container"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/max_content_size"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"

@@ -214,28 +214,28 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
 
 
     private void showDetailsFragment(String devId, String devName) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-
-        LinearLayout mainContainer = (LinearLayout) findViewById(R.id.main_activity_linear_layout);
-        SwipeRefreshLayout deviceList = (SwipeRefreshLayout) mainContainer.findViewById(R.id.devices_swipe_refresh);
-        CardView detailsContainer = (CardView) mainContainer.findViewById(R.id.main_activity_device_details_container);
-
-
-        if (detailsContainer.getVisibility() == View.GONE) {
-            detailsContainer.setVisibility(View.VISIBLE);
-        }
-
-        mainContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f);
-        layoutParams.setMarginEnd(GeneralUtility.dpToPx(getApplicationContext(), 12));
-        layoutParams.setMarginStart(GeneralUtility.dpToPx(getApplicationContext(), 0));
-        deviceList.setLayoutParams(layoutParams);
-        detailsContainer.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 4f));
-        detailsContainer.requestLayout();
-        deviceList.requestLayout();
-
-        fragmentTransaction.replace(R.id.main_activity_device_details_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
+//        FragmentManager fm = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//
+//        LinearLayout mainContainer = (LinearLayout) findViewById(R.id.main_activity_linear_layout);
+//        SwipeRefreshLayout deviceList = (SwipeRefreshLayout) mainContainer.findViewById(R.id.devices_swipe_refresh);
+//        CardView detailsContainer = (CardView) mainContainer.findViewById(R.id.main_activity_device_details_container);
+//
+//
+//        if (detailsContainer.getVisibility() == View.GONE) {
+//            detailsContainer.setVisibility(View.VISIBLE);
+//        }
+//
+//        mainContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f);
+//        layoutParams.setMarginEnd(GeneralUtility.dpToPx(getApplicationContext(), 12));
+//        layoutParams.setMarginStart(GeneralUtility.dpToPx(getApplicationContext(), 0));
+//        deviceList.setLayoutParams(layoutParams);
+//        detailsContainer.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 4f));
+//        detailsContainer.requestLayout();
+//        deviceList.requestLayout();
+//
+//        fragmentTransaction.replace(R.id.main_activity_device_details_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
     }
 
     private void startDetailsActivity(String devId, String devName) {

@@ -274,20 +274,20 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void hideDetailsFragment() {
-        LinearLayout mainContainer = (LinearLayout) getActivity().findViewById(R.id.main_activity_linear_layout);
-        SwipeRefreshLayout deviceList = (SwipeRefreshLayout) mainContainer.findViewById(R.id.devices_swipe_refresh);
-        CardView detailsContainer = (CardView) mainContainer.findViewById(R.id.main_activity_device_details_container);
-
-        if (detailsContainer.getVisibility() == View.VISIBLE) {
-            detailsContainer.setVisibility(View.GONE);
-        }
-
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.main_fragment_with), ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER;
-        mainContainer.setLayoutParams(layoutParams);
-
-        deviceList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        deviceList.requestLayout();
+//        LinearLayout mainContainer = (LinearLayout) getActivity().findViewById(R.id.main_activity_linear_layout);
+//        SwipeRefreshLayout deviceList = (SwipeRefreshLayout) mainContainer.findViewById(R.id.devices_swipe_refresh);
+//        CardView detailsContainer = (CardView) mainContainer.findViewById(R.id.main_activity_device_details_container);
+//
+//        if (detailsContainer.getVisibility() == View.VISIBLE) {
+//            detailsContainer.setVisibility(View.GONE);
+//        }
+//
+//        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.main_fragment_with), ViewGroup.LayoutParams.WRAP_CONTENT);
+//        layoutParams.gravity = Gravity.CENTER;
+//        mainContainer.setLayoutParams(layoutParams);
+//
+//        deviceList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        deviceList.requestLayout();
     }
 
 }

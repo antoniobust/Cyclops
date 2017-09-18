@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:id="@+id/activity_login"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/max_content_size"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical"

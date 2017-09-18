@@ -14,9 +14,7 @@
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
         android:maxSdkVersion="22"/>
-
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
 
     <application
@@ -48,7 +46,6 @@
             android:label="@string/title_activity_main"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.MainActivity"/>
-
         <activity
             android:name=".ui.deviceDetails.DeviceDetailsActivity"
             android:label="@string/title_activity_device_details"
@@ -65,14 +62,15 @@
             android:authorities="com.mdmobile.pocketconsole"
             android:exported="false"/>
 
-        <!--Device Sync Adapter-->
+        <!-- Device Sync Adapter -->
         <service
-            android:name="com.mdmobile.pocketconsole.services.RefreshDataBinder"
+            android:name=".services.RefreshDataBinder"
             android:exported="true"
             android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
+
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/devices_sync_adapter"/>
@@ -89,7 +87,15 @@
                 android:resource="@xml/authenticator"/>
         </service>
 
-
+        <activity
+            android:name=".ServerDetailsActivity"
+            android:label="@string/title_activity_service_details"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mdmobile.pocketconsole.ui.main.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

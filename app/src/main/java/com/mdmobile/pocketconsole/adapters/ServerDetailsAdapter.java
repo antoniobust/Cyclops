@@ -1,11 +1,14 @@
 package com.mdmobile.pocketconsole.adapters;
 
-import android.database.Cursor;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.gson.ServerInfo;
 
 /**
  * Adapter responsible to populate a server
@@ -13,10 +16,25 @@ import android.widget.TextView;
 
 public class ServerDetailsAdapter extends RecyclerView.Adapter<ServerDetailsAdapter.ViewHolder> {
 
-    Cursor mCursor;
+    ServerInfo.DeploymentServer dsInfo;
+    ServerInfo.ManagementServer msInfo;
+    Context mContext;
+    String[] infoLabels;
+    String[] serverValues;
 
-    public ServerDetailsAdapter(Cursor cursor) {
-        mCursor = cursor;
+
+    public ServerDetailsAdapter(Context mContext, ServerInfo.DeploymentServer serverInfo) {
+        this.dsInfo = serverInfo;
+        this.mContext = mContext.getApplicationContext();
+        infoLabels = this.mContext.getResources().getStringArray(R.array.ds_information_labels);
+        serverValues = serverInfo.infoToArray();
+    }
+
+    public ServerDetailsAdapter(Context mContext, ServerInfo.ManagementServer serverInfo) {
+        this.msInfo = serverInfo;
+        this.mContext = mContext.getApplicationContext();
+        infoLabels = this.mContext.getResources().getStringArray(R.array.ms_information_labels);
+        serverValues = serverInfo.infoToArray();
     }
 
     @Override
@@ -29,23 +47,29 @@ public class ServerDetailsAdapter extends RecyclerView.Adapter<ServerDetailsAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (mCursor != null && mCursor.getCount() > 0) {
-            holder.textView.setText("Hellooo");
-        }
+        populateInfo(holder, position);
     }
 
 
     @Override
     public int getItemCount() {
-//        return mCursor == null ? 0 : mCursor.getCount();
-        return 100;
+        return infoLabels.length * 2;
+    }
+
+    private void populateInfo(ViewHolder viewHolder, int position) {
+        if (position % 2 == 0) {
+            viewHolder.textView.setText(infoLabels[position / 2]);
+        } else {
+            viewHolder.textView.setText(serverValues[position / 2]);
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
+            textView = (TextView) itemView.findViewById(android.R.id.text1);
         }
     }
 }

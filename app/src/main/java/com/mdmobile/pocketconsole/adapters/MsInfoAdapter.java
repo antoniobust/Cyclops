@@ -76,10 +76,14 @@ public class MsInfoAdapter extends ServerListAdapter implements View.OnClickList
         Cursor c = getCursor();
         c.moveToPosition(adapterPosition);
         Parcelable parcel = new ServerInfo.ManagementServer(
-                c.getString(c.getColumnIndex(McContract.ManagementServer.FULLY_QUALIFIED_NAME)),c.getString(c.getColumnIndex(McContract.ManagementServer.DESCRIPTION)),
-                c.getString(c.getColumnIndex(McContract.ManagementServer.STATUS_TIME)),c.getString(c.getColumnIndex(McContract.ManagementServer.MAC_ADDRESS)),
-                c.getString(c.getColumnIndex(McContract.ManagementServer.NAME)),c.getString(c.getColumnIndex(McContract.ManagementServer.STATUS)),
-                c.getInt(c.getColumnIndex(McContract.ManagementServer.PORT_NUMBER)),c.getInt(c.getColumnIndex(McContract.ManagementServer.TOTAL_USER_COUNT)));
+                c.getString(c.getColumnIndex(McContract.ManagementServer.FULLY_QUALIFIED_NAME)),
+                c.getString(c.getColumnIndex(McContract.ManagementServer.DESCRIPTION)),
+                c.getString(c.getColumnIndex(McContract.ManagementServer.STATUS_TIME)),
+                c.getString(c.getColumnIndex(McContract.ManagementServer.MAC_ADDRESS)),
+                c.getString(c.getColumnIndex(McContract.ManagementServer.NAME)),
+                c.getString(c.getColumnIndex(McContract.ManagementServer.STATUS)),
+                c.getInt(c.getColumnIndex(McContract.ManagementServer.PORT_NUMBER)),
+                c.getInt(c.getColumnIndex(McContract.ManagementServer.TOTAL_USER_COUNT)));
         mClickCallback.itemCLicked(parcel);
     }
 }

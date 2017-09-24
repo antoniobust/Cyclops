@@ -2,6 +2,7 @@ package com.mdmobile.pocketconsole.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +93,6 @@ public class DsInfoAdapter extends ServerListAdapter implements View.OnClickList
                 c.getInt(c.getColumnIndex(McContract.DeploymentServer.MAX_BURST_THREADS)), c.getInt(c.getColumnIndex(McContract.DeploymentServer.PULSE_WAIT_INTERVAL)),
                 c.getInt(c.getColumnIndex(McContract.DeploymentServer.DEVICES_CONNECTED)), c.getInt(c.getColumnIndex(McContract.DeploymentServer.MANAGERS_CONNECTED)),
                 c.getInt(c.getColumnIndex(McContract.DeploymentServer.QUEUE_LENGTH)), c.getInt(c.getColumnIndex(McContract.DeploymentServer.CURRENT_THREAD_COUNT)));
-
         mCallback.itemCLicked(parcel);
     }
 }

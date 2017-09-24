@@ -10,16 +10,6 @@ import java.util.List;
 
 public class ServerInfo implements Parcelable {
 
-    @SerializedName("DeploymentServers")
-    List<DeploymentServer> deploymentServers;
-    @SerializedName("ManagementServers")
-    List<ManagementServer> managementServers;
-
-    protected ServerInfo(Parcel in) {
-        deploymentServers = in.createTypedArrayList(DeploymentServer.CREATOR);
-        managementServers = in.createTypedArrayList(ManagementServer.CREATOR);
-    }
-
     public static final Creator<ServerInfo> CREATOR = new Creator<ServerInfo>() {
         @Override
         public ServerInfo createFromParcel(Parcel in) {
@@ -31,6 +21,15 @@ public class ServerInfo implements Parcelable {
             return new ServerInfo[size];
         }
     };
+    @SerializedName("DeploymentServers")
+    List<DeploymentServer> deploymentServers;
+    @SerializedName("ManagementServers")
+    List<ManagementServer> managementServers;
+
+    public ServerInfo(Parcel in) {
+        deploymentServers = in.createTypedArrayList(DeploymentServer.CREATOR);
+        managementServers = in.createTypedArrayList(ManagementServer.CREATOR);
+    }
 
     public List<DeploymentServer> getDeploymentServers() {
         return deploymentServers;
@@ -52,6 +51,17 @@ public class ServerInfo implements Parcelable {
     }
 
     public static final class DeploymentServer implements Parcelable {
+        public static final Creator<DeploymentServer> CREATOR = new Creator<DeploymentServer>() {
+            @Override
+            public DeploymentServer createFromParcel(Parcel in) {
+                return new DeploymentServer(in);
+            }
+
+            @Override
+            public DeploymentServer[] newArray(int size) {
+                return new DeploymentServer[size];
+            }
+        };
         private String PrimaryManagementAddress, SecondaryManagementAddress, PrimaryAgentAddress, SecondaryAgentAddress,
                 DeviceManagementAddress, Name, Status;
         private Boolean IsConnected;
@@ -105,18 +115,6 @@ public class ServerInfo implements Parcelable {
             MsgQueueLength = in.readInt();
             CurrentThreadCount = in.readInt();
         }
-
-        public static final Creator<DeploymentServer> CREATOR = new Creator<DeploymentServer>() {
-            @Override
-            public DeploymentServer createFromParcel(Parcel in) {
-                return new DeploymentServer(in);
-            }
-
-            @Override
-            public DeploymentServer[] newArray(int size) {
-                return new DeploymentServer[size];
-            }
-        };
 
         public String getPrimaryManagementAddress() {
             return PrimaryManagementAddress;
@@ -194,6 +192,15 @@ public class ServerInfo implements Parcelable {
             return CurrentThreadCount;
         }
 
+        public String[] infoToArray() {
+            //keep the following order to match @Array -> ds_information_labels
+            return new String[]{getName(), getStatus(), "Yes/No", String.valueOf(getConnectedDeviceCount()),
+                    String.valueOf(getMsgQueueLength()), String.valueOf(getConnectedManagerCount()), getPrimaryAgentAddress(), getSecondaryAgentAddress(),
+                    getDeviceManagementAddress(), getPrimaryManagementAddress(), getSecondaryManagementAddress(), String.valueOf(getCurrentThreadCount()),
+                    String.valueOf(getMinThreads()), String.valueOf(getMaxThread()), String.valueOf(getMaxBurstThreads()), String.valueOf(getScheduleInterval()),
+                    String.valueOf(getRuleReload())};
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -223,7 +230,18 @@ public class ServerInfo implements Parcelable {
     }
 
 
-    public static final class ManagementServer implements Parcelable{
+    public static final class ManagementServer implements Parcelable {
+        public static final Creator<ManagementServer> CREATOR = new Creator<ManagementServer>() {
+            @Override
+            public ManagementServer createFromParcel(Parcel in) {
+                return new ManagementServer(in);
+            }
+
+            @Override
+            public ManagementServer[] newArray(int size) {
+                return new ManagementServer[size];
+            }
+        };
         private String Fqdn, Description, StatusTime, MacAddress, Name, Status;
         private int PortNumber, TotalConsoleUsers;
 
@@ -249,18 +267,6 @@ public class ServerInfo implements Parcelable {
             PortNumber = in.readInt();
             TotalConsoleUsers = in.readInt();
         }
-
-        public static final Creator<ManagementServer> CREATOR = new Creator<ManagementServer>() {
-            @Override
-            public ManagementServer createFromParcel(Parcel in) {
-                return new ManagementServer(in);
-            }
-
-            @Override
-            public ManagementServer[] newArray(int size) {
-                return new ManagementServer[size];
-            }
-        };
 
         public String getFqdn() {
             return Fqdn;
@@ -292,6 +298,11 @@ public class ServerInfo implements Parcelable {
 
         public int getTotalConsoleUsers() {
             return TotalConsoleUsers;
+        }
+
+        public String[] infoToArray() {
+            return new String[]{getName(), getFqdn(), getDescription(), getStatus(), getStatusTime(), getMacAddress(),
+                    String.valueOf(getPortNumber()), String.valueOf(getTotalConsoleUsers())};
         }
 
         @Override

@@ -186,7 +186,7 @@ public class DbData {
         ContentValues values = new ContentValues();
         values.put(McContract.DeploymentServer.NAME, server.getName());
         values.put(McContract.DeploymentServer.STATUS, server.getStatus());
-        values.put(McContract.DeploymentServer.CONNECTED, server.getConnected());
+        values.put(McContract.DeploymentServer.CONNECTED, server.getConnected() ? 1 : 0);
         values.put(McContract.DeploymentServer.PRIMARY_AGENT_ADDRESS, server.getPrimaryAgentAddress());
         values.put(McContract.DeploymentServer.SECONDARY_AGENT_ADDRESS, server.getSecondaryAgentAddress());
         values.put(McContract.DeploymentServer.DEVICE_MANAGEMENT_ADDRESS, server.getDeviceManagementAddress());

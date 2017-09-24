@@ -7,6 +7,7 @@
         <item>Show message</item>
         <item>Wipe device</item>
     </string-array>
+
     <string-array name="default_script_descriptions">
         <item>Reboot devices</item>
         <item>Device connects to MobiControl and activates data connection if not present</item>
@@ -14,12 +15,45 @@
         <item>Show message to device user</item>
         <item>Wipe device (only applies to WM5 and later devices)</item>
     </string-array>
+
     <string-array name="default_script">
         <item>reset /s</item>
         <item>"%MCAPP%" -connect -connmgr -inet \n connect</item>
         <item>log -i "ENTER YOUR LOG MESSAGE HERE!"</item>
         <item>showmessagebox "ENTER YOUR MESSAGE HERE!"</item>
         <item>reset /w /delay 0</item>
+    </string-array>
+
+
+    <string-array name="ds_information_labels">
+        <item>Name</item>
+        <item>Status</item>
+        <item>Management service</item>
+        <item>Device connected</item>
+        <item>Queue length</item>
+        <item>Connected managers</item>
+        <item>Primary Agent Address</item>
+        <item>Secondary Agent Address</item>
+        <item>Device management address</item>
+        <item>Primary server management address</item>
+        <item>Secondary server management address</item>
+        <item>Current thread count</item>
+        <item>Min threads number</item>
+        <item>Max thread number</item>
+        <item>Max service\'s threads</item>
+        <item>Schedule interval</item>
+        <item>Rule reload time</item>
+    </string-array>
+
+    <string-array name="ms_information_labels">
+        <item>Name</item>
+        <item>FQDN</item>
+        <item>Description</item>
+        <item>Status</item>
+        <item>Status time</item>
+        <item>MAC address</item>
+        <item>Port number</item>
+        <item>Users count</item>
     </string-array>
 </resources>
 

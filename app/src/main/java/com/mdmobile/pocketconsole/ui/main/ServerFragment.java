@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DsInfoAdapter;
 import com.mdmobile.pocketconsole.adapters.MsInfoAdapter;
+import com.mdmobile.pocketconsole.adapters.ServerListAdapter;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
 
@@ -50,14 +51,14 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
         dsInfoRecycler = (RecyclerView) rootView.findViewById(R.id.ds_recycler);
         msInfoRecycler = (RecyclerView) rootView.findViewById(R.id.ms_recycler);
 
-        dsInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-        msInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        dsInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        msInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         getLoaderManager().initLoader(50, null, this);
         getLoaderManager().initLoader(51, null, this);
 
-        dsInfoAdapter = new DsInfoAdapter(getContext(), null);
-        msInfoAdapter = new MsInfoAdapter(getContext(), null);
+        dsInfoAdapter = new DsInfoAdapter(getContext(), null, (ServerListAdapter.onClick) getActivity());
+        msInfoAdapter = new MsInfoAdapter(getContext(), null, (ServerListAdapter.onClick) getActivity());
 
         dsInfoRecycler.setAdapter(dsInfoAdapter);
         msInfoRecycler.setAdapter(msInfoAdapter);
@@ -91,9 +92,9 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        if(loader.getId() == 50) {
+        if (loader.getId() == 50) {
             dsInfoAdapter.swapCursor(null);
-        } else{
+        } else {
             msInfoAdapter.swapCursor(null);
         }
     }

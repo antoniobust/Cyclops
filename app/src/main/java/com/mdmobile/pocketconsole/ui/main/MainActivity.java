@@ -4,31 +4,26 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.ServerDetailsActivity;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
+import com.mdmobile.pocketconsole.adapters.ServerListAdapter;
+import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
-import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
-import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import static com.mdmobile.pocketconsole.R.id.main_activity_fragment_container;
@@ -36,7 +31,8 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKE
 import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
 
 
-public class MainActivity extends AppCompatActivity implements DevicesListAdapter.DeviceSelected {
+public class MainActivity extends AppCompatActivity implements DevicesListAdapter.DeviceSelected,
+        ServerListAdapter.onClick {
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     //Define a flag if we are in tablet layout or not
     public static boolean TABLET_MODE;
@@ -242,6 +238,14 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         Intent intent = new Intent(this, DeviceDetailsActivity.class);
         intent.putExtra(DEVICE_NAME_EXTRA_KEY, devName);
         intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void itemCLicked(Parcelable serverParcel) {
+        Intent intent = new Intent(this, ServerDetailsActivity.class);
+        intent.putExtra(McContract.DEPLOYMENT_SERVER_TABLE_NAME, serverParcel);
         startActivity(intent);
     }
 }

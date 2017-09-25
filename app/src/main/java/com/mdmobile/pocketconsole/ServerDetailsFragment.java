@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ public class ServerDetailsFragment extends Fragment {
 
     private final static String SERVER_PARCELABLE_ARGUMENT = "ServerParcelableArgument";
     private ServerDetailsAdapter serverDetailsAdapter;
+    private String actionBarTitle;
 
     public ServerDetailsFragment() {
     }
@@ -38,9 +41,13 @@ public class ServerDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Parcelable parcel =getArguments().getParcelable(SERVER_PARCELABLE_ARGUMENT);
         if(parcel instanceof ServerInfo.ManagementServer) {
+            ServerInfo.ManagementServer serverInfo = (ServerInfo.ManagementServer) parcel;
             serverDetailsAdapter = new ServerDetailsAdapter(getContext(),(ServerInfo.ManagementServer) parcel);
+            actionBarTitle = serverInfo.getName();
         } else {
+            ServerInfo.DeploymentServer serverInfo = (ServerInfo.DeploymentServer) parcel;
             serverDetailsAdapter = new ServerDetailsAdapter(getContext(),(ServerInfo.DeploymentServer) parcel);
+            actionBarTitle = serverInfo.getName();
         }
     }
 
@@ -51,9 +58,14 @@ public class ServerDetailsFragment extends Fragment {
         RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.server_details_recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-
         recycler.setAdapter(serverDetailsAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(actionBarTitle);
     }
 }

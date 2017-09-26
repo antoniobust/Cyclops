@@ -34,8 +34,11 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
     private Cursor data;
     private String selected;
     private DeviceSelected mSelectionCallback;
+    private Context mContext;
 
-    public DevicesListAdapter(@Nullable Cursor cursor, DeviceSelected callback) {
+    public DevicesListAdapter(Context context, @Nullable Cursor cursor, DeviceSelected callback) {
+        mContext = context;
+
         if (cursor != null) {
             setHasStableIds(true);
             data = cursor;
@@ -49,7 +52,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_list_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.device_list_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -123,12 +126,11 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
     }
 
     private void showActionsMenu(final View view) {
-        PopupMenu menu = new PopupMenu(view.getContext(), view, Gravity.START);
+        PopupMenu menu = new PopupMenu(mContext, view, Gravity.START);
         menu.inflate(R.menu.device_action_menu);
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Context mContext = view.getContext();
                 switch (menuItem.getItemId()) {
                     case R.id.action_checkin:
                         //Check in action

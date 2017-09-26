@@ -26,7 +26,8 @@ import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.
  * Dialog shown to let the user send a script to a device
  */
 
-public class MessageDialog extends android.support.v4.app.DialogFragment implements DialogInterface.OnClickListener, TextWatcher {
+public class MessageDialog extends android.support.v4.app.DialogFragment
+        implements DialogInterface.OnClickListener, TextWatcher {
 
 
     EditText editText;

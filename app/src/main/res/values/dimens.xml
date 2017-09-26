@@ -3,8 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-
     <dimen name="max_content_size">@dimen/match_parent</dimen>
+    <dimen name="dashboard_card_height">280dp</dimen>
 
     <item name="match_parent" format="integer" type="dimen">-1</item>
 </resources>

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -16,7 +17,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.ui.ViewHolder.ChartViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
  * Chart recycler view adapter
  */
 
-public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
+public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> {
 
     private Bundle statistics;
 
@@ -126,7 +126,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
         pieChart.setData(data);
         pieChart.setDrawEntryLabels(true);
         pieChart.setMaxAngle(360f);
-        pieChart.setHoleRadius(50f);
+        pieChart.setHoleRadius(60f);
         pieChart.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         Legend legend = pieChart.getLegend();
@@ -158,5 +158,22 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartViewHolder> {
 
     private void createBarsChart() {
 
+    }
+
+    class ChartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView refreshButton;
+        FrameLayout chartContainer;
+
+        ChartViewHolder(View itemView) {
+            super(itemView);
+            chartContainer = (FrameLayout) itemView.findViewById(R.id.chart_container);
+            refreshButton = (ImageView) itemView.findViewById(R.id.chart_refresh_button);
+            refreshButton.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+
+        }
     }
 }

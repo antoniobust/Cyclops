@@ -112,7 +112,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         mSwipeToRefresh.setOnRefreshListener(this);
 
         //Create an adapter for recycler
-        mAdapter = new DevicesListAdapter(null, (DevicesListAdapter.DeviceSelected) getActivity());
+        mAdapter = new DevicesListAdapter(getContext(),null, (DevicesListAdapter.DeviceSelected) getActivity());
 
         return rootView;
     }

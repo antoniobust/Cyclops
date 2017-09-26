@@ -79,5 +79,6 @@
         <item>@string/sort_device_offline_first</item>
     </string-array>
     <string name="title_activity_service_details">ServiceDetailsActivity</string>
+    <string name="add_chart_label">Add chart</string>
 
 </resources>

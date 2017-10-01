@@ -3,26 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:colorPrimary" tools:targetApi="lollipop">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark" tools:targetApi="lollipop">@color/colorPrimaryDark
-        </item>
+        <item name="android:colorPrimaryDark" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
         <item name="android:colorAccent" tools:targetApi="lollipop">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
         <!--Enable window content shared_element_transition-->
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
-
-
-        <!-- specify shared element transitions -->
-        <item name="android:windowSharedElementEnterTransition" tools:targetApi="lollipop">
-            @transition/shared_element_transition
-        </item>
-        <item name="android:windowSharedElementExitTransition" tools:targetApi="lollipop">
-            @transition/shared_element_transition
-        </item>
-        <item name="android:windowSharedElementReenterTransition" tools:targetApi="lollipop">
-            @transition/shared_element_transition
-        </item>
-        <item name="android:windowSharedElementReturnTransition" tools:targetApi="lollipop">
-            @transition/shared_element_transition
-        </item>
 
 
         <!--Support library-->
@@ -32,19 +17,8 @@
 
     </style>
 
-    <!--Specific Main activity style-->
-    <style name="AppTheme.MainActivity">
-        <item name="android:windowExitTransition" tools:targetApi="lollipop">@transition/activity_fade_transition</item>
-        <item name="android:windowReenterTransition" tools:targetApi="lollipop">@transition/activity_fade_transition
-        </item>
-    </style>
-
     <!--Specific device details activity style-->
-    <style name="AppTheme.DeviceDetailsActivity" parent="AppTheme">
-        <item name="android:windowEnterTransition" tools:targetApi="lollipop">
-            @transition/device_details_content_transition
-        </item>
-        <item name="android:windowExitTransition" tools:targetApi="lollipop">@transition/activity_fade_transition</item>
+    <style name="AppTheme.DetailsActivity" parent="AppTheme">
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

@@ -15,21 +15,17 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
@@ -87,20 +83,19 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
 
         Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        ActionBar actionBar;
-        //Handle different context if in tablet layout or smartphone
-        if (MainActivity.TABLET_MODE) {
-            ((MainActivity) getActivity()).setSupportActionBar(toolbar);
-            actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        } else {
-            ((DeviceDetailsActivity) getActivity()).setSupportActionBar(toolbar);
-            actionBar = ((DeviceDetailsActivity) getActivity()).getSupportActionBar();
+        if (GeneralUtility.getLayoutMode(getContext())) {
+            toolbar.setVisibility(View.GONE);
         }
+
+        ActionBar actionBar;
+        ((DeviceDetailsActivity) getActivity()).setSupportActionBar(toolbar);
+        actionBar = ((DeviceDetailsActivity) getActivity()).getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setTitle(deviceName);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
 
         ImageView titleIconView = (ImageView) rootView.findViewById(R.id.device_detail_icon);
         TextView titleView = (TextView) rootView.findViewById(R.id.device_detail_title_view);

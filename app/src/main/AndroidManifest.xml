@@ -26,10 +26,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.logIn.LoginActivity"
-            android:label="@string/title_activity_login"
             android:launchMode="singleTop">
             <intent-filter>
-
                 <!-- Searches intent -->
                 <action android:name="android.intent.action.SEARCH"/>
                 <action android:name="android.intent.action.MAIN"/>
@@ -45,12 +43,13 @@
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.MainActivity"/>
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".ui.deviceDetails.DeviceDetailsActivity"
             android:label="@string/title_activity_device_details"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.DeviceDetailsActivity">
+            android:theme="@style/AppTheme.DetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mdmobile.pocketconsole.ui.main.MainActivity"/>
@@ -91,7 +90,7 @@
             android:name=".ServerDetailsActivity"
             android:label="@string/title_activity_service_details"
             android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.DetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mdmobile.pocketconsole.ui.main.MainActivity"/>

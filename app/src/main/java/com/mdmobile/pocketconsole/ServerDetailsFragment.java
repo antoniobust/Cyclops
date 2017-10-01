@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -57,7 +58,6 @@ public class ServerDetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_server_details, container, false);
         RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.server_details_recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
         recycler.setAdapter(serverDetailsAdapter);
 
         return rootView;

@@ -201,11 +201,8 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         this.devId = devId;
         this.devName = devName;
 
-        if (TABLET_MODE) {
-            showDetailsFragment(devId, devName);
-        } else {
-            startDetailsActivity(devId, devName);
-        }
+        startDetailsActivity(devId, devName);
+
     }
 
 

@@ -71,7 +71,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         setContentView(R.layout.activity_login);
 
         //Set constant tablet Mode as first thing
-        MainActivity.TABLET_MODE = GeneralUtility.getLayoutMode(getApplicationContext());
+        MainActivity.TABLET_MODE = GeneralUtility.isTabletMode(getApplicationContext());
 
         //Instantiate views
         viewPager = (ViewPager) findViewById(R.id.login_view_pager);

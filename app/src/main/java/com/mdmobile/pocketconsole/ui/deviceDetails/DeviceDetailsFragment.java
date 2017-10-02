@@ -83,7 +83,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
 
         Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        if (GeneralUtility.getLayoutMode(getContext())) {
+        if (GeneralUtility.isTabletMode(getContext())) {
             toolbar.setVisibility(View.GONE);
         }
 

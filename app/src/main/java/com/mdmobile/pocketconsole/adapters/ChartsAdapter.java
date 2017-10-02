@@ -28,12 +28,18 @@ import java.util.List;
 public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> {
 
     private Bundle statistics;
+    private String[] enabledCharts;
 
-    public ChartsAdapter(@Nullable Bundle data) {
+    public ChartsAdapter(Context c,@Nullable Bundle data) {
         if (data != null) {
             statistics = data;
         }
         setHasStableIds(true);
+//        enabledCharts = c.getApplicationContext().getSharedPreferences
+//                (c.getString(R.string.shared_preference), Context.MODE_PRIVATE)
+//                .getStringSet(c.getString(R.string.charts_preference),);
+//        )
+
     }
 
     @Override
@@ -111,13 +117,12 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
             case 3:
                 //Average memory
                 break;
-
         }
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 6;
     }
 
     private PieChart createPieChart(Context mContext, PieData data, int position) {

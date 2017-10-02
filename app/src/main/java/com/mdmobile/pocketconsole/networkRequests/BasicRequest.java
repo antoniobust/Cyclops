@@ -36,7 +36,7 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKE
  * And provides standard procedure for a refused request
  */
 
-public abstract class BasicRequest<T> extends Request<T> {
+abstract class BasicRequest<T> extends Request<T> {
 
     private final Context mContext;
     private final String LOG_TAG = BasicRequest.class.getSimpleName();
@@ -73,7 +73,8 @@ public abstract class BasicRequest<T> extends Request<T> {
                         Account[] accounts = accountManager.getAccountsByType(accountType);
                         if (accounts[0].name.equals(accountName)) {
                             accountManager.setAuthToken(accounts[0], authTokenType, authToken);
-                            Logger.log(LOG_TAG, "Account " + accountName + " new token saved: " + authToken, Log.VERBOSE);
+                            Logger.log(LOG_TAG, "Account " + accountName + " new token saved: " + authToken
+                                    + "\n Resending request...", Log.VERBOSE);
                         }
                     }
                 }
@@ -148,8 +149,7 @@ public abstract class BasicRequest<T> extends Request<T> {
 
         //If error is in 400 range give it another try as it could be the token expired
         if (response.statusCode == HttpsURLConnection.HTTP_UNAUTHORIZED ||
-                response.statusCode == HttpsURLConnection.HTTP_FORBIDDEN ||
-                response.statusCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
+                response.statusCode == HttpsURLConnection.HTTP_FORBIDDEN) {
             //Allow max 1 attempt to get the token -> this will avoid recursive loop of requests
             Logger.log(LOG_TAG, "Attempt requesting a new Token", Log.VERBOSE);
 

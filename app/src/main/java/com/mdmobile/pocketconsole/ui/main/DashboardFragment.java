@@ -60,7 +60,7 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
-        ChartsAdapter recyclerAdapter = new ChartsAdapter(null);
+        ChartsAdapter recyclerAdapter = new ChartsAdapter(getContext(),null);
         recyclerView.setAdapter(recyclerAdapter);
 
 //        //Get devices pie chart
@@ -105,6 +105,6 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void OnFinished(Bundle result) {
-        recyclerView.swapAdapter(new ChartsAdapter(result), true);
+        recyclerView.swapAdapter(new ChartsAdapter(getContext(),result), true);
     }
 }

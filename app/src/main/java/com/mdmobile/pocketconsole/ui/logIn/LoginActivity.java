@@ -83,7 +83,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         //Check if activity was launched from authenticator(to add a new accountsUpdateListener),
         // if not check if there is any user already logged in
         if (authenticatorResponse == null) {
-            if (UserUtility.checkAnyUserLoggedIn(getApplicationContext())) {
+            if (UserUtility.checkAnyUserLoggedIn()) {
                 //user found, launch main activity
                 startMainActivity();
             }
@@ -98,7 +98,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         super.onResume();
         //Check if a user was added while the activity was paused
         if (authenticatorResponse == null) {
-            if (UserUtility.checkAnyUserLoggedIn(getApplicationContext())) {
+            if (UserUtility.checkAnyUserLoggedIn()) {
                 //user found, launch main activity
                 startMainActivity();
             }
@@ -271,7 +271,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             //Update accountsUpdateListener with new info
             accountManager.setPassword(account, psw);
             //Update account with new user data (token type would be teh same, the others may have changed)
-            UserUtility.updateUserData(getApplicationContext(), userInfo, account);
+            UserUtility.updateUserData(userInfo);
         }
 
         //Set the token we have for this accountsUpdateListener

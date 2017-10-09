@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?listPreferredItemHeight"
+    android:layout_margin="4dp"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal"
+    tools:targetApi="lollipop">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        app:srcCompat="@drawable/ic_account_box"/>
+
+    <TextView
+        android:id="@+id/user_list_text_view"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="6"
+        android:gravity="center_vertical"
+        android:paddingEnd="0dp"
+        android:paddingStart="16dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        tools:text="UK-MS"/>
+
+</LinearLayout>

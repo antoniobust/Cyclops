@@ -3,6 +3,7 @@ package com.mdmobile.pocketconsole.ui.main;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.UserUtility;
 
 import static com.mdmobile.pocketconsole.R.id.main_activity_fragment_container;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
@@ -143,9 +145,15 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             case R.id.main_activity_search_button:
                 item.expandActionView();
                 return true;
+            case R.id.logout_action:
+                logOut();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logOut() {
+
     }
 
 

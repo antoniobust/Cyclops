@@ -82,5 +82,6 @@
     <string name="add_chart_label">Add chart</string>
     <string name="charts_preference">selectedCharts</string>
     <string name="more_label">more</string>
+    <string name="logout_label">Logout</string>
 
 </resources>

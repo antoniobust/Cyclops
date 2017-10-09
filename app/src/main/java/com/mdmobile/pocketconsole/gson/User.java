@@ -2,46 +2,54 @@ package com.mdmobile.pocketconsole.gson;
 
 
 public class User {
-    private String name, displayName, kind, eulaAcceptanceDate;
-    private Boolean isEulaAccepted, isAccountLocked;
-    private int numberOfFailedLogins;
+    private String Name, DisplayName, Kind, EulaAcceptanceDate;
+    private Boolean IsEulaAccepted, IsAccountLocked;
+    private int NumberOfFailedLogins;
 
     public User(String name, String displayName, String kind, String eulaAcceptanceDate,
                 Boolean isEulaAccepted, Boolean isAccountLocked, int numberOfFailedLogins) {
-        this.name = name;
-        this.displayName = displayName;
-        this.kind = kind;
-        this.eulaAcceptanceDate = eulaAcceptanceDate;
-        this.isEulaAccepted = isEulaAccepted;
-        this.isAccountLocked = isAccountLocked;
-        this.numberOfFailedLogins = numberOfFailedLogins;
+        this.Name = name;
+        this.DisplayName = displayName;
+        this.Kind = kind;
+        this.EulaAcceptanceDate = eulaAcceptanceDate;
+        this.IsEulaAccepted = isEulaAccepted;
+        this.IsAccountLocked = isAccountLocked;
+        this.NumberOfFailedLogins = numberOfFailedLogins;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public String getDisplayName() {
-        return displayName;
+        return DisplayName;
     }
 
     public String getKind() {
-        return kind;
+        return Kind;
     }
 
     public String getEulaAcceptanceDate() {
-        return eulaAcceptanceDate;
+        if (IsEulaAccepted == null) {
+            return null;
+        } else {
+            return EulaAcceptanceDate;
+        }
     }
 
-    public Boolean getEulaAccepted() {
-        return isEulaAccepted;
+    public int getEulaAccepted() {
+        if (IsEulaAccepted == null) {
+            return -1;
+        } else {
+            return IsEulaAccepted ? 1 : 0;
+        }
     }
 
-    public Boolean getAccountLocked() {
-        return isAccountLocked;
+    public int getAccountLocked() {
+        return IsAccountLocked ? 1 : 0;
     }
 
     public int getNumberOfFailedLogins() {
-        return numberOfFailedLogins;
+        return NumberOfFailedLogins;
     }
 }

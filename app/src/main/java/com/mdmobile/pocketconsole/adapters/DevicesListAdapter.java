@@ -59,7 +59,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (!data.moveToPosition(position)) {
-            //Error view
+            //Error nameView
         }
 
         holder.deviceNameView.setText(data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)));
@@ -182,10 +182,10 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
 
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                    ActivityOptionsCompat options = ActivityOptionsCompat.
-//                            makeSceneTransitionAnimation((MainActivity) view.getContext(), holder.deviceIconView, holder.deviceIconView.getTransitionName());
-//                    view.getContext().startActivity(intent, options.toBundle());
+//                            makeSceneTransitionAnimation((MainActivity) nameView.getContext(), holder.deviceIconView, holder.deviceIconView.getTransitionName());
+//                    nameView.getContext().startActivity(intent, options.toBundle());
 //                } else {
-//                    view.getContext().startActivity(intent);
+//                    nameView.getContext().startActivity(intent);
 //                }
             }
         };

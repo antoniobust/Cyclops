@@ -2,7 +2,6 @@ package com.mdmobile.pocketconsole.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +35,11 @@ public class DsInfoAdapter extends ServerListAdapter implements View.OnClickList
     @Override
     public void onBindViewHolder(Holder holder, int position) {
 
-        if (getCursor() == null || !getCursor().moveToFirst()) {
+        if (getCursor() == null || !getCursor().moveToPosition(position)) {
             return;
         }
-        String serverName = getCursor().getString(getCursor().getColumnIndex(McContract.DeploymentServer.NAME));
-        String status = getCursor().getString(getCursor().getColumnIndex(McContract.DeploymentServer.STATUS));
+        String serverName = getCursor().getString(getCursor().getColumnIndex(McContract.DsInfo.NAME));
+        String status = getCursor().getString(getCursor().getColumnIndex(McContract.DsInfo.STATUS));
 
 
         holder.serverNameView.setText(serverName);
@@ -79,20 +78,20 @@ public class DsInfoAdapter extends ServerListAdapter implements View.OnClickList
         Cursor c = getCursor();
         c.moveToPosition(adapterPosition);
         Parcelable parcel = new ServerInfo.DeploymentServer(
-                c.getString(c.getColumnIndex(McContract.DeploymentServer.PRIMARY_MANAGEMENT_ADDRESS)),
-                c.getString(c.getColumnIndex(McContract.DeploymentServer.SECONDARY_MANAGEMENT_ADDRESS)),
-                c.getString(c.getColumnIndex(McContract.DeploymentServer.PRIMARY_AGENT_ADDRESS)),
-                c.getString(c.getColumnIndex(McContract.DeploymentServer.SECONDARY_AGENT_ADDRESS)),
-                c.getString(c.getColumnIndex(McContract.DeploymentServer.DEVICE_MANAGEMENT_ADDRESS)),
-                c.getString(c.getColumnIndex(McContract.DeploymentServer.NAME)),
-                c.getString(c.getColumnIndex(McContract.DeploymentServer.STATUS)),
-                (c.getInt(c.getColumnIndex(McContract.DeploymentServer.CONNECTED)) == 1),
-                c.getInt(c.getColumnIndex(McContract.DeploymentServer.PULSE_TIMEOUT)), c.getInt(c.getColumnIndex(McContract.DeploymentServer.RULE_RELOAD)),
-                c.getInt(c.getColumnIndex(McContract.DeploymentServer.SCHEDULE_INTERVAL)),
-                c.getInt(c.getColumnIndex(McContract.DeploymentServer.MIN_THREADS)), c.getInt(c.getColumnIndex(McContract.DeploymentServer.MAX_THREADS)),
-                c.getInt(c.getColumnIndex(McContract.DeploymentServer.MAX_BURST_THREADS)), c.getInt(c.getColumnIndex(McContract.DeploymentServer.PULSE_WAIT_INTERVAL)),
-                c.getInt(c.getColumnIndex(McContract.DeploymentServer.DEVICES_CONNECTED)), c.getInt(c.getColumnIndex(McContract.DeploymentServer.MANAGERS_CONNECTED)),
-                c.getInt(c.getColumnIndex(McContract.DeploymentServer.QUEUE_LENGTH)), c.getInt(c.getColumnIndex(McContract.DeploymentServer.CURRENT_THREAD_COUNT)));
+                c.getString(c.getColumnIndex(McContract.DsInfo.PRIMARY_MANAGEMENT_ADDRESS)),
+                c.getString(c.getColumnIndex(McContract.DsInfo.SECONDARY_MANAGEMENT_ADDRESS)),
+                c.getString(c.getColumnIndex(McContract.DsInfo.PRIMARY_AGENT_ADDRESS)),
+                c.getString(c.getColumnIndex(McContract.DsInfo.SECONDARY_AGENT_ADDRESS)),
+                c.getString(c.getColumnIndex(McContract.DsInfo.DEVICE_MANAGEMENT_ADDRESS)),
+                c.getString(c.getColumnIndex(McContract.DsInfo.NAME)),
+                c.getString(c.getColumnIndex(McContract.DsInfo.STATUS)),
+                (c.getInt(c.getColumnIndex(McContract.DsInfo.CONNECTED)) == 1),
+                c.getInt(c.getColumnIndex(McContract.DsInfo.PULSE_TIMEOUT)), c.getInt(c.getColumnIndex(McContract.DsInfo.RULE_RELOAD)),
+                c.getInt(c.getColumnIndex(McContract.DsInfo.SCHEDULE_INTERVAL)),
+                c.getInt(c.getColumnIndex(McContract.DsInfo.MIN_THREADS)), c.getInt(c.getColumnIndex(McContract.DsInfo.MAX_THREADS)),
+                c.getInt(c.getColumnIndex(McContract.DsInfo.MAX_BURST_THREADS)), c.getInt(c.getColumnIndex(McContract.DsInfo.PULSE_WAIT_INTERVAL)),
+                c.getInt(c.getColumnIndex(McContract.DsInfo.DEVICES_CONNECTED)), c.getInt(c.getColumnIndex(McContract.DsInfo.MANAGERS_CONNECTED)),
+                c.getInt(c.getColumnIndex(McContract.DsInfo.QUEUE_LENGTH)), c.getInt(c.getColumnIndex(McContract.DsInfo.CURRENT_THREAD_COUNT)));
         mCallback.itemCLicked(parcel);
     }
 }

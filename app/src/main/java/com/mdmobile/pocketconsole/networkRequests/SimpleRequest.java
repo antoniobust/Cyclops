@@ -26,8 +26,8 @@ public class SimpleRequest extends BasicRequest<String> {
      * @param errorListener Error listener, or null to ignore errors
      */
     public SimpleRequest(int method, String url, Response.Listener<String> listener,
-                         Response.ErrorListener errorListener, Context context) {
-        super(method, url, errorListener, context);
+                         Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
         mListener = listener;
     }
 
@@ -38,8 +38,8 @@ public class SimpleRequest extends BasicRequest<String> {
      * @param listener      Listener to receive the String response
      * @param errorListener Error listener, or null to ignore errors
      */
-    public SimpleRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener, Context context) {
-        this(Method.GET, url, listener, errorListener, context);
+    public SimpleRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        this(Method.GET, url, listener, errorListener);
     }
 
     @Override

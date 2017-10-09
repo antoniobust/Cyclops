@@ -14,17 +14,17 @@ import com.mdmobile.pocketconsole.utils.DbData;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
+
 /**
  * Responsible of requesting and storing information about Servers
  */
 
 public class ServerInfoRequest extends BasicRequest<String> {
     private Response.Listener<String> responseListener;
-    private Context mContext;
 
-    public ServerInfoRequest(String url, Response.Listener<String> responseListener, Response.ErrorListener errorListener, Context context) {
-        super(Method.GET, url, errorListener, context);
-        mContext = context;
+    public ServerInfoRequest(String url, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
+        super(Method.GET, url, errorListener);
         this.responseListener = responseListener;
     }
 
@@ -45,22 +45,22 @@ public class ServerInfoRequest extends BasicRequest<String> {
             ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(servers.getDeploymentServers());
 
             //Delete any existing data in DB
-            mContext.getContentResolver().delete(McContract.ManagementServer.CONTENT_URI, null, null);
-            mContext.getContentResolver().delete(McContract.DeploymentServer.CONTENT_URI, null, null);
+            applicationContext.getContentResolver().delete(McContract.MsInfo.CONTENT_URI, null, null);
+            applicationContext.getContentResolver().delete(McContract.DsInfo.CONTENT_URI, null, null);
 
             if (managementServers.size() > 1) {
-                mContext.getContentResolver().bulkInsert(McContract.ManagementServer.CONTENT_URI,
+                applicationContext.getContentResolver().bulkInsert(McContract.MsInfo.CONTENT_URI,
                         DbData.prepareMsValues(managementServers));
             } else {
-                mContext.getContentResolver().insert(McContract.ManagementServer.CONTENT_URI,
+                applicationContext.getContentResolver().insert(McContract.MsInfo.CONTENT_URI,
                         DbData.prepareMsValues(managementServers.get(0)));
             }
 
             if (deploymentServers.size() > 1) {
-                mContext.getContentResolver().bulkInsert(McContract.DeploymentServer.CONTENT_URI,
+                applicationContext.getContentResolver().bulkInsert(McContract.DsInfo.CONTENT_URI,
                         DbData.prepareDsValues(deploymentServers));
             } else {
-                mContext.getContentResolver().insert(McContract.DeploymentServer.CONTENT_URI,
+                applicationContext.getContentResolver().insert(McContract.DsInfo.CONTENT_URI,
                         DbData.prepareDsValues(deploymentServers.get(0)));
             }
 

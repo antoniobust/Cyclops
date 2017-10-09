@@ -99,22 +99,22 @@ public class DbData extends AndroidJUnitRunner {
     @Test
     public void managementServer() {
         insertMs();
-        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.ManagementServer.CONTENT_URI, null, null, null, null);
+        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.MsInfo.CONTENT_URI, null, null, null, null);
         assertNotNull("Null cursor returned for MS ", c);
         assertTrue("No MS info found", c.moveToFirst());
 
-//        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.ManagementServer.CONTENT_URI, null, null);
+//        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.MsInfo.CONTENT_URI, null, null);
 //        assertTrue("MS not deleted properly, deleted: " + deleted + " records", deleted > 0);
     }
 
     @Test
     public void deploymentServer() {
         insertDs();
-        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.DeploymentServer.CONTENT_URI, null, null, null, null);
+        Cursor c = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.DsInfo.CONTENT_URI, null, null, null, null);
         assertNotNull("Null cursor returned for DS ", c);
         assertTrue("No DS info found", c.moveToFirst());
 
-//        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.DeploymentServer.CONTENT_URI, null, null);
+//        int deleted = InstrumentationRegistry.getTargetContext().getContentResolver().delete(McContract.DsInfo.CONTENT_URI, null, null);
 //        assertTrue("DS not deleted properly, deleted: " + deleted + " records", deleted > 0);
     }
 
@@ -190,14 +190,14 @@ public class DbData extends AndroidJUnitRunner {
     private void insertMs() {
         ArrayList<ServerInfo.ManagementServer> msArray = getMsFromJson();
         ContentValues[] msValues = com.mdmobile.pocketconsole.utils.DbData.prepareMsValues(msArray);
-        int inserted = InstrumentationRegistry.getContext().getContentResolver().bulkInsert(McContract.ManagementServer.CONTENT_URI, msValues);
+        int inserted = InstrumentationRegistry.getContext().getContentResolver().bulkInsert(McContract.MsInfo.CONTENT_URI, msValues);
         assertTrue("MS not inserted", inserted > 0);
     }
 
     private void insertDs() {
         ArrayList<ServerInfo.DeploymentServer> dsArray = getDsFromJson();
         ContentValues[] dsValues = com.mdmobile.pocketconsole.utils.DbData.prepareDsValues(dsArray);
-        int inserted = InstrumentationRegistry.getContext().getContentResolver().bulkInsert(McContract.DeploymentServer.CONTENT_URI, dsValues);
+        int inserted = InstrumentationRegistry.getContext().getContentResolver().bulkInsert(McContract.DsInfo.CONTENT_URI, dsValues);
         assertTrue("DS not inserted", inserted > 0);
     }
 

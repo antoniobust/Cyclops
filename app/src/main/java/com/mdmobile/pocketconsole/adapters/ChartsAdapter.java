@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Chart recycler view adapter
+ * Chart recycler nameView adapter
  */
 
 public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> {

@@ -35,11 +35,15 @@ public enum McEnumUri {
 
     SCRIPTS(513, McContract.SCRIPT_TABLE_NAME, false, McContract.SCRIPT_TABLE_NAME),
 
-    SCRIPT_ID(514, McContract.SCRIPT_TABLE_NAME + "/*", true, McContract.SCRIPT_TABLE_NAME);
+    SCRIPT_ID(514, McContract.SCRIPT_TABLE_NAME + "/*", true, McContract.SCRIPT_TABLE_NAME),
 
+    USERS(515, McContract.USER_TABLE_NAME, false, McContract.USER_TABLE_NAME),
+
+    USER_ID(516, McContract.USER_TABLE_NAME + "/*", true, McContract.USER_TABLE_NAME);
 
     public String path, contentType, tableName;
     public int matcherCode;
+
 
     McEnumUri(int matcherCode, String path, boolean item, String tableName) {
 

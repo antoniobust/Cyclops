@@ -14,9 +14,8 @@ public class DeviceProfilesRequest extends BasicRequest<String> {
     Context mContext;
     private Response.Listener<String> listener;
 
-    public DeviceProfilesRequest(int method, String url, Response.ErrorListener errorListener, Context context) {
-        super(method, url, errorListener, context);
-        mContext = context.getApplicationContext();
+    public DeviceProfilesRequest(int method, String url, Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
     }
 
     @Override

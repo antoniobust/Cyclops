@@ -34,11 +34,11 @@ public class MsInfoAdapter extends ServerListAdapter implements View.OnClickList
     @Override
     public void onBindViewHolder(Holder holder, int position) {
 
-        if (getCursor() == null || !getCursor().moveToFirst()) {
+        if (getCursor() == null || !getCursor().moveToPosition(position)) {
             return;
         }
-        String serverName = getCursor().getString(getCursor().getColumnIndex(McContract.ManagementServer.NAME));
-        String status = getCursor().getString(getCursor().getColumnIndex(McContract.ManagementServer.STATUS));
+        String serverName = getCursor().getString(getCursor().getColumnIndex(McContract.MsInfo.NAME));
+        String status = getCursor().getString(getCursor().getColumnIndex(McContract.MsInfo.STATUS));
 
 
         holder.serverNameView.setText(serverName);
@@ -76,14 +76,14 @@ public class MsInfoAdapter extends ServerListAdapter implements View.OnClickList
         Cursor c = getCursor();
         c.moveToPosition(adapterPosition);
         Parcelable parcel = new ServerInfo.ManagementServer(
-                c.getString(c.getColumnIndex(McContract.ManagementServer.FULLY_QUALIFIED_NAME)),
-                c.getString(c.getColumnIndex(McContract.ManagementServer.DESCRIPTION)),
-                c.getString(c.getColumnIndex(McContract.ManagementServer.STATUS_TIME)),
-                c.getString(c.getColumnIndex(McContract.ManagementServer.MAC_ADDRESS)),
-                c.getString(c.getColumnIndex(McContract.ManagementServer.NAME)),
-                c.getString(c.getColumnIndex(McContract.ManagementServer.STATUS)),
-                c.getInt(c.getColumnIndex(McContract.ManagementServer.PORT_NUMBER)),
-                c.getInt(c.getColumnIndex(McContract.ManagementServer.TOTAL_USER_COUNT)));
+                c.getString(c.getColumnIndex(McContract.MsInfo.FULLY_QUALIFIED_NAME)),
+                c.getString(c.getColumnIndex(McContract.MsInfo.DESCRIPTION)),
+                c.getString(c.getColumnIndex(McContract.MsInfo.STATUS_TIME)),
+                c.getString(c.getColumnIndex(McContract.MsInfo.MAC_ADDRESS)),
+                c.getString(c.getColumnIndex(McContract.MsInfo.NAME)),
+                c.getString(c.getColumnIndex(McContract.MsInfo.STATUS)),
+                c.getInt(c.getColumnIndex(McContract.MsInfo.PORT_NUMBER)),
+                c.getInt(c.getColumnIndex(McContract.MsInfo.TOTAL_USER_COUNT)));
         mClickCallback.itemCLicked(parcel);
     }
 }

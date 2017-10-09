@@ -28,6 +28,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 /**
@@ -38,7 +39,6 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKE
 
 abstract class BasicRequest<T> extends Request<T> {
 
-    private final Context mContext;
     private final String LOG_TAG = BasicRequest.class.getSimpleName();
     private AccountManagerCallback<Bundle> managerCallback = new AccountManagerCallback<Bundle>() {
         @Override
@@ -57,7 +57,7 @@ abstract class BasicRequest<T> extends Request<T> {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            mContext.startActivity(intent);
+                            applicationContext.startActivity(intent);
                         }
                     } else {
 //                        result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
@@ -69,7 +69,7 @@ abstract class BasicRequest<T> extends Request<T> {
                         String authTokenType = newInfo.getString(AUTH_TOKEN_TYPE_KEY);
                         String authToken = newInfo.getString(AccountManager.KEY_AUTHTOKEN);
 
-                        AccountManager accountManager = AccountManager.get(mContext);
+                        AccountManager accountManager = AccountManager.get(applicationContext);
                         Account[] accounts = accountManager.getAccountsByType(accountType);
                         if (accounts[0].name.equals(accountName)) {
                             accountManager.setAuthToken(accounts[0], authTokenType, authToken);
@@ -87,8 +87,8 @@ abstract class BasicRequest<T> extends Request<T> {
                     e.printStackTrace();
 
                     //Clearing user credential and let the user input new ones
-                    AccountManager accountManager = AccountManager.get(mContext);
-                    Account[] accounts = accountManager.getAccountsByType(mContext.getString(R.string.account_type));
+                    AccountManager accountManager = AccountManager.get(applicationContext);
+                    Account[] accounts = accountManager.getAccountsByType(applicationContext.getString(R.string.account_type));
                     accountManager.clearPassword(accounts[0]);
                     accountManager.getAuthToken(accounts[0],
                             accountManager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY)
@@ -100,16 +100,15 @@ abstract class BasicRequest<T> extends Request<T> {
         }
     };
 
-    public BasicRequest(int method, String url, Response.ErrorListener errorListener, Context context) {
+    public BasicRequest(int method, String url, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
-        mContext = context.getApplicationContext();
     }
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> headers = new HashMap<>();
-        AccountManager accountManager = AccountManager.get(mContext);
-        Account[] accountAvailable = accountManager.getAccountsByType(mContext.getString(R.string.account_type));
+        AccountManager accountManager = AccountManager.get(applicationContext);
+        Account[] accountAvailable = accountManager.getAccountsByType(applicationContext.getString(R.string.account_type));
 
         String tokenType = accountManager.getUserData(accountAvailable[0], AUTH_TOKEN_TYPE_KEY);
         //Assuming we only have 1 account
@@ -154,13 +153,13 @@ abstract class BasicRequest<T> extends Request<T> {
             Logger.log(LOG_TAG, "Attempt requesting a new Token", Log.VERBOSE);
 
             //Get current user data we have stored
-            AccountManager manager = AccountManager.get(mContext);
-            Account[] accounts = manager.getAccountsByType(mContext.getString(R.string.account_type));
+            AccountManager manager = AccountManager.get(applicationContext);
+            Account[] accounts = manager.getAccountsByType(applicationContext.getString(R.string.account_type));
 
             if (accounts.length == 1) {
                 String tokenType = manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY);
                 String token = manager.peekAuthToken(accounts[0], tokenType);
-                manager.invalidateAuthToken(mContext.getString(R.string.account_type), token);
+                manager.invalidateAuthToken(applicationContext.getString(R.string.account_type), token);
 
                 manager.getAuthToken(accounts[0],
                         manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),

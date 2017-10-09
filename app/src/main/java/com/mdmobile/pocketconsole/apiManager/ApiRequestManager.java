@@ -27,6 +27,7 @@ import com.mdmobile.pocketconsole.networkRequests.DeviceInstalledAppRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceRequest;
 import com.mdmobile.pocketconsole.networkRequests.ServerInfoRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
+import com.mdmobile.pocketconsole.networkRequests.UserRequest;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
@@ -103,7 +104,7 @@ public class ApiRequestManager {
                 Log.e(LOG_TAG, "Error receiving token");
                 error.printStackTrace();
             }
-        }, ApplicationLoader.applicationContext) {
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -123,10 +124,10 @@ public class ApiRequestManager {
 
     }
 
-    public void getDevices(Account account) {
+    public void getDevices() {
 
 //        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
-        String apiAuthority = UserUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(ApplicationLoader.applicationContext, Request.Method.GET, api,
@@ -146,8 +147,7 @@ public class ApiRequestManager {
     }
 
     public void getDeviceInstalledApps(@NonNull final String devID) {
-        Account account = UserUtility.getUser(ApplicationLoader.applicationContext);
-        String apiAuthority = UserUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
         DeviceInstalledAppRequest installedAppRequest = new DeviceInstalledAppRequest(Request.Method.GET,
@@ -161,7 +161,7 @@ public class ApiRequestManager {
             public void onErrorResponse(VolleyError error) {
                 Logger.log(LOG_TAG, "Error requesting installed Apps for:" + devID, Log.ERROR);
             }
-        }, ApplicationLoader.applicationContext);
+        });
 
         requestsQueue.add(installedAppRequest);
     }
@@ -173,8 +173,7 @@ public class ApiRequestManager {
 
     public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
-        Account account = UserUtility.getUser(ApplicationLoader.applicationContext);
-        String apiAuthority = UserUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 
         String jsonPayload = new Gson().toJson(new Action(action, message, phoneNumber));
@@ -189,7 +188,7 @@ public class ApiRequestManager {
             public void onErrorResponse(VolleyError error) {
                 Logger.log(LOG_TAG, "Error sending action:" + action + " to device= " + deviceID, Log.ERROR);
             }
-        }, ApplicationLoader.applicationContext);
+        });
 
 
         requestsQueue.add(actionRequest);
@@ -198,8 +197,7 @@ public class ApiRequestManager {
     }
 
     public void getServerInfo() {
-        Account account = UserUtility.getUser(ApplicationLoader.applicationContext);
-        String apiAuthority = UserUtility.getUserInfo(ApplicationLoader.applicationContext, account).get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
         String api = ApiModel.ServerApi.Builder(apiAuthority).getServerInfo().build();
 
         ServerInfoRequest request = new ServerInfoRequest(api, new Response.Listener<String>() {
@@ -212,9 +210,22 @@ public class ApiRequestManager {
             public void onErrorResponse(VolleyError error) {
                 Logger.log(LOG_TAG, "Error requesting servers info", Log.ERROR);
             }
-        }, ApplicationLoader.applicationContext);
+        });
 
         requestsQueue.add(request);
+    }
+
+    public void getUsers(){
+        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
+        String api = ApiModel.UserSecurityApi.Builder(apiAuthority).getAllUsers(false,null,null).build();
+        UserRequest userRequest = new UserRequest(api, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requestsQueue.add(userRequest);
     }
 
 

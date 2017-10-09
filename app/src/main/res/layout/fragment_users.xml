@@ -2,7 +2,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/AppTheme.MainActivity.Fragment"
-    android:background="@android:color/holo_green_light"
     tools:context=".ui.main.UsersFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/users_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/user_list_item"/>
 
 </FrameLayout>

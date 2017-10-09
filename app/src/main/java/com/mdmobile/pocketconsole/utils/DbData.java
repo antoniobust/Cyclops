@@ -4,6 +4,7 @@ import android.content.ContentValues;
 
 import com.mdmobile.pocketconsole.gson.InstalledApp;
 import com.mdmobile.pocketconsole.gson.ServerInfo;
+import com.mdmobile.pocketconsole.gson.User;
 import com.mdmobile.pocketconsole.gson.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 
@@ -158,14 +159,14 @@ public class DbData {
 
     private static ContentValues getMsContentValues(ServerInfo.ManagementServer server) {
         ContentValues msValues = new ContentValues();
-        msValues.put(McContract.ManagementServer.NAME, server.getName());
-        msValues.put(McContract.ManagementServer.FULLY_QUALIFIED_NAME, server.getFqdn());
-        msValues.put(McContract.ManagementServer.DESCRIPTION, server.getDescription());
-        msValues.put(McContract.ManagementServer.MAC_ADDRESS, server.getMacAddress());
-        msValues.put(McContract.ManagementServer.PORT_NUMBER, server.getPortNumber());
-        msValues.put(McContract.ManagementServer.STATUS_TIME, server.getStatusTime());
-        msValues.put(McContract.ManagementServer.STATUS, server.getStatus());
-        msValues.put(McContract.ManagementServer.TOTAL_USER_COUNT, server.getTotalConsoleUsers());
+        msValues.put(McContract.MsInfo.NAME, server.getName());
+        msValues.put(McContract.MsInfo.FULLY_QUALIFIED_NAME, server.getFqdn());
+        msValues.put(McContract.MsInfo.DESCRIPTION, server.getDescription());
+        msValues.put(McContract.MsInfo.MAC_ADDRESS, server.getMacAddress());
+        msValues.put(McContract.MsInfo.PORT_NUMBER, server.getPortNumber());
+        msValues.put(McContract.MsInfo.STATUS_TIME, server.getStatusTime());
+        msValues.put(McContract.MsInfo.STATUS, server.getStatus());
+        msValues.put(McContract.MsInfo.TOTAL_USER_COUNT, server.getTotalConsoleUsers());
         return msValues;
     }
 
@@ -184,24 +185,24 @@ public class DbData {
 
     private static ContentValues getDsContentValues(ServerInfo.DeploymentServer server) {
         ContentValues values = new ContentValues();
-        values.put(McContract.DeploymentServer.NAME, server.getName());
-        values.put(McContract.DeploymentServer.STATUS, server.getStatus());
-        values.put(McContract.DeploymentServer.CONNECTED, server.getConnected() ? 1 : 0);
-        values.put(McContract.DeploymentServer.PRIMARY_AGENT_ADDRESS, server.getPrimaryAgentAddress());
-        values.put(McContract.DeploymentServer.SECONDARY_AGENT_ADDRESS, server.getSecondaryAgentAddress());
-        values.put(McContract.DeploymentServer.DEVICE_MANAGEMENT_ADDRESS, server.getDeviceManagementAddress());
-        values.put(McContract.DeploymentServer.PRIMARY_MANAGEMENT_ADDRESS, server.getPrimaryManagementAddress());
-        values.put(McContract.DeploymentServer.SECONDARY_MANAGEMENT_ADDRESS, server.getSecondaryManagementAddress());
-        values.put(McContract.DeploymentServer.RULE_RELOAD, server.getRuleReload());
-        values.put(McContract.DeploymentServer.SCHEDULE_INTERVAL, server.getScheduleInterval());
-        values.put(McContract.DeploymentServer.MIN_THREADS, server.getMinThreads());
-        values.put(McContract.DeploymentServer.MAX_THREADS, server.getMaxThread());
-        values.put(McContract.DeploymentServer.MAX_BURST_THREADS, server.getMaxBurstThreads());
-        values.put(McContract.DeploymentServer.DEVICES_CONNECTED, server.getConnectedDeviceCount());
-        values.put(McContract.DeploymentServer.MANAGERS_CONNECTED, server.getConnectedManagerCount());
-        values.put(McContract.DeploymentServer.QUEUE_LENGTH, server.getMsgQueueLength());
-        values.put(McContract.DeploymentServer.CURRENT_THREAD_COUNT, server.getMsgQueueLength());
-        values.put(McContract.DeploymentServer.PULSE_WAIT_INTERVAL, server.getPulseWaitInterval());
+        values.put(McContract.DsInfo.NAME, server.getName());
+        values.put(McContract.DsInfo.STATUS, server.getStatus());
+        values.put(McContract.DsInfo.CONNECTED, server.getConnected() ? 1 : 0);
+        values.put(McContract.DsInfo.PRIMARY_AGENT_ADDRESS, server.getPrimaryAgentAddress());
+        values.put(McContract.DsInfo.SECONDARY_AGENT_ADDRESS, server.getSecondaryAgentAddress());
+        values.put(McContract.DsInfo.DEVICE_MANAGEMENT_ADDRESS, server.getDeviceManagementAddress());
+        values.put(McContract.DsInfo.PRIMARY_MANAGEMENT_ADDRESS, server.getPrimaryManagementAddress());
+        values.put(McContract.DsInfo.SECONDARY_MANAGEMENT_ADDRESS, server.getSecondaryManagementAddress());
+        values.put(McContract.DsInfo.RULE_RELOAD, server.getRuleReload());
+        values.put(McContract.DsInfo.SCHEDULE_INTERVAL, server.getScheduleInterval());
+        values.put(McContract.DsInfo.MIN_THREADS, server.getMinThreads());
+        values.put(McContract.DsInfo.MAX_THREADS, server.getMaxThread());
+        values.put(McContract.DsInfo.MAX_BURST_THREADS, server.getMaxBurstThreads());
+        values.put(McContract.DsInfo.DEVICES_CONNECTED, server.getConnectedDeviceCount());
+        values.put(McContract.DsInfo.MANAGERS_CONNECTED, server.getConnectedManagerCount());
+        values.put(McContract.DsInfo.QUEUE_LENGTH, server.getMsgQueueLength());
+        values.put(McContract.DsInfo.CURRENT_THREAD_COUNT, server.getMsgQueueLength());
+        values.put(McContract.DsInfo.PULSE_WAIT_INTERVAL, server.getPulseWaitInterval());
 
         return values;
     }
@@ -216,5 +217,30 @@ public class DbData {
             dsValuesArray[i] = getDsContentValues(servers.get(i));
         }
         return dsValuesArray;
+    }
+
+    private static ContentValues getUserContentValues(User user) {
+        ContentValues values = new ContentValues();
+        values.put(McContract.UserInfo.NAME, user.getName());
+        values.put(McContract.UserInfo.DISPLAYED_NAME, user.getDisplayName());
+        values.put(McContract.UserInfo.KIND, user.getKind());
+        values.put(McContract.UserInfo.IS_EULA_ACCEPTED, user.getEulaAccepted());
+        values.put(McContract.UserInfo.EULA_ACCEPTANCE_DATE, user.getEulaAcceptanceDate());
+        values.put(McContract.UserInfo.IS_LOCKED, user.getAccountLocked());
+        values.put(McContract.UserInfo.NUMBER_OF_FAILED_LOGIN, user.getNumberOfFailedLogins());
+
+        return values;
+    }
+
+    public static ContentValues prepareUserValues(User user) {
+        return getUserContentValues(user);
+    }
+
+    public static ContentValues[] prepareUserValues(ArrayList<User> users) {
+        ContentValues[] userValues = new ContentValues[users.size()];
+        for (int i = 0; i < users.size(); i++) {
+            userValues[i] = getUserContentValues(users.get(i));
+        }
+        return userValues;
     }
 }

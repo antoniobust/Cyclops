@@ -72,10 +72,10 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id == 50) {
-            return new CursorLoader(getActivity().getApplicationContext(), McContract.DeploymentServer.CONTENT_URI,
+            return new CursorLoader(getContext(), McContract.DsInfo.CONTENT_URI,
                     null, null, null, null);
         } else if (id == 51) {
-            return new CursorLoader(getActivity().getApplicationContext(), McContract.ManagementServer.CONTENT_URI,
+            return new CursorLoader(getContext(), McContract.MsInfo.CONTENT_URI,
                     null, null, null, null);
         }
         return null;

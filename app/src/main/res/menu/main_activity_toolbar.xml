@@ -16,6 +16,10 @@
         android:orderInCategory="3"
         android:title="@string/refresh_token"/>
 
+    <item android:id="@+id/logout_action"
+        android:orderInCategory="99"
+        android:title="@string/logout_label"/>
+
 
     <item
         android:id="@+id/main_activity_settings_action"

@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ServerInfo implements Parcelable {
+public class  ServerInfo implements Parcelable {
 
     public static final Creator<ServerInfo> CREATOR = new Creator<ServerInfo>() {
         @Override

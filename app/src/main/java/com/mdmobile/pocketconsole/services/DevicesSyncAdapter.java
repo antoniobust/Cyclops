@@ -93,7 +93,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
         ApiRequestManager.getInstance().getToken(serverUrl, clientId, secret, account.name, password, new NetworkCallBack() {
             @Override
             public void tokenReceived(Token JsonToken) {
-                ApiRequestManager.getInstance().getDevices(account);
+                ApiRequestManager.getInstance().getDevices();
             }
 
             @Override

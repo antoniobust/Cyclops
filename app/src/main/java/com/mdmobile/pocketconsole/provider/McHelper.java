@@ -21,15 +21,17 @@ import static com.mdmobile.pocketconsole.provider.McContract.DEVICE_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.INSTALLED_APPLICATION_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.MANAGEMENT_SERVER_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.SCRIPT_TABLE_NAME;
+import static com.mdmobile.pocketconsole.provider.McContract.SERVER_INFO_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.ScriptColumns.DESCRIPTION;
 import static com.mdmobile.pocketconsole.provider.McContract.ScriptColumns.SCRIPT;
 import static com.mdmobile.pocketconsole.provider.McContract.ScriptColumns.TITLE;
+import static com.mdmobile.pocketconsole.provider.McContract.USER_TABLE_NAME;
 
 
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 23;
+    private static final int DB_VERSION = 25;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -70,41 +72,41 @@ public class McHelper extends SQLiteOpenHelper {
                 + ");");
 
 
-        //Create ManagementServer table
+        //Create MsInfo table
         db.execSQL(" CREATE TABLE " + MANAGEMENT_SERVER_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + McContract.ManagementServer.FULLY_QUALIFIED_NAME + " TEXT, "
-                + McContract.ManagementServer.PORT_NUMBER + " INTEGER, "
-                + McContract.ManagementServer.DESCRIPTION + " TEXT, "
-                + McContract.ManagementServer.STATUS_TIME + " TEXT, "
-                + McContract.ManagementServer.MAC_ADDRESS + " TEXT, "
-                + McContract.ManagementServer.TOTAL_USER_COUNT + " INTEGER, "
-                + McContract.ManagementServer.NAME + " TEXT, "
-                + McContract.ManagementServer.STATUS + " TEXT "
+                + McContract.MsInfo.FULLY_QUALIFIED_NAME + " TEXT, "
+                + McContract.MsInfo.PORT_NUMBER + " INTEGER, "
+                + McContract.MsInfo.DESCRIPTION + " TEXT, "
+                + McContract.MsInfo.STATUS_TIME + " TEXT, "
+                + McContract.MsInfo.MAC_ADDRESS + " TEXT, "
+                + McContract.MsInfo.TOTAL_USER_COUNT + " INTEGER, "
+                + McContract.MsInfo.NAME + " TEXT, "
+                + McContract.MsInfo.STATUS + " TEXT "
                 + ");");
 
-        //Create DeploymentServer table
+        //Create DsInfo table
         db.execSQL(" CREATE TABLE " + DEPLOYMENT_SERVER_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                + McContract.DeploymentServer.NAME + " TEXT, "
-                + McContract.DeploymentServer.STATUS + " TEXT, "
-                + McContract.DeploymentServer.CONNECTED + " TEXT, "
-                + McContract.DeploymentServer.PRIMARY_AGENT_ADDRESS + " TEXT, "
-                + McContract.DeploymentServer.SECONDARY_AGENT_ADDRESS + " TEXT, "
-                + McContract.DeploymentServer.DEVICE_MANAGEMENT_ADDRESS + " TEXT, "
-                + McContract.DeploymentServer.PRIMARY_MANAGEMENT_ADDRESS + " TEXT, "
-                + McContract.DeploymentServer.SECONDARY_MANAGEMENT_ADDRESS + " TEXT, "
-                + McContract.DeploymentServer.PULSE_TIMEOUT + " INTEGER, "
-                + McContract.DeploymentServer.RULE_RELOAD + " INTEGER, "
-                + McContract.DeploymentServer.SCHEDULE_INTERVAL + " INTEGER, "
-                + McContract.DeploymentServer.MIN_THREADS + " INTEGER, "
-                + McContract.DeploymentServer.MAX_THREADS + " INTEGER, "
-                + McContract.DeploymentServer.MAX_BURST_THREADS + " INTEGER, "
-                + McContract.DeploymentServer.CURRENT_THREAD_COUNT + " INTEGER, "
-                + McContract.DeploymentServer.PULSE_WAIT_INTERVAL + " INTEGER, "
-                + McContract.DeploymentServer.DEVICES_CONNECTED + " INTEGER, "
-                + McContract.DeploymentServer.MANAGERS_CONNECTED + " INTEGER, "
-                + McContract.DeploymentServer.QUEUE_LENGTH + " INTEGER "
+                + McContract.DsInfo.NAME + " TEXT, "
+                + McContract.DsInfo.STATUS + " TEXT, "
+                + McContract.DsInfo.CONNECTED + " TEXT, "
+                + McContract.DsInfo.PRIMARY_AGENT_ADDRESS + " TEXT, "
+                + McContract.DsInfo.SECONDARY_AGENT_ADDRESS + " TEXT, "
+                + McContract.DsInfo.DEVICE_MANAGEMENT_ADDRESS + " TEXT, "
+                + McContract.DsInfo.PRIMARY_MANAGEMENT_ADDRESS + " TEXT, "
+                + McContract.DsInfo.SECONDARY_MANAGEMENT_ADDRESS + " TEXT, "
+                + McContract.DsInfo.PULSE_TIMEOUT + " INTEGER, "
+                + McContract.DsInfo.RULE_RELOAD + " INTEGER, "
+                + McContract.DsInfo.SCHEDULE_INTERVAL + " INTEGER, "
+                + McContract.DsInfo.MIN_THREADS + " INTEGER, "
+                + McContract.DsInfo.MAX_THREADS + " INTEGER, "
+                + McContract.DsInfo.MAX_BURST_THREADS + " INTEGER, "
+                + McContract.DsInfo.CURRENT_THREAD_COUNT + " INTEGER, "
+                + McContract.DsInfo.PULSE_WAIT_INTERVAL + " INTEGER, "
+                + McContract.DsInfo.DEVICES_CONNECTED + " INTEGER, "
+                + McContract.DsInfo.MANAGERS_CONNECTED + " INTEGER, "
+                + McContract.DsInfo.QUEUE_LENGTH + " INTEGER "
                 + ");");
 
         //Create CustomData tables
@@ -174,6 +176,24 @@ public class McHelper extends SQLiteOpenHelper {
                 + DESCRIPTION + " TEXT, "
                 + SCRIPT + " TEXT NOT NULL );");
 
+        //Create user table
+        db.execSQL("CREATE TABLE " + McContract.USER_TABLE_NAME + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + McContract.UserInfo.NAME + " TEXT NON NULL, "
+                + McContract.UserInfo.DISPLAYED_NAME + " TEXT, "
+                + McContract.UserInfo.KIND + " TEXT, "
+                + McContract.UserInfo.IS_LOCKED + " INTEGER, "
+                + McContract.UserInfo.IS_EULA_ACCEPTED + " INTEGER, "
+                + McContract.UserInfo.EULA_ACCEPTANCE_DATE + " TEXT, "
+                + McContract.UserInfo.NUMBER_OF_FAILED_LOGIN + " INTEGER );");
+
+        //Create server info table
+        db.execSQL("CREATE TABLE " + McContract.SERVER_INFO_TABLE_NAME + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + McContract.ServerInfo.CLIENT_ID + " TEXT NON NULL, "
+                + McContract.ServerInfo.CLIENT_SECRET + " TEXT NON NULL, "
+                + McContract.ServerInfo.NAME + " TEXT NON NULL UNIQUE );");
+
         //Insert standard script in Script table
         Resources res = mContext.getResources();
         String[] titles = res.getStringArray(R.array.default_script_titles);
@@ -199,6 +219,8 @@ public class McHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPLIANCE_ITEM_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + INSTALLED_APPLICATION_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SCRIPT_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SERVER_INFO_TABLE_NAME + ";");
 
 
         onCreate(sqLiteDatabase);

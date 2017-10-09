@@ -27,9 +27,8 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
     private Response.Listener<String> listener;
     private Context mContext;
 
-    public DeviceInstalledAppRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener, Context context) {
-        super(method, url, errorListener, context);
-        mContext = context.getApplicationContext();
+    public DeviceInstalledAppRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
         this.listener = listener;
     }
 

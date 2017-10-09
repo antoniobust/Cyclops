@@ -47,7 +47,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
     public DeviceRequest(Context context, int method, String url, Response.Listener<T> listener,
                          Response.ErrorListener errorListener, int insertDataMEthod) {
-        super(method, url, errorListener, context);
+        super(method, url, errorListener);
 
         this.mContext = context.getApplicationContext();
         this.listener = listener;

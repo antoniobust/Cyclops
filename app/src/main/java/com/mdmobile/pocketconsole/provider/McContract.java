@@ -12,7 +12,7 @@ public class McContract {
     public static final String CONTENT_AUTHORITY = "com.mdmobile.pocketconsole";
     //DB tables
     //TODO: create user info table
-    public static final String DEVICE_TABLE_NAME = "Device";
+    public static final String DEVICE_TABLE_NAME = "DeviceInfo";
     public static final String COMPLIANCE_ITEM_TABLE_NAME = "ComplianceItem";
     public static final String CUSTOM_ATTRIBUTE_TABLE_NAME = "CustomAttribute";
     public static final String CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME = "CustomAttributeDevice";
@@ -25,9 +25,11 @@ public class McContract {
     public static final String CUSTOM_DATA_TABLE_NAME = "CustomData";
     public static final String CUSTOM_DATA_DEVICE_TABLE_NAME = "CustomDataDevice";
     public static final String INSTALLED_APPLICATION_TABLE_NAME = "InstalledApps";
-    public static final String MANAGEMENT_SERVER_TABLE_NAME = "ManagementServer";
-    public static final String DEPLOYMENT_SERVER_TABLE_NAME = "DeploymentServer";
+    public static final String MANAGEMENT_SERVER_TABLE_NAME = "MsInfo";
+    public static final String DEPLOYMENT_SERVER_TABLE_NAME = "DsInfo";
     public static final String SCRIPT_TABLE_NAME = "Script";
+    public static final String USER_TABLE_NAME = "UserInfo";
+    public static final String SERVER_INFO_TABLE_NAME = "ServerInfo";
     //Content type
     private static final String CONTENT_TYPE_BASE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
     private static final String CONTENT_TYPE_ITEM_BASE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
@@ -49,7 +51,7 @@ public class McContract {
     }
 
     // ************ Table's columns interfaces **********************
-    interface DeviceColumns {
+    interface DeviceInfo {
 
         //Columns
         String COLUMN_KIND = "Kind";
@@ -112,7 +114,7 @@ public class McContract {
         String CUSTOM_DATA_ID = "CustomDataID";
     }
 
-    interface ManagementServerColumns {
+    interface MsInfoColumns {
         //Columns
         String FULLY_QUALIFIED_NAME = "Fqdn";
         String PORT_NUMBER = "PortNumber";
@@ -136,7 +138,7 @@ public class McContract {
     }
 
 
-    interface DeploymentServerColumns {
+    interface DsInfoColumns {
         //Columns
         String NAME = "Name";
         String STATUS = "Status";
@@ -165,11 +167,27 @@ public class McContract {
         String SCRIPT = "Script";
     }
 
+    interface UserInfoColumns {
+        String NAME = "Name";
+        String DISPLAYED_NAME = "DisplayedName";
+        String KIND = "Kind";
+        String IS_EULA_ACCEPTED = "EulaAccepted";
+        String EULA_ACCEPTANCE_DATE = "EulaAcceptanceDate";
+        String IS_LOCKED = "IsLocked";
+        String NUMBER_OF_FAILED_LOGIN = "NumberOfFailedLogin";
+    }
+
+    interface ServerInfoColumns {
+        String NAME = "Name";
+        String CLIENT_ID = "ClientId";
+        String CLIENT_SECRET = "ClientSecret";
+    }
+
     //***************************************************************
 
 
     //Represent Device table
-    public static class Device implements DeviceColumns, BaseColumns {
+    public static class Device implements DeviceInfo, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEVICE_TABLE_NAME).build();
 
@@ -378,7 +396,7 @@ public class McContract {
     }
 
     //Represent Management server table
-    public static class ManagementServer implements ManagementServerColumns, BaseColumns {
+    public static class MsInfo implements MsInfoColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(MANAGEMENT_SERVER_TABLE_NAME).build();
 
@@ -390,7 +408,7 @@ public class McContract {
 
 
     //Represent deployment server table
-    public static class DeploymentServer implements DeploymentServerColumns, BaseColumns {
+    public static class DsInfo implements DsInfoColumns, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEPLOYMENT_SERVER_TABLE_NAME).build();
 
@@ -399,9 +417,19 @@ public class McContract {
         }
     }
 
+    //Represent the server added to the application
+    public static class ServerInfo implements ServerInfoColumns, BaseColumns {
+        //Table Uri
+        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(SERVER_INFO_TABLE_NAME).build();
+
+        public static Uri buildUriWithId(long id) {
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+    }
+
     public static class Script implements ScriptColumns, BaseColumns {
         //Table Uri
-        public static Uri CONTENT_URI = DB_URI.buildUpon().appendPath(SCRIPT_TABLE_NAME).build();
+        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(SCRIPT_TABLE_NAME).build();
 
         //Helper uri methods
         public static Uri buildUriWithId(long id) {
@@ -409,6 +437,19 @@ public class McContract {
         }
 
         public static String getScriptIdFromUri(Uri uri) {
+            return uri.getLastPathSegment();
+        }
+    }
+
+    public static class UserInfo implements UserInfoColumns, BaseColumns {
+        //Table Uri
+        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(USER_TABLE_NAME).build();
+
+        public static Uri buildUriWithUserId(long id) {
+            return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+
+        public static String getUserIdFromUri(Uri uri) {
             return uri.getLastPathSegment();
         }
     }

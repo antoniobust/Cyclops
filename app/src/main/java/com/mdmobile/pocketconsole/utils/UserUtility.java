@@ -3,15 +3,16 @@ package com.mdmobile.pocketconsole.utils;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 
 import java.util.HashMap;
 
+import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.API_SECRET_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_EXPIRATION_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
@@ -45,16 +46,16 @@ public class UserUtility {
         return null;
     }
 
-    public static Account getUser(Context context) {
-        return AccountManager.get(ApplicationLoader.applicationContext)
-                .getAccountsByType(ApplicationLoader.applicationContext.getString(R.string.account_type))[0];
+    public static Account getUser() {
+        return AccountManager.get(applicationContext)
+                .getAccountsByType(applicationContext.getString(R.string.account_type))[0];
     }
 
-    public static Boolean checkAnyUserLoggedIn(Context context) {
+    public static Boolean checkAnyUserLoggedIn() {
         Logger.log(LOG_TAG, "Checking any users Logged", Log.VERBOSE);
 
         Account[] accounts =
-                AccountManager.get(context).getAccountsByType(context.getString(R.string.account_type));
+                AccountManager.get(applicationContext).getAccountsByType(applicationContext.getString(R.string.account_type));
         if (accounts.length > 0) {
             Logger.log(LOG_TAG, "found:" + accounts.length + " logged", Log.VERBOSE);
             return true;
@@ -62,8 +63,9 @@ public class UserUtility {
         return false;
     }
 
-    public static HashMap<String, String> getUserInfo(Context context, Account account) {
-        AccountManager accountManager = AccountManager.get(context);
+    public static HashMap<String, String> getUserInfo() {
+        Account account = getUser();
+        AccountManager accountManager = AccountManager.get(applicationContext);
         HashMap<String, String> userInfo = new HashMap<>();
         //TODO:support multiple account
         userInfo.put(SERVER_ADDRESS_KEY,
@@ -80,12 +82,12 @@ public class UserUtility {
         return userInfo;
     }
 
-    public static void updateUserData(@NonNull Context context, @NonNull Bundle userInfo, @NonNull Account account) {
+    public static void updateUserData(@NonNull Bundle userInfo) {
         //TODO:support multiple account
 
-        AccountManager manager = AccountManager.get(context);
+        AccountManager manager = AccountManager.get(applicationContext);
 
-        Account[] accounts = manager.getAccountsByType(context.getString(R.string.account_type));
+        Account account = getUser();
 
         //Update accountsUpdateListener with new user data (token type would be teh same, the others may have changed)
         if (userInfo.containsKey(CLIENT_ID_KEY)) {
@@ -102,6 +104,15 @@ public class UserUtility {
         }
         if (userInfo.containsKey(AUTH_TOKEN_TYPE_KEY)) {
             manager.setUserData(account, AUTH_TOKEN_TYPE_KEY, userInfo.getString(AUTH_TOKEN_TYPE_KEY));
+        }
+    }
+
+    public static void logOutUser() {
+        Account account = getUser();
+        if (Build.VERSION.SDK_INT >= 22) {
+            AccountManager.get(applicationContext).removeAccountExplicitly(account);
+        } else {
+            AccountManager.get(applicationContext).removeAccount(account, null, null);
         }
     }
 }

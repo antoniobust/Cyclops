@@ -95,6 +95,10 @@ public class McProvider extends ContentProvider {
                 c = database.query(McContract.DEPLOYMENT_SERVER_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
+            case USERS:
+                c = database.query(McContract.USER_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }
@@ -107,7 +111,6 @@ public class McProvider extends ContentProvider {
 
         Logger.log(LOG_TAG, "insert( uri:" + uri.toString() + " , objects: " + values.length + ")", Log.VERBOSE);
 
-        //Get DB is an expensive operation check if we already have opened it
         if (database == null) {
             database = mcHelper.getWritableDatabase();
         }
@@ -183,6 +186,20 @@ public class McProvider extends ContentProvider {
                     return dataInserted;
                 }
 
+            case USERS:
+                for (ContentValues contentValues : values) {
+                    if (database.insertWithOnConflict(McContract.USER_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                        dataInserted++;
+                    }
+                }
+                if (dataInserted == values.length) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    return dataInserted;
+                } else {
+                    Logger.log(LOG_TAG, "Users bulk insert didn't insert values correctly", Log.ERROR);
+                    return dataInserted;
+                }
+
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }
@@ -245,7 +262,7 @@ public class McProvider extends ContentProvider {
                     return null;
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
-                return McContract.ManagementServer.buildUriWithMsId(newRowID);
+                return McContract.MsInfo.buildUriWithMsId(newRowID);
 
             case DEPLOYMENT_SERVERS:
                 newRowID = database.insertWithOnConflict(McContract.DEPLOYMENT_SERVER_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -254,9 +271,14 @@ public class McProvider extends ContentProvider {
                     return null;
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
-                return McContract.DeploymentServer.buildUriWithDsId(newRowID);
+                return McContract.DsInfo.buildUriWithDsId(newRowID);
 
-
+            case USERS:
+                newRowID = database.insertWithOnConflict(McContract.USER_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                if (newRowID < 1) {
+                    Logger.log(LOG_TAG, "Impossibl to insert User in DB", Log.ERROR);
+                    return null;
+                }
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }
@@ -274,11 +296,7 @@ public class McProvider extends ContentProvider {
         switch (mcEnumUri) {
             case DEVICES:
                 deleted = database.delete(McContract.DEVICE_TABLE_NAME, null, null);
-                if (deleted > 0) {
-                    Logger.log(LOG_TAG, "Devices deleted:" + deleted, Log.VERBOSE);
-                } else {
-                    Logger.log(LOG_TAG, "No device deleted", Log.VERBOSE);
-                }
+                Logger.log(LOG_TAG, "Devices deleted:" + deleted, Log.VERBOSE);
                 break;
             case DEVICES_ID:
                 String deviceId = McContract.Device.getDeviceIdFromUri(uri);
@@ -296,27 +314,24 @@ public class McProvider extends ContentProvider {
                 String devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
                 deleted = database.delete(McContract.DEVICE_TABLE_NAME, McContract.InstalledApplications.DEVICE_ID + " =?",
                         new String[]{devId});
-                if (deleted > 0) {
-                    Logger.log(LOG_TAG, "InstalledApps deleted:" + deleted, Log.VERBOSE);
-                } else {
-                    Logger.log(LOG_TAG, "No InstalledApps deleted", Log.VERBOSE);
-                }
+                Logger.log(LOG_TAG, "InstalledApps deleted:" + deleted, Log.VERBOSE);
                 break;
             case MANAGEMENT_SERVERS:
                 deleted = database.delete(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, null);
-                if (deleted > 0) {
-                    Logger.log(LOG_TAG, "MS deleted:" + deleted, Log.VERBOSE);
-                } else {
-                    Logger.log(LOG_TAG, "No MS deleted", Log.VERBOSE);
-                }
+                Logger.log(LOG_TAG, "MS deleted:" + deleted, Log.VERBOSE);
                 break;
             case DEPLOYMENT_SERVERS:
                 deleted = database.delete(McContract.DEPLOYMENT_SERVER_TABLE_NAME, null, null);
-                if (deleted > 0) {
-                    Logger.log(LOG_TAG, "DS deleted:" + deleted, Log.VERBOSE);
-                } else {
-                    Logger.log(LOG_TAG, "No DS deleted", Log.VERBOSE);
-                }
+                Logger.log(LOG_TAG, "DS deleted:" + deleted, Log.VERBOSE);
+                break;
+            case USER_ID:
+                String id = McContract.UserInfo.getUserIdFromUri(uri);
+                deleted = database.delete(McContract.USER_TABLE_NAME, McContract.UserInfo._ID, new String[]{id});
+                Logger.log(LOG_TAG, "User deleted (" + id + "): " + deleted, Log.VERBOSE);
+                break;
+            case USERS:
+                deleted = database.delete(McContract.USER_TABLE_NAME, null, null);
+                Logger.log(LOG_TAG, "User deleted: " + deleted, Log.VERBOSE);
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
@@ -351,5 +366,9 @@ public class McProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }
         return updated;
+    }
+
+    public void deleteDatabase() {
+
     }
 }

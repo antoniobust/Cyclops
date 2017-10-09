@@ -23,7 +23,6 @@ class McUriMatcher {
 
     private void addUrisToMatch() {
         final String authority = McContract.CONTENT_AUTHORITY;
-        //Get enums values as array
         McEnumUri[] enumValues = McEnumUri.values();
 
         //Iterate over enums values and add the uris and respective codes to the matcher

@@ -27,7 +27,7 @@
                 android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_server_black_24dp"
                 android:text="@string/deployment_servers_label"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 tools:text="Deployment Servers"/>
 
             <android.support.v7.widget.RecyclerView
@@ -60,7 +60,7 @@
                 android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_server_black_24dp"
                 android:text="@string/management_servers_label"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 tools:text="Management Servers"/>
 
             <android.support.v7.widget.RecyclerView

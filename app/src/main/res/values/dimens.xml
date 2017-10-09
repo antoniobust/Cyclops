@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="max_content_size">@dimen/match_parent</dimen>
-    <dimen name="dashboard_card_height">340dp</dimen>
+    <dimen name="dashboard_card_height">240dp</dimen>
 
     <item name="match_parent" format="integer" type="dimen">-1</item>
 </resources>

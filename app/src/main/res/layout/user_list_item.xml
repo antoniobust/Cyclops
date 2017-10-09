@@ -17,7 +17,8 @@
         android:layout_weight="1"
         android:layout_height="match_parent"
         android:padding="8dp"
-        app:srcCompat="@drawable/ic_account_box"/>
+        app:srcCompat="@drawable/ic_account_circle_black_24dp"
+        android:tint="@color/colorPrimaryDark"/>
 
     <TextView
         android:id="@+id/user_list_text_view"
@@ -26,7 +27,7 @@
         android:layout_height="match_parent"
         android:layout_weight="6"
         android:gravity="center_vertical"
-        android:paddingEnd="0dp"
+        android:paddingEnd="8dp"
         android:paddingStart="16dp"
         android:textAllCaps="true"
         android:textStyle="bold"

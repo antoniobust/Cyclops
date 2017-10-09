@@ -15,22 +15,28 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
     Cursor mCursor;
 
-    public UserListAdapter(Cursor c){
+    public UserListAdapter(Cursor c) {
         mCursor = c;
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_list_item, parent, false);
-        return new ViewHolder(view);    }
+        return new ViewHolder(view);
+    }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (mCursor== null || !mCursor.moveToFirst()) {
+        if (mCursor == null || !mCursor.moveToPosition(position)) {
             return;
         }
-        mCursor.moveToPosition(position);
+
         String serverName = mCursor.getString(mCursor.getColumnIndex(McContract.ServerInfo.NAME));
         holder.nameView.setText(serverName);
+        if (mCursor.getInt(mCursor.getColumnIndex(McContract.UserInfo.IS_LOCKED)) == 1) {
+            holder.nameView.setCompoundDrawablesWithIntrinsicBounds(null,
+                    null, holder.nameView.getContext().getResources().getDrawable(R.drawable.ic_lock), null);
+        }
     }
 
     @Override
@@ -53,6 +59,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView nameView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             nameView = (TextView) itemView.findViewById(R.id.user_list_text_view);

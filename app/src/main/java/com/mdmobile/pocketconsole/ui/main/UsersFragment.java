@@ -19,9 +19,10 @@ import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 
-public class UsersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class UsersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     UserListAdapter adapter;
+
     public UsersFragment() {
         // Required empty public constructor
     }
@@ -47,21 +48,21 @@ public class UsersFragment extends Fragment implements LoaderManager.LoaderCallb
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_users, container, false);
         RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.users_recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         ApiRequestManager.getInstance().getUsers();
 
         adapter = new UserListAdapter(null);
         recycler.setAdapter(adapter);
 
-        getLoaderManager().initLoader(100,null,this);
+        getLoaderManager().initLoader(100, null, this);
 
         return rootView;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), McContract.UserInfo.CONTENT_URI,null,null,null,null);
+        return new CursorLoader(getContext(), McContract.UserInfo.CONTENT_URI, null, null, null, McContract.UserInfo.DISPLAYED_NAME + " asc");
     }
 
     @Override

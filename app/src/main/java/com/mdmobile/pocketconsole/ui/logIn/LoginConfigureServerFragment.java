@@ -40,7 +40,7 @@ public class LoginConfigureServerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.server_name_fragment, container, false);
-        serverAddressEditText = (EditText) rootView.findViewById(R.id.server_address_text_view);
+        serverAddressEditText = rootView.findViewById(R.id.server_address_text_view);
 
         return rootView;
     }

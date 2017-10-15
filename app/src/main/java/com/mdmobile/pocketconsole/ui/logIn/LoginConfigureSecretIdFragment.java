@@ -7,10 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.mdmobile.pocketconsole.R;
 
 public class LoginConfigureSecretIdFragment extends Fragment {
+
+    public EditText clientIdEditText, apiSecretEditText;
 
     public LoginConfigureSecretIdFragment() {
         //Empty constructor required
@@ -28,6 +31,9 @@ public class LoginConfigureSecretIdFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.api_client_secret_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.api_client_secret_fragment, container, false);
+        clientIdEditText = rootView.findViewById(R.id.client_id_text_view);
+        apiSecretEditText = rootView.findViewById(R.id.api_secret_text_view);
+        return rootView;
     }
 }

@@ -67,7 +67,7 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
     public boolean onMenuItemClick(MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.uninstall_app_action) {
             //Check for alert dialog showing preference - Show confirmation or execute action
-            if (mContext.getSharedPreferences(mContext.getString(R.string.shared_preference), Context.MODE_PRIVATE)
+            if (mContext.getSharedPreferences(mContext.getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
                     .getBoolean(mContext.getString(R.string.uninstall_app_confirm_disabled_pref), false)) {
                 actionConfirmed(true);
             } else {

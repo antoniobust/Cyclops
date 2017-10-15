@@ -27,7 +27,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     public final static String AUTH_TOKEN_EXPIRATION_KEY = "AuthTokenExpirationKey";
     public final static String REFRESH_AUTH_TOKEN_KEY = "RefreshAuthTokenKey";
     public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
-    public final static String SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey",
+    public final static String SERVER_NAME_KEY = "serverNameKey", SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey",
             API_SECRET_KEY = "apiSecretKey", USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     private Context mContext;
     private String LOG_TAG = AccountAuthenticator.class.getSimpleName();

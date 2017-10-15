@@ -2,6 +2,7 @@ package com.mdmobile.pocketconsole.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import com.mdmobile.pocketconsole.ui.logIn.LoginConfigureSecretIdFragment;
 import com.mdmobile.pocketconsole.ui.logIn.LoginConfigureServerFragment;
@@ -18,10 +19,10 @@ public class LogInViewPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+
     @Override
     public Fragment getItem(int position) {
 
-        //Check which fragment to return based on position
         switch (position) {
             case 0:
                 return LoginConfigureServerFragment.newInstance();

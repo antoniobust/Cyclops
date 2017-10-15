@@ -34,15 +34,13 @@
     <string name="sort_device_z_a">Device name (Z-A)</string>
     <string name="sort_device_online_first">Devices online first</string>
     <string name="sort_device_offline_first">Devices offline first</string>
-    <string name="shared_preference">PocketConsoleSharedPref</string>
-    <string name="sorting_shared_preference">sorting_devices_preference</string>
+
     <string name="dialog_cancel_label">Cancel</string>
     <string name="dialog_apply_label">Apply</string>
     <string name="last_synced">1 minute ago</string>
     <string name="pin_a_folder_dialog_title">Pin a folder to main screen</string>
     <string name="pin_folder_dialog_subtitle">Only devices belonging to this folder will be displayed</string>
     <string name="folder_path_hint">Folder Path</string>
-    <string name="folder_preference">pinnedFolderPreferenceKey</string>
     <string name="device_count_chart_description">Devices enrolled</string>
     <string name="no_data_found_chart">No Data available!!</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -70,6 +68,23 @@
     <string name="platform_chart_label">Platforms</string>
     <string name="deployment_servers_label">Deployment Servers</string>
     <string name="management_servers_label">Management Servers</string>
+    <string name="server_ini_file_name">ServerSetup.xml</string>
+
+    <string name="title_activity_service_details">ServiceDetailsActivity</string>
+    <string name="add_chart_label">Add chart</string>
+
+    <string name="more_label">more</string>
+    <string name="logout_label">Logout</string>
+    <string name="notification_channel_name">MDM Alerts</string>
+    <string name="notification_channel_description">Get notified when you services are not reachable</string>
+
+    <string name="server_offline">1$s(2$s) status: Offline</string>
+    <string name="server_stopped">1$s(2$s) status: Stopped</string>
+    <string name="server_unlicensed">1$s(2$s) status: Unlicensed</string>
+    <string name="server_disabled">1$s(2$s) status: Disabled</string>
+    <string name="server_started_but_not_registered">M1$s(2$s) status: Started but not registered</string>
+    <string name="server_deleted">1$s(2$s) status: Deleted</string>
+    <string name="server_unknown">1$s(2$s) status: Unknown</string>
 
 
     <string-array name="sorting_options_radio_labels">
@@ -78,10 +93,27 @@
         <item>@string/sort_device_online_first</item>
         <item>@string/sort_device_offline_first</item>
     </string-array>
-    <string name="title_activity_service_details">ServiceDetailsActivity</string>
-    <string name="add_chart_label">Add chart</string>
+
+    <string-array name="server_notification_labels">
+        <item>@string/server_stopped</item>
+        <item>@string/server_offline</item>
+        <item>@string/server_unlicensed</item>
+        <item>@string/server_disabled</item>
+        <item>@string/server_started_but_not_registered</item>
+        <item>@string/server_deleted</item>
+        <item>@string/server_unknown</item>
+    </string-array>
+
+    <!--Shared preferences strings-->
+    <string name="general_shared_preference">PocketConsoleGeneralPref</string>
+    <string name="server_shared_preference">PocketConsoleServerPref</string>
+    <string name="server_name_preference">server_name_preference</string>
+    <string name="server_address_preference">server_address_preference</string>
+    <string name="client_id_preference">client_id_preference</string>
+    <string name="api_secret_preference">client_secret_preference</string>
+    <string name="sorting_shared_preference">sorting_devices_preference</string>
     <string name="charts_preference">selectedCharts</string>
-    <string name="more_label">more</string>
-    <string name="logout_label">Logout</string>
+    <string name="folder_preference">pinnedFolderPreferenceKey</string>
+
 
 </resources>

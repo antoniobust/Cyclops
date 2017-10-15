@@ -1,12 +1,17 @@
 package com.mdmobile.pocketconsole.ui.logIn;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -23,9 +28,14 @@ import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
+import com.mdmobile.pocketconsole.utils.ConfigureServerAsyncTask;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.ServerUtility;
+import com.mdmobile.pocketconsole.utils.ServerXmlConfigParser;
 import com.mdmobile.pocketconsole.utils.UserUtility;
+
+import java.io.File;
 
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.ACCOUNT_TYPE_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.ADDING_NEW_ACCOUNT_KEY;
@@ -38,14 +48,17 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.REFRESH_A
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.USER_NAME_KEY;
 
-public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack {
+public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack, ServerXmlConfigParser.ServerXmlParse,
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
-    ViewPager viewPager;
-    TabLayout dotsIndicator;
-    Bundle userInputBundle;
-    AccountAuthenticatorResponse authenticatorResponse;
+    private ViewPager viewPager;
+    private TabLayout dotsIndicator;
+    private Bundle userInputBundle;
+    private AccountAuthenticatorResponse authenticatorResponse;
+    private LogInViewPagerAdapter viewPagerAdapter;
+    private int permissionReqID = 100;
 
     //Token received network callback
     @Override
@@ -70,60 +83,60 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Set constant tablet Mode as first thing
         MainActivity.TABLET_MODE = GeneralUtility.isTabletMode(getApplicationContext());
 
         //Instantiate views
-        viewPager = (ViewPager) findViewById(R.id.login_view_pager);
-        dotsIndicator = (TabLayout) findViewById(R.id.login_view_pager_dots_indicator);
+        viewPager = findViewById(R.id.login_view_pager);
+        dotsIndicator = findViewById(R.id.login_view_pager_dots_indicator);
 
         //If activity was launched from authenticator get the intent with the auth response
         authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
-        //Check if activity was launched from authenticator(to add a new accountsUpdateListener),
-        // if not check if there is any user already logged in
+
         if (authenticatorResponse == null) {
             if (UserUtility.checkAnyUserLoggedIn()) {
                 //user found, launch main activity
                 startMainActivity();
             }
         }
-
-        //Configure viewPager
         setViewPager();
+        checkConfigurationFile();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //Check if a user was added while the activity was paused
         if (authenticatorResponse == null) {
             if (UserUtility.checkAnyUserLoggedIn()) {
-                //user found, launch main activity
                 startMainActivity();
             }
         }
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == permissionReqID) {
+            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkConfigurationFile();
+            }
+        }
+    }
+
+
     //Set up the view pager
     private void setViewPager() {
-        //Set adapter to viewPager
-        viewPager.setAdapter(new LogInViewPagerAdapter(getSupportFragmentManager()));
-        //Adjust margin between pages
+        viewPagerAdapter = new LogInViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(viewPagerAdapter);
+
         viewPager.setPageMargin(80);
 
-        //Attach custom indicator to view pager
         dotsIndicator.setupWithViewPager(viewPager, true);
 
-        //Adjust margin between tabs in tabLayout
         View dot;
-        //Get dots container
         ViewGroup dotsContainer = (ViewGroup) dotsIndicator.getChildAt(0);
-        //Instantiate margin to apply
         ViewGroup.MarginLayoutParams p;
 
-        //Navigate through all the indicator dots and apply margins
         for (int i = 0; i < dotsIndicator.getTabCount(); i++) {
             dot = dotsContainer.getChildAt(i);
             p = (ViewGroup.MarginLayoutParams) dot.getLayoutParams();
@@ -133,13 +146,10 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
     }
 
 
-    //LogIn Button OnClick function
     public void logIn(View v) {
 
-        //Get user input
         Bundle userInfo = getUserInput();
 
-        //Request token through ApiRequestManager
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
         ApiRequestManager.getInstance().getToken(
                 userInfo.getString(SERVER_ADDRESS_KEY),
@@ -155,16 +165,13 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
     private Bundle getUserInput() {
         userInputBundle = new Bundle();
 
-        //temp strings to store user input
         String tempString, tempString1;
 
         for (int i = 0; i < viewPager.getChildCount(); i++) {
 
-            //resetting temp strings from previous cycle
             tempString = "";
             tempString1 = "";
 
-            //According the current position get the relative data
             switch (i) {
                 case 0:
                     tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.server_address_text_view)).getText().toString();
@@ -301,6 +308,42 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    public void xmlParseComplete() {
+        Bundle serverInfo = ServerUtility.getServer();
+        if (serverInfo == null) {
+            return;
+        }
+
+        String serverAddress = serverInfo.getString(SERVER_ADDRESS_KEY);
+        String clientId = serverInfo.getString(CLIENT_ID_KEY);
+        String apiSecret = serverInfo.getString(API_SECRET_KEY);
+
+//        ((LoginConfigureServerFragment) viewPagerAdapter.getItem(0)).serverAddressEditText.setText(serverAddress);
+//        LoginConfigureSecretIdFragment fragment = ((LoginConfigureSecretIdFragment) viewPagerAdapter.getItem(1));
+//        fragment.apiSecretEditText.setText(apiSecret);
+//        fragment.apiSecretEditText.setText(clientId);
+    }
+
+    private boolean checkConfigurationFile() {
+
+        File serverSetupFile = new File(Environment.getExternalStorageDirectory() + File.separator + getString(R.string.server_ini_file_name));
+        if (!serverSetupFile.exists()) {
+            Logger.log(LOG_TAG, "ServerInfo configuration xml file not found", Log.ERROR);
+            return false;
+        }
+
+        if (!GeneralUtility.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            GeneralUtility.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, permissionReqID);
+        } else {
+            Logger.log(LOG_TAG, "Found server configuration file", Log.ERROR);
+            ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
+            configureServerAsyncTask.execute(serverSetupFile);
+            return true;
+        }
+        return false;
     }
 }
 

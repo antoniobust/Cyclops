@@ -79,7 +79,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 //        filtersView = (TextView) getActivity().findViewById(R.id.device_filters_view);
 //        filtersView.setVisibility(View.VISIBLE);
 
-        preferences = getActivity().getSharedPreferences(getString(R.string.shared_preference), Context.MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE);
         currentSortingOption = preferences.getInt(getString(R.string.sorting_shared_preference), 0);
         currentPinnedPath = preferences.getString(getString(R.string.folder_preference), "");
         preferences.registerOnSharedPreferenceChangeListener(this);

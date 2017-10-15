@@ -50,7 +50,7 @@ public class PinFolderDialog extends DialogFragment implements Dialog.OnClickLis
                 .setNegativeButton(getString(R.string.dialog_cancel_label), this)
                 .setView(view).create();
 
-        preferenceKey = getContext().getString(R.string.shared_preference);
+        preferenceKey = getContext().getString(R.string.general_shared_preference);
         folderPreferenceKey = getContext().getString(R.string.folder_preference);
         currentPreference = getContext().getSharedPreferences(preferenceKey, Context.MODE_PRIVATE).getString(folderPreferenceKey, "");
 

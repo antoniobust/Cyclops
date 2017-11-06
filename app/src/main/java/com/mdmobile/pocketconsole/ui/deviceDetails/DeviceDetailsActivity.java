@@ -1,12 +1,10 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -15,13 +13,11 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.utils.Utils;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.ui.Dialogs.MessageDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.ScriptDialog;
-import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
 import static android.support.v4.view.ViewCompat.animate;
 

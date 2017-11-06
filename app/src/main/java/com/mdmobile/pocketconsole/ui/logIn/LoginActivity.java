@@ -316,15 +316,10 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         if (serverInfo == null) {
             return;
         }
-
-        String serverAddress = serverInfo.getString(SERVER_ADDRESS_KEY);
-        String clientId = serverInfo.getString(CLIENT_ID_KEY);
-        String apiSecret = serverInfo.getString(API_SECRET_KEY);
-
-//        ((LoginConfigureServerFragment) viewPagerAdapter.getItem(0)).serverAddressEditText.setText(serverAddress);
-//        LoginConfigureSecretIdFragment fragment = ((LoginConfigureSecretIdFragment) viewPagerAdapter.getItem(1));
-//        fragment.apiSecretEditText.setText(apiSecret);
-//        fragment.apiSecretEditText.setText(clientId);
+//        Logger.log(LOG_TAG, "Removing unnecessary fragments from login pager", Log.VERBOSE);
+//        ViewGroup pagerParent = findViewById(R.id.activity_login);
+//        viewPager.getAdapter().destroyItem(pagerParent, 1, viewPagerAdapter.getItem(1));
+//        viewPager.getAdapter().destroyItem(pagerParent, 2, viewPagerAdapter.getItem(2));
     }
 
     private boolean checkConfigurationFile() {

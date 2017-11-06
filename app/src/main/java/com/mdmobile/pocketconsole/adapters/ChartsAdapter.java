@@ -13,9 +13,12 @@ import android.widget.ImageView;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.mdmobile.pocketconsole.R;
 
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ import java.util.List;
  * Chart recycler nameView adapter
  */
 
-public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> {
+public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> implements OnChartValueSelectedListener{
 
     private Bundle statistics;
     private String[] enabledCharts;
@@ -74,14 +77,14 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
             case 0:
                 //Online vs offline devices
                 pieEntries = new ArrayList<>();
-                pieEntries.add(new PieEntry(statistics.getInt("OnlineDevs"), "OnLine"));
-                pieEntries.add(new PieEntry(statistics.getInt("OfflineDevs"), "OffLine"));
+                pieEntries.add(new PieEntry(statistics.getInt("OnlineDevs"), "Online"));
+                pieEntries.add(new PieEntry(statistics.getInt("OfflineDevs"), "Offline"));
 
                 pieDataSet = new PieDataSet(pieEntries, null);
                 pieDataSet.setColors(new int[]{R.color.colorPrimaryDark, R.color.colorPrimary}, holder.chartContainer.getContext());
                 PieData pieData = new PieData();
                 pieData.addDataSet(pieDataSet);
-                pieData.setValueTextSize(22f);
+                pieData.setValueTextSize(0f);
 
                 chart = createPieChart(holder.chartContainer.getContext(), pieData, position);
                 holder.chartContainer.addView(chart);
@@ -95,9 +98,9 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
                 pieEntries.add(new PieEntry(statistics.getInt("Android"), "Android"));
                 pieEntries.add(new PieEntry(statistics.getInt("Apple"), "iOS"));
                 pieEntries.add(new PieEntry(statistics.getInt("WindowsDesktop"), "Desktop"));
-                pieEntries.add(new PieEntry(statistics.getInt("WindowsCE"), "Windows CE / Mobile"));
-                pieEntries.add(new PieEntry(statistics.getInt("WindowsModern"), "Windows Modern"));
-                pieEntries.add(new PieEntry(statistics.getInt("Printer"), "Zebra Printers"));
+                pieEntries.add(new PieEntry(statistics.getInt("WindowsCE"), "Win CE / Mobile"));
+                pieEntries.add(new PieEntry(statistics.getInt("WindowsModern"), "Win Modern"));
+                pieEntries.add(new PieEntry(statistics.getInt("Printer"), "Printers"));
 
                 pieDataSet = new PieDataSet(pieEntries, null);
                 pieDataSet.setColors(
@@ -105,7 +108,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
                                 R.color.darkGreen, R.color.printerColor}, holder.chartContainer.getContext());
                 pieData = new PieData();
                 pieData.addDataSet(pieDataSet);
-                pieData.setValueTextSize(16f);
+                pieData.setValueTextSize(0f);
 
                 chart = createPieChart(holder.chartContainer.getContext(), pieData, position);
                 holder.chartContainer.addView(chart);
@@ -129,10 +132,11 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
         PieChart pieChart = new PieChart(mContext);
         pieChart.setData(data);
-        pieChart.setDrawEntryLabels(true);
+        pieChart.setDrawEntryLabels(false);
         pieChart.setMaxAngle(360f);
         pieChart.setHoleRadius(60f);
         pieChart.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
 
         Legend legend = pieChart.getLegend();
         legend.setWordWrapEnabled(true);
@@ -145,8 +149,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
         Description descriptionLabel = new Description();
         descriptionLabel.setEnabled(true);
-        descriptionLabel.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-        descriptionLabel.setTextSize(16f);
+
 
         switch (position) {
             case 0:
@@ -157,11 +160,22 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
                 break;
         }
         pieChart.setDescription(descriptionLabel);
+        pieChart.setOnChartValueSelectedListener(this);
 
         return pieChart;
     }
 
     private void createBarsChart() {
+
+    }
+
+    @Override
+    public void onValueSelected(Entry entry, Highlight highlight) {
+//        highlight
+    }
+
+    @Override
+    public void onNothingSelected() {
 
     }
 
@@ -171,8 +185,8 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
         ChartViewHolder(View itemView) {
             super(itemView);
-            chartContainer = (FrameLayout) itemView.findViewById(R.id.chart_container);
-            refreshButton = (ImageView) itemView.findViewById(R.id.chart_refresh_button);
+            chartContainer =  itemView.findViewById(R.id.chart_container);
+            refreshButton = itemView.findViewById(R.id.chart_refresh_button);
             refreshButton.setOnClickListener(this);
         }
 

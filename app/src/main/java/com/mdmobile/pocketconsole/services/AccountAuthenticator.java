@@ -18,6 +18,7 @@ import com.mdmobile.pocketconsole.gson.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.UserUtility;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
@@ -60,14 +61,13 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                                final String authTokenType, Bundle bundle) throws NetworkErrorException {
 
 
-        //Get the account manager to access the account details
         final AccountManager accountManager = AccountManager.get(mContext);
+        final Bundle userInfo = UserUtility.getUserInfo(account);
 
-        //Get account details
         final String password = accountManager.getPassword(account);
-        final String clientID = accountManager.getUserData(account, CLIENT_ID_KEY);
-        final String apiSecret = accountManager.getUserData(account, API_SECRET_KEY);
-        final String serverUrl = accountManager.getUserData(account, SERVER_ADDRESS_KEY);
+        final String clientID = userInfo.getString(CLIENT_ID_KEY);
+        final String apiSecret = userInfo.getString(API_SECRET_KEY);
+        final String serverUrl = userInfo.getString(SERVER_ADDRESS_KEY);
 
 
         //If we have all necessary details let's attempt a token request

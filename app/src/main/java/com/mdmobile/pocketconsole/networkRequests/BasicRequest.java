@@ -7,7 +7,6 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.UserUtility;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -40,6 +40,7 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKE
 abstract class BasicRequest<T> extends Request<T> {
 
     private final String LOG_TAG = BasicRequest.class.getSimpleName();
+    private int lastError, retryCount;
     private AccountManagerCallback<Bundle> managerCallback = new AccountManagerCallback<Bundle>() {
         @Override
         public void run(AccountManagerFuture accountManagerFuture) {
@@ -108,12 +109,12 @@ abstract class BasicRequest<T> extends Request<T> {
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> headers = new HashMap<>();
         AccountManager accountManager = AccountManager.get(applicationContext);
-        Account[] accountAvailable = accountManager.getAccountsByType(applicationContext.getString(R.string.account_type));
 
-        String tokenType = accountManager.getUserData(accountAvailable[0], AUTH_TOKEN_TYPE_KEY);
-        //Assuming we only have 1 account
         //TODO: support multiple account
-        String token = accountManager.peekAuthToken(accountAvailable[0], tokenType);
+        Account account = UserUtility.getUser();
+        String tokenType = UserUtility.getUserInfo(UserUtility.getUser()).getString(AUTH_TOKEN_TYPE_KEY);
+
+        String token = accountManager.peekAuthToken(account, tokenType);
 
         if (token == null) {
             //TODO: stop request and launch account manager for a new token
@@ -135,10 +136,10 @@ abstract class BasicRequest<T> extends Request<T> {
 
         NetworkResponse response = volleyError.networkResponse;
         if (response == null) {
+            Logger.log(LOG_TAG, "Network request Error: error response: NULL\n", Log.ERROR);
             return super.parseNetworkError(volleyError);
         }
 
-        //Log error message
         try {
             String errorResponse = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             Logger.log(LOG_TAG, errorResponse, Log.ERROR);
@@ -146,13 +147,20 @@ abstract class BasicRequest<T> extends Request<T> {
             e.printStackTrace();
         }
 
+        //TODO:if we attempted already and error message is the same log out the user
+        if(retryCount >=2 && lastError ==  response.statusCode){
+            return super.parseNetworkError(volleyError);
+        }
+
+        lastError = response.statusCode;
+
         //If error is in 400 range give it another try as it could be the token expired
         if (response.statusCode == HttpsURLConnection.HTTP_UNAUTHORIZED ||
                 response.statusCode == HttpsURLConnection.HTTP_FORBIDDEN) {
             //Allow max 1 attempt to get the token -> this will avoid recursive loop of requests
             Logger.log(LOG_TAG, "Attempt requesting a new Token", Log.VERBOSE);
+            retryCount++;
 
-            //Get current user data we have stored
             AccountManager manager = AccountManager.get(applicationContext);
             Account[] accounts = manager.getAccountsByType(applicationContext.getString(R.string.account_type));
 

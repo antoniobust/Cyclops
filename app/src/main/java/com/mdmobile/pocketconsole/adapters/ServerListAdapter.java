@@ -78,9 +78,9 @@ public abstract class ServerListAdapter extends RecyclerView.Adapter<ServerListA
         Holder(final View itemView) {
             super(itemView);
             itemView.setTag(this);
-            serverNameView = (TextView) itemView.findViewById(R.id.server_list_item_server_name);
+            serverNameView =  itemView.findViewById(R.id.server_list_item_server_name);
             statusIndicator = itemView.findViewById(R.id.server_list_item_colored_marker);
-            imageView = (ImageView) itemView.findViewById(R.id.list_item_arrow_icon);
+            imageView =  itemView.findViewById(R.id.list_item_arrow_icon);
         }
 
         public void setClickListener(View.OnClickListener listener){

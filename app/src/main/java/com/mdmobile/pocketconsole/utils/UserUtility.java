@@ -63,20 +63,20 @@ public class UserUtility {
         return false;
     }
 
-    public static HashMap<String, String> getUserInfo() {
-        Account account = getUser();
+    public static Bundle getUserInfo(Account account) {
+
         AccountManager accountManager = AccountManager.get(applicationContext);
-        HashMap<String, String> userInfo = new HashMap<>();
+        Bundle userInfo = new Bundle();
         //TODO:support multiple account
-        userInfo.put(SERVER_ADDRESS_KEY,
+        userInfo.putString(SERVER_ADDRESS_KEY,
                 accountManager.getUserData(account, SERVER_ADDRESS_KEY));
-        userInfo.put(CLIENT_ID_KEY,
+        userInfo.putString(CLIENT_ID_KEY,
                 accountManager.getUserData(account, CLIENT_ID_KEY));
-        userInfo.put(API_SECRET_KEY,
+        userInfo.putString(API_SECRET_KEY,
                 accountManager.getUserData(account, API_SECRET_KEY));
-        userInfo.put(AUTH_TOKEN_TYPE_KEY,
+        userInfo.putString(AUTH_TOKEN_TYPE_KEY,
                 accountManager.getUserData(account, AUTH_TOKEN_TYPE_KEY));
-        userInfo.put(AUTH_TOKEN_EXPIRATION_KEY,
+        userInfo.putString(AUTH_TOKEN_EXPIRATION_KEY,
                 accountManager.getUserData(account, AUTH_TOKEN_EXPIRATION_KEY));
 
         return userInfo;

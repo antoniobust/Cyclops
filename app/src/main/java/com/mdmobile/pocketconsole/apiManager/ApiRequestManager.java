@@ -127,7 +127,7 @@ public class ApiRequestManager {
     public void getDevices() {
 
 //        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
-        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(ApplicationLoader.applicationContext, Request.Method.GET, api,
@@ -147,7 +147,7 @@ public class ApiRequestManager {
     }
 
     public void getDeviceInstalledApps(@NonNull final String devID) {
-        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
         DeviceInstalledAppRequest installedAppRequest = new DeviceInstalledAppRequest(Request.Method.GET,
@@ -173,7 +173,7 @@ public class ApiRequestManager {
 
     public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
-        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 
         String jsonPayload = new Gson().toJson(new Action(action, message, phoneNumber));
@@ -197,7 +197,7 @@ public class ApiRequestManager {
     }
 
     public void getServerInfo() {
-        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.ServerApi.Builder(apiAuthority).getServerInfo().build();
 
         ServerInfoRequest request = new ServerInfoRequest(api, new Response.Listener<String>() {
@@ -216,7 +216,7 @@ public class ApiRequestManager {
     }
 
     public void getUsers(){
-        String apiAuthority = UserUtility.getUserInfo().get(SERVER_ADDRESS_KEY);
+        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.UserSecurityApi.Builder(apiAuthority).getAllUsers(false,null,null).build();
         UserRequest userRequest = new UserRequest(api, new Response.ErrorListener() {
             @Override

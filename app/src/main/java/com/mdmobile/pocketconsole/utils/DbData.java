@@ -1,6 +1,7 @@
 package com.mdmobile.pocketconsole.utils;
 
 import android.content.ContentValues;
+import android.os.Bundle;
 
 import com.mdmobile.pocketconsole.gson.InstalledApp;
 import com.mdmobile.pocketconsole.gson.ServerInfo;
@@ -37,7 +38,6 @@ public class DbData {
     public static ContentValues prepareDeviceValues(BasicDevice device) {
 
         ContentValues deviceBasicValues = getDeviceBasicValues(device);
-
 
         try {
             Class<?> c = Class.forName(device.getClass().getName());
@@ -242,5 +242,20 @@ public class DbData {
             userValues[i] = getUserContentValues(users.get(i));
         }
         return userValues;
+    }
+
+    public static Bundle getDeviceExtraInfo(String extraInfo) {
+        String[] extras = extraInfo.split(";");
+        String[]temp;
+        Bundle extraBundle = new Bundle();
+        for (int i = 0; i < extras.length; i++) {
+            temp = extras[i].split("=");
+            if(temp.length == 1){
+                extraBundle.putString(temp[0], "N/A");
+                continue;
+            }
+            extraBundle.putString(temp[0], temp[1]);
+        }
+        return extraBundle;
     }
 }

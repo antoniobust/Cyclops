@@ -18,6 +18,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
+
 /**
  * Volley request to get installed application on a single device
  */
@@ -25,7 +27,6 @@ import java.util.List;
 public class DeviceInstalledAppRequest extends BasicRequest<String> {
 
     private Response.Listener<String> listener;
-    private Context mContext;
 
     public DeviceInstalledAppRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
@@ -48,10 +49,10 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
             //Parse devices to extract common properties and put other as extra string
             if (applications.size() == 1) {
                 ContentValues appValues = DbData.prepareInstalledAppValues(applications.get(0));
-                mContext.getContentResolver().insert(McContract.InstalledApplications.CONTENT_URI, appValues);
+                applicationContext.getContentResolver().insert(McContract.InstalledApplications.CONTENT_URI, appValues);
             } else if (applications.size() > 1) {
                 ContentValues[] appValues = DbData.prepareInstalledAppValues(applications);
-                mContext.getContentResolver().bulkInsert(McContract.InstalledApplications.CONTENT_URI, appValues);
+                applicationContext.getContentResolver().bulkInsert(McContract.InstalledApplications.CONTENT_URI, appValues);
             }
 
             return Response.success(null,

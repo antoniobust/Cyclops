@@ -64,12 +64,12 @@ public class ServerDetailsAdapter extends RecyclerView.Adapter<ServerDetailsAdap
         }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(android.R.id.text1);
+            textView = itemView.findViewById(android.R.id.text1);
         }
     }
 }

@@ -56,6 +56,29 @@
         <item>Users online</item>
     </string-array>
 
+    <string-array name="devices_info_labels">
+        <item>Device name</item>
+        <item>Enrollment time</item>
+        <item>Hostname</item>
+        <item>MAC Address</item>
+        <item>Manufacturer</item>
+        <item>Mode</item>
+        <item>Model</item>
+        <item>OS Version</item>
+        <item>Group Path</item>
+        <item>Platform</item>
+        <item>Compliance status</item>
+        <item>Online</item>
+        <item>Virtual device</item>
+
+
+    </string-array>
+
+    Mode, Model,
+    OSVersion, Path, Platform;
+    private Boolean ComplianceStatus, IsAgentOnline, IsVirtual;
+
+
 </resources>
 
 

@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
+import com.mdmobile.pocketconsole.utils.DbData;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
 import java.util.HashMap;
@@ -47,6 +49,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private String deviceId;
     private String iconTransitionName;
     private String nameTransitionName;
+    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
 
     public DeviceDetailsFragment() {
     }
@@ -82,7 +85,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         View rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
 
 
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
         if (GeneralUtility.isTabletMode(getContext())) {
             toolbar.setVisibility(View.GONE);
         }
@@ -97,11 +100,16 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         }
 
 
-        ImageView titleIconView = (ImageView) rootView.findViewById(R.id.device_detail_icon);
-        TextView titleView = (TextView) rootView.findViewById(R.id.device_detail_title_view);
-        TextView subtitleView = (TextView) rootView.findViewById(R.id.device_detail_subtitle_view);
-        CardView infoCard = (CardView) rootView.findViewById(R.id.device_details_info_card);
-        CardView appsCard = (CardView) rootView.findViewById(R.id.device_details_apps_card);
+        ImageView titleIconView = rootView.findViewById(R.id.device_detail_icon);
+        TextView titleView = rootView.findViewById(R.id.device_detail_title_view);
+        TextView subtitleView = rootView.findViewById(R.id.device_detail_subtitle_view);
+        CardView infoCard = rootView.findViewById(R.id.device_details_info_card);
+        CardView appsCard = rootView.findViewById(R.id.device_details_apps_card);
+        batteryView = rootView.findViewById(R.id.device_details_battery);
+        wifiView = rootView.findViewById(R.id.device_details_wifi);
+        simView = rootView.findViewById(R.id.device_details_simcard);
+        ramView = rootView.findViewById(R.id.device_details_memory);
+        sdCardView = rootView.findViewById(R.id.device_details_sdcard);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             titleIconView.setTransitionName(iconTransitionName);
@@ -171,7 +179,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case 10:
-                setDeviceInfoCard(data);
+                Cursor c = data;
+                setCharts(c);
+                setDeviceInfoCard(c);
                 break;
             case 11:
                 break;
@@ -189,8 +199,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void setDeviceInfoCard(Cursor c) {
-        GridLayout infoGrid = (GridLayout) getActivity().findViewById(R.id.device_details_info_grid);
-        TextView devName = (TextView) getActivity().findViewById(R.id.device_detail_title_view);
+        GridLayout infoGrid = getActivity().findViewById(R.id.device_details_info_grid);
+        TextView devName = getActivity().findViewById(R.id.device_detail_title_view);
 
         if (c.moveToFirst()) {
             Boolean online = c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1;
@@ -227,7 +237,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void setInstalledAppInfoCard(Cursor c) {
-        GridLayout infoGrid = (GridLayout) getActivity().findViewById(R.id.device_details_apps_grid_view);
+        GridLayout infoGrid = getActivity().findViewById(R.id.device_details_apps_grid_view);
 
         if (!c.moveToFirst()) {
             return;
@@ -242,13 +252,31 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         }
     }
 
+    private void setCharts(Cursor data) {
+        data.moveToFirst();
+        Bundle extraInfo = DbData.getDeviceExtraInfo(data.getString(24));
+
+        String value = extraInfo.getString("tBatteryStatus");
+        if (value == null) {
+            value = "0";
+        }
+        int val = Integer.valueOf(value);
+        LayerDrawable clipBar = (LayerDrawable) batteryView.getDrawable();
+
+        Drawable barFilling = clipBar.findDrawableByLayerId(R.id.horizontal_bar_filling);
+        if (val > 0 && val < 20) {
+            barFilling.setTint(getContext().getResources().getColor(android.R.color.holo_red_light));
+        }
+        barFilling.setLevel(val * 100);
+    }
+
     @Override
     public void onClick(View v) {
         FragmentTransaction transaction = (getActivity()).getSupportFragmentManager().beginTransaction();
 
         switch (v.getId()) {
             case R.id.device_details_info_card:
-                transaction.replace(R.id.device_details_fragment_container, FullDeviceInfoFragment.newInstance())
+                transaction.replace(R.id.device_details_fragment_container, FullDeviceInfoFragment.newInstance(deviceId))
                         .commit();
                 break;
             case R.id.device_details_profiles_card:
@@ -284,5 +312,4 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //        deviceList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 //        deviceList.requestLayout();
     }
-
 }

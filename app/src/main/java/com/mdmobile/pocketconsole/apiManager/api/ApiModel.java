@@ -90,7 +90,7 @@ public class ApiModel {
                 return SelectDevice.this;
             }
 
-            public SelectDevice getInstalledProfiles() {
+            public SelectDevice getProfiles() {
                 String path = "profiles";
                 currentApi.appendPath(path);
                 return SelectDevice.this;
@@ -98,7 +98,7 @@ public class ApiModel {
 
             public SelectDevice installDeviceProfile(@NonNull String profileID) {
                 String path = "actions";
-                getInstalledProfiles();
+                getProfiles();
                 currentApi.appendPath(profileID).appendPath(path);
                 return SelectDevice.this;
             }

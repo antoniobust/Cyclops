@@ -1,12 +1,16 @@
 package com.mdmobile.pocketconsole.adapters;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 
 import com.mdmobile.pocketconsole.ui.logIn.LoginConfigureSecretIdFragment;
 import com.mdmobile.pocketconsole.ui.logIn.LoginConfigureServerFragment;
 import com.mdmobile.pocketconsole.ui.logIn.LoginUserNamePasswordFragment;
+
+import java.util.ArrayList;
 
 /**
  * This adapter inflates fragments in the login activity viewPager
@@ -15,10 +19,13 @@ import com.mdmobile.pocketconsole.ui.logIn.LoginUserNamePasswordFragment;
 
 public class LogInViewPagerAdapter extends FragmentPagerAdapter {
 
+    public ArrayList<Fragment> fragments = new ArrayList<>();
+    private FragmentManager fm;
+
     public LogInViewPagerAdapter(android.support.v4.app.FragmentManager fm) {
         super(fm);
+        this.fm = fm;
     }
-
 
     @Override
     public Fragment getItem(int position) {
@@ -30,9 +37,20 @@ public class LogInViewPagerAdapter extends FragmentPagerAdapter {
                 return LoginConfigureSecretIdFragment.newInstance();
             case 2:
                 return LoginUserNamePasswordFragment.newInstance();
-            default:
-                return LoginConfigureServerFragment.newInstance();
         }
+        return null;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        if (fragments.contains(object)) {
+            return fragments.indexOf(object);
+        } else return POSITION_NONE;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
@@ -40,4 +58,12 @@ public class LogInViewPagerAdapter extends FragmentPagerAdapter {
         return 3;
     }
 
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        if (position < getCount()) {
+            FragmentTransaction trans = fm.beginTransaction();
+            trans.remove((Fragment) object);
+            trans.commit();
+        }
+    }
 }

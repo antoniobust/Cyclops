@@ -1,0 +1,87 @@
+package com.mdmobile.pocketconsole.interfaces;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.utils.Logger;
+
+import java.io.IOException;
+
+import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
+import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
+
+/**
+ * This class implements AccountManagerCallback in order to process the API new Token request
+ */
+
+public class OnTokenAcquired implements AccountManagerCallback<Bundle> {
+
+    private static final String LOG_TAG = OnTokenAcquired.class.getSimpleName();
+
+    @Override
+    public void run(AccountManagerFuture<Bundle> future) {
+        try {
+            if (future.isDone() && !future.isCancelled()) {
+                Bundle newInfo = future.getResult();
+
+                //If result contains KEY INTENT from account manager it means it failed to get
+                //a new token as we cannot log in -> prompt login activity
+                if (newInfo.containsKey(AccountManager.KEY_INTENT)) {
+                    //TODO:after getting new credentials if we get token we need to save new password
+                    //which is not getting saved -> stays null after clearPassword
+                    Intent intent = newInfo.getParcelable(AccountManager.KEY_INTENT);
+                    if (intent != null) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        applicationContext.startActivity(intent);
+                    }
+                } else {
+//                        result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+//                        result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+//                        result.putString(AUTH_TOKEN_TYPE_KEY, JsonToken.getToken_type());
+//                        result.putString(AccountManager.KEY_AUTHTOKEN, JsonToken.getAccess_token());
+                    String accountName = newInfo.getString(AccountManager.KEY_ACCOUNT_NAME);
+                    String accountType = newInfo.getString(AccountManager.KEY_ACCOUNT_TYPE);
+                    String authTokenType = newInfo.getString(AUTH_TOKEN_TYPE_KEY);
+                    String authToken = newInfo.getString(AccountManager.KEY_AUTHTOKEN);
+
+                    AccountManager accountManager = AccountManager.get(applicationContext);
+                    Account[] accounts = accountManager.getAccountsByType(accountType);
+                    if (accounts[0].name.equals(accountName)) {
+                        accountManager.setAuthToken(accounts[0], authTokenType, authToken);
+                        Logger.log(LOG_TAG, "Account " + accountName + " new token saved: " + authToken
+                                + "\n Resending request...", Log.VERBOSE);
+                    }
+                }
+            }
+
+        } catch (AuthenticatorException e) {
+            if (e.getMessage().equals("AuthenticationException")) {
+                //Launch login activity
+                //TODO:Launch log in activity
+                Logger.log(LOG_TAG, "Authentication exception ...\n" +
+                        " No connection was possible with account authenticator\nRedirecting to login ", Log.ERROR);
+                e.printStackTrace();
+
+                //Clearing user credential and let the user input new ones
+                AccountManager accountManager = AccountManager.get(applicationContext);
+                Account[] accounts = accountManager.getAccountsByType(applicationContext.getString(R.string.account_type));
+                accountManager.clearPassword(accounts[0]);
+                accountManager.getAuthToken(accounts[0],
+                        accountManager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY)
+                        , null, true, this, null);
+            }
+        } catch (IOException | OperationCanceledException e) {
+            e.printStackTrace();
+        }
+    }
+}

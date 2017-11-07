@@ -3,12 +3,6 @@ package com.mdmobile.pocketconsole.networkRequests;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -18,10 +12,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.interfaces.OnTokenAcquired;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,65 +35,7 @@ abstract class BasicRequest<T> extends Request<T> {
 
     private final String LOG_TAG = BasicRequest.class.getSimpleName();
     private int lastError, retryCount;
-    private AccountManagerCallback<Bundle> managerCallback = new AccountManagerCallback<Bundle>() {
-        @Override
-        public void run(AccountManagerFuture accountManagerFuture) {
-            try {
-                if (accountManagerFuture.isDone() && !accountManagerFuture.isCancelled()) {
-                    Bundle newInfo = (Bundle) accountManagerFuture.getResult();
 
-                    //If result contains KEY INTENT from account manager it means it failed to get
-                    //a new token as we cannot log in -> prompt login activity
-                    if (newInfo.containsKey(AccountManager.KEY_INTENT)) {
-                        //TODO:after getting new credentials if we get token we need to save new password
-                        //which is not getting saved -> stays null after clearPassword
-                        Intent intent = newInfo.getParcelable(AccountManager.KEY_INTENT);
-                        if (intent != null) {
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            applicationContext.startActivity(intent);
-                        }
-                    } else {
-//                        result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-//                        result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-//                        result.putString(AUTH_TOKEN_TYPE_KEY, JsonToken.getToken_type());
-//                        result.putString(AccountManager.KEY_AUTHTOKEN, JsonToken.getAccess_token());
-                        String accountName = newInfo.getString(AccountManager.KEY_ACCOUNT_NAME);
-                        String accountType = newInfo.getString(AccountManager.KEY_ACCOUNT_TYPE);
-                        String authTokenType = newInfo.getString(AUTH_TOKEN_TYPE_KEY);
-                        String authToken = newInfo.getString(AccountManager.KEY_AUTHTOKEN);
-
-                        AccountManager accountManager = AccountManager.get(applicationContext);
-                        Account[] accounts = accountManager.getAccountsByType(accountType);
-                        if (accounts[0].name.equals(accountName)) {
-                            accountManager.setAuthToken(accounts[0], authTokenType, authToken);
-                            Logger.log(LOG_TAG, "Account " + accountName + " new token saved: " + authToken
-                                    + "\n Resending request...", Log.VERBOSE);
-                        }
-                    }
-                }
-
-            } catch (AuthenticatorException e) {
-                if (e.getMessage().equals("AuthenticationException")) {
-                    //Launch login activity
-                    //TODO:Launch log in activity
-                    Logger.log(LOG_TAG, "Authentication exception ...\n No connection was possible with account authenticator\nRedirecting to login ", Log.ERROR);
-                    e.printStackTrace();
-
-                    //Clearing user credential and let the user input new ones
-                    AccountManager accountManager = AccountManager.get(applicationContext);
-                    Account[] accounts = accountManager.getAccountsByType(applicationContext.getString(R.string.account_type));
-                    accountManager.clearPassword(accounts[0]);
-                    accountManager.getAuthToken(accounts[0],
-                            accountManager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY)
-                            , null, null, this, null);
-                }
-            } catch (IOException | OperationCanceledException e) {
-                e.printStackTrace();
-            }
-        }
-    };
 
     public BasicRequest(int method, String url, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
@@ -148,18 +84,28 @@ abstract class BasicRequest<T> extends Request<T> {
         }
 
         //TODO:if we attempted already and error message is the same log out the user
-        if(retryCount >=2 && lastError ==  response.statusCode){
+        if (retryCount > 1 && lastError == response.statusCode) {
+            //CHECK ALL ERRORS CODE
+            parseErrorCode(response.statusCode);
             return super.parseNetworkError(volleyError);
+        } else {
+            //RERUN REQUEST
+            lastError = response.statusCode;
+            retryCount++;
         }
 
-        lastError = response.statusCode;
+        return super.parseNetworkError(volleyError);
+    }
 
-        //If error is in 400 range give it another try as it could be the token expired
-        if (response.statusCode == HttpsURLConnection.HTTP_UNAUTHORIZED ||
-                response.statusCode == HttpsURLConnection.HTTP_FORBIDDEN) {
+    private void parseErrorCode(int errorCode) {
+
+        if (errorCode == 400) {
+            //TODO:show generic error message, log error stack
+        } else if (errorCode == HttpsURLConnection.HTTP_UNAUTHORIZED ||
+                errorCode == HttpsURLConnection.HTTP_FORBIDDEN) {
             //Allow max 1 attempt to get the token -> this will avoid recursive loop of requests
-            Logger.log(LOG_TAG, "Attempt requesting a new Token", Log.VERBOSE);
-            retryCount++;
+            Logger.log(LOG_TAG, "Attempt requesting a new Token, retry sequence: " + retryCount, Log.VERBOSE);
+
 
             AccountManager manager = AccountManager.get(applicationContext);
             Account[] accounts = manager.getAccountsByType(applicationContext.getString(R.string.account_type));
@@ -171,11 +117,15 @@ abstract class BasicRequest<T> extends Request<T> {
 
                 manager.getAuthToken(accounts[0],
                         manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
-                        null, false, managerCallback, null);
+                        null, false, new OnTokenAcquired(), null);
             }
+        } else if (errorCode == 404) {
+            //TODO:NOTIFY THE USER
+        } else if (errorCode == 422) {
+            //TODO: show error message in toast
+        } else if (errorCode == 500) {
+            //TODO:sho internal server error
         }
-        return super.parseNetworkError(volleyError);
     }
-
 }
 

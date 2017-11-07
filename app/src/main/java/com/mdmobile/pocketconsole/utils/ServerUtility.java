@@ -1,9 +1,14 @@
 package com.mdmobile.pocketconsole.utils;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.gson.ServerInfo;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
@@ -17,6 +22,15 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_NA
  */
 
 public class ServerUtility {
+
+    public static int SERVER_STOPPED = 0;
+    public static int SERVER_STARTED = 1;
+    public static int SERVER_DASABLED = 2;
+    public static int SERVER_UNLICENSED = 3;
+    public static int SERVER_DELETED = 4;
+    public static int SERVER_STARTED_BUT_NOT_REGISTERED = 5;
+    public static int SERVER_OFFLINE = 6;
+    public static int SERVER_STATUS_UNKNOWN = 7;
 
     public static void saveServerInfo(String serverName, String apiSecret, String clientId, String serverAddress) {
 
@@ -32,22 +46,89 @@ public class ServerUtility {
 
     public static Bundle getServer() {
 
-                SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
-                String serverName = preferences.getString(applicationContext.getString(R.string.server_name_preference), null);
-                String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);
-                String clientId = preferences.getString(applicationContext.getString(R.string.client_id_preference), null);
-                String address = preferences.getString(applicationContext.getString(R.string.server_address_preference), null);
+        SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
+        String serverName = preferences.getString(applicationContext.getString(R.string.server_name_preference), null);
+        String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);
+        String clientId = preferences.getString(applicationContext.getString(R.string.client_id_preference), null);
+        String address = preferences.getString(applicationContext.getString(R.string.server_address_preference), null);
 
-                if (serverName != null && apiSecret != null && clientId != null && address != null) {
-                    Bundle bundle = new Bundle(4);
-                    bundle.putString(SERVER_NAME_KEY, serverName);
-                    bundle.putString(SERVER_ADDRESS_KEY, address);
-                    bundle.putString(CLIENT_ID_KEY, clientId);
-                    bundle.putString(API_SECRET_KEY, apiSecret);
+        if (serverName != null && apiSecret != null && clientId != null && address != null) {
+            Bundle bundle = new Bundle(4);
+            bundle.putString(SERVER_NAME_KEY, serverName);
+            bundle.putString(SERVER_ADDRESS_KEY, address);
+            bundle.putString(CLIENT_ID_KEY, clientId);
+            bundle.putString(API_SECRET_KEY, apiSecret);
 
-                    return bundle;
-                } else {
-                    return null;
+            return bundle;
+        } else {
+            return null;
         }
+    }
+
+    public static int isServerOnline(ServerInfo.DeploymentServer server) {
+
+        if (server instanceof ServerInfo.DeploymentServer) {
+            //TODO: check if MS is connected to this DS
+        }
+        switch (server.getStatus()) {
+            case "Stopped":
+                return 0;
+            case "Started":
+                return 1;
+            case "Disabled":
+                return 2;
+            case "Unlicensed":
+                return 3;
+            case "Deleted":
+                return 4;
+            case "StartedButNotRegistered":
+                return 5;
+            case "Offline":
+                return 6;
+            case "Unknown":
+                return 7;
+            default:
+                return 7;
+        }
+    }
+
+    public static int isServerOnline(ServerInfo.ManagementServer server) {
+        switch (server.getStatus()) {
+            case "Stopped":
+                return 0;
+            case "Started":
+                return 1;
+            case "Disabled":
+                return 2;
+            case "Unlicensed":
+                return 3;
+            case "Deleted":
+                return 4;
+            case "StartedButNotRegistered":
+                return 5;
+            case "Offline":
+                return 6;
+            case "Unknown":
+                return 7;
+            default:
+                return 7;
+        }
+    }
+
+    public static void notifyServerStatus(String serverName, int status) {
+        String message = applicationContext.getResources().getStringArray(R.array.server_notification_labels)[status];
+        message = String.format(message, serverName);
+
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(applicationContext, applicationContext.getPackageName())
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setSmallIcon(R.drawable.ic_block)
+                .setContentTitle(applicationContext.getString(R.string.notification_server_status_title))
+                .setContentText(message);
+
+
+        NotificationManager notificationManager = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, notificationBuilder.build());
+
     }
 }

@@ -4,6 +4,7 @@ package com.mdmobile.pocketconsole.networkRequests;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -11,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.github.mikephil.charting.utils.Utils;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.interfaces.OnTokenAcquired;
 import com.mdmobile.pocketconsole.utils.Logger;
@@ -92,6 +94,7 @@ abstract class BasicRequest<T> extends Request<T> {
             //RERUN REQUEST
             lastError = response.statusCode;
             retryCount++;
+            getUrl();
         }
 
         return super.parseNetworkError(volleyError);
@@ -99,8 +102,8 @@ abstract class BasicRequest<T> extends Request<T> {
 
     private void parseErrorCode(int errorCode) {
 
-        if (errorCode == 400) {
-            //TODO:show generic error message, log error stack
+        if (errorCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
+            Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show();
         } else if (errorCode == HttpsURLConnection.HTTP_UNAUTHORIZED ||
                 errorCode == HttpsURLConnection.HTTP_FORBIDDEN) {
             //Allow max 1 attempt to get the token -> this will avoid recursive loop of requests
@@ -119,11 +122,11 @@ abstract class BasicRequest<T> extends Request<T> {
                         manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
                         null, false, new OnTokenAcquired(), null);
             }
-        } else if (errorCode == 404) {
-            //TODO:NOTIFY THE USER
+        } else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
+
         } else if (errorCode == 422) {
             //TODO: show error message in toast
-        } else if (errorCode == 500) {
+        } else if (errorCode == HttpsURLConnection.HTTP_INTERNAL_ERROR) {
             //TODO:sho internal server error
         }
     }

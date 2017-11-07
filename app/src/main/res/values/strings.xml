@@ -76,15 +76,17 @@
     <string name="more_label">more</string>
     <string name="logout_label">Logout</string>
     <string name="notification_channel_name">MDM Alerts</string>
-    <string name="notification_channel_description">Get notified when you services are not reachable</string>
+    <string name="notification_channel_description">Get notified when MDM services are not reachable</string>
+    <string name="notification_server_status_title">Alert: Server status changed</string>
 
-    <string name="server_offline">1$s(2$s) status: Offline</string>
-    <string name="server_stopped">1$s(2$s) status: Stopped</string>
-    <string name="server_unlicensed">1$s(2$s) status: Unlicensed</string>
-    <string name="server_disabled">1$s(2$s) status: Disabled</string>
-    <string name="server_started_but_not_registered">M1$s(2$s) status: Started but not registered</string>
-    <string name="server_deleted">1$s(2$s) status: Deleted</string>
-    <string name="server_unknown">1$s(2$s) status: Unknown</string>
+    <string name="server_offline">%1$s status: Offline</string>
+    <string name="server_stopped">%1$s status: Stopped</string>
+    <string name="server_online">%1$s status: Online</string>
+    <string name="server_unlicensed">%1$s status: Unlicensed</string>
+    <string name="server_disabled">%1$s status: Disabled</string>
+    <string name="server_started_but_not_registered">%1$s status: Started but not registered</string>
+    <string name="server_deleted">%1$s status: Deleted</string>
+    <string name="server_unknown">%1$s status: Unknown</string>
 
 
     <string-array name="sorting_options_radio_labels">
@@ -96,11 +98,12 @@
 
     <string-array name="server_notification_labels">
         <item>@string/server_stopped</item>
-        <item>@string/server_offline</item>
-        <item>@string/server_unlicensed</item>
+        <item>@string/server_online</item>
         <item>@string/server_disabled</item>
-        <item>@string/server_started_but_not_registered</item>
+        <item>@string/server_unlicensed</item>
         <item>@string/server_deleted</item>
+        <item>@string/server_started_but_not_registered</item>
+        <item>@string/server_offline</item>
         <item>@string/server_unknown</item>
     </string-array>
 

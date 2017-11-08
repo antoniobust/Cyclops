@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.networkRequests.BasicRequest;
+import com.mdmobile.pocketconsole.networkRequests.BasicRequestRetry;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.io.IOException;
@@ -22,9 +24,10 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKE
  * This class implements AccountManagerCallback in order to process the API new Token request
  */
 
-public class OnTokenAcquired implements AccountManagerCallback<Bundle> {
+public class OnTokenAcquired implements AccountManagerCallback<Bundle>{
 
     private static final String LOG_TAG = OnTokenAcquired.class.getSimpleName();
+
 
     @Override
     public void run(AccountManagerFuture<Bundle> future) {

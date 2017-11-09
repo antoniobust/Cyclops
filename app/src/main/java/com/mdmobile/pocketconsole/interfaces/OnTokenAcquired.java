@@ -10,12 +10,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.android.volley.toolbox.Volley;
+import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.networkRequests.BasicRequest;
-import com.mdmobile.pocketconsole.networkRequests.BasicRequestRetry;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
@@ -24,10 +26,14 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKE
  * This class implements AccountManagerCallback in order to process the API new Token request
  */
 
-public class OnTokenAcquired implements AccountManagerCallback<Bundle>{
+public class OnTokenAcquired implements AccountManagerCallback<Bundle> {
 
     private static final String LOG_TAG = OnTokenAcquired.class.getSimpleName();
+    WeakReference<BasicRequest> request;
 
+    public OnTokenAcquired(WeakReference<BasicRequest> request) {
+        this.request = request;
+    }
 
     @Override
     public void run(AccountManagerFuture<Bundle> future) {
@@ -61,8 +67,11 @@ public class OnTokenAcquired implements AccountManagerCallback<Bundle>{
                     Account[] accounts = accountManager.getAccountsByType(accountType);
                     if (accounts[0].name.equals(accountName)) {
                         accountManager.setAuthToken(accounts[0], authTokenType, authToken);
-                        Logger.log(LOG_TAG, "Account " + accountName + " new token saved: " + authToken
-                                + "\n Resending request...", Log.VERBOSE);
+                        Logger.log(LOG_TAG, "Account " + accountName + " new token saved: " + authToken, Log.VERBOSE);
+                        if (request != null) {
+                            Logger.log(LOG_TAG, "Resending request " + request.get().getUrl(), Log.VERBOSE);
+                            Volley.newRequestQueue(ApplicationLoader.applicationContext).add(request.get());
+                        }
                     }
                 }
             }

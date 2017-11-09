@@ -19,6 +19,7 @@ import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -107,7 +108,7 @@ abstract public class BasicRequest<T> extends Request<T> {
 
                 manager.getAuthToken(accounts[0],
                         manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
-                        null, false, new OnTokenAcquired(), null);
+                        null, false, new OnTokenAcquired(new WeakReference<BasicRequest>(this)), null);
             }
         }
         else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {

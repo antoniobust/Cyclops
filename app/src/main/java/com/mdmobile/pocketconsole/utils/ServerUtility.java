@@ -25,12 +25,14 @@ public class ServerUtility {
 
     public static int SERVER_STOPPED = 0;
     public static int SERVER_STARTED = 1;
-    public static int SERVER_DASABLED = 2;
+    public static int SERVER_DISABLED = 2;
     public static int SERVER_UNLICENSED = 3;
     public static int SERVER_DELETED = 4;
     public static int SERVER_STARTED_BUT_NOT_REGISTERED = 5;
     public static int SERVER_OFFLINE = 6;
     public static int SERVER_STATUS_UNKNOWN = 7;
+    public static int SERVER_STARTED_BUT_NOT_CONNECTED = 5;
+
 
     public static void saveServerInfo(String serverName, String apiSecret, String clientId, String serverAddress) {
 
@@ -67,51 +69,52 @@ public class ServerUtility {
 
     public static int isServerOnline(ServerInfo.DeploymentServer server) {
 
-        if (server instanceof ServerInfo.DeploymentServer) {
-            //TODO: check if MS is connected to this DS
+        if (!server.getConnected()) {
+            return SERVER_STARTED_BUT_NOT_CONNECTED;
         }
+
         switch (server.getStatus()) {
             case "Stopped":
-                return 0;
+                return SERVER_STOPPED;
             case "Started":
-                return 1;
+                return SERVER_STARTED;
             case "Disabled":
-                return 2;
+                return SERVER_DISABLED;
             case "Unlicensed":
                 return 3;
             case "Deleted":
-                return 4;
+                return SERVER_DELETED;
             case "StartedButNotRegistered":
-                return 5;
+                return SERVER_STARTED_BUT_NOT_REGISTERED;
             case "Offline":
-                return 6;
+                return SERVER_OFFLINE;
             case "Unknown":
-                return 7;
+                return SERVER_STATUS_UNKNOWN;
             default:
-                return 7;
+                return SERVER_STATUS_UNKNOWN;
         }
     }
 
     public static int isServerOnline(ServerInfo.ManagementServer server) {
         switch (server.getStatus()) {
             case "Stopped":
-                return 0;
+                return SERVER_STOPPED;
             case "Started":
-                return 1;
+                return SERVER_STARTED;
             case "Disabled":
-                return 2;
+                return SERVER_DISABLED;
             case "Unlicensed":
                 return 3;
             case "Deleted":
-                return 4;
+                return SERVER_DELETED;
             case "StartedButNotRegistered":
-                return 5;
+                return SERVER_STARTED_BUT_NOT_REGISTERED;
             case "Offline":
-                return 6;
+                return SERVER_OFFLINE;
             case "Unknown":
-                return 7;
+                return SERVER_STATUS_UNKNOWN;
             default:
-                return 7;
+                return SERVER_STATUS_UNKNOWN;
         }
     }
 

@@ -16,6 +16,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.interfaces.OnTokenAcquired;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.ServerUtility;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
 import java.io.UnsupportedEncodingException;
@@ -112,11 +113,10 @@ abstract public class BasicRequest<T> extends Request<T> {
             }
         }
         else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
-            //TODO: notify user
+            ServerUtility.notifyServerStatus(getUrl(),ServerUtility.SERVER_OFFLINE);
         } else if (errorCode == 422) {
             //TODO: show error message in toast
         } else if (errorCode == HttpsURLConnection.HTTP_INTERNAL_ERROR) {
-            //TODO:sho internal server error
         }
     }
 }

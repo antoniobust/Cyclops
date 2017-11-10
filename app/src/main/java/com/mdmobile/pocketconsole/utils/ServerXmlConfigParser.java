@@ -12,7 +12,14 @@ import java.util.ArrayList;
 
 /**
  * Parse the xml file provided from user to import client id secret and address automatically
+ * Format expected
+ * <server name="serverName">
+ *     <secret>XXXX</secret>
+ *     <clientId>XXXX</clientId>
+ *     <address>http://xxx</address>
+ * </server>
  */
+
 @WorkerThread
 public class ServerXmlConfigParser {
 
@@ -34,14 +41,14 @@ public class ServerXmlConfigParser {
     private ArrayList<ServerInfo> readServer(XmlPullParser xmlParser) throws XmlPullParserException, IOException {
         ArrayList<ServerInfo> serverInfo = new ArrayList<>();
         xmlParser.require(XmlPullParser.START_TAG, nameSpace, "server");
-        String serverNanme = xmlParser.getAttributeValue(0);
+        String serverName = xmlParser.getAttributeValue(0);
 
         while (xmlParser.next() != XmlPullParser.END_DOCUMENT) {
             if (xmlParser.getEventType() == XmlPullParser.START_DOCUMENT || xmlParser.getEventType() == XmlPullParser.END_TAG ) {
                 continue;
             }
             if(xmlParser.getEventType() == XmlPullParser.START_TAG) {
-                    serverInfo.add(readServerProperties(serverNanme,xmlParser));
+                    serverInfo.add(readServerProperties(serverName,xmlParser));
             }
         }
         return serverInfo;
@@ -111,13 +118,29 @@ public class ServerXmlConfigParser {
     }
 
     public static class ServerInfo {
-        public String apiSecret, clientId, serverAddress, serverName;
+        private String apiSecret, clientId, serverAddress, serverName;
 
         public ServerInfo(String name, String apiSecret, String clientId, String serverAddress) {
             this.apiSecret = apiSecret;
             this.clientId = clientId;
             this.serverAddress = serverAddress;
             this.serverName = name;
+        }
+
+        public String getApiSecret() {
+            return apiSecret;
+        }
+
+        public String getClientId() {
+            return clientId;
+        }
+
+        public String getServerAddress() {
+            return serverAddress;
+        }
+
+        public String getServerName() {
+            return serverName;
         }
     }
 }

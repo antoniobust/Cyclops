@@ -316,7 +316,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         if (serverInfo == null) {
             return;
         }
-//        Logger.log(LOG_TAG, "Removing unnecessary fragments from login pager", Log.VERBOSE);
+        Logger.log(LOG_TAG, "Removing unnecessary fragments from login pager", Log.VERBOSE);
 //        ViewGroup pagerParent = findViewById(R.id.activity_login);
 //        viewPager.getAdapter().destroyItem(pagerParent, 1, viewPagerAdapter.getItem(1));
 //        viewPager.getAdapter().destroyItem(pagerParent, 2, viewPagerAdapter.getItem(2));

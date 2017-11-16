@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui.main;
+package com.mdmobile.pocketconsole.ui.main.myDevices;
 
 
 import android.accounts.Account;

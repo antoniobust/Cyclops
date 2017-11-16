@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactoryManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +29,17 @@ import java.util.List;
  * Chart recycler nameView adapter
  */
 
-public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> implements OnChartValueSelectedListener{
+public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> implements OnChartValueSelectedListener {
+
+    private static int ONLINE_CHART = 0;
+    private static int MANUFACTURERS_CHART = 1;
+    private static int OUT_OF_CONTACT_CHART = 2;
+    private static int BATTERY_CHART = 3;
 
     private Bundle statistics;
     private String[] enabledCharts;
 
-    public ChartsAdapter(Context c,@Nullable Bundle data) {
+    public ChartsAdapter(Context c, @Nullable Bundle data) {
         if (data != null) {
             statistics = data;
         }
@@ -57,10 +63,10 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
     @Override
     public ChartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_item, parent, false);
         return new ChartViewHolder(item);
     }
+
 
     @Override
     public void onBindViewHolder(ChartViewHolder holder, int position) {
@@ -72,6 +78,10 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         List<PieEntry> pieEntries;
         PieDataSet pieDataSet;
         View chart;
+
+//        ChartFactoryManager designer = new ChartFactoryManager();
+//        designer.createChart(new com.mdmobile.pocketconsole.ui.main.dashboard.Charts.PieChart(null));
+//        designer.setData(new PieData(new PieDataSet( )));
 
         switch (position) {
             case 0:
@@ -130,12 +140,9 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
     private PieChart createPieChart(Context mContext, PieData data, int position) {
 
-        PieChart pieChart = new PieChart(mContext);
+        PieChart pieChart =
+                (PieChart) ChartFactoryManager.instantiate(mContext, position, ChartFactoryManager.PIE_CHART).createChart(mContext);
         pieChart.setData(data);
-        pieChart.setDrawEntryLabels(false);
-        pieChart.setMaxAngle(360f);
-        pieChart.setHoleRadius(60f);
-        pieChart.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
 
         Legend legend = pieChart.getLegend();
@@ -179,13 +186,13 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
     }
 
-    class ChartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class ChartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView refreshButton;
         FrameLayout chartContainer;
 
         ChartViewHolder(View itemView) {
             super(itemView);
-            chartContainer =  itemView.findViewById(R.id.chart_container);
+            chartContainer = itemView.findViewById(R.id.chart_container);
             refreshButton = itemView.findViewById(R.id.chart_refresh_button);
             refreshButton.setOnClickListener(this);
         }

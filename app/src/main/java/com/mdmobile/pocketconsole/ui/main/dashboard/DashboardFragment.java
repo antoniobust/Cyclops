@@ -1,10 +1,9 @@
-package com.mdmobile.pocketconsole.ui.main;
+package com.mdmobile.pocketconsole.ui.main.dashboard;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -21,6 +20,7 @@ import android.view.ViewGroup;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.ChartsAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.DevicesStatsCalculator;
 
 

@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui.main;
+package com.mdmobile.pocketconsole.ui.main.users;
 
 import android.content.Context;
 import android.database.Cursor;

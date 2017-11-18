@@ -6,7 +6,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mdmobile.pocketconsole.gson.User;
+import com.mdmobile.pocketconsole.dataModels.api.User;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.DbData;
 

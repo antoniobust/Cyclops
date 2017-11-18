@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.gson.ServerInfo;
+import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
 
 /**
  * Adapter responsible to populate a server

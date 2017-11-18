@@ -1,6 +1,5 @@
 package com.mdmobile.pocketconsole.apiManager;
 
-import android.accounts.Account;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Base64;
@@ -19,8 +18,8 @@ import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.api.ApiModel;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
-import com.mdmobile.pocketconsole.gson.Action;
-import com.mdmobile.pocketconsole.gson.Token;
+import com.mdmobile.pocketconsole.dataModels.api.Action;
+import com.mdmobile.pocketconsole.dataModels.api.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.networkRequests.ActionRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceInstalledAppRequest;

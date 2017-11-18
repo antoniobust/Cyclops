@@ -1,7 +1,6 @@
 package com.mdmobile.pocketconsole.networkRequests;
 
 import android.content.ContentValues;
-import android.content.Context;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -9,7 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mdmobile.pocketconsole.gson.InstalledApp;
+import com.mdmobile.pocketconsole.dataModels.api.InstalledApp;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.DbData;
 

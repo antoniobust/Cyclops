@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.gson.ServerInfo;
+import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 /**

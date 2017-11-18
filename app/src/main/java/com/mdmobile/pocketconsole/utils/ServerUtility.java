@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.gson.ServerInfo;
+import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;

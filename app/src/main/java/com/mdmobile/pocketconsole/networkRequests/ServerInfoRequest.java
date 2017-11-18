@@ -5,7 +5,7 @@ import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
-import com.mdmobile.pocketconsole.gson.ServerInfo;
+import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.DbData;
 import com.mdmobile.pocketconsole.utils.ServerUtility;

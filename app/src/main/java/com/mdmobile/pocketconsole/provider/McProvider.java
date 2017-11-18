@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.mdmobile.pocketconsole.utils.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class McProvider extends ContentProvider {
@@ -63,6 +64,16 @@ public class McProvider extends ContentProvider {
                         projection,
                         McContract.Device.COLUMN_DEVICE_ID + "=?",
                         new String[]{devID}, null, null, sortOrder);
+                break;
+
+            case DEVICES_GROUP_BY:
+                ArrayList<String> columns = new ArrayList<>();
+                columns.add("COUNT("+McContract.Device._ID+")");
+                if(projection != null) {
+                    columns.addAll(Arrays.asList(projection));
+                }
+                String groupBy = McContract.Device.getGroupByFromUri(uri);
+                c = database.query(McContract.DEVICE_TABLE_NAME, columns.toArray(new String[]{}),null,null,groupBy,null,null);
                 break;
 
             case INSTALLED_APPLICATIONS_ON_DEVICE:

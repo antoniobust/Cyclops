@@ -3,10 +3,10 @@ package com.mdmobile.pocketconsole.utils;
 import android.content.ContentValues;
 import android.os.Bundle;
 
-import com.mdmobile.pocketconsole.gson.InstalledApp;
-import com.mdmobile.pocketconsole.gson.ServerInfo;
-import com.mdmobile.pocketconsole.gson.User;
-import com.mdmobile.pocketconsole.gson.devices.BasicDevice;
+import com.mdmobile.pocketconsole.dataModels.api.InstalledApp;
+import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
+import com.mdmobile.pocketconsole.dataModels.api.User;
+import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 import java.lang.reflect.InvocationTargetException;

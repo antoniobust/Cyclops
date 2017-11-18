@@ -14,7 +14,7 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
-import com.mdmobile.pocketconsole.gson.Token;
+import com.mdmobile.pocketconsole.dataModels.api.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;

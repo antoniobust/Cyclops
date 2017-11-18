@@ -8,8 +8,6 @@ import com.mdmobile.pocketconsole.ui.main.dashboard.Charts.BarChart;
 import com.mdmobile.pocketconsole.ui.main.dashboard.Charts.LineChart;
 import com.mdmobile.pocketconsole.ui.main.dashboard.Charts.PieChart;
 
-import java.util.HashMap;
-
 /**
  * Class responsible for managing charts creation
  */

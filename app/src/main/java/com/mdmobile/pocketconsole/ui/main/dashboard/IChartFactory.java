@@ -10,4 +10,7 @@ import com.github.mikephil.charting.charts.Chart;
 
 public interface IChartFactory {
     Chart createChart(Context context);
+
+    void setData(Chart data);
+
 }

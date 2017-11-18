@@ -117,6 +117,7 @@
     <string name="sorting_shared_preference">sorting_devices_preference</string>
     <string name="charts_preference">selectedCharts</string>
     <string name="folder_preference">pinnedFolderPreferenceKey</string>
+    <string name="unknown_label">Unknown</string>
 
 
 </resources>

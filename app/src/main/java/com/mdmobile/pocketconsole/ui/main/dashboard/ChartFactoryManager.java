@@ -4,9 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
-import com.mdmobile.pocketconsole.ui.main.dashboard.charts.BarChart;
-import com.mdmobile.pocketconsole.ui.main.dashboard.charts.LineChart;
-import com.mdmobile.pocketconsole.ui.main.dashboard.charts.PieChart;
+import com.mdmobile.pocketconsole.ui.main.dashboard.Charts.BarChart;
+import com.mdmobile.pocketconsole.ui.main.dashboard.Charts.LineChart;
+import com.mdmobile.pocketconsole.ui.main.dashboard.Charts.PieChart;
 
 /**
  * Class responsible for managing charts creation

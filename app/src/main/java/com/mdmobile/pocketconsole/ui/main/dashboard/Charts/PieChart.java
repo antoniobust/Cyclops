@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui.main.dashboard.charts;
+package com.mdmobile.pocketconsole.ui.main.dashboard.Charts;
 
 import android.content.Context;
 import android.view.ViewGroup;

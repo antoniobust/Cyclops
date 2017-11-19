@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.adapters;
+package com.mdmobile.pocketconsole.ui.main.dashboard;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,7 +20,6 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactoryManager;
 
 import java.util.ArrayList;
 import java.util.List;

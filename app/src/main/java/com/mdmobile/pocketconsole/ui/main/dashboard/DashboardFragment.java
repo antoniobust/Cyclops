@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.adapters.ChartsAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.DevicesStatsCalculator;

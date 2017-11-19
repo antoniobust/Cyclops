@@ -33,5 +33,4 @@ public class PieChart extends com.github.mikephil.charting.charts.PieChart imple
     public void setData(Chart data) {
         chart.setData(data);
     }
-
 }

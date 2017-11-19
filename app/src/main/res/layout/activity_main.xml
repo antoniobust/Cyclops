@@ -16,7 +16,7 @@
 
         <include layout="@layout/actionbar"/>
 
-
+        <include layout="@layout/filters_action_bar" />
         <!--Main content container-->
         <!--TODO: fina a solution to merge layout with parent in activity-->
         <FrameLayout
@@ -32,7 +32,7 @@
             android:animateLayoutChanges="true"/>
 
 
-        <!--Bottom bar for platform filters-->
+        <!--Bottom bar to switch between views-->
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/navigation"
             android:layout_width="match_parent"

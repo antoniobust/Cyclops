@@ -2,6 +2,7 @@ package com.mdmobile.pocketconsole.ui.main;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -15,9 +16,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.adapters.ServerListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
@@ -26,8 +27,10 @@ import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.ui.main.dashboard.DashboardFragment;
 import com.mdmobile.pocketconsole.ui.main.myDevices.DevicesFragment;
+import com.mdmobile.pocketconsole.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.pocketconsole.ui.main.server.ServerFragment;
 import com.mdmobile.pocketconsole.ui.main.users.UsersFragment;
+import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import static com.mdmobile.pocketconsole.R.id.main_activity_fragment_container;
@@ -38,9 +41,12 @@ import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.
 public class MainActivity extends AppCompatActivity implements DevicesListAdapter.DeviceSelected,
         ServerListAdapter.onClick {
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
     //Define a flag if we are in tablet layout or not
     public static boolean TABLET_MODE;
     String devId, devName;
+    Toolbar filtersToolbar;
+
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -54,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
                     if (getSupportFragmentManager().findFragmentByTag("DevicesFragment") != null) {
                         break;
                     }
+                    hideFiltersToolbar(View.VISIBLE);
                     ft.replace(main_activity_fragment_container, DevicesFragment.newInstance(), "DevicesFragment");
                     ft.commit();
                     return true;
@@ -62,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
                     if (getSupportFragmentManager().findFragmentByTag("DashboardFragment") != null) {
                         break;
                     }
+                    hideFiltersToolbar(View.VISIBLE);
                     ft.replace(main_activity_fragment_container, DashboardFragment.newInstance(), "DashboardFragment");
                     ft.commit();
                     return true;
@@ -70,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
                     if (getSupportFragmentManager().findFragmentByTag("ServerFragment") != null) {
                         break;
                     }
+                    hideFiltersToolbar(View.GONE);
                     ft.replace(main_activity_fragment_container, ServerFragment.newInstance(), "ServerFragment");
                     ft.commit();
                     return true;
@@ -78,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
                     if (getSupportFragmentManager().findFragmentByTag("UserFragment") != null) {
                         break;
                     }
+                    hideFiltersToolbar(View.GONE);
                     ft.replace(main_activity_fragment_container, UsersFragment.newInstance(), "UserFragment");
                     ft.commit();
                     return true;
@@ -93,9 +103,14 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        filtersToolbar = findViewById(R.id.filters_toolbar);
 //        supportPostponeEnterTransition();
 
-        BottomNavigationView bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
+        if (savedInstanceState != null && savedInstanceState.containsKey(TOOLBAR_FILTER_STATUS)) {
+            filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
+        }
+
+        BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         if (savedInstanceState == null) {
             bottomNavigation.setSelectedItemId(R.id.navigation_dashboard);
@@ -116,10 +131,8 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         if (TABLET_MODE && savedInstanceState != null && savedInstanceState.containsKey(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY)) {
             showDetailsFragment(savedInstanceState.getString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY), savedInstanceState.getString(DEVICE_NAME_EXTRA_KEY));
         }
-//        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
-//        serviceIntent.setAction(getString(R.string.download_devices_action));
-//        serviceIntent.setPackage(this.getPackageName());
-//        startService(serviceIntent);
+
+
     }
 
 
@@ -171,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             outState.putString(DEVICE_NAME_EXTRA_KEY, devName);
             outState.putString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);
         }
+        outState.putInt(TOOLBAR_FILTER_STATUS, filtersToolbar.getVisibility());
     }
 
     private void syncDevicesNow() {
@@ -246,6 +260,42 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         intent.putExtra(DEVICE_NAME_EXTRA_KEY, devName);
         intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);
         startActivity(intent);
+    }
+
+    private void hideFiltersToolbar(final int setVisibility) {
+        if (filtersToolbar != null && filtersToolbar.getVisibility() != setVisibility) {
+            float translation;
+            if (setVisibility == View.GONE) {
+                translation = -GeneralUtility.dpToPx(this, 32);
+            } else {
+                translation = 32;
+            }
+            filtersToolbar.animate().translationY(translation).setDuration(100).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    if (setVisibility == View.VISIBLE) {
+                        filtersToolbar.setVisibility(setVisibility);
+                    }
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (setVisibility == View.GONE) {
+                        filtersToolbar.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            }).start();
+        }
     }
 
 

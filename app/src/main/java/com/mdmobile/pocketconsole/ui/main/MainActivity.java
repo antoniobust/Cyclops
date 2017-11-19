@@ -17,7 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.ServerDetailsActivity;
+import com.mdmobile.pocketconsole.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.adapters.ServerListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;

@@ -1,10 +1,11 @@
-package com.mdmobile.pocketconsole;
+package com.mdmobile.pocketconsole.ui.main.server;
 
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 public class ServerDetailsActivity extends AppCompatActivity {

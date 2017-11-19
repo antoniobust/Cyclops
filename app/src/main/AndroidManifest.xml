@@ -89,7 +89,7 @@
         </service>
 
         <activity
-            android:name=".ServerDetailsActivity"
+            android:name=".ui.main.server.ServerDetailsActivity"
             android:label="@string/title_activity_service_details"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/AppTheme.DetailsActivity">

@@ -31,14 +31,15 @@ public class StatisticTests {
     public void manufacturerTest() {
         DeviceStat stat = (DeviceStat) StatsManager.createFactory(Statistic.DEVICE_STAT, McContract.Device.COLUMN_MANUFACTURER);
         stat.initPoll(mContext);
-
         assertTrue("Statistic returned 0 manufacturer", stat.getData().length > 0);
-
-        int counter = stat.getPopulationSize();
-        int deviceCount = mContext.getContentResolver().query(McContract.Device.CONTENT_URI, null, null, null).getCount();
-        assertTrue("Devices counter:" + deviceCount + " devices from statistic: " + counter, counter == deviceCount);
-
     }
 
+    @Test
+    public void deviceOsTest() {
+        DeviceStat stat = (DeviceStat) StatsManager.createFactory(Statistic.DEVICE_STAT, McContract.Device.COLUMN_FAMILY);
+        stat.initPoll(mContext);
+        assertTrue("Statistic returned 0 platforms", stat.getData().length > 0);
+
+    }
 
 }

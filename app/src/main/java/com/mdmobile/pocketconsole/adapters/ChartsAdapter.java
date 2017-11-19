@@ -79,10 +79,6 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         PieDataSet pieDataSet;
         View chart;
 
-//        ChartFactoryManager designer = new ChartFactoryManager();
-//        designer.createChart(new com.mdmobile.pocketconsole.ui.main.dashboard.Charts.PieChart(null));
-//        designer.setData(new PieData(new PieDataSet( )));
-
         switch (position) {
             case 0:
                 //Online vs offline devices

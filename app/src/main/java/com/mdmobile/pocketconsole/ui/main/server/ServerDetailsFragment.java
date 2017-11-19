@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole;
+package com.mdmobile.pocketconsole.ui.main.server;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.ServerDetailsAdapter;
 import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
 

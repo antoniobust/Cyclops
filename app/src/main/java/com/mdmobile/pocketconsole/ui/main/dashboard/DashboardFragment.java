@@ -52,7 +52,7 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
 
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.dashboard_recycler_view);
+        recyclerView = rootView.findViewById(R.id.dashboard_recycler_view);
 
         if (MainActivity.TABLET_MODE) {
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false));

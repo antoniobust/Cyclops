@@ -98,6 +98,24 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     };
     private AccountManager accountManager;
 
+    // -- Interface methods
+    @Override
+    public void itemCLicked(Parcelable serverParcel) {
+        Intent intent = new Intent(this, ServerDetailsActivity.class);
+        intent.putExtra(McContract.DEPLOYMENT_SERVER_TABLE_NAME, serverParcel);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDeviceSelected(String devId, String devName) {
+        this.devId = devId;
+        this.devName = devName;
+
+        startDetailsActivity(devId, devName);
+    }
+
+
+    // -- Life cycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             bottomNavigation.setSelectedItemId(R.id.navigation_dashboard);
         }
 
-        //Set action bar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -127,12 +144,6 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
 
         //Set account manager to be used in this activity
         accountManager = AccountManager.get(getApplicationContext());
-
-        if (TABLET_MODE && savedInstanceState != null && savedInstanceState.containsKey(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY)) {
-            showDetailsFragment(savedInstanceState.getString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY), savedInstanceState.getString(DEVICE_NAME_EXTRA_KEY));
-        }
-
-
     }
 
 
@@ -161,16 +172,11 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
                 item.expandActionView();
                 return true;
             case R.id.logout_action:
-                logOut();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    private void logOut() {
-
-    }
-
 
     @Override
     protected void onPause() {
@@ -194,65 +200,20 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     }
 
     private void refreshToken() {
-
         Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
         String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
         accountManager.invalidateAuthToken(getString(R.string.account_type), token);
         accountManager.getAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY),
                 null, new LoginActivity(), null, null);
         Logger.log(LOG_TAG, "Token refresh manually forced", Log.VERBOSE);
-
-//
-//        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
-//        serviceIntent.setAction(getString(R.string.download_devices_action));
-//        serviceIntent.setPackage(getPackageName());
-//        startService(serviceIntent);
-
     }
 
     private void invalidateToken() {
-
         Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
         String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
         accountManager.invalidateAuthToken(getString(R.string.account_type), token);
         Logger.log(LOG_TAG, "Token manually invalidated", Log.VERBOSE);
 
-    }
-
-    //On device selected open details view
-    @Override
-    public void onDeviceSelected(String devId, String devName) {
-        this.devId = devId;
-        this.devName = devName;
-
-        startDetailsActivity(devId, devName);
-
-    }
-
-
-    private void showDetailsFragment(String devId, String devName) {
-//        FragmentManager fm = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//
-//        LinearLayout mainContainer = (LinearLayout) findViewById(R.id.main_activity_linear_layout);
-//        SwipeRefreshLayout deviceList = (SwipeRefreshLayout) mainContainer.findViewById(R.id.devices_swipe_refresh);
-//        CardView detailsContainer = (CardView) mainContainer.findViewById(R.id.main_activity_device_details_container);
-//
-//
-//        if (detailsContainer.getVisibility() == View.GONE) {
-//            detailsContainer.setVisibility(View.VISIBLE);
-//        }
-//
-//        mainContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f);
-//        layoutParams.setMarginEnd(GeneralUtility.dpToPx(getApplicationContext(), 12));
-//        layoutParams.setMarginStart(GeneralUtility.dpToPx(getApplicationContext(), 0));
-//        deviceList.setLayoutParams(layoutParams);
-//        detailsContainer.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 4f));
-//        detailsContainer.requestLayout();
-//        deviceList.requestLayout();
-//
-//        fragmentTransaction.replace(R.id.main_activity_device_details_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
     }
 
     private void startDetailsActivity(String devId, String devName) {
@@ -266,9 +227,9 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         if (filtersToolbar != null && filtersToolbar.getVisibility() != setVisibility) {
             float translation;
             if (setVisibility == View.GONE) {
-                translation = -GeneralUtility.dpToPx(this, 32);
+                translation = -GeneralUtility.dpToPx(this, 28);
             } else {
-                translation = 32;
+                translation = 28;
             }
             filtersToolbar.animate().translationY(translation).setDuration(100).setListener(new Animator.AnimatorListener() {
                 @Override
@@ -296,13 +257,5 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
                 }
             }).start();
         }
-    }
-
-
-    @Override
-    public void itemCLicked(Parcelable serverParcel) {
-        Intent intent = new Intent(this, ServerDetailsActivity.class);
-        intent.putExtra(McContract.DEPLOYMENT_SERVER_TABLE_NAME, serverParcel);
-        startActivity(intent);
     }
 }

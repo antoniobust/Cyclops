@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-    android:id="@+id/filters_toolbar"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/filters_toolbar"
     android:layout_width="match_parent"
-    android:layout_height="52dp"
+    android:layout_height="42dp"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
     android:layout_marginTop="@dimen/activity_vertical_margin"
-    app:elevation="8dp"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:paddingEnd="8dp"
+    android:paddingStart="8dp"
+    app:elevation="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         <android.support.v7.widget.RecyclerView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/last_sync_view"
@@ -28,6 +28,6 @@
             android:drawableStart="@drawable/ic_restore"
             android:gravity="end"
             android:text="@string/last_synced"
-            tools:text="1 hour ago"/>
+            tools:text="1 hour ago" />
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

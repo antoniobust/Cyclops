@@ -229,9 +229,9 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             if (setVisibility == View.GONE) {
                 translation = -GeneralUtility.dpToPx(this, 28);
             } else {
-                translation = 28;
+                translation = 42;
             }
-            filtersToolbar.animate().translationY(translation).setDuration(100).setListener(new Animator.AnimatorListener() {
+            filtersToolbar.animate().translationY(translation).setDuration(80).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
                     if (setVisibility == View.VISIBLE) {

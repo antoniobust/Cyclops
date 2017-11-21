@@ -1,5 +1,4 @@
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/devices_swipe_refresh"
     style="@style/AppTheme.MainActivity.Fragment"
@@ -9,9 +8,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/devices_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:scrollbars="vertical"
-        tools:listitem="@layout/device_list_item"/>
+        tools:listitem="@layout/device_list_item" />
 </android.support.v4.widget.SwipeRefreshLayout>
 
 

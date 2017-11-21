@@ -37,7 +37,7 @@
 
     <string name="dialog_cancel_label">Cancel</string>
     <string name="dialog_apply_label">Apply</string>
-    <string name="last_synced">1 minute ago</string>
+    <string name="last_synced">1 min ago</string>
     <string name="pin_a_folder_dialog_title">Pin a folder to main screen</string>
     <string name="pin_folder_dialog_subtitle">Only devices belonging to this folder will be displayed</string>
     <string name="folder_path_hint">Folder Path</string>

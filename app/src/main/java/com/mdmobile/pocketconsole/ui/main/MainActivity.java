@@ -101,6 +101,24 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     };
     private AccountManager accountManager;
 
+    // -- Interface methods
+    @Override
+    public void itemCLicked(Parcelable serverParcel) {
+        Intent intent = new Intent(this, ServerDetailsActivity.class);
+        intent.putExtra(McContract.DEPLOYMENT_SERVER_TABLE_NAME, serverParcel);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDeviceSelected(String devId, String devName) {
+        this.devId = devId;
+        this.devName = devName;
+
+        startDetailsActivity(devId, devName);
+    }
+
+
+    // -- Life cycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,8 +151,8 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
 
         //Set account manager to be used in this activity
         accountManager = AccountManager.get(getApplicationContext());
-
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,16 +179,11 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
                 item.expandActionView();
                 return true;
             case R.id.logout_action:
-                logOut();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    private void logOut() {
-
-    }
-
 
     @Override
     protected void onPause() {
@@ -194,41 +207,21 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     }
 
     private void refreshToken() {
-
         Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
         String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
         accountManager.invalidateAuthToken(getString(R.string.account_type), token);
         accountManager.getAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY),
                 null, new LoginActivity(), null, null);
         Logger.log(LOG_TAG, "Token refresh manually forced", Log.VERBOSE);
-
-//
-//        Intent serviceIntent = new Intent(getApplicationContext(), RefreshDataService.class);
-//        serviceIntent.setAction(getString(R.string.download_devices_action));
-//        serviceIntent.setPackage(getPackageName());
-//        startService(serviceIntent);
-
     }
 
     private void invalidateToken() {
-
         Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
         String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
         accountManager.invalidateAuthToken(getString(R.string.account_type), token);
         Logger.log(LOG_TAG, "Token manually invalidated", Log.VERBOSE);
 
     }
-
-    //On device selected open details view
-    @Override
-    public void onDeviceSelected(String devId, String devName) {
-        this.devId = devId;
-        this.devName = devName;
-
-        startDetailsActivity(devId, devName);
-
-    }
-
 
     private void startDetailsActivity(String devId, String devName) {
         Intent intent = new Intent(this, DeviceDetailsActivity.class);
@@ -241,9 +234,9 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         if (filtersToolbar != null && filtersToolbar.getVisibility() != setVisibility) {
             float translation;
             if (setVisibility == View.GONE) {
-                translation = -GeneralUtility.dpToPx(this, 32);
+                translation = -GeneralUtility.dpToPx(this, 28);
             } else {
-                translation = 32;
+                translation = 28;
             }
             filtersToolbar.animate().translationY(translation).setDuration(80).setListener(new Animator.AnimatorListener() {
                 @Override
@@ -277,12 +270,5 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         filtersRecyclerView = filtersToolbar.findViewById(R.id.filter_recycler_view);
         filtersRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         filtersRecyclerView.setAdapter(new FiltersRecyclerAdapter());
-    }
-
-    @Override
-    public void itemCLicked(Parcelable serverParcel) {
-        Intent intent = new Intent(this, ServerDetailsActivity.class);
-        intent.putExtra(McContract.DEPLOYMENT_SERVER_TABLE_NAME, serverParcel);
-        startActivity(intent);
     }
 }

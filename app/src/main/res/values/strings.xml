@@ -118,6 +118,7 @@
     <string name="charts_preference">selectedCharts</string>
     <string name="folder_preference">pinnedFolderPreferenceKey</string>
     <string name="unknown_label">Unknown</string>
+    <string name="add_filter_label">Add a filter...</string>
 
 
 </resources>

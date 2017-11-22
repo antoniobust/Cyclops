@@ -32,6 +32,7 @@ import com.mdmobile.pocketconsole.ui.main.server.ServerFragment;
 import com.mdmobile.pocketconsole.ui.main.users.UsersFragment;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.RecyclerEmptyView;
 
 import static com.mdmobile.pocketconsole.R.id.main_activity_fragment_container;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     public static boolean TABLET_MODE;
     String devId, devName;
     Toolbar filtersToolbar;
+    RecyclerEmptyView filtersRecycler;
 
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -127,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         if (savedInstanceState != null && savedInstanceState.containsKey(TOOLBAR_FILTER_STATUS)) {
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
+
+        setFiltersView();
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -222,6 +226,13 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         intent.putExtra(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);
         startActivity(intent);
     }
+
+    private void setFiltersView() {
+        filtersRecycler = filtersToolbar.findViewById(R.id.filters_recycler);
+        View emptyView = filtersToolbar.findViewById(R.id.filters_recycler_empty_view);
+        filtersRecycler.setEmptyView(emptyView);
+    }
+
 
     private void hideFiltersToolbar(final int setVisibility) {
         if (filtersToolbar != null && filtersToolbar.getVisibility() != setVisibility) {

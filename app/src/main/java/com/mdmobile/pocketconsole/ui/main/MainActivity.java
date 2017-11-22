@@ -11,6 +11,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     public static boolean TABLET_MODE;
     String devId, devName;
     Toolbar filtersToolbar;
+    RecyclerView filtersRecyclerView;
 
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -110,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
 
+        if (filtersToolbar.getVisibility() == View.VISIBLE) {
+            setFilterView();
+        }
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         if (savedInstanceState == null) {
@@ -128,13 +134,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         //Set account manager to be used in this activity
         accountManager = AccountManager.get(getApplicationContext());
 
-        if (TABLET_MODE && savedInstanceState != null && savedInstanceState.containsKey(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY)) {
-            showDetailsFragment(savedInstanceState.getString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY), savedInstanceState.getString(DEVICE_NAME_EXTRA_KEY));
-        }
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -230,31 +230,6 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     }
 
 
-    private void showDetailsFragment(String devId, String devName) {
-//        FragmentManager fm = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//
-//        LinearLayout mainContainer = (LinearLayout) findViewById(R.id.main_activity_linear_layout);
-//        SwipeRefreshLayout deviceList = (SwipeRefreshLayout) mainContainer.findViewById(R.id.devices_swipe_refresh);
-//        CardView detailsContainer = (CardView) mainContainer.findViewById(R.id.main_activity_device_details_container);
-//
-//
-//        if (detailsContainer.getVisibility() == View.GONE) {
-//            detailsContainer.setVisibility(View.VISIBLE);
-//        }
-//
-//        mainContainer.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f);
-//        layoutParams.setMarginEnd(GeneralUtility.dpToPx(getApplicationContext(), 12));
-//        layoutParams.setMarginStart(GeneralUtility.dpToPx(getApplicationContext(), 0));
-//        deviceList.setLayoutParams(layoutParams);
-//        detailsContainer.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 4f));
-//        detailsContainer.requestLayout();
-//        deviceList.requestLayout();
-//
-//        fragmentTransaction.replace(R.id.main_activity_device_details_container, DeviceDetailsFragment.newInstance(devId, devName, null, null), getString(R.string.details_fragment_tag)).commit();
-    }
-
     private void startDetailsActivity(String devId, String devName) {
         Intent intent = new Intent(this, DeviceDetailsActivity.class);
         intent.putExtra(DEVICE_NAME_EXTRA_KEY, devName);
@@ -268,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             if (setVisibility == View.GONE) {
                 translation = -GeneralUtility.dpToPx(this, 32);
             } else {
-                translation = 42;
+                translation = 32;
             }
             filtersToolbar.animate().translationY(translation).setDuration(80).setListener(new Animator.AnimatorListener() {
                 @Override
@@ -298,6 +273,11 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         }
     }
 
+    private void setFilterView(){
+        filtersRecyclerView = filtersToolbar.findViewById(R.id.filter_recycler_view);
+        filtersRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        filtersRecyclerView.setAdapter(new FiltersRecyclerAdapter());
+    }
 
     @Override
     public void itemCLicked(Parcelable serverParcel) {

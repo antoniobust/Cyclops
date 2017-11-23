@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/devices_swipe_refresh"
     style="@style/AppTheme.MainActivity.Fragment"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/max_content_size"
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.RecyclerView

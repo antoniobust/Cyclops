@@ -3,13 +3,14 @@ package com.mdmobile.pocketconsole.utils;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.view.View;
 
 /**
  * Utility class that provided methods for setting an empty view when recycler is empty
  */
 
-public abstract class RecyclerEmptyView extends RecyclerView {
+public class RecyclerEmptyView extends RecyclerView {
 
     private View emptyView;
 
@@ -36,10 +37,19 @@ public abstract class RecyclerEmptyView extends RecyclerView {
         }
     };
 
-    // -- Constructor
+    // -- Constructors
     public RecyclerEmptyView(Context context) {
         super(context);
     }
+
+    public RecyclerEmptyView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public RecyclerEmptyView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
 
     @Override
     public void setAdapter(@Nullable Adapter adapter) {
@@ -59,7 +69,9 @@ public abstract class RecyclerEmptyView extends RecyclerView {
     }
 
     private void checkIfEmpty() {
-        if (emptyView != null) {
+        if (getAdapter() == null) {
+            emptyView.setVisibility(VISIBLE);
+        } else if (emptyView != null) {
             emptyView.setVisibility(getAdapter().getItemCount() > 0 ? VISIBLE : GONE);
         }
     }

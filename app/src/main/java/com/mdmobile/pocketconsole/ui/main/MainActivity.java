@@ -11,8 +11,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -34,6 +32,7 @@ import com.mdmobile.pocketconsole.ui.main.server.ServerFragment;
 import com.mdmobile.pocketconsole.ui.main.users.UsersFragment;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.RecyclerEmptyView;
 
 import static com.mdmobile.pocketconsole.R.id.main_activity_fragment_container;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     public static boolean TABLET_MODE;
     String devId, devName;
     Toolbar filtersToolbar;
-    RecyclerView filtersRecyclerView;
+    RecyclerEmptyView filtersRecycler;
 
     //Bottom navigation bar, navigation listener
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -131,16 +130,14 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
 
-        if (filtersToolbar.getVisibility() == View.VISIBLE) {
-            setFilterView();
-        }
+        setFiltersView();
+
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         if (savedInstanceState == null) {
             bottomNavigation.setSelectedItemId(R.id.navigation_dashboard);
         }
 
-        //Set action bar
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -230,13 +227,20 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
         startActivity(intent);
     }
 
+    private void setFiltersView() {
+        filtersRecycler = filtersToolbar.findViewById(R.id.filters_recycler);
+        View emptyView = filtersToolbar.findViewById(R.id.filters_recycler_empty_view);
+        filtersRecycler.setEmptyView(emptyView);
+    }
+
+
     private void hideFiltersToolbar(final int setVisibility) {
         if (filtersToolbar != null && filtersToolbar.getVisibility() != setVisibility) {
             float translation;
             if (setVisibility == View.GONE) {
                 translation = -GeneralUtility.dpToPx(this, 28);
             } else {
-                translation = 28;
+                translation = 42;
             }
             filtersToolbar.animate().translationY(translation).setDuration(80).setListener(new Animator.AnimatorListener() {
                 @Override
@@ -264,11 +268,5 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
                 }
             }).start();
         }
-    }
-
-    private void setFilterView(){
-        filtersRecyclerView = filtersToolbar.findViewById(R.id.filter_recycler_view);
-        filtersRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        filtersRecyclerView.setAdapter(new FiltersRecyclerAdapter());
     }
 }

@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/filters_toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="42dp"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:paddingEnd="8dp"
-    android:paddingStart="8dp"
-    app:elevation="8dp">
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   xmlns:tools="http://schemas.android.com/tools"
+                                   android:id="@+id/filters_toolbar"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="42dp"
+                                   android:layout_marginBottom="@dimen/activity_vertical_margin"
+                                   android:layout_marginTop="@dimen/activity_vertical_margin"
+                                   android:paddingEnd="8dp"
+                                   android:paddingStart="8dp"
+                                   app:elevation="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/filter_recycler_view"
+        <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+            <com.mdmobile.pocketconsole.utils.RecyclerEmptyView
+                android:id="@+id/filters_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/filters_recycler_empty_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:text="@string/add_filter_label"
+                android:drawableStart="@drawable/ic_add_circle"
+                android:drawablePadding="4dp"
+                android:visibility="visible"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/last_sync_view"
@@ -29,6 +44,6 @@
             android:drawableStart="@drawable/ic_restore"
             android:gravity="end"
             android:text="@string/last_synced"
-            tools:text="1 hour ago" />
+            tools:text="1 hour ago"/>
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

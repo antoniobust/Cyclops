@@ -2,6 +2,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dashboard_recycler_view"
     style="@style/AppTheme.MainActivity.Fragment"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/max_content_size"
     android:layout_height="match_parent"/>
 

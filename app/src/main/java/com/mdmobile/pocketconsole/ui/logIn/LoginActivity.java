@@ -9,9 +9,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -100,7 +102,14 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             }
         }
         setViewPager();
-        checkConfigurationFile();
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (checkConfigurationFile()) {
+            parseServerConfFile();
+        }
     }
 
     @Override
@@ -118,7 +127,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == permissionReqID) {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkConfigurationFile();
+                parseServerConfFile();
             }
         }
     }
@@ -147,7 +156,6 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
 
     public void logIn(View v) {
-
         Bundle userInfo = getUserInput();
 
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
@@ -164,47 +172,52 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
     private Bundle getUserInput() {
         userInputBundle = new Bundle();
-
         String tempString, tempString1;
 
-        for (int i = 0; i < viewPager.getChildCount(); i++) {
+        int fragmentCounter = viewPager.getChildCount();
+        if (fragmentCounter == 1) {
+            userInputBundle.putAll(ServerUtility.getServer());
+        }
 
+        for (int i = 0; i < fragmentCounter; i++) {
             tempString = "";
             tempString1 = "";
 
-            switch (i) {
-                case 0:
-                    tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.server_address_text_view)).getText().toString();
+            Fragment fragment = viewPagerAdapter.getItem(i);
 
-                    if (tempString.equals("")) {
-                        showInvalidInputSneakBar();
-                        break;
-                    } else {
-                        userInputBundle
-                                .putString(SERVER_ADDRESS_KEY, tempString);
-                        continue;
-                    }
-                case 1:
-                    tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.client_id_text_view)).getText().toString();
-                    tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.api_secret_text_view)).getText().toString();
-                    if (tempString.equals("") || tempString1.equals("")) {
-                        showInvalidInputSneakBar();
-                        break;
-                    } else {
-                        userInputBundle.putString(CLIENT_ID_KEY, tempString);
-                        userInputBundle.putString(API_SECRET_KEY, tempString);
-                        continue;
-                    }
-                case 2:
-                    tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.user_name_text_view)).getText().toString();
-                    tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.password_text_view)).getText().toString();
-                    if (tempString.equals("") || tempString1.equals("")) {
-                        showInvalidInputSneakBar();
-                        break;
-                    } else {
-                        userInputBundle.putString(USER_NAME_KEY, tempString);
-                        userInputBundle.putString(PASSWORD_KEY, tempString);
-                    }
+            if (fragment instanceof LoginConfigureServerFragment) {
+
+                tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.server_address_text_view)).getText().toString();
+                if (tempString.equals("")) {
+                    showInvalidInputSneakBar();
+                    break;
+                } else {
+                    userInputBundle.putString(SERVER_ADDRESS_KEY, tempString);
+                }
+
+            } else if (fragment instanceof LoginConfigureSecretIdFragment) {
+
+                tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.client_id_text_view)).getText().toString();
+                tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.api_secret_text_view)).getText().toString();
+                if (tempString.equals("") || tempString1.equals("")) {
+                    showInvalidInputSneakBar();
+                    break;
+                } else {
+                    userInputBundle.putString(CLIENT_ID_KEY, tempString);
+                    userInputBundle.putString(API_SECRET_KEY, tempString);
+                }
+
+            } else if (fragment instanceof LoginUserNamePasswordFragment) {
+
+                tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.user_name_text_view)).getText().toString();
+                tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.password_text_view)).getText().toString();
+                if (tempString.equals("") || tempString1.equals("")) {
+                    showInvalidInputSneakBar();
+                    break;
+                } else {
+                    userInputBundle.putString(USER_NAME_KEY, tempString);
+                    userInputBundle.putString(PASSWORD_KEY, tempString1);
+                }
             }
         }
 
@@ -227,19 +240,19 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         //we will add it explicitly
         Bundle userInfo = new Bundle();
         //if debug discard input and use debugging info
-        if (BuildConfig.DEBUG) {
-            userInfo.putString(CLIENT_ID_KEY, getString(R.string.mc_clientID));
-            userInfo.putString(API_SECRET_KEY, getString(R.string.mc_client_secret));
-            userInfo.putString(SERVER_ADDRESS_KEY, getString(R.string.mc_server_url));
-            userName = getString(R.string.mc_user_name);
-            psw = getString(R.string.mc_password);
-        } else {
-            userInfo.putString(CLIENT_ID_KEY, userInputBundle.getString(CLIENT_ID_KEY));
-            userInfo.putString(API_SECRET_KEY, userInputBundle.getString(API_SECRET_KEY));
-            userInfo.putString(SERVER_ADDRESS_KEY, userInputBundle.getString(SERVER_ADDRESS_KEY));
-            userName = userInputBundle.getString(USER_NAME_KEY);
-            psw = userInputBundle.getString(PASSWORD_KEY);
-        }
+//        if (BuildConfig.DEBUG) {
+//            userInfo.putString(CLIENT_ID_KEY, getString(R.string.mc_clientID));
+//            userInfo.putString(API_SECRET_KEY, getString(R.string.mc_client_secret));
+//            userInfo.putString(SERVER_ADDRESS_KEY, getString(R.string.mc_server_url));
+//            userName = getString(R.string.mc_user_name);
+//            psw = getString(R.string.mc_password);
+//        } else {
+        userInfo.putString(CLIENT_ID_KEY, userInputBundle.getString(CLIENT_ID_KEY));
+        userInfo.putString(API_SECRET_KEY, userInputBundle.getString(API_SECRET_KEY));
+        userInfo.putString(SERVER_ADDRESS_KEY, userInputBundle.getString(SERVER_ADDRESS_KEY));
+        userName = userInputBundle.getString(USER_NAME_KEY);
+        psw = userInputBundle.getString(PASSWORD_KEY);
+//        }
 
         userInfo.putInt(AUTH_TOKEN_EXPIRATION_KEY, response.getTokenExpiration());
         userInfo.putString(REFRESH_AUTH_TOKEN_KEY, response.getRefreshToken());
@@ -316,29 +329,31 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         if (serverInfo == null) {
             return;
         }
+
         Logger.log(LOG_TAG, "Removing unnecessary fragments from login pager", Log.VERBOSE);
-//        ViewGroup pagerParent = findViewById(R.id.activity_login);
-//        viewPager.getAdapter().destroyItem(pagerParent, 1, viewPagerAdapter.getItem(1));
-//        viewPager.getAdapter().destroyItem(pagerParent, 2, viewPagerAdapter.getItem(2));
+        viewPagerAdapter.removeSererFragments();
+        viewPager.setCurrentItem(2);
+        dotsIndicator.setVisibility(View.INVISIBLE);
     }
 
     private boolean checkConfigurationFile() {
-
-        File serverSetupFile = new File(Environment.getExternalStorageDirectory() + File.separator + getString(R.string.server_ini_file_name));
-        if (!serverSetupFile.exists()) {
-            Logger.log(LOG_TAG, "ServerInfo configuration xml file not found", Log.ERROR);
+        if (!new File(Environment.getExternalStorageDirectory() + File.separator + getString(R.string.server_ini_file_name)).exists()) {
+            Logger.log(LOG_TAG, "ServerInfo configuration xml file not found", Log.VERBOSE);
             return false;
+        } else {
+            Logger.log(LOG_TAG, "ServerInfo configuration xml file found", Log.INFO);
+            return true;
         }
+    }
 
+    private void parseServerConfFile() {
+        File serverSetupFile = new File(Environment.getExternalStorageDirectory() + File.separator + getString(R.string.server_ini_file_name));
         if (!GeneralUtility.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             GeneralUtility.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, permissionReqID);
         } else {
-            Logger.log(LOG_TAG, "Found server configuration file", Log.ERROR);
             ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
             configureServerAsyncTask.execute(serverSetupFile);
-            return true;
         }
-        return false;
     }
 }
 

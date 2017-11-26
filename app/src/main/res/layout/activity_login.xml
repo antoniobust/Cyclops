@@ -1,74 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin">
 
-    <LinearLayout
-        android:id="@+id/activity_login"
-        android:layout_width="@dimen/max_content_size"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_horizontal_margin"
-        android:layout_gravity="center"
-        android:weightSum="10"
-        tools:context="com.mdmobile.pocketconsole.ui.logIn.LoginActivity">
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            app:srcCompat="@drawable/ic_android"
-            app:civ_border_color="@android:color/white"
-            app:civ_border_width="2dp" />
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/login_view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="12dp"
-            android:layout_weight="5"
-            android:clipToPadding="false"
-            android:isScrollContainer="false"
-            android:paddingBottom="2dp"
-            android:paddingEnd="54dp"
-            android:paddingStart="54dp"
-            android:paddingTop="2dp" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/login_view_pager_dots_indicator"
-            android:layout_width="24dp"
-            android:layout_height="8dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="16dp"
-            app:tabBackground="@drawable/login_drawer_selector"
-            app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"
-            app:tabMode="fixed">
-
-        </android.support.design.widget.TabLayout>
-
-        <Button
-            android:id="@+id/login_connect_button"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+        <LinearLayout
+            android:id="@+id/activity_login"
+            android:layout_width="@dimen/max_content_size"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:enabled="true"
-            android:onClick="logIn"
-            android:text="@string/logIn_label" />
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:weightSum="10"
+            tools:context="com.mdmobile.pocketconsole.ui.logIn.LoginActivity">
 
-        <!--<TextView-->
-        <!--android:id="@+id/login_footer"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="2" />-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                app:civ_border_color="@android:color/white"
+                app:civ_border_width="2dp"/>
 
-    </LinearLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/login_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:layout_weight="5"
+                android:clipToPadding="false"
+                android:isScrollContainer="false"
+                android:paddingBottom="2dp"
+                android:paddingEnd="54dp"
+                android:paddingStart="54dp"
+                android:paddingTop="2dp"/>
 
-</android.support.design.widget.CoordinatorLayout>
+            <android.support.design.widget.TabLayout
+                android:id="@+id/login_view_pager_dots_indicator"
+                android:layout_width="24dp"
+                android:layout_height="8dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                app:tabBackground="@drawable/login_drawer_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="fixed">
+
+            </android.support.design.widget.TabLayout>
+
+            <Button
+                android:id="@+id/login_connect_button"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:enabled="true"
+                android:onClick="logIn"
+                android:text="@string/logIn_label"/>
+
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

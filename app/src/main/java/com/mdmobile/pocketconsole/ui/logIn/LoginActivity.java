@@ -239,20 +239,13 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         //Save new user in Account, if we are here is because there is no accountsUpdateListener saved so
         //we will add it explicitly
         Bundle userInfo = new Bundle();
-        //if debug discard input and use debugging info
-//        if (BuildConfig.DEBUG) {
-//            userInfo.putString(CLIENT_ID_KEY, getString(R.string.mc_clientID));
-//            userInfo.putString(API_SECRET_KEY, getString(R.string.mc_client_secret));
-//            userInfo.putString(SERVER_ADDRESS_KEY, getString(R.string.mc_server_url));
-//            userName = getString(R.string.mc_user_name);
-//            psw = getString(R.string.mc_password);
-//        } else {
+
         userInfo.putString(CLIENT_ID_KEY, userInputBundle.getString(CLIENT_ID_KEY));
         userInfo.putString(API_SECRET_KEY, userInputBundle.getString(API_SECRET_KEY));
         userInfo.putString(SERVER_ADDRESS_KEY, userInputBundle.getString(SERVER_ADDRESS_KEY));
         userName = userInputBundle.getString(USER_NAME_KEY);
         psw = userInputBundle.getString(PASSWORD_KEY);
-//        }
+
 
         userInfo.putInt(AUTH_TOKEN_EXPIRATION_KEY, response.getTokenExpiration());
         userInfo.putString(REFRESH_AUTH_TOKEN_KEY, response.getRefreshToken());

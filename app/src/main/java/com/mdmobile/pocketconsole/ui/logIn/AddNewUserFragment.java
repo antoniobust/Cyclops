@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import com.mdmobile.pocketconsole.R;
 
 
-public class LoginUserNamePasswordFragment extends Fragment {
+public class AddNewUserFragment extends Fragment {
 
-    public LoginUserNamePasswordFragment() {
+    public AddNewUserFragment() {
         //Empty constructor required
     }
 
-    public static LoginUserNamePasswordFragment newInstance() {
-        return new LoginUserNamePasswordFragment();
+    public static AddNewUserFragment newInstance() {
+        return new AddNewUserFragment();
     }
 
     @Override
@@ -28,6 +28,6 @@ public class LoginUserNamePasswordFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.username_password_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_add_user, container, false);
     }
 }

@@ -11,20 +11,17 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.adapters.LogInViewPagerAdapter;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataModels.api.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
@@ -33,7 +30,6 @@ import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.ConfigureServerAsyncTask;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
-import com.mdmobile.pocketconsole.utils.ServerUtility;
 import com.mdmobile.pocketconsole.utils.ServerXmlConfigParser;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
@@ -55,11 +51,11 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
 
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
+    private final String SERVER_FRAG_TAG = "SERVER_FRAG_TAG";
+    private final String USER_FRAG_TAG = "USER_FRAG_TAG";
     private ViewPager viewPager;
-    private TabLayout dotsIndicator;
     private Bundle userInputBundle;
     private AccountAuthenticatorResponse authenticatorResponse;
-    private LogInViewPagerAdapter viewPagerAdapter;
     private int permissionReqID = 100;
 
     //Token received network callback
@@ -87,29 +83,27 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
         MainActivity.TABLET_MODE = GeneralUtility.isTabletMode(getApplicationContext());
 
-        //Instantiate views
-        viewPager = findViewById(R.id.login_view_pager);
-        dotsIndicator = findViewById(R.id.login_view_pager_dots_indicator);
-
-        //If activity was launched from authenticator get the intent with the auth response
-        authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.login_activity_container, AddServerFragment.newInstance()).commit();
 
 
-        if (authenticatorResponse == null) {
-            if (UserUtility.checkAnyUserLoggedIn()) {
-                //user found, launch main activity
-                startMainActivity();
-            }
-        }
-        setViewPager();
+//        //If activity was launched from authenticator get the intent with the auth response
+//        authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
+
+
+//        if (authenticatorResponse == null) {
+//            if (UserUtility.checkAnyUserLoggedIn()) {
+//                //user found, launch main activity
+//                startMainActivity();
+//            }
+//        }
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if (checkConfigurationFile()) {
-            parseServerConfFile();
-        }
+//        if (checkConfigurationFile()) {
+//            parseServerConfFile();
+//        }
     }
 
     @Override
@@ -132,28 +126,23 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         }
     }
 
+    //Swipe section onClick method
+    public void changeSection(View v) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-    //Set up the view pager
-    private void setViewPager() {
-        viewPagerAdapter = new LogInViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(viewPagerAdapter);
-
-        viewPager.setPageMargin(80);
-
-        dotsIndicator.setupWithViewPager(viewPager, true);
-
-        View dot;
-        ViewGroup dotsContainer = (ViewGroup) dotsIndicator.getChildAt(0);
-        ViewGroup.MarginLayoutParams p;
-
-        for (int i = 0; i < dotsIndicator.getTabCount(); i++) {
-            dot = dotsContainer.getChildAt(i);
-            p = (ViewGroup.MarginLayoutParams) dot.getLayoutParams();
-            p.setMargins(5, 0, 5, 0);
-            dot.requestLayout();
+        switch (v.getId()) {
+            case R.id.add_server_button:
+                ft.replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG)
+                        .setTransition(android.R.transition.slide_left).commit();
+                break;
+            case R.id.add_user_button:
+                ft.replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG)
+                        .setTransition(android.R.transition.slide_left).commit();
+                break;
+            default:
+                AddServerFragment.newInstance();
         }
     }
-
 
     public void logIn(View v) {
         Bundle userInfo = getUserInput();
@@ -166,60 +155,59 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
                 userInfo.getString(USER_NAME_KEY),
                 userInfo.getString(PASSWORD_KEY),
                 this);
-
     }
 
 
     private Bundle getUserInput() {
-        userInputBundle = new Bundle();
-        String tempString, tempString1;
-
-        int fragmentCounter = viewPager.getChildCount();
-        if (fragmentCounter == 1) {
-            userInputBundle.putAll(ServerUtility.getServer());
-        }
-
-        for (int i = 0; i < fragmentCounter; i++) {
-            tempString = "";
-            tempString1 = "";
-
-            Fragment fragment = viewPagerAdapter.getItem(i);
-
-            if (fragment instanceof LoginConfigureServerFragment) {
-
-                tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.server_address_text_view)).getText().toString();
-                if (tempString.equals("")) {
-                    showInvalidInputSneakBar();
-                    break;
-                } else {
-                    userInputBundle.putString(SERVER_ADDRESS_KEY, tempString);
-                }
-
-            } else if (fragment instanceof LoginConfigureSecretIdFragment) {
-
-                tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.client_id_text_view)).getText().toString();
-                tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.api_secret_text_view)).getText().toString();
-                if (tempString.equals("") || tempString1.equals("")) {
-                    showInvalidInputSneakBar();
-                    break;
-                } else {
-                    userInputBundle.putString(CLIENT_ID_KEY, tempString);
-                    userInputBundle.putString(API_SECRET_KEY, tempString);
-                }
-
-            } else if (fragment instanceof LoginUserNamePasswordFragment) {
-
-                tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.user_name_text_view)).getText().toString();
-                tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.password_text_view)).getText().toString();
-                if (tempString.equals("") || tempString1.equals("")) {
-                    showInvalidInputSneakBar();
-                    break;
-                } else {
-                    userInputBundle.putString(USER_NAME_KEY, tempString);
-                    userInputBundle.putString(PASSWORD_KEY, tempString1);
-                }
-            }
-        }
+//        userInputBundle = new Bundle();
+//        String tempString, tempString1;
+//
+//        int fragmentCounter = viewPager.getChildCount();
+//        if (fragmentCounter == 1) {
+//            userInputBundle.putAll(ServerUtility.getServer());
+//        }
+//
+//        for (int i = 0; i < fragmentCounter; i++) {
+//            tempString = "";
+//            tempString1 = "";
+//
+//            Fragment fragment = viewPagerAdapter.getItem(i);
+//
+//            if (fragment instanceof LoginConfigureServerFragment) {
+//
+//                tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.server_address_text_view)).getText().toString();
+//                if (tempString.equals("")) {
+//                    showInvalidInputSneakBar();
+//                    break;
+//                } else {
+//                    userInputBundle.putString(SERVER_ADDRESS_KEY, tempString);
+//                }
+//
+//            } else if (fragment instanceof LoginConfigureSecretIdFragment) {
+//
+//                tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.client_id_text_view)).getText().toString();
+//                tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.api_secret_text_view)).getText().toString();
+//                if (tempString.equals("") || tempString1.equals("")) {
+//                    showInvalidInputSneakBar();
+//                    break;
+//                } else {
+//                    userInputBundle.putString(CLIENT_ID_KEY, tempString);
+//                    userInputBundle.putString(API_SECRET_KEY, tempString);
+//                }
+//
+//            } else if (fragment instanceof AddNewUserFragment) {
+//
+//                tempString = ((TextView) viewPager.getChildAt(i).findViewById(R.id.user_name_text_view)).getText().toString();
+//                tempString1 = ((TextView) viewPager.getChildAt(i).findViewById(R.id.password_text_view)).getText().toString();
+//                if (tempString.equals("") || tempString1.equals("")) {
+//                    showInvalidInputSneakBar();
+//                    break;
+//                } else {
+//                    userInputBundle.putString(USER_NAME_KEY, tempString);
+//                    userInputBundle.putString(PASSWORD_KEY, tempString1);
+//                }
+//            }
+//        }
 
         //If we are out the cycle means that no field is empty return the info bundle
         return userInputBundle;
@@ -318,15 +306,15 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
     @Override
     public void xmlParseComplete() {
-        Bundle serverInfo = ServerUtility.getServer();
-        if (serverInfo == null) {
-            return;
-        }
-
-        Logger.log(LOG_TAG, "Removing unnecessary fragments from login pager", Log.VERBOSE);
-        viewPagerAdapter.removeSererFragments();
-        viewPager.setCurrentItem(2);
-        dotsIndicator.setVisibility(View.INVISIBLE);
+//        Bundle serverInfo = ServerUtility.getServer();
+//        if (serverInfo == null) {
+//            return;
+//        }
+//
+//        Logger.log(LOG_TAG, "Removing unnecessary fragments from login pager", Log.VERBOSE);
+//        viewPagerAdapter.removeSererFragments();
+//        viewPager.setCurrentItem(2);
+//        dotsIndicator.setVisibility(View.INVISIBLE);
     }
 
     private boolean checkConfigurationFile() {

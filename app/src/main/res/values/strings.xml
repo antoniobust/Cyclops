@@ -119,6 +119,8 @@
     <string name="folder_preference">pinnedFolderPreferenceKey</string>
     <string name="unknown_label">Unknown</string>
     <string name="add_filter_label">Add a filter...</string>
+    <string name="add_new_user_label">Add new user</string>
+    <string name="add_server_label">Add server</string>
 
 
 </resources>

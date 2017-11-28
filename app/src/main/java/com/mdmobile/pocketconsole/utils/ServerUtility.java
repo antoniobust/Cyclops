@@ -35,7 +35,6 @@ public class ServerUtility {
 
 
     public static void saveServerInfo(String serverName, String apiSecret, String clientId, String serverAddress) {
-
         SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(applicationContext.getString(R.string.server_name_preference), serverName);
@@ -46,8 +45,13 @@ public class ServerUtility {
         editor.apply();
     }
 
-    public static Bundle getServer() {
+    public static boolean anyActiveServer(){
+        SharedPreferences preferences = applicationContext
+                .getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
+        return preferences.contains(applicationContext.getString(R.string.server_name_preference));
+    }
 
+    public static Bundle getServer() {
         SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
         String serverName = preferences.getString(applicationContext.getString(R.string.server_name_preference), null);
         String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);

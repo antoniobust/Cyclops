@@ -1,6 +1,5 @@
 package com.mdmobile.pocketconsole.ui.deviceDetails;
 
-import android.content.CursorLoader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -45,7 +44,7 @@ public class FullDeviceInfoFragment extends Fragment implements android.support.
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.full_device_information_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_full_device_information, container, false);
 
         infoRecycler = rootView.findViewById(R.id.device_details_recycler);
         infoRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false));

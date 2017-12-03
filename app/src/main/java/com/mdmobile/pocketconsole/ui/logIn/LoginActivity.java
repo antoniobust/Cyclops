@@ -47,8 +47,8 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.REFRESH_A
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.USER_NAME_KEY;
 
-public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity implements NetworkCallBack, ServerXmlConfigParser.ServerXmlParse,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthenticatorActivity
+        implements NetworkCallBack, ServerXmlConfigParser.ServerXmlParse, ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     private static final String ATTACHED_FRAGMENT_KEY = "FRAGMENT_ATTACHED";
@@ -66,7 +66,6 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         if (BuildConfig.DEBUG) {
             Toast.makeText(getApplicationContext(), "token received", Toast.LENGTH_SHORT).show();
         }
-
         finishLogin(response);
     }
 

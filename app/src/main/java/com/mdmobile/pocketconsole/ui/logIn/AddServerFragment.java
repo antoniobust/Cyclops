@@ -46,6 +46,13 @@ public class AddServerFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().findViewById(R.id.add_server_button).setVisibility(View.INVISIBLE);
+        getActivity().findViewById(R.id.add_user_button).setVisibility(View.VISIBLE);
+    }
+
     //Convenience method to set up the view pager
     private void setViewPager() {
         viewPagerAdapter = new LogInViewPagerAdapter(getChildFragmentManager());

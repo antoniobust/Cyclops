@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -88,13 +87,7 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(ATTACHED_FRAGMENT_KEY)) {
-            String tag = savedInstanceState.getString(ATTACHED_FRAGMENT_KEY, SERVER_FRAG_TAG);
-            if (tag.equals(USER_FRAG_TAG)) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
-            }
-        } else {
+        if (savedInstanceState == null) {
             if (!ServerUtility.anyActiveServer()) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
@@ -141,8 +134,20 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
     }
 
+    // Actions OnClick method -> change between server and user fragment
+    public void changeSection(View v) {
+        if (v.getId() == R.id.add_server_button) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
+        }
+    }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         if (requestCode == permissionReqID) {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 parseServerConfFile();
@@ -151,22 +156,22 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
     }
 
     //onClick - change section
-    public void changeSection(View v) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-        switch (v.getId()) {
-            case R.id.add_server_button:
-                ft.replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG)
-                        .setTransition(android.R.transition.slide_left).commit();
-                break;
-            case R.id.add_user_button:
-                ft.replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG)
-                        .setTransition(android.R.transition.slide_left).commit();
-                break;
-            default:
-                AddServerFragment.newInstance();
-        }
-    }
+//    public void changeSection(View v) {
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//
+//        switch (v.getId()) {
+//            case R.id.add_server_button:
+//                ft.replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG)
+//                        .setTransition(android.R.transition.slide_left).commit();
+//                break;
+//            case R.id.add_user_button:
+//                ft.replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG)
+//                        .setTransition(android.R.transition.slide_left).commit();
+//                break;
+//            default:
+//                AddServerFragment.newInstance();
+//        }
+//    }
 
     public void logIn(View v) {
         Bundle userInfo = getUserInput();
@@ -368,6 +373,15 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         } else {
             ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
             configureServerAsyncTask.execute(serverSetupFile);
+        }
+    }
+
+    private void adjustActionsVisibility(String currentFragmentTag) {
+        switch (currentFragmentTag) {
+            case SERVER_FRAG_TAG:
+                findViewById(R.id.add_server_button).setVisibility(View.INVISIBLE);
+            case USER_FRAG_TAG:
+                findViewById(R.id.add_user_button).setVisibility(View.INVISIBLE);
         }
     }
 }

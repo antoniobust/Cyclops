@@ -12,10 +12,6 @@ import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
-import static com.mdmobile.pocketconsole.services.AccountAuthenticator.API_SECRET_KEY;
-import static com.mdmobile.pocketconsole.services.AccountAuthenticator.CLIENT_ID_KEY;
-import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
-import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_NAME_KEY;
 
 /**
  * Utility class for server info methods
@@ -23,6 +19,8 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_NA
 
 public class ServerUtility {
 
+    public final static String SERVER_NAME_KEY = "serverNameKey", SERVER_ADDRESS_KEY = "serverAddressKey",
+            CLIENT_ID_KEY = "clientIdKey", API_SECRET_KEY = "apiSecretKey";
     public static int SERVER_STOPPED = 0;
     public static int SERVER_STARTED = 1;
     public static int SERVER_DISABLED = 2;
@@ -32,7 +30,6 @@ public class ServerUtility {
     public static int SERVER_OFFLINE = 6;
     public static int SERVER_STATUS_UNKNOWN = 7;
     public static int SERVER_STARTED_BUT_NOT_CONNECTED = 5;
-
 
     public static void saveServerInfo(String serverName, String apiSecret, String clientId, String serverAddress) {
         SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
@@ -45,7 +42,7 @@ public class ServerUtility {
         editor.apply();
     }
 
-    public static boolean anyActiveServer(){
+    public static boolean anyActiveServer() {
         SharedPreferences preferences = applicationContext
                 .getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
         return preferences.contains(applicationContext.getString(R.string.server_name_preference));

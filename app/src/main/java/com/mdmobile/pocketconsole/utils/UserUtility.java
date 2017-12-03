@@ -10,14 +10,12 @@ import android.util.Log;
 
 import com.mdmobile.pocketconsole.R;
 
-import java.util.HashMap;
-
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
-import static com.mdmobile.pocketconsole.services.AccountAuthenticator.API_SECRET_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_EXPIRATION_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
-import static com.mdmobile.pocketconsole.services.AccountAuthenticator.CLIENT_ID_KEY;
-import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
+import static com.mdmobile.pocketconsole.utils.ServerUtility.API_SECRET_KEY;
+import static com.mdmobile.pocketconsole.utils.ServerUtility.CLIENT_ID_KEY;
+import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 /**
  * Helper methods to deal with users
@@ -26,6 +24,8 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_AD
 public class UserUtility {
 
     private static final String LOG_TAG = UserUtility.class.getSimpleName();
+    public final static String  USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
+
 
     public static Account checkUserExists(Context context, String userName) {
         Logger.log(LOG_TAG, "Checking any users exists", Log.VERBOSE);
@@ -68,12 +68,6 @@ public class UserUtility {
         AccountManager accountManager = AccountManager.get(applicationContext);
         Bundle userInfo = new Bundle();
         //TODO:support multiple account
-        userInfo.putString(SERVER_ADDRESS_KEY,
-                accountManager.getUserData(account, SERVER_ADDRESS_KEY));
-        userInfo.putString(CLIENT_ID_KEY,
-                accountManager.getUserData(account, CLIENT_ID_KEY));
-        userInfo.putString(API_SECRET_KEY,
-                accountManager.getUserData(account, API_SECRET_KEY));
         userInfo.putString(AUTH_TOKEN_TYPE_KEY,
                 accountManager.getUserData(account, AUTH_TOKEN_TYPE_KEY));
         userInfo.putString(AUTH_TOKEN_EXPIRATION_KEY,

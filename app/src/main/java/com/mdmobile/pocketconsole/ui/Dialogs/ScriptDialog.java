@@ -70,8 +70,8 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
 
         View view = inflater.inflate(R.layout.dialog_send_script, container, false);
 
-        spinner = (Spinner) view.findViewById(R.id.preset_scripts_spinner);
-        editText = (EditText) view.findViewById(R.id.script_edit_text);
+        spinner = view.findViewById(R.id.preset_scripts_spinner);
+        editText = view.findViewById(R.id.script_edit_text);
         editText.addTextChangedListener(this);
 
         Dialog dialog = new AlertDialog.Builder(getContext())

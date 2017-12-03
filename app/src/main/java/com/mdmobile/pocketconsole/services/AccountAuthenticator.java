@@ -18,7 +18,12 @@ import com.mdmobile.pocketconsole.dataModels.api.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.ServerUtility;
 import com.mdmobile.pocketconsole.utils.UserUtility;
+
+import static com.mdmobile.pocketconsole.utils.ServerUtility.API_SECRET_KEY;
+import static com.mdmobile.pocketconsole.utils.ServerUtility.CLIENT_ID_KEY;
+import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
@@ -28,8 +33,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     public final static String AUTH_TOKEN_EXPIRATION_KEY = "AuthTokenExpirationKey";
     public final static String REFRESH_AUTH_TOKEN_KEY = "RefreshAuthTokenKey";
     public final static String ADDING_NEW_ACCOUNT_KEY = "AddingNewAccountIntentKey";
-    public final static String SERVER_NAME_KEY = "serverNameKey", SERVER_ADDRESS_KEY = "serverAddressKey", CLIENT_ID_KEY = "clientIdKey",
-            API_SECRET_KEY = "apiSecretKey", USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     private Context mContext;
     private String LOG_TAG = AccountAuthenticator.class.getSimpleName();
 
@@ -63,11 +66,12 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         final AccountManager accountManager = AccountManager.get(mContext);
         final Bundle userInfo = UserUtility.getUserInfo(account);
+        final Bundle serverInfo = ServerUtility.getServer();
 
         final String password = accountManager.getPassword(account);
-        final String clientID = userInfo.getString(CLIENT_ID_KEY);
-        final String apiSecret = userInfo.getString(API_SECRET_KEY);
-        final String serverUrl = userInfo.getString(SERVER_ADDRESS_KEY);
+        final String clientID = serverInfo.getString(CLIENT_ID_KEY);
+        final String apiSecret = serverInfo.getString(API_SECRET_KEY);
+        final String serverUrl = serverInfo.getString(SERVER_ADDRESS_KEY);
 
 
         //If we have all necessary details let's attempt a token request
@@ -77,7 +81,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     .getToken(serverUrl, clientID, apiSecret, account.name, password,
                             new NetworkCallBack() {
                                 @Override
-                                public void tokenReceived(Token JsonToken) {
+                                public void tokenReceived(Bundle userInfo,Token JsonToken) {
                                     //Credentials still valid, token received
                                     //Returning data back to authenticatorResponse
                                     Bundle result = new Bundle();

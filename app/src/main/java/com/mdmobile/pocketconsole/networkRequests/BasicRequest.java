@@ -4,10 +4,8 @@ package com.mdmobile.pocketconsole.networkRequests;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -94,7 +92,7 @@ abstract public class BasicRequest<T> extends Request<T> {
     private void parseErrorCode(int errorCode) {
 
         if (errorCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
-            Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show();
+            Logger.log(LOG_TAG, "Error " + errorCode + " HTTP BAD REQUEST", Log.ERROR);
         } else if (errorCode == HttpsURLConnection.HTTP_UNAUTHORIZED ||
                 errorCode == HttpsURLConnection.HTTP_FORBIDDEN) {
             Logger.log(LOG_TAG, "Attempt to request new token\n", Log.VERBOSE);
@@ -111,9 +109,8 @@ abstract public class BasicRequest<T> extends Request<T> {
                         manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
                         null, false, new OnTokenAcquired(new WeakReference<BasicRequest>(this)), null);
             }
-        }
-        else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
-            ServerUtility.notifyServerStatus(getUrl(),ServerUtility.SERVER_OFFLINE);
+        } else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
+            ServerUtility.notifyServerStatus(getUrl(), ServerUtility.SERVER_OFFLINE);
         } else if (errorCode == 422) {
             //TODO: show error message in toast
         } else if (errorCode == HttpsURLConnection.HTTP_INTERNAL_ERROR) {

@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -30,6 +31,7 @@ import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.ConfigureServerAsyncTask;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.ServerUtility;
 import com.mdmobile.pocketconsole.utils.ServerXmlConfigParser;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
@@ -76,12 +78,15 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         Toast.makeText(getApplicationContext(), "error receiving token", Toast.LENGTH_SHORT).show();
     }
 
+    // Login activity will check if there is any server already saved. If yes it will prompt add new user interface.
+    // If not will give the opportunity to create new server
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         MainActivity.TABLET_MODE = GeneralUtility.isTabletMode(getApplicationContext());
-//        if(ServerUtility.anyActiveServer()){}
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
 
         if (savedInstanceState != null && savedInstanceState.containsKey(ATTACHED_FRAGMENT_KEY)) {
             String tag = savedInstanceState.getString(ATTACHED_FRAGMENT_KEY, SERVER_FRAG_TAG);
@@ -90,11 +95,14 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
                         .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
             }
         } else {
-            //By default we start adding server details
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
+            if (!ServerUtility.anyActiveServer()) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
+            }
         }
-
 
 //        //If activity was launched from authenticator get the intent with the auth response
 //        authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
@@ -229,10 +237,10 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         return userInputBundle;
     }
 
-    private String getAttachedFragmentTag(){
+    private String getAttachedFragmentTag() {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        for(Fragment fragment: fragments){
-            if(fragment.isAdded() && fragment.isVisible()){
+        for (Fragment fragment : fragments) {
+            if (fragment.isAdded() && fragment.isVisible()) {
                 return fragment.getTag();
             }
         }

@@ -1,7 +1,10 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices;
 
+import android.os.Bundle;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 //TODO: support missing platform, only android ios added so far

@@ -4,6 +4,7 @@ package com.mdmobile.pocketconsole.dataModels.api.devices;
  * Represent Gson class for android Plus Device
  */
 
+@SuppressWarnings("unused")
 public class AndroidPlusDevice extends BasicDevice {
     private String AgentVersion, HardwareSerialNumber, HardwareVersion, IMEI_MEID_ESN, CellularCarrier,
             LastLoggedOnUser,

@@ -20,11 +20,11 @@ android {
 
     buildTypes {
         debug {
-            resValue "string", "mc_user_name", MC_USER_NAME
-            resValue "string", "mc_password", MC_PASSWORD
-            resValue "string", "mc_clientID", MC_CLIENT_ID
-            resValue "string", "mc_client_secret", MC_CLIENT_SECRET
-            resValue "string", "mc_server_url", MC_SERVER_URL
+//            resValue "string", "mc_user_name", MC_USER_NAME
+//            resValue "string", "mc_password", MC_PASSWORD
+//            resValue "string", "mc_clientID", MC_CLIENT_ID
+//            resValue "string", "mc_client_secret", MC_CLIENT_SECRET
+//            resValue "string", "mc_server_url", MC_SERVER_URL
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

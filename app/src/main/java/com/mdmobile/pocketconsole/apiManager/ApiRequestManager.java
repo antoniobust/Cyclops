@@ -69,16 +69,16 @@ public class ApiRequestManager {
 
 
         //if debug discard input and use debugging info
-        if (BuildConfig.DEBUG) {
-            serverUrl = ApplicationLoader.applicationContext.getString(R.string.mc_server_url).concat("/MobiControl/api/token");
-            clientID = ApplicationLoader.applicationContext.getString(R.string.mc_clientID);
-            clientSecret = ApplicationLoader.applicationContext.getString(R.string.mc_client_secret);
-            userName = ApplicationLoader.applicationContext.getString(R.string.mc_user_name);
-            password = ApplicationLoader.applicationContext.getString(R.string.mc_password);
-        } else {
+//        if (BuildConfig.DEBUG) {
+//            serverUrl = ApplicationLoader.applicationContext.getString(R.string.mc_server_url).concat("/MobiControl/api/token");
+//            clientID = ApplicationLoader.applicationContext.getString(R.string.mc_clientID);
+//            clientSecret = ApplicationLoader.applicationContext.getString(R.string.mc_client_secret);
+//            userName = ApplicationLoader.applicationContext.getString(R.string.mc_user_name);
+//            password = ApplicationLoader.applicationContext.getString(R.string.mc_password);
+//        } else {
             //If not debug take the url input from user and attach the token request
             serverUrl = serverUrl.concat("/MobiControl/api/token");
-        }
+//        }
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
         final String header = clientID.concat(":").concat(clientSecret);
 

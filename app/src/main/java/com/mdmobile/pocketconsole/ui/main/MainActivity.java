@@ -30,7 +30,6 @@ import com.mdmobile.pocketconsole.ui.main.myDevices.DevicesFragment;
 import com.mdmobile.pocketconsole.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.pocketconsole.ui.main.server.ServerFragment;
 import com.mdmobile.pocketconsole.ui.main.users.UsersFragment;
-import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.RecyclerEmptyView;
 
@@ -236,13 +235,13 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
 
     private void hideFiltersToolbar(final int setVisibility) {
         if (filtersToolbar != null && filtersToolbar.getVisibility() != setVisibility) {
-            float translation;
-            if (setVisibility == View.GONE) {
-                translation = -GeneralUtility.dpToPx(this, 28);
-            } else {
-                translation = 42;
+            float translation = -filtersToolbar.getHeight();
+            if (setVisibility == View.VISIBLE) {
+                translation = 0;
             }
-            filtersToolbar.animate().translationY(translation).setDuration(80).setListener(new Animator.AnimatorListener() {
+
+            filtersToolbar.animate().translationY(translation).setDuration(80)
+                    .setStartDelay(100).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
                     if (setVisibility == View.VISIBLE) {

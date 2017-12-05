@@ -47,7 +47,6 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
         if (BuildConfig.DEBUG) {
             Toast.makeText(getApplicationContext(), "token received", Toast.LENGTH_SHORT).show();
         }
-
         finishLogin(userInput, response);
     }
 
@@ -79,16 +78,15 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
             }
         }
 
-//        //If activity was launched from authenticator get the intent with the auth response
-//        authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
+        //If activity was launched from authenticator get the intent with the auth response
+        authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
 
-//        if (authenticatorResponse == null) {
-//            if (UserUtility.checkAnyUserLoggedIn()) {
-//                //user found, launch main activity
-//                startMainActivity();
-//            }
-//        }
+        if (authenticatorResponse == null) {
+            if (UserUtility.checkAnyUserLoggedIn()) {
+                startMainActivity();
+            }
+        }
     }
 
     @Override

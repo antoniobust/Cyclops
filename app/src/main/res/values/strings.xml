@@ -121,6 +121,7 @@
     <string name="add_filter_label">Add a filter...</string>
     <string name="add_new_user_label">Add new user</string>
     <string name="add_server_label">Add server</string>
+    <string name="xml_file_read">Server XML file read</string>
 
 
 </resources>

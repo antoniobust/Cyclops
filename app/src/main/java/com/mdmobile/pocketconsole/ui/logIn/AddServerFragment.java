@@ -36,7 +36,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     private ViewPager viewPager;
     private TabLayout dotsIndicator;
     private LogInViewPagerAdapter viewPagerAdapter;
-
+    private View rootView;
 
     public AddServerFragment() {
         //Empty constructor
@@ -44,14 +44,14 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
 
     public static AddServerFragment newInstance() {
 
-        AddServerFragment fragment = new AddServerFragment();
-        return fragment;
+        return new AddServerFragment();
     }
 
     //Interface methods
     @Override
     public void xmlParseComplete() {
         //TODO: update UI file parsed
+        rootView.findViewById(R.id.server_conf_read_label).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_add_server, container, false);
+        rootView = inflater.inflate(R.layout.fragment_add_server, container, false);
 
         //Instantiate views
         viewPager = rootView.findViewById(R.id.login_add_server_view_pager);
@@ -122,7 +122,13 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     private void parseServerConfFile() {
         File serverSetupFile = new File(Environment.getExternalStorageDirectory() + File.separator + getString(R.string.server_ini_file_name));
         if (!GeneralUtility.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            GeneralUtility.requestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE, permissionReqID);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, permissionReqID);
+            }
         } else {
             ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
             configureServerAsyncTask.execute(serverSetupFile);

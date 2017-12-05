@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PocketConsole.iml" filepath="$PROJECT_DIR$/PocketConsole.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PoketConsole.iml" filepath="$PROJECT_DIR$/PoketConsole.iml" />
+      <module fileurl="file://C:\Users\acalabrese\Documents\Workspace\PocketConsole\PoketConsole.iml" filepath="C:\Users\acalabrese\Documents\Workspace\PocketConsole\PoketConsole.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -1,53 +1,19 @@
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/server_address_fragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    app:cardCornerRadius="8dp"
-    app:contentPadding="24dp">
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <include layout="@layout/info_button"/>
+
+    <EditText
+        android:id="@+id/server_address_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
-
-        <include layout="@layout/info_button" />
-
-        <EditText
-            android:id="@+id/server_address_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:hint="@string/server_address_hint"
-            android:inputType="textCapWords" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/server_address_test_connection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="@string/test_connection_label"
-                android:clickable="true"
-                style="@style/Base.TextAppearance.AppCompat.Caption"
-                android:onClick="serverConnetionTest"
-                />
-
-            <ProgressBar
-                android:id="@+id/server_address_test_connection_progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                style="?android:attr/progressBarStyleSmall"
-                android:visibility="gone"/>
-        </FrameLayout>
-
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+        android:layout_gravity="center_vertical"
+        android:textColorHint="@android:color/white"
+        android:hint="@string/server_address_hint"
+        android:inputType="textCapWords"/>
+</LinearLayout>

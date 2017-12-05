@@ -31,7 +31,7 @@ public class LoginConfigureSecretIdFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.api_client_secret_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_api_client_secret, container, false);
         clientIdEditText = rootView.findViewById(R.id.client_id_text_view);
         apiSecretEditText = rootView.findViewById(R.id.api_secret_text_view);
         return rootView;

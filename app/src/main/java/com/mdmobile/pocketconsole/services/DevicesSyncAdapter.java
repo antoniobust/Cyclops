@@ -15,8 +15,12 @@ import android.util.Log;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.ServerUtility;
 
 import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
+import static com.mdmobile.pocketconsole.utils.ServerUtility.API_SECRET_KEY;
+import static com.mdmobile.pocketconsole.utils.ServerUtility.CLIENT_ID_KEY;
+import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 /**
  * Sync adapter to get info refreshed in the DB.
@@ -81,9 +85,15 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(final Account account, Bundle bundle, String authority,
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
-        String secret = AccountManager.get(getContext()).getUserData(account, AccountAuthenticator.API_SECRET_KEY);
-        String clientId = AccountManager.get(getContext()).getUserData(account, AccountAuthenticator.CLIENT_ID_KEY);
-        String serverUrl = AccountManager.get(getContext()).getUserData(account, AccountAuthenticator.SERVER_ADDRESS_KEY);
+        Bundle serverInfo = ServerUtility.getServer();
+        if (serverInfo == null) {
+            Logger.log(LOG_TAG, "No Server Found...\nSkipping Sync", Log.ERROR);
+            return;
+        }
+
+        String secret = serverInfo.getString(API_SECRET_KEY);
+        String clientId = serverInfo.getString(CLIENT_ID_KEY);
+        String serverUrl = serverInfo.getString(SERVER_ADDRESS_KEY);
         String password = AccountManager.get(getContext()).getPassword(account);
 
         ApiRequestManager.getInstance().getDevices();

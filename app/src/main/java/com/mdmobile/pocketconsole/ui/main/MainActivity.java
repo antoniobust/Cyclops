@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +29,7 @@ import com.mdmobile.pocketconsole.ui.main.myDevices.DevicesFragment;
 import com.mdmobile.pocketconsole.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.pocketconsole.ui.main.server.ServerFragment;
 import com.mdmobile.pocketconsole.ui.main.users.UsersFragment;
+import com.mdmobile.pocketconsole.utils.BaseActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.RecyclerEmptyView;
 
@@ -38,7 +38,7 @@ import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKE
 import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
 
 
-public class MainActivity extends AppCompatActivity implements DevicesListAdapter.DeviceSelected,
+public class MainActivity extends BaseActivity implements DevicesListAdapter.DeviceSelected,
         ServerListAdapter.onClick {
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
@@ -184,6 +184,11 @@ public class MainActivity extends AppCompatActivity implements DevicesListAdapte
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

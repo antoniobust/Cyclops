@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.apiManager;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Base64;
@@ -15,11 +16,10 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.BuildConfig;
-import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.api.ApiModel;
-import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.dataModels.api.Action;
 import com.mdmobile.pocketconsole.dataModels.api.Token;
+import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.networkRequests.ActionRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceInstalledAppRequest;
@@ -28,6 +28,7 @@ import com.mdmobile.pocketconsole.networkRequests.ServerInfoRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
 import com.mdmobile.pocketconsole.networkRequests.UserRequest;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.ServerUtility;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
 import org.json.JSONArray;
@@ -35,7 +36,7 @@ import org.json.JSONArray;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.mdmobile.pocketconsole.services.AccountAuthenticator.SERVER_ADDRESS_KEY;
+import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 /**
  * Main class for API requests.
@@ -67,20 +68,13 @@ public class ApiRequestManager {
     public void getToken(String serverUrl, String clientID, String clientSecret,
                          String userName, String password, final NetworkCallBack callBack) {
 
-
-        //if debug discard input and use debugging info
-//        if (BuildConfig.DEBUG) {
-//            serverUrl = ApplicationLoader.applicationContext.getString(R.string.mc_server_url).concat("/MobiControl/api/token");
-//            clientID = ApplicationLoader.applicationContext.getString(R.string.mc_clientID);
-//            clientSecret = ApplicationLoader.applicationContext.getString(R.string.mc_client_secret);
-//            userName = ApplicationLoader.applicationContext.getString(R.string.mc_user_name);
-//            password = ApplicationLoader.applicationContext.getString(R.string.mc_password);
-//        } else {
-            //If not debug take the url input from user and attach the token request
-            serverUrl = serverUrl.concat("/MobiControl/api/token");
-//        }
+        serverUrl = serverUrl.concat("/MobiControl/api/token");
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
         final String header = clientID.concat(":").concat(clientSecret);
+        final Bundle userInput = new Bundle();
+        userInput.putString(UserUtility.USER_NAME_KEY, userName);
+        userInput.putString(UserUtility.PASSWORD_KEY, password);
+
 
 
         SimpleRequest tokenRequest = new SimpleRequest(Request.Method.POST, serverUrl,
@@ -94,7 +88,7 @@ public class ApiRequestManager {
 
                         //Parse network response to get token details
                         Token token = new Gson().fromJson(response, Token.class);
-                        callBack.tokenReceived(token);
+                        callBack.tokenReceived(userInput,token);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -124,9 +118,7 @@ public class ApiRequestManager {
     }
 
     public void getDevices() {
-
-//        Account account = AccountManager.get(mContext).getAccountsByType(mContext.getString(R.string.account_type))[0];
-        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(ApplicationLoader.applicationContext, Request.Method.GET, api,
@@ -146,7 +138,7 @@ public class ApiRequestManager {
     }
 
     public void getDeviceInstalledApps(@NonNull final String devID) {
-        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
         DeviceInstalledAppRequest installedAppRequest = new DeviceInstalledAppRequest(Request.Method.GET,
@@ -172,7 +164,7 @@ public class ApiRequestManager {
 
     public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
-        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 
         String jsonPayload = new Gson().toJson(new Action(action, message, phoneNumber));
@@ -196,7 +188,7 @@ public class ApiRequestManager {
     }
 
     public void getServerInfo() {
-        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.ServerApi.Builder(apiAuthority).getServerInfo().build();
 
         ServerInfoRequest request = new ServerInfoRequest(api, new Response.Listener<String>() {
@@ -214,9 +206,9 @@ public class ApiRequestManager {
         requestsQueue.add(request);
     }
 
-    public void getUsers(){
-        String apiAuthority = UserUtility.getUserInfo(UserUtility.getUser()).getString(SERVER_ADDRESS_KEY);
-        String api = ApiModel.UserSecurityApi.Builder(apiAuthority).getAllUsers(false,null,null).build();
+    public void getUsers() {
+        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String api = ApiModel.UserSecurityApi.Builder(apiAuthority).getAllUsers(false, null, null).build();
         UserRequest userRequest = new UserRequest(api, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {

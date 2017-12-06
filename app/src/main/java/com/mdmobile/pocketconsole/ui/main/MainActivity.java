@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     // -- Life cycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         filtersToolbar = findViewById(R.id.filters_toolbar);

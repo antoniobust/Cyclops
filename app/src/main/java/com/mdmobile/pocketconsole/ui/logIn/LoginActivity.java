@@ -21,7 +21,10 @@ import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.ServerUtility;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
+import java.net.HttpURLConnection;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.ACCOUNT_TYPE_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.ADDING_NEW_ACCOUNT_KEY;
@@ -52,8 +55,24 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
     @Override
     public void errorReceivingToken(VolleyError error) {
-        //TODO: based on the error message prompt the related error message to user
-        Toast.makeText(getApplicationContext(), "error receiving token", Toast.LENGTH_SHORT).show();
+        String message;
+        switch (error.networkResponse.statusCode) {
+            case HttpsURLConnection.HTTP_BAD_REQUEST:
+                message = "Login failed... Check your credentials";
+                break;
+            case HttpsURLConnection.HTTP_FORBIDDEN:
+                message = "Login failed... Check your credentials";
+                break;
+            case HttpURLConnection.HTTP_INTERNAL_ERROR:
+                message = "Internal server error";
+                break;
+            case HttpURLConnection.HTTP_NOT_FOUND:
+                message = "Server not found";
+                break;
+            default:
+                message = "Login failed";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
     // Login activity will check if there is any server already saved. If yes it will prompt add new user interface.

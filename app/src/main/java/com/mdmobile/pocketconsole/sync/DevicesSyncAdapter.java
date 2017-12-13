@@ -1,8 +1,7 @@
-package com.mdmobile.pocketconsole.services;
+package com.mdmobile.pocketconsole.sync;
 
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
@@ -18,9 +17,6 @@ import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.ServerUtility;
 
 import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
-import static com.mdmobile.pocketconsole.utils.ServerUtility.API_SECRET_KEY;
-import static com.mdmobile.pocketconsole.utils.ServerUtility.CLIENT_ID_KEY;
-import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 /**
  * Sync adapter to get info refreshed in the DB.
@@ -43,10 +39,9 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     //When adding an account call this method to schedule device information updates
     private static void onNewAccountCreated(Context c, Account account) {
 
-        //Without calling setSyncAutomatically, our periodic sync will not be enabled.
+        //Without calling setSyncAutomatically, periodic sync will not be enabled.
         ContentResolver.setSyncAutomatically(account, c.getString(R.string.content_authority), true);
 
-        //Configure periodic sync
         DevicesSyncAdapter.configurePeriodicSync(c.getApplicationContext(), account);
 
         //As the account was just created we should launch the first sync
@@ -55,9 +50,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     //Helper method to set up a period sync interval
     private static void configurePeriodicSync(Context context, Account account) {
-
         String authority = context.getString(R.string.content_authority);
-
         Logger.log(LOG_TAG, "Configuring periodic sync: " + UPDATE_SCHEDULE, Log.VERBOSE);
 
         // we can enable inexact timers in our periodic sync
@@ -67,7 +60,6 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
                 setExtras(new Bundle()).build();
 
         ContentResolver.requestSync(request);
-
     }
 
     public static void syncImmediately(Context context, Account account) {
@@ -90,11 +82,6 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
             Logger.log(LOG_TAG, "No Server Found...\nSkipping Sync", Log.ERROR);
             return;
         }
-
-        String secret = serverInfo.getString(API_SECRET_KEY);
-        String clientId = serverInfo.getString(CLIENT_ID_KEY);
-        String serverUrl = serverInfo.getString(SERVER_ADDRESS_KEY);
-        String password = AccountManager.get(getContext()).getPassword(account);
 
         ApiRequestManager.getInstance().getDevices();
     }

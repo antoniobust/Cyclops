@@ -30,7 +30,7 @@ import android.widget.TextView;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
-import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
+import com.mdmobile.pocketconsole.sync.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.Dialogs.PinFolderDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.SortingDeviceDialog;
 import com.mdmobile.pocketconsole.utils.Logger;

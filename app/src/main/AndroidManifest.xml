@@ -68,7 +68,7 @@
 
         <!-- Device Sync Adapter -->
         <service
-            android:name=".services.RefreshDataBinder"
+            android:name=".sync.RefreshDataBinder"
             android:exported="true"
             android:process=":sync">
             <intent-filter>

@@ -15,7 +15,7 @@ import com.mdmobile.pocketconsole.BuildConfig;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.dataModels.api.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
-import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
+import com.mdmobile.pocketconsole.sync.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.ServerUtility;

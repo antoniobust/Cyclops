@@ -21,7 +21,7 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.adapters.ServerListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
-import com.mdmobile.pocketconsole.services.DevicesSyncAdapter;
+import com.mdmobile.pocketconsole.sync.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.ui.main.dashboard.DashboardFragment;

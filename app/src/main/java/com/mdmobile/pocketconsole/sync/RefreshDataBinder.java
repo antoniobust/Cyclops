@@ -1,8 +1,10 @@
-package com.mdmobile.pocketconsole.services;
+package com.mdmobile.pocketconsole.sync;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import com.mdmobile.pocketconsole.sync.DevicesSyncAdapter;
 
 public class RefreshDataBinder extends Service {
     // Object to use as a thread-safe lock

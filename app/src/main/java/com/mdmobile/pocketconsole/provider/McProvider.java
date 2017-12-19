@@ -13,8 +13,8 @@ import android.util.Log;
 
 import com.mdmobile.pocketconsole.utils.Logger;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class McProvider extends ContentProvider {
 
@@ -47,69 +47,70 @@ public class McProvider extends ContentProvider {
 
         Logger.log(LOG_TAG, "Query( uri:" + uri.toString() + ", data selected: " + Arrays.toString(projection)
                 + " selection parameters: " + selection + " values:" + Arrays.toString(selectionArgs), Log.VERBOSE);
+
         //Get DB is an expensive operation check if we already have opened it
         if (database == null) {
             database = mcHelper.getWritableDatabase();
         }
+
+        SQLiteQueryBuilder mQueryBuilder = new SQLiteQueryBuilder();
         McEnumUri mcEnumUri = matcher.matchUri(uri);
         Cursor c;
         String devId;
 
         switch (mcEnumUri) {
             case DEVICES:
-                c = database.query(McContract.DEVICE_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
                 break;
 
             case DEVICES_ID:
                 devId = McContract.Device.getDeviceIdFromUri(uri);
-                c = database.query(McContract.DEVICE_TABLE_NAME,
-                        projection,
-                        McContract.Device.COLUMN_DEVICE_ID + "=?",
-                        new String[]{devId}, null, null, sortOrder);
+                mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
+                mQueryBuilder.appendWhere(McContract.Device.COLUMN_DEVICE_ID + "=" + devId);
+
                 break;
 
             case DEVICES_GROUP_BY:
-                ArrayList<String> columns = new ArrayList<>();
-                columns.add("COUNT(" + McContract.Device._ID + ")");
-                if (projection != null) {
-                    columns.addAll(Arrays.asList(projection));
-                }
-                String groupBy = McContract.Device.getGroupByFromUri(uri);
-                c = database.query(McContract.DEVICE_TABLE_NAME, columns.toArray(new String[]{}), null, null, groupBy, null, null);
+                HashMap<String, String> mProjection = new HashMap<>();
+                mProjection.put("COUNT(" + McContract.Device._ID + ")", "COUNT(" + McContract.Device._ID + ")");
+
+                mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
+                mQueryBuilder.setProjectionMap(mProjection);
+
                 break;
 
             case INSTALLED_APPLICATIONS_ON_DEVICE:
                 devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
-                c = database.query(McContract.INSTALLED_APPLICATION_TABLE_NAME, projection,
-                        McContract.InstalledApplications.DEVICE_ID + "=?", new String[]{devId}, null, null, sortOrder);
+                mQueryBuilder.setTables(McContract.INSTALLED_APPLICATION_TABLE_NAME);
+                mQueryBuilder.appendWhere(McContract.InstalledApplications.DEVICE_ID + "=" + devId);
                 break;
 
             case INSTALLED_APPLICATION_PKG_NAME:
                 String packageName = McContract.InstalledApplications.getAppPackageNameFromUri(uri);
-                c = database.query(McContract.INSTALLED_APPLICATION_TABLE_NAME, projection,
-                        McContract.InstalledApplications.APPLICATION_ID + "=?", new String[]{packageName}, null, null, sortOrder);
+                mQueryBuilder.setTables(McContract.INSTALLED_APPLICATION_TABLE_NAME);
+                mQueryBuilder.appendWhere(McContract.InstalledApplications.APPLICATION_ID + "=" + packageName);
                 break;
 
             case SCRIPTS:
-                c = database.query(McContract.SCRIPT_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                mQueryBuilder.setTables(McContract.SCRIPT_TABLE_NAME);
                 break;
 
             case SCRIPT_ID:
                 String scriptId = McContract.Script.getScriptIdFromUri(uri);
-                c = database.query(McContract.SCRIPT_TABLE_NAME, projection,
-                        McContract.Script._ID + "=?", new String[]{scriptId}, null, null, sortOrder);
+                mQueryBuilder.setTables(McContract.SCRIPT_TABLE_NAME);
+                mQueryBuilder.appendWhere(McContract.Script._ID + "=" + scriptId);
                 break;
 
             case MANAGEMENT_SERVERS:
-                c = database.query(McContract.MANAGEMENT_SERVER_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                mQueryBuilder.setTables(McContract.MANAGEMENT_SERVER_TABLE_NAME);
                 break;
 
             case DEPLOYMENT_SERVERS:
-                c = database.query(McContract.DEPLOYMENT_SERVER_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                mQueryBuilder.setTables(McContract.DEPLOYMENT_SERVER_TABLE_NAME);
                 break;
 
             case USERS:
-                c = database.query(McContract.USER_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                mQueryBuilder.setTables(McContract.USER_TABLE_NAME);
                 break;
 
             case PROFILE_ID:
@@ -117,16 +118,17 @@ public class McProvider extends ContentProvider {
                 String join = McContract.PROFILE_TABLE_NAME + " INNER JOIN " + McContract.PROFILE_DEVICE_TABLE_NAME + " ON "
                         + McContract.PROFILE_DEVICE_TABLE_NAME + " = " + McContract.PROFILE_TABLE_NAME;
 
-                SQLiteQueryBuilder mQueryBuilder = new SQLiteQueryBuilder();
                 mQueryBuilder.setTables(join);
                 mQueryBuilder.appendWhere(McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_DEVICE_ID + " = " + devId);
 
-                c = mQueryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
             default:
                 throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }
+        //Execute built query
+        c = mQueryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
+
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }

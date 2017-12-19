@@ -197,8 +197,8 @@ public class McHelper extends SQLiteOpenHelper {
 
         //Create profile table
         db.execSQL("CREATE TABLE " + McContract.PROFILE_TABLE_NAME + " ("
-                + BaseColumns._ID + "INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + McContract.Profile.REFERENCE_ID + "TEXT NOT NULL, "
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + McContract.Profile.REFERENCE_ID + " TEXT NOT NULL, "
                 + McContract.Profile.NAME + " TEXT NOT NULL, "
                 + McContract.Profile.STATUS + " TEXT NOT NULL, "
                 + McContract.Profile.ASSIGNMENT_DATE + " TEXT, "
@@ -208,7 +208,7 @@ public class McHelper extends SQLiteOpenHelper {
         //Create profile device hook table
         db.execSQL("CREATE TABLE " + McContract.PROFILE_DEVICE_TABLE_NAME + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + McContract.ProfileDevice.DEVICE_ID + "TEXT NOT NULL, "
+                + McContract.ProfileDevice.DEVICE_ID + " TEXT NOT NULL, "
                 + McContract.ProfileDevice.PROFILE_ID + " TEXT NOT NULL, "
                 + " FOREIGN KEY (" + McContract.ProfileDevice.DEVICE_ID + ") REFERENCES "
                 + DEVICE_TABLE_NAME + "(" + McContract.Device.COLUMN_DEVICE_ID + "), "

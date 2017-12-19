@@ -20,6 +20,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.DEPLOYMENT_SERVER_T
 import static com.mdmobile.pocketconsole.provider.McContract.DEVICE_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.INSTALLED_APPLICATION_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.MANAGEMENT_SERVER_TABLE_NAME;
+import static com.mdmobile.pocketconsole.provider.McContract.PROFILE_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.SCRIPT_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.SERVER_INFO_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.ScriptColumns.DESCRIPTION;
@@ -31,7 +32,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.USER_TABLE_NAME;
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 25;
+    private static final int DB_VERSION = 26;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -179,7 +180,7 @@ public class McHelper extends SQLiteOpenHelper {
         //Create user table
         db.execSQL("CREATE TABLE " + McContract.USER_TABLE_NAME + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + McContract.UserInfo.NAME + " TEXT NON NULL, "
+                + McContract.UserInfo.NAME + " TEXT NOT NULL, "
                 + McContract.UserInfo.DISPLAYED_NAME + " TEXT, "
                 + McContract.UserInfo.KIND + " TEXT, "
                 + McContract.UserInfo.IS_LOCKED + " INTEGER, "
@@ -190,9 +191,29 @@ public class McHelper extends SQLiteOpenHelper {
         //Create server info table
         db.execSQL("CREATE TABLE " + McContract.SERVER_INFO_TABLE_NAME + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + McContract.ServerInfo.CLIENT_ID + " TEXT NON NULL, "
-                + McContract.ServerInfo.CLIENT_SECRET + " TEXT NON NULL, "
-                + McContract.ServerInfo.NAME + " TEXT NON NULL UNIQUE );");
+                + McContract.ServerInfo.CLIENT_ID + " TEXT NOT NULL, "
+                + McContract.ServerInfo.CLIENT_SECRET + " TEXT NOT NULL, "
+                + McContract.ServerInfo.NAME + " TEXT NOT NULL UNIQUE );");
+
+        //Create profile table
+        db.execSQL("CREATE TABLE " + McContract.PROFILE_TABLE_NAME + " ("
+                + BaseColumns._ID + "INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + McContract.Profile.REFERENCE_ID + "TEXT NOT NULL, "
+                + McContract.Profile.NAME + " TEXT NOT NULL, "
+                + McContract.Profile.STATUS + " TEXT NOT NULL, "
+                + McContract.Profile.ASSIGNMENT_DATE + " TEXT, "
+                + McContract.Profile.IS_MANDATORY + " INTEGER, "
+                + McContract.Profile.VERSION_NUMBER + " INTEGER );");
+
+        //Create profile device hook table
+        db.execSQL("CREATE TABLE " + McContract.PROFILE_DEVICE_TABLE_NAME + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + McContract.ProfileDevice.DEVICE_ID + "TEXT NOT NULL, "
+                + McContract.ProfileDevice.PROFILE_ID + " TEXT NOT NULL, "
+                + " FOREIGN KEY (" + McContract.ProfileDevice.DEVICE_ID + ") REFERENCES "
+                + DEVICE_TABLE_NAME + "(" + McContract.Device.COLUMN_DEVICE_ID + "), "
+                + " FOREIGN KEY("+ McContract.ProfileDevice.PROFILE_ID + ") REFERENCES "
+                + PROFILE_TABLE_NAME + "( " + McContract.Profile.REFERENCE_ID + "));");
 
         //Insert standard script in Script table
         Resources res = mContext.getResources();

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.os.Bundle;
 
 import com.mdmobile.pocketconsole.dataModels.api.InstalledApp;
+import com.mdmobile.pocketconsole.dataModels.api.Profile;
 import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
 import com.mdmobile.pocketconsole.dataModels.api.User;
 import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
@@ -147,6 +148,26 @@ public class DbData {
         return getInstalledAppContentValues(installedApp);
     }
 
+    public static ContentValues[] prepareProfilesValue(ArrayList<Profile> profiles){
+        ArrayList<ContentValues> values = new ArrayList<>(profiles.size());
+        for(int i = 0 ; i < profiles.size(); i ++){
+            values.add(prepareProfilesValue(profiles.get(i)));
+        }
+        ContentValues[] values1 = new ContentValues[values.size()];
+        values.toArray(values1);
+        return values1;
+    }
+
+    public static ContentValues prepareProfilesValue(Profile profile){
+        ContentValues values = new ContentValues();
+        values.put(McContract.Profile.REFERENCE_ID, profile.getReferenceId());
+        values.put(McContract.Profile.NAME, profile.getName());
+        values.put(McContract.Profile.STATUS, profile.getStatus());
+        values.put(McContract.Profile.VERSION_NUMBER, profile.getVersionNumber());
+        values.put(McContract.Profile.ASSIGNMENT_DATE, profile.getAssignmentDate());
+        values.put(McContract.Profile.IS_MANDATORY, profile.getMandatory());
+        return values;
+    }
 
     public static ContentValues prepareScriptValues(String name, String description, String script) {
         ContentValues contentValues = new ContentValues();

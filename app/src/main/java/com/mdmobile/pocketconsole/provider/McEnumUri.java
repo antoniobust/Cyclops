@@ -9,7 +9,7 @@ public enum McEnumUri {
     //Uri matcher codes
     DEVICES(500, McContract.DEVICE_TABLE_NAME, false, McContract.DEVICE_TABLE_NAME),
 
-    DEVICES_GROUP_BY (501, McContract.DEVICE_TABLE_NAME + "/GROUP_BY/*",false,McContract.DEVICE_TABLE_NAME),
+    DEVICES_GROUP_BY(501, McContract.DEVICE_TABLE_NAME + "/GROUP_BY/*", false, McContract.DEVICE_TABLE_NAME),
 
     DEVICES_ID(502, McContract.DEVICE_TABLE_NAME + "/*", true, McContract.DEVICE_TABLE_NAME),
 
@@ -41,7 +41,11 @@ public enum McEnumUri {
 
     USERS(516, McContract.USER_TABLE_NAME, false, McContract.USER_TABLE_NAME),
 
-    USER_ID(517, McContract.USER_TABLE_NAME + "/*", true, McContract.USER_TABLE_NAME);
+    USER_ID(517, McContract.USER_TABLE_NAME + "/*", true, McContract.USER_TABLE_NAME),
+
+    PROFILES(518, McContract.PROFILE_TABLE_NAME, false, McContract.PROFILE_TABLE_NAME),
+
+    PROFILE_ID(519, McContract.PROFILE_DEVICE_TABLE_NAME + "/*", true, McContract.PROFILE_TABLE_NAME);
 
     public String path, contentType, tableName;
     public int matcherCode;

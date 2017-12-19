@@ -307,71 +307,39 @@ public class McContract {
     }
 
 
-//    //Represent Profile table
-//    public static class Profile implements BaseColumns {
-//        //Table Uri
-//        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(PROFILE_TABLE_NAME).build();
-//
-//        //Columns
-//        public final static String REFERENCE_ID = "ReferenceId";
-//        public final static String NAME = "Name";
-//        public final static String VERSION_NUMBER = "VersionNumber";
-//        public final static String STATUS = "Status";
-//        public final static String MANDATORY = "Mandatory";
-//        public final static String ASSIGNMET_DATE = "AssignmentDate";
-//        public final static String PROFILE_CONFIGURATION_ID = "ProfileConfigurationID";
-//        public final static String PROFILE_PACKAGE_ID = "ProfilePackageID";
-//    }
-//
-//
-//    //Link table n -> n relation from devices and custom profiles
-//    public static class ProfileDevice implements BaseColumns {
-//        //Table URI
-//        public static final Uri CONTENT_URI = DB_URI.buildUpon()
-//                .appendPath(PROFILE_DEVICE_TABLE_NAME).build();
-//
-//        //Columns
-//        public static final String DEVICE_ID = "DeviceID";
-//        public static final String PROFILE_ID = "ProfileID";
-//    }
-//
-//
-//    //Represent a payload table
-//    public static class Payload implements BaseColumns {
-//        //Table Uri
-//        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(PAYLOAD_TABLE_NAME).build();
-//
-//        //Columns
-//        public final static String NAME = "Name";
-//        public final static String PAYLOAD_TYPE_ID = "PayloadTypeID";
-//        public final static String STATUS = "Status";
-//
-//    }
-//
-//
-//    //Represent the payload sub type table
-//    public static class PayloadSubType implements BaseColumns {
-//        //Table Uri
-//        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(PAYLOAD_SUB_TYPE_TABLE_NAME).build();
-//
-//        //Columns
-//        public final static String NAME = "Name";
-//    }
-//
-//
-//    //Represent a package table
-//    public static class ProfilePackage implements BaseColumns {
-//        //Table Uri
-//        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(PROFILE_PACKAGE_TABLE_NAME).build();
-//
-//        //Columns
-//        public final static String NAME = "Name";
-//        public final static String VERSION = "Version";
-//        public final static String SIZE = "Size";
-//        public final static String STATUS = "Status";
-//        public final static String REFERNECE_ID = "ReferenceId";
-//
-//    }
+    //Represent Profile table
+    public static class Profile implements BaseColumns {
+        //Table Uri
+        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(PROFILE_TABLE_NAME).build();
+
+        //Columns
+        public final static String REFERENCE_ID = "ReferenceId";
+        public final static String NAME = "Name";
+        public final static String VERSION_NUMBER = "VersionNumber";
+        public final static String STATUS = "Status";
+        public final static String IS_MANDATORY = "IsMandatory";
+        public final static String ASSIGNMENT_DATE = "AssignmentDate";
+
+        public static Uri buildUriWithDeviceID(@NonNull String deviceID){
+            return CONTENT_URI.buildUpon().appendPath(deviceID).build();
+        }
+
+        public static String getDeviceIdFromUri(@NonNull Uri uri){
+            return uri.getLastPathSegment();
+        }
+    }
+
+
+    //Link table n -> n relation from devices and profiles
+    public static class ProfileDevice implements BaseColumns {
+        //Table URI
+        public static final Uri CONTENT_URI = DB_URI.buildUpon()
+                .appendPath(PROFILE_DEVICE_TABLE_NAME).build();
+
+        //Columns
+        public static final String DEVICE_ID = "DeviceID";
+        public static final String PROFILE_ID = "ProfileID";
+    }
 
     public static class InstalledApplications implements BaseColumns, InstalledAppsColumns {
         //Table URI

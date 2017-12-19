@@ -38,6 +38,7 @@ android {
         sourceCompatibility 1.7
     }
 }
+//TODO: fix this
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

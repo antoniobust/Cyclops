@@ -46,12 +46,12 @@ public class DeviceRequest<T> extends BasicRequest<T> {
     private int insertInfoMethod;
 
     public DeviceRequest(Context context, int method, String url, Response.Listener<T> listener,
-                         Response.ErrorListener errorListener, int insertDataMEthod) {
+                         Response.ErrorListener errorListener, int insertDataMethod) {
         super(method, url, errorListener);
 
         this.mContext = context.getApplicationContext();
         this.listener = listener;
-        insertInfoMethod = insertDataMEthod;
+        insertInfoMethod = insertDataMethod;
     }
 
 

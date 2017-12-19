@@ -24,6 +24,7 @@ import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
 import com.mdmobile.pocketconsole.networkRequests.ActionRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceInstalledAppRequest;
 import com.mdmobile.pocketconsole.networkRequests.DeviceRequest;
+import com.mdmobile.pocketconsole.networkRequests.ProfilesRequest;
 import com.mdmobile.pocketconsole.networkRequests.ServerInfoRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
 import com.mdmobile.pocketconsole.networkRequests.UserRequest;
@@ -76,7 +77,6 @@ public class ApiRequestManager {
         userInput.putString(UserUtility.PASSWORD_KEY, password);
 
 
-
         SimpleRequest tokenRequest = new SimpleRequest(Request.Method.POST, serverUrl,
                 new Response.Listener<String>() {
                     @Override
@@ -88,7 +88,7 @@ public class ApiRequestManager {
 
                         //Parse network response to get token details
                         Token token = new Gson().fromJson(response, Token.class);
-                        callBack.tokenReceived(userInput,token);
+                        callBack.tokenReceived(userInput, token);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -135,6 +135,25 @@ public class ApiRequestManager {
         }, DeviceRequest.ERASE_OLD_DEVICE_INFO);
 
         requestsQueue.add(deviceRequest);
+    }
+
+    public void getDeviceProfiles(@NonNull final String deviceID) {
+        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).getInstalledApplications().build();
+
+        ProfilesRequest request = new ProfilesRequest(Request.Method.GET, api, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
+            }
+        });
+
+        requestsQueue.add(request);
     }
 
     public void getDeviceInstalledApps(@NonNull final String devID) {

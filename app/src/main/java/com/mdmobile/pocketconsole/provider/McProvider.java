@@ -5,6 +5,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -52,6 +53,7 @@ public class McProvider extends ContentProvider {
         }
         McEnumUri mcEnumUri = matcher.matchUri(uri);
         Cursor c;
+        String devId;
 
         switch (mcEnumUri) {
             case DEVICES:
@@ -59,25 +61,25 @@ public class McProvider extends ContentProvider {
                 break;
 
             case DEVICES_ID:
-                String devID = McContract.Device.getDeviceIdFromUri(uri);
+                devId = McContract.Device.getDeviceIdFromUri(uri);
                 c = database.query(McContract.DEVICE_TABLE_NAME,
                         projection,
                         McContract.Device.COLUMN_DEVICE_ID + "=?",
-                        new String[]{devID}, null, null, sortOrder);
+                        new String[]{devId}, null, null, sortOrder);
                 break;
 
             case DEVICES_GROUP_BY:
                 ArrayList<String> columns = new ArrayList<>();
-                columns.add("COUNT("+McContract.Device._ID+")");
-                if(projection != null) {
+                columns.add("COUNT(" + McContract.Device._ID + ")");
+                if (projection != null) {
                     columns.addAll(Arrays.asList(projection));
                 }
                 String groupBy = McContract.Device.getGroupByFromUri(uri);
-                c = database.query(McContract.DEVICE_TABLE_NAME, columns.toArray(new String[]{}),null,null,groupBy,null,null);
+                c = database.query(McContract.DEVICE_TABLE_NAME, columns.toArray(new String[]{}), null, null, groupBy, null, null);
                 break;
 
             case INSTALLED_APPLICATIONS_ON_DEVICE:
-                String devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
+                devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
                 c = database.query(McContract.INSTALLED_APPLICATION_TABLE_NAME, projection,
                         McContract.InstalledApplications.DEVICE_ID + "=?", new String[]{devId}, null, null, sortOrder);
                 break;
@@ -108,6 +110,18 @@ public class McProvider extends ContentProvider {
 
             case USERS:
                 c = database.query(McContract.USER_TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+
+            case PROFILE_ID:
+                devId = McContract.Profile.getDeviceIdFromUri(uri);
+                String join = McContract.PROFILE_TABLE_NAME + " INNER JOIN " + McContract.PROFILE_DEVICE_TABLE_NAME + " ON "
+                        + McContract.PROFILE_DEVICE_TABLE_NAME + " = " + McContract.PROFILE_TABLE_NAME;
+
+                SQLiteQueryBuilder mQueryBuilder = new SQLiteQueryBuilder();
+                mQueryBuilder.setTables(join);
+                mQueryBuilder.appendWhere(McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_DEVICE_ID + " = " + devId);
+
+                c = mQueryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
             default:

@@ -247,26 +247,22 @@ public class McProvider extends ContentProvider {
         }
 
         McEnumUri mcEnumUri = matcher.matchUri(uri);
-        long newRowID;
-
+        long newRowID =
+                database.insertWithOnConflict(mcEnumUri.tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
 
         switch (mcEnumUri) {
             case DEVICES:
-                newRowID = database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert device in DB", Log.ERROR);
                     return null;
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return McContract.Device.buildUriWithID(newRowID);
-
             case CUSTOM_ATTRIBUTE:
                 return null;
             case CUSTOM_DATA:
                 return null;
-
             case INSTALLED_APPLICATION_ID:
-                newRowID = database.insertWithOnConflict(McContract.INSTALLED_APPLICATION_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert application in DB", Log.ERROR);
                     return null;
@@ -275,7 +271,6 @@ public class McProvider extends ContentProvider {
                 return McContract.InstalledApplications.buildUriWithId(newRowID);
 
             case SCRIPTS:
-                newRowID = database.insert(McContract.SCRIPT_TABLE_NAME, null, contentValues);
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert script in DB", Log.ERROR);
                     return null;
@@ -283,7 +278,6 @@ public class McProvider extends ContentProvider {
                 return McContract.Script.buildUriWithId(newRowID);
 
             case MANAGEMENT_SERVERS:
-                newRowID = database.insertWithOnConflict(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert MS in DB", Log.ERROR);
                     return null;
@@ -292,7 +286,6 @@ public class McProvider extends ContentProvider {
                 return McContract.MsInfo.buildUriWithMsId(newRowID);
 
             case DEPLOYMENT_SERVERS:
-                newRowID = database.insertWithOnConflict(McContract.DEPLOYMENT_SERVER_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert DS in DB", Log.ERROR);
                     return null;
@@ -301,9 +294,14 @@ public class McProvider extends ContentProvider {
                 return McContract.DsInfo.buildUriWithDsId(newRowID);
 
             case USERS:
-                newRowID = database.insertWithOnConflict(McContract.USER_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
                 if (newRowID < 1) {
-                    Logger.log(LOG_TAG, "Impossibl to insert User in DB", Log.ERROR);
+                    Logger.log(LOG_TAG, "Impossible to insert User in DB", Log.ERROR);
+                    return null;
+                }
+
+            case PROFILES:
+                if (newRowID < 1) {
+                    Logger.log(LOG_TAG, "Impossible to insert Profiles in DB", Log.ERROR);
                     return null;
                 }
             default:

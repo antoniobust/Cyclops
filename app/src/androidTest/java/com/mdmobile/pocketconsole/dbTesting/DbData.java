@@ -145,17 +145,19 @@ public class DbData extends AndroidJUnitRunner {
         ArrayList<Profile> profiles = getProfilesFromJson();
         assertTrue("Error parsing profiles", profiles != null && !profiles.isEmpty());
 
+        InsertDevice();
         ContentValues[] val = com.mdmobile.pocketconsole.utils.DbData.prepareProfilesValue(profiles);
-        Cursor devices = InstrumentationRegistry.getContext().getContentResolver().query(McContract.Device.CONTENT_URI,null,null,null,null);
+        Cursor devices = InstrumentationRegistry.getContext().getContentResolver().query(McContract.Device.CONTENT_URI, null, null, null, null);
         devices.moveToFirst();
         String devId = devices.getString(devices.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
-        Uri uri = InstrumentationRegistry.getContext().getContentResolver().insert(McContract.Profile.buildUriWithDeviceID(devId),val[0]);
+
+        Uri uri = InstrumentationRegistry.getContext().getContentResolver().insert(McContract.Profile.buildUriWithDeviceID(devId), val[0]);
         assertNotNull("Error inserting profile, uri is null", uri);
 
-        Cursor c = InstrumentationRegistry.getContext().getContentResolver().query(McContract.Profile.buildUriWithDeviceID(devId),
-        null,null,null);
-        c.moveToFirst();
+        Cursor c = InstrumentationRegistry.getTargetContext()
+                .getContentResolver().query(McContract.Profile.buildUriWithDeviceID(devId), null, null,null,null);
         assertNotNull(c);
+        assertTrue("Cannot select the profile in cursor", c.moveToFirst());
     }
 
 

@@ -116,7 +116,7 @@ public class McProvider extends ContentProvider {
             case PROFILE_DEVICE_ID:
                 devId = McContract.Profile.getDeviceIdFromUri(uri);
                 String join = McContract.PROFILE_TABLE_NAME + " INNER JOIN "
-                        + McContract.PROFILE_DEVICE_TABLE_NAME + " ON " + McContract.PROFILE_TABLE_NAME + "." + McContract.Profile.REFERENCE_ID
+                        + McContract.PROFILE_DEVICE_TABLE_NAME + " ON " + McContract.PROFILE_TABLE_NAME + "." + McContract.Profile._ID
                         + " = " + McContract.PROFILE_DEVICE_TABLE_NAME + "." + McContract.ProfileDevice.PROFILE_ID
                         + " INNER JOIN " + McContract.DEVICE_TABLE_NAME + " ON " + McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_DEVICE_ID
                         + " = " + McContract.PROFILE_DEVICE_TABLE_NAME + "." + McContract.ProfileDevice.DEVICE_ID;

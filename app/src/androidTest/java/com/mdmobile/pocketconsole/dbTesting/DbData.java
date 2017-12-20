@@ -147,7 +147,7 @@ public class DbData extends AndroidJUnitRunner {
 
         InsertDevice();
         ContentValues[] val = com.mdmobile.pocketconsole.utils.DbData.prepareProfilesValue(profiles);
-        Cursor devices = InstrumentationRegistry.getContext().getContentResolver().query(McContract.Device.CONTENT_URI, null, null, null, null);
+        Cursor devices = InstrumentationRegistry.getTargetContext().getContentResolver().query(McContract.Device.CONTENT_URI, null, null, null, null);
         devices.moveToFirst();
         String devId = devices.getString(devices.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
 

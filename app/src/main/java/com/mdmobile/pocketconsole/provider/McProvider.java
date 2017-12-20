@@ -113,10 +113,13 @@ public class McProvider extends ContentProvider {
                 mQueryBuilder.setTables(McContract.USER_TABLE_NAME);
                 break;
 
-            case PROFILE_ID:
+            case PROFILE_DEVICE_ID:
                 devId = McContract.Profile.getDeviceIdFromUri(uri);
-                String join = McContract.PROFILE_TABLE_NAME + " INNER JOIN " + McContract.PROFILE_DEVICE_TABLE_NAME + " ON "
-                        + McContract.PROFILE_DEVICE_TABLE_NAME + " = " + McContract.PROFILE_TABLE_NAME;
+                String join = McContract.PROFILE_TABLE_NAME + " INNER JOIN "
+                        + McContract.PROFILE_DEVICE_TABLE_NAME + " ON " + McContract.PROFILE_TABLE_NAME + "." + McContract.Profile._ID
+                        + " = " + McContract.PROFILE_DEVICE_TABLE_NAME + "." + McContract.ProfileDevice.PROFILE_ID
+                        + " INNER JOIN " + McContract.PROFILE_DEVICE_TABLE_NAME + " ON " + McContract.PROFILE_TABLE_NAME + "." + McContract.Device.COLUMN_DEVICE_ID
+                        + " = " + McContract.PROFILE_DEVICE_TABLE_NAME + "." + McContract.ProfileDevice.DEVICE_ID;
 
                 mQueryBuilder.setTables(join);
                 mQueryBuilder.appendWhere(McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_DEVICE_ID + " = " + devId);
@@ -298,12 +301,17 @@ public class McProvider extends ContentProvider {
                     Logger.log(LOG_TAG, "Impossible to insert User in DB", Log.ERROR);
                     return null;
                 }
+                return McContract.UserInfo.buildUriWithUserId(newRowID);
 
-            case PROFILES:
+            case PROFILE_DEVICE_ID:
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert Profiles in DB", Log.ERROR);
                     return null;
                 }
+                database.execSQL("INSERT INTO " + McContract.PROFILE_DEVICE_TABLE_NAME + " ("
+                        + McContract.ProfileDevice.PROFILE_ID + " , " + McContract.ProfileDevice.DEVICE_ID + ") VALUES ('"
+                        + newRowID + "','" + McContract.Device.getDeviceIdFromUri(uri) + "');");
+                return McContract.Profile.buildUriWithProfileID(String.valueOf(newRowID));
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }

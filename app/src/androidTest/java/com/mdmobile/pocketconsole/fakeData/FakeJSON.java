@@ -1843,4 +1843,90 @@ public class FakeJSON {
             "    }\n" +
             "  ]\n" +
             "}";
+
+    public final static String profileJson = "[\n" +
+            "  {\n" +
+            "    \"ReferenceId\": \"b9977aa8-f31a-4764-b270-cf1c3f889eb2\",\n" +
+            "    \"Name\": \"Casino\",\n" +
+            "    \"VersionNumber\": 3,\n" +
+            "    \"Status\": \"AdministrativelyRemoved\",\n" +
+            "    \"IsMandatory\": true,\n" +
+            "    \"AssignmentDate\": \"2017-11-23T10:26:48.53Z\",\n" +
+            "    \"Configurations\": [\n" +
+            "      {\n" +
+            "        \"Name\": \"\",\n" +
+            "        \"DeviceConfigurationType\": {\n" +
+            "          \"ConfigurationType\": {\n" +
+            "            \"Name\": \"AuthenticationSection\"\n" +
+            "          },\n" +
+            "          \"Subtype\": null\n" +
+            "        },\n" +
+            "        \"Status\": null\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"Name\": \"\",\n" +
+            "        \"DeviceConfigurationType\": {\n" +
+            "          \"ConfigurationType\": {\n" +
+            "            \"Name\": \"CertificateSection\"\n" +
+            "          },\n" +
+            "          \"Subtype\": null\n" +
+            "        },\n" +
+            "        \"Status\": null\n" +
+            "      }\n" +
+            "    ],\n" +
+            "    \"Packages\": []\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"ReferenceId\": \"58124242-ce97-49f9-9751-6bb3a4e33647\",\n" +
+            "    \"Name\": \"Cert\",\n" +
+            "    \"VersionNumber\": 5,\n" +
+            "    \"Status\": \"AdministrativelyRemoved\",\n" +
+            "    \"IsMandatory\": true,\n" +
+            "    \"AssignmentDate\": \"2017-12-19T13:50:32.593Z\",\n" +
+            "    \"Configurations\": [\n" +
+            "      {\n" +
+            "        \"Name\": \"\",\n" +
+            "        \"DeviceConfigurationType\": {\n" +
+            "          \"ConfigurationType\": {\n" +
+            "            \"Name\": \"AuthenticationSection\"\n" +
+            "          },\n" +
+            "          \"Subtype\": null\n" +
+            "        },\n" +
+            "        \"Status\": null\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"Name\": \"\",\n" +
+            "        \"DeviceConfigurationType\": {\n" +
+            "          \"ConfigurationType\": {\n" +
+            "            \"Name\": \"CertificateSection\"\n" +
+            "          },\n" +
+            "          \"Subtype\": null\n" +
+            "        },\n" +
+            "        \"Status\": null\n" +
+            "      }\n" +
+            "    ],\n" +
+            "    \"Packages\": []\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"ReferenceId\": \"547875a0-f8f0-4f24-82b5-0fe9b4e7e858\",\n" +
+            "    \"Name\": \"Admintest\",\n" +
+            "    \"VersionNumber\": 1,\n" +
+            "    \"Status\": \"AdministrativelyRemoved\",\n" +
+            "    \"IsMandatory\": true,\n" +
+            "    \"AssignmentDate\": \"2017-11-28T16:48:24.933Z\",\n" +
+            "    \"Configurations\": [\n" +
+            "      {\n" +
+            "        \"Name\": \"\",\n" +
+            "        \"DeviceConfigurationType\": {\n" +
+            "          \"ConfigurationType\": {\n" +
+            "            \"Name\": \"FeatureControlSection\"\n" +
+            "          },\n" +
+            "          \"Subtype\": null\n" +
+            "        },\n" +
+            "        \"Status\": null\n" +
+            "      }\n" +
+            "    ],\n" +
+            "    \"Packages\": []\n" +
+            "  }\n" +
+            "]";
 }

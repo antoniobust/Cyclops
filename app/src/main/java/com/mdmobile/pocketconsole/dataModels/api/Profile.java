@@ -3,40 +3,40 @@ package com.mdmobile.pocketconsole.dataModels.api;
 
 public class Profile {
 
-    private String referenceId, name, status, assignmentDate;
-    private int versionNumber;
-    private Boolean isMandatory;
+    private String ReferenceId, Name, Status, AssignmentDate;
+    private int VersionNumber;
+    private Boolean IsMandatory;
 
     public Profile(String referenceId, String name, String status, String assignmentDate, int versionNumber, Boolean isMandatory) {
-        this.referenceId = referenceId;
-        this.name = name;
-        this.status = status;
-        this.assignmentDate = assignmentDate;
-        this.versionNumber = versionNumber;
-        this.isMandatory = isMandatory;
+        this.ReferenceId = referenceId;
+        this.Name = name;
+        this.Status = status;
+        this.AssignmentDate = assignmentDate;
+        this.VersionNumber = versionNumber;
+        this.IsMandatory = isMandatory;
     }
 
     public String getReferenceId() {
-        return referenceId;
+        return ReferenceId;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public String getStatus() {
-        return status;
+        return Status;
     }
 
     public String getAssignmentDate() {
-        return assignmentDate;
+        return AssignmentDate;
     }
 
     public int getVersionNumber() {
-        return versionNumber;
+        return VersionNumber;
     }
 
     public Boolean getMandatory() {
-        return isMandatory;
+        return IsMandatory;
     }
 }

@@ -200,19 +200,14 @@ public class McContract {
         }
 
         public static String getDeviceIdFromUri(@NonNull Uri uri) {
-            //Check if URI provided is device URI
-            if (uri.toString().startsWith(CONTENT_URI.toString())) {
-                return uri.getLastPathSegment();
-            } else {
-                return null;
-            }
+            return uri.getLastPathSegment();
         }
 
-        public static Uri buildUriWithGroup(@NonNull String column){
+        public static Uri buildUriWithGroup(@NonNull String column) {
             return CONTENT_URI.buildUpon().appendPath("GROUP_BY").appendPath(column).build();
         }
 
-        public static String getGroupByFromUri(@NonNull Uri uri){
+        public static String getGroupByFromUri(@NonNull Uri uri) {
             return uri.getLastPathSegment();
         }
     }
@@ -320,11 +315,15 @@ public class McContract {
         public final static String IS_MANDATORY = "IsMandatory";
         public final static String ASSIGNMENT_DATE = "AssignmentDate";
 
-        public static Uri buildUriWithDeviceID(@NonNull String deviceID){
+        public static Uri buildUriWithDeviceID(@NonNull String deviceID) {
             return CONTENT_URI.buildUpon().appendPath(deviceID).build();
         }
 
-        public static String getDeviceIdFromUri(@NonNull Uri uri){
+        public static Uri buildUriWithProfileID(@NonNull String profileId) {
+            return CONTENT_URI.buildUpon().appendPath(profileId).build();
+        }
+
+        public static String getDeviceIdFromUri(@NonNull Uri uri) {
             return uri.getLastPathSegment();
         }
     }

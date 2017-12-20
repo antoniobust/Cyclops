@@ -12,8 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
-import com.mdmobile.pocketconsole.fakeData.FakeJSON;
+import com.mdmobile.pocketconsole.dataModels.api.Profile;
 import com.mdmobile.pocketconsole.dataModels.api.RuntimeTypeAdapterFactory;
 import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
 import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidForWorkDevice;
@@ -28,6 +27,8 @@ import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsDesktop;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsDesktopLegacy;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsPhone;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsRuntime;
+import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
+import com.mdmobile.pocketconsole.fakeData.FakeJSON;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.provider.McHelper;
 
@@ -39,6 +40,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
@@ -138,6 +140,24 @@ public class DbData extends AndroidJUnitRunner {
         assertTrue("Additional scripts found in DB" + titleSet.toString(), titleSet.size() == initialCount);
     }
 
+    @Test
+    public void TestProfile() {
+        ArrayList<Profile> profiles = getProfilesFromJson();
+        assertTrue("Error parsing profiles", profiles != null && !profiles.isEmpty());
+
+        ContentValues[] val = com.mdmobile.pocketconsole.utils.DbData.prepareProfilesValue(profiles);
+        Cursor devices = InstrumentationRegistry.getContext().getContentResolver().query(McContract.Device.CONTENT_URI,null,null,null,null);
+        devices.moveToFirst();
+        String devId = devices.getString(devices.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
+        Uri uri = InstrumentationRegistry.getContext().getContentResolver().insert(McContract.Profile.buildUriWithDeviceID(devId),val[0]);
+        assertNotNull("Error inserting profile, uri is null", uri);
+
+        Cursor c = InstrumentationRegistry.getContext().getContentResolver().query(McContract.Profile.buildUriWithDeviceID(devId),
+        null,null,null);
+        c.moveToFirst();
+        assertNotNull(c);
+    }
+
 
     private void createSingleNewDevice() {
         ArrayList<BasicDevice> devicesArray = getDeviceFromJson();
@@ -162,6 +182,14 @@ public class DbData extends AndroidJUnitRunner {
         assertFalse("Not all devices have been inserted correctly", newDev == 0);
     }
 
+
+    private ArrayList<Profile> getProfilesFromJson() {
+        Type type = new TypeToken<List<Profile>>() {
+        }.getType();
+
+        Gson gson = new Gson();
+        return gson.fromJson(FakeJSON.profileJson, type);
+    }
 
     private ArrayList<BasicDevice> getDeviceFromJson() {
         Type deviceCollectionType = new TypeToken<ArrayList<BasicDevice>>() {

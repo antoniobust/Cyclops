@@ -50,10 +50,10 @@ public class ProfilesRequest extends BasicRequest<String> {
             //Parse Profiles and save in DB
             if (profiles.size() == 1) {
                 ContentValues values = DbData.prepareProfilesValue(profiles.get(0));
-                mContext.getContentResolver().insert( McContract.Profile.buildUriWithDeviceID(devId), values);
+                mContext.getContentResolver().insert(McContract.Profile.buildUriWithDeviceID(devId), values);
             } else if (profiles.size() > 1) {
                 ContentValues[] appValues = DbData.prepareProfilesValue(profiles);
-                mContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceID(devId),, appValues);
+                mContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceID(devId), appValues);
             }
 
             return Response.success(null,

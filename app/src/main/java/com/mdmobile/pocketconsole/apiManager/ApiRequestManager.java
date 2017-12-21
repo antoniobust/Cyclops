@@ -141,7 +141,7 @@ public class ApiRequestManager {
         String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).getInstalledApplications().build();
 
-        ProfilesRequest request = new ProfilesRequest(Request.Method.GET, api, new Response.Listener<String>() {
+        ProfilesRequest request = new ProfilesRequest(Request.Method.GET, api,deviceID, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Logger.log(LOG_TAG, " done with request", Log.VERBOSE);

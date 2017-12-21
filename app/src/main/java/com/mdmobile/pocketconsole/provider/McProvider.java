@@ -122,8 +122,8 @@ public class McProvider extends ContentProvider {
                         + " = " + McContract.PROFILE_DEVICE_TABLE_NAME + "." + McContract.ProfileDevice.DEVICE_ID;
 
                 mQueryBuilder.setTables(join);
-                HashMap<String,String> map = new HashMap<>();
-                map.put(McContract.Profile.NAME,McContract.Profile.NAME);
+                HashMap<String, String> map = new HashMap<>();
+                map.put(McContract.Profile.NAME, McContract.Profile.NAME);
                 mQueryBuilder.setProjectionMap(map);
                 mQueryBuilder.appendWhere(McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_DEVICE_ID + " = '" + devId + "'");
 
@@ -232,6 +232,19 @@ public class McProvider extends ContentProvider {
                     Logger.log(LOG_TAG, "Users bulk insert didn't insert values correctly", Log.ERROR);
                     return dataInserted;
                 }
+
+            case PROFILE_DEVICE_ID:
+                for (ContentValues contentValues : values) {
+                    long newRowID =
+                            database.insertWithOnConflict(mcEnumUri.tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                    if (newRowID > 0) {
+                        database.execSQL("INSERT INTO " + McContract.PROFILE_DEVICE_TABLE_NAME + " ("
+                                + McContract.ProfileDevice.PROFILE_ID + " , " + McContract.ProfileDevice.DEVICE_ID + ") VALUES ('"
+                                + newRowID + "','" + McContract.Device.getDeviceIdFromUri(uri) + "');");
+                        dataInserted++;
+                    }
+                }
+                return dataInserted;
 
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());

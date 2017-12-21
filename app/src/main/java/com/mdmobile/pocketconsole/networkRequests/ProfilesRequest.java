@@ -26,10 +26,12 @@ public class ProfilesRequest extends BasicRequest<String> {
 
     Context mContext;
     private Response.Listener<String> responseListener;
+    private final String devId;
 
-    public ProfilesRequest(int method, String url, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
+    public ProfilesRequest(int method, String url, String devId, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         this.responseListener = responseListener;
+        this.devId = devId;
     }
 
     @Override
@@ -48,10 +50,10 @@ public class ProfilesRequest extends BasicRequest<String> {
             //Parse Profiles and save in DB
             if (profiles.size() == 1) {
                 ContentValues values = DbData.prepareProfilesValue(profiles.get(0));
-                mContext.getContentResolver().insert(McContract.Profile.CONTENT_URI, values);
+                mContext.getContentResolver().insert( McContract.Profile.buildUriWithDeviceID(devId), values);
             } else if (profiles.size() > 1) {
                 ContentValues[] appValues = DbData.prepareProfilesValue(profiles);
-                mContext.getContentResolver().bulkInsert(McContract.Profile.CONTENT_URI, appValues);
+                mContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceID(devId),, appValues);
             }
 
             return Response.success(null,

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "886470147642",
+    "firebase_url": "https://pocketconsole-4a9e2.firebaseio.com",
+    "project_id": "pocketconsole-4a9e2",
+    "storage_bucket": "pocketconsole-4a9e2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886470147642:android:ef2912f91ec3a5c1",
+        "android_client_info": {
+          "package_name": "com.mdmobile.pocketconsole"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886470147642-4j17ed5tb8biba70ijb40defv8bqcjl8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTdlPpt8Wu_KD2qix65veDgNSSWGvzwVM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

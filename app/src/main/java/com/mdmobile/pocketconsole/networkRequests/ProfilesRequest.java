@@ -18,6 +18,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
+
 /**
  * Class to handle profiles installed info request
  */
@@ -50,10 +52,10 @@ public class ProfilesRequest extends BasicRequest<String> {
             //Parse Profiles and save in DB
             if (profiles.size() == 1) {
                 ContentValues values = DbData.prepareProfilesValue(profiles.get(0));
-                mContext.getContentResolver().insert(McContract.Profile.buildUriWithDeviceID(devId), values);
+                applicationContext.getContentResolver().insert(McContract.Profile.buildUriWithDeviceID(devId), values);
             } else if (profiles.size() > 1) {
                 ContentValues[] appValues = DbData.prepareProfilesValue(profiles);
-                mContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceID(devId), appValues);
+                applicationContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceID(devId), appValues);
             }
 
             return Response.success(null,

@@ -154,95 +154,93 @@ public class McProvider extends ContentProvider {
             case DEVICES:
                 for (ContentValues contentValues : values) {
 
-                    if (database.insertWithOnConflict(McContract.DEVICE_TABLE_NAME,
-                            null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                    if (database.insert(McContract.DEVICE_TABLE_NAME,
+                            null, contentValues) > 0) {
                         dataInserted++;
                     }
                 }
                 if (dataInserted == values.length) {
                     getContext().getContentResolver().notifyChange(uri, null);
                     Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " devices in DB", Log.VERBOSE);
-
-                    return dataInserted;
                 } else {
                     Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);
-                    return dataInserted;
                 }
+                return dataInserted;
+
             case INSTALLED_APPLICATION_PKG_NAME:
                 for (ContentValues contentValues : values) {
-                    if (database.insertWithOnConflict(McContract.INSTALLED_APPLICATION_TABLE_NAME,
-                            null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                    if (database.insert(McContract.INSTALLED_APPLICATION_TABLE_NAME, null, contentValues) > 0) {
                         dataInserted++;
                     }
                 }
                 if (dataInserted == values.length) {
                     getContext().getContentResolver().notifyChange(uri, null);
                     Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " apps in DB", Log.VERBOSE);
-
-                    return dataInserted;
                 } else {
                     Logger.log(LOG_TAG, "Device Bulk insert didn't insert devices correctly", Log.ERROR);
-                    return dataInserted;
                 }
+                return dataInserted;
 
             case MANAGEMENT_SERVERS:
                 for (ContentValues contentValues : values) {
-                    if (database.insertWithOnConflict(McContract.MANAGEMENT_SERVER_TABLE_NAME,
-                            null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                    if (database.insert(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, contentValues) > 0) {
                         dataInserted++;
                     }
                 }
                 if (dataInserted == values.length) {
                     getContext().getContentResolver().notifyChange(uri, null);
                     Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " MS in DB", Log.VERBOSE);
-
-                    return dataInserted;
                 } else {
                     Logger.log(LOG_TAG, "MS bulk insert didn't insert values correctly", Log.ERROR);
-                    return dataInserted;
                 }
+                return dataInserted;
 
             case DEPLOYMENT_SERVERS:
                 for (ContentValues contentValues : values) {
-                    if (database.insertWithOnConflict(McContract.DEPLOYMENT_SERVER_TABLE_NAME,
-                            null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                    if (database.insert(McContract.DEPLOYMENT_SERVER_TABLE_NAME, null, contentValues) > 0) {
                         dataInserted++;
                     }
                 }
                 if (dataInserted == values.length) {
                     getContext().getContentResolver().notifyChange(uri, null);
                     Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " DS in DB", Log.VERBOSE);
-
-                    return dataInserted;
                 } else {
                     Logger.log(LOG_TAG, "DS bulk insert didn't insert values correctly", Log.ERROR);
-                    return dataInserted;
                 }
+                return dataInserted;
 
             case USERS:
                 for (ContentValues contentValues : values) {
-                    if (database.insertWithOnConflict(McContract.USER_TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE) > 0) {
+                    if (database.insert(McContract.USER_TABLE_NAME, null, contentValues) > 0) {
                         dataInserted++;
                     }
                 }
                 if (dataInserted == values.length) {
+                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " users in DB", Log.VERBOSE);
                     getContext().getContentResolver().notifyChange(uri, null);
-                    return dataInserted;
                 } else {
                     Logger.log(LOG_TAG, "Users bulk insert didn't insert values correctly", Log.ERROR);
-                    return dataInserted;
                 }
+                return dataInserted;
+
 
             case PROFILE_DEVICE_ID:
                 for (ContentValues contentValues : values) {
                     long newRowID =
-                            database.insertWithOnConflict(mcEnumUri.tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                            database.insert(mcEnumUri.tableName, null, contentValues);
                     if (newRowID > 0) {
                         database.execSQL("INSERT INTO " + McContract.PROFILE_DEVICE_TABLE_NAME + " ("
                                 + McContract.ProfileDevice.PROFILE_ID + " , " + McContract.ProfileDevice.DEVICE_ID + ") VALUES ('"
                                 + newRowID + "','" + McContract.Device.getDeviceIdFromUri(uri) + "');");
                         dataInserted++;
                     }
+                }
+                if (dataInserted == values.length) {
+                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " profiles(" +
+                            McContract.Device.getDeviceIdFromUri(uri) + ") in DB", Log.VERBOSE);
+
+                } else {
+                    Logger.log(LOG_TAG, "Profiles bulk insert didn't insert values correctly", Log.ERROR);
                 }
                 return dataInserted;
 

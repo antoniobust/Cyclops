@@ -137,11 +137,12 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
 //        getActivity().supportStartPostponedEnterTransition();
-        getLoaderManager().initLoader(10, null, this);
-        getLoaderManager().initLoader(11, null, this);
-        getLoaderManager().initLoader(12, null, this);
+//        getLoaderManager().initLoader(10, null, this);
+//        getLoaderManager().initLoader(11, null, this);
+//        getLoaderManager().initLoader(12, null, this);
 
         ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
+        ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
     }
 
 

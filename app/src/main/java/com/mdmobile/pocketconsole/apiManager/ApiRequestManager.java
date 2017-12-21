@@ -139,9 +139,9 @@ public class ApiRequestManager {
 
     public void getDeviceProfiles(@NonNull final String deviceID) {
         String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
-        String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).getInstalledApplications().build();
+        String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).getProfiles().build();
 
-        ProfilesRequest request = new ProfilesRequest(Request.Method.GET, api,deviceID, new Response.Listener<String>() {
+        ProfilesRequest request = new ProfilesRequest(Request.Method.GET, api, deviceID, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
@@ -149,7 +149,7 @@ public class ApiRequestManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
+                Logger.log(LOG_TAG, "Error requesting device's profiles (" + deviceID + ") ", Log.ERROR);
             }
         });
 

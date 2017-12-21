@@ -20,6 +20,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.DEPLOYMENT_SERVER_T
 import static com.mdmobile.pocketconsole.provider.McContract.DEVICE_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.INSTALLED_APPLICATION_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.MANAGEMENT_SERVER_TABLE_NAME;
+import static com.mdmobile.pocketconsole.provider.McContract.PROFILE_DEVICE_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.PROFILE_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.SCRIPT_TABLE_NAME;
 import static com.mdmobile.pocketconsole.provider.McContract.SERVER_INFO_TABLE_NAME;
@@ -32,7 +33,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.USER_TABLE_NAME;
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 26;
+    private static final int DB_VERSION = 28;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -46,7 +47,7 @@ public class McHelper extends SQLiteOpenHelper {
         //Create device table
         db.execSQL(" CREATE TABLE " + McContract.DEVICE_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + McContract.Device.COLUMN_DEVICE_ID + " TEXT UNIQUE NOT NULL, "
+                + McContract.Device.COLUMN_DEVICE_ID + " TEXT NOT NULL, "
                 + McContract.Device.COLUMN_KIND + " TEXT, "
                 + McContract.Device.COLUMN_DEVICE_NAME + " TEXT, "
                 + McContract.Device.COLUMN_AGENT_ONLINE + " INTEGER, "
@@ -69,8 +70,9 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.Device.COLUMN_OS_VERSION + " TEXT, "
                 + McContract.Device.COLUMN_PATH + " TEXT, "
                 + McContract.Device.COLUMN_PLATFORM + " INTEGER, "
-                + McContract.Device.COLUMN_EXTRA_INFO + " TEXT"
-                + ");");
+                + McContract.Device.COLUMN_EXTRA_INFO + " TEXT, "
+                + "UNIQUE(" + McContract.Device.COLUMN_DEVICE_ID + ") ON CONFLICT REPLACE );");
+
 
 
         //Create MsInfo table
@@ -160,15 +162,15 @@ public class McHelper extends SQLiteOpenHelper {
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + McContract.InstalledApplications.DEVICE_ID + " TEXT NOT NULL, "
                 + McContract.InstalledApplications.APPLICATION_NAME + " TEXT,"
-                + McContract.InstalledApplications.APPLICATION_ID + " TEXT UNIQUE, "
+                + McContract.InstalledApplications.APPLICATION_ID + " TEXT  NOT NULL, "
                 + McContract.InstalledApplications.APPLICATION_SIZE + " TEXT, "
                 + McContract.InstalledApplications.APPLICATION_DATA_USED + " TEXT, "
                 + McContract.InstalledApplications.APPLICATION_VERSION + " TEXT, "
                 + McContract.InstalledApplications.APPLICATION_BUILD_NUMBER + " TEXT, "
                 + McContract.InstalledApplications.APPLICATION_STATUS + " TEXT, "
                 + "FOREIGN KEY(" + McContract.InstalledApplications.DEVICE_ID + ") REFERENCES "
-                + DEVICE_TABLE_NAME + " (" + McContract.Device.COLUMN_DEVICE_ID + ")"
-                + ");");
+                + DEVICE_TABLE_NAME + " (" + McContract.Device.COLUMN_DEVICE_ID + "), "
+                + "UNIQUE(" + McContract.InstalledApplications.APPLICATION_ID + ") ON CONFLICT REPLACE );");
 
         //Create Script table
         db.execSQL("CREATE TABLE " + McContract.SCRIPT_TABLE_NAME + " ("
@@ -193,17 +195,19 @@ public class McHelper extends SQLiteOpenHelper {
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + McContract.ServerInfo.CLIENT_ID + " TEXT NOT NULL, "
                 + McContract.ServerInfo.CLIENT_SECRET + " TEXT NOT NULL, "
-                + McContract.ServerInfo.NAME + " TEXT NOT NULL UNIQUE );");
+                + McContract.ServerInfo.NAME + " TEXT,"
+                + "UNIQUE(" + McContract.ServerInfo.NAME + ") ON CONFLICT ABORT );");
 
         //Create profile table
         db.execSQL("CREATE TABLE " + McContract.PROFILE_TABLE_NAME + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + McContract.Profile.REFERENCE_ID + " TEXT NOT NULL, "
+                + McContract.Profile.REFERENCE_ID + "  NOT NULL, "
                 + McContract.Profile.NAME + " TEXT NOT NULL, "
                 + McContract.Profile.STATUS + " TEXT NOT NULL, "
                 + McContract.Profile.ASSIGNMENT_DATE + " TEXT, "
                 + McContract.Profile.IS_MANDATORY + " INTEGER, "
-                + McContract.Profile.VERSION_NUMBER + " INTEGER );");
+                + McContract.Profile.VERSION_NUMBER + " INTEGER, "
+                + "UNIQUE(" + McContract.Profile.REFERENCE_ID + ") ON CONFLICT REPLACE );");
 
         //Create profile device hook table
         db.execSQL("CREATE TABLE " + McContract.PROFILE_DEVICE_TABLE_NAME + " ("
@@ -212,7 +216,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.ProfileDevice.PROFILE_ID + " TEXT NOT NULL, "
                 + " FOREIGN KEY (" + McContract.ProfileDevice.DEVICE_ID + ") REFERENCES "
                 + DEVICE_TABLE_NAME + "(" + McContract.Device.COLUMN_DEVICE_ID + "), "
-                + " FOREIGN KEY("+ McContract.ProfileDevice.PROFILE_ID + ") REFERENCES "
+                + " FOREIGN KEY(" + McContract.ProfileDevice.PROFILE_ID + ") REFERENCES "
                 + PROFILE_TABLE_NAME + "( " + McContract.Profile.REFERENCE_ID + "));");
 
         //Insert standard script in Script table
@@ -242,6 +246,8 @@ public class McHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SCRIPT_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SERVER_INFO_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PROFILE_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PROFILE_DEVICE_TABLE_NAME + ";");
 
 
         onCreate(sqLiteDatabase);

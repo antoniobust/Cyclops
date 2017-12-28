@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Utility class that provided methods for setting an empty view when recycler is empty
+ * Utility class that provides methods for setting an empty view when recycler is empty
  */
 
 public class RecyclerEmptyView extends RecyclerView {

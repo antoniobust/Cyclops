@@ -105,6 +105,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         TextView subtitleView = rootView.findViewById(R.id.device_detail_subtitle_view);
         CardView infoCard = rootView.findViewById(R.id.device_details_info_card);
         CardView appsCard = rootView.findViewById(R.id.device_details_apps_card);
+        CardView profilesCard = rootView.findViewById(R.id.device_details_profiles_card);
         batteryView = rootView.findViewById(R.id.device_details_battery);
         wifiView = rootView.findViewById(R.id.device_details_wifi);
         simView = rootView.findViewById(R.id.device_details_simcard);
@@ -118,6 +119,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
         infoCard.setOnClickListener(this);
         appsCard.setOnClickListener(this);
+        profilesCard.setOnClickListener(this);
 
         titleIconView.setImageResource(R.drawable.ic_phone_android);
         titleView.setText(deviceName);
@@ -137,9 +139,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
 //        getActivity().supportStartPostponedEnterTransition();
-//        getLoaderManager().initLoader(10, null, this);
-//        getLoaderManager().initLoader(11, null, this);
-//        getLoaderManager().initLoader(12, null, this);
+        getLoaderManager().initLoader(10, null, this);
+        getLoaderManager().initLoader(11, null, this);
+        getLoaderManager().initLoader(12, null, this);
 
         ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
         ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
@@ -271,6 +273,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         barFilling.setLevel(val * 100);
     }
 
+
     @Override
     public void onClick(View v) {
         FragmentTransaction transaction = (getActivity()).getSupportFragmentManager().beginTransaction();
@@ -281,6 +284,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                         .commit();
                 break;
             case R.id.device_details_profiles_card:
+                transaction.replace(R.id.device_details_fragment_container, ProfilesFragment.newInstance(deviceId))
+                .commit();
                 break;
             case R.id.device_details_apps_card:
 

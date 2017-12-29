@@ -66,7 +66,7 @@ public class McProvider extends ContentProvider {
             case DEVICES_ID:
                 devId = McContract.Device.getDeviceIdFromUri(uri);
                 mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
-                mQueryBuilder.appendWhere(McContract.Device.COLUMN_DEVICE_ID + "=" + devId);
+                mQueryBuilder.appendWhere(McContract.Device.COLUMN_DEVICE_ID + "='" + devId +"'");
 
                 break;
 
@@ -82,7 +82,7 @@ public class McProvider extends ContentProvider {
             case INSTALLED_APPLICATIONS_ON_DEVICE:
                 devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
                 mQueryBuilder.setTables(McContract.INSTALLED_APPLICATION_TABLE_NAME);
-                mQueryBuilder.appendWhere(McContract.InstalledApplications.DEVICE_ID + "=" + devId);
+                mQueryBuilder.appendWhere(McContract.InstalledApplications.DEVICE_ID + "='" + devId +"'");
                 break;
 
             case INSTALLED_APPLICATION_PKG_NAME:
@@ -124,7 +124,7 @@ public class McProvider extends ContentProvider {
                 mQueryBuilder.setTables(join);
                 HashMap<String, String> map = new HashMap<>();
                 map.put(McContract.Profile.NAME, McContract.Profile.NAME);
-                mQueryBuilder.setProjectionMap(map);
+                mQueryBuilder.setProjectionMap(null);
                 mQueryBuilder.appendWhere(McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_DEVICE_ID + " = '" + devId + "'");
 
                 break;

@@ -36,7 +36,7 @@ public class ProfileListAdapter extends RecyclerView.Adapter<ProfileListAdapter.
         cursor.moveToPosition(position);
         String profileName = cursor.getString(cursor.getColumnIndex(McContract.Profile.NAME));
         String profileStatus = cursor.getString(cursor.getColumnIndex(McContract.Profile.STATUS));
-        holder.profileStatusView.setText(profileName);
+        holder.profileNameView.setText(profileName);
         holder.profileStatusView.setText(profileStatus);
     }
 
@@ -46,12 +46,8 @@ public class ProfileListAdapter extends RecyclerView.Adapter<ProfileListAdapter.
     }
 
     public Cursor swapCursor(Cursor c) {
-        if (cursor == null && getItemCount() == 0 ) {
-            return null;
-        }
-
         Cursor oldCursor = cursor;
-        this.cursor = c;
+        cursor = c;
         if (cursor != null) {
             this.notifyDataSetChanged();
         }

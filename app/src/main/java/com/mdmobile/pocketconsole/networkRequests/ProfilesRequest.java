@@ -2,16 +2,20 @@ package com.mdmobile.pocketconsole.networkRequests;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.github.mikephil.charting.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.dataModels.api.Profile;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.DbData;
+import com.mdmobile.pocketconsole.utils.GeneralUtility;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -26,6 +30,7 @@ import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 
 public class ProfilesRequest extends BasicRequest<String> {
 
+    private static final String LOG_TAG =ProfilesRequest.class.getSimpleName() ;
     Context mContext;
     private Response.Listener<String> responseListener;
     private final String devId;
@@ -48,7 +53,7 @@ public class ProfilesRequest extends BasicRequest<String> {
 
             Gson gson = new Gson();
             ArrayList<Profile> profiles = gson.fromJson(jsonResponseString, type);
-
+            Logger.log(LOG_TAG,  profiles.size() + " profiles received for: " +devId, Log.VERBOSE);
             //Parse Profiles and save in DB
             if (profiles.size() == 1) {
                 ContentValues values = DbData.prepareProfilesValue(profiles.get(0));

@@ -17,7 +17,6 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DsInfoAdapter;
 import com.mdmobile.pocketconsole.adapters.MsInfoAdapter;
 import com.mdmobile.pocketconsole.adapters.ServerListAdapter;
-import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 
@@ -48,8 +47,8 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
         inflater = inflater.cloneInContext(contextThemeWrapper);
         View rootView = inflater.inflate(R.layout.fragment_server, container, false);
 
-        dsInfoRecycler = (RecyclerView) rootView.findViewById(R.id.ds_recycler);
-        msInfoRecycler = (RecyclerView) rootView.findViewById(R.id.ms_recycler);
+        dsInfoRecycler = rootView.findViewById(R.id.ds_recycler);
+        msInfoRecycler = rootView.findViewById(R.id.ms_recycler);
 
         dsInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         msInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -62,8 +61,6 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
 
         dsInfoRecycler.setAdapter(dsInfoAdapter);
         msInfoRecycler.setAdapter(msInfoAdapter);
-
-        ApiRequestManager.getInstance().getServerInfo();
 
         return rootView;
     }

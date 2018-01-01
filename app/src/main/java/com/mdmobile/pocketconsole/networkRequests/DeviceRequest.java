@@ -99,8 +99,6 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                 Type deviceCollectionType = new TypeToken<BasicDevice>() {
                 }.getType();
                 BasicDevice deviceInfo = gson.fromJson(jsonResponseString, deviceCollectionType);
-
-//                TODO:implement old data update method
                 ContentValues device = prepareDeviceValues(deviceInfo);
                 String devId = device.getAsString(McContract.Device.COLUMN_DEVICE_ID);
                 mContext.getContentResolver()

@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.UserListAdapter;
-import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 
@@ -47,10 +46,8 @@ public class UsersFragment extends Fragment implements LoaderManager.LoaderCallb
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_users, container, false);
-        RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.users_recycler);
+        RecyclerView recycler = rootView.findViewById(R.id.users_recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-        ApiRequestManager.getInstance().getUsers();
 
         adapter = new UserListAdapter(null);
         recycler.setAdapter(adapter);

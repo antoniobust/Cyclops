@@ -84,6 +84,8 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         ApiRequestManager.getInstance().getDeviceInfo();
+        ApiRequestManager.getInstance().getUsers();
+        ApiRequestManager.getInstance().getServerInfo();
     }
 
     @Override

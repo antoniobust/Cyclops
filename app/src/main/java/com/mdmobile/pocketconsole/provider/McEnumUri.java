@@ -45,7 +45,10 @@ public enum McEnumUri {
 
     PROFILES(518, McContract.PROFILE_TABLE_NAME, false, McContract.PROFILE_TABLE_NAME),
 
-    PROFILE_DEVICE_ID(519, McContract.PROFILE_TABLE_NAME + "/*", true, McContract.PROFILE_TABLE_NAME);
+    PROFILE_DEVICE_ID(519, McContract.PROFILE_TABLE_NAME + "/device/*", true, McContract.PROFILE_TABLE_NAME),
+
+    PROFILE_ID(520, McContract.PROFILE_TABLE_NAME + "/*", true, McContract.PROFILE_TABLE_NAME);
+
 
     public String path, contentType, tableName;
     public int matcherCode;

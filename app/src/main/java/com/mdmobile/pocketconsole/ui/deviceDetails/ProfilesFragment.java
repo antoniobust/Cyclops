@@ -75,7 +75,7 @@ public class ProfilesFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(getContext(), McContract.Profile.buildUriWithDeviceID(devId), null, null, null, McContract.Profile.NAME);
+        return new CursorLoader(getContext(), McContract.Profile.buildUriWithDeviceId(devId), null, null, null, McContract.Profile.NAME);
     }
 
     @Override

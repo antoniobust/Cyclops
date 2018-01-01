@@ -151,13 +151,15 @@ public class DbData extends AndroidJUnitRunner {
         devices.moveToFirst();
         String devId = devices.getString(devices.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
 
-        Uri uri = InstrumentationRegistry.getContext().getContentResolver().insert(McContract.Profile.buildUriWithDeviceID(devId), val[0]);
+        Uri uri = InstrumentationRegistry.getContext().getContentResolver().insert(McContract.Profile.buildUriWithDeviceId(devId), val[0]);
         assertNotNull("Error inserting profile, uri is null", uri);
 
-        Cursor c = InstrumentationRegistry.getTargetContext()
-                .getContentResolver().query(McContract.Profile.buildUriWithDeviceID(devId), null, null,null,null);
-        assertNotNull(c);
-        assertTrue("Cannot select the profile in cursor", c.moveToFirst());
+
+        String profileId = profiles.get(0).getReferenceId();
+
+        assertTrue("Profile id: " + profileId + " has not been deleted", InstrumentationRegistry.getTargetContext()
+                .getContentResolver().delete(McContract.Profile.buildUriWithID(profileId), null, null) == 1);
+
     }
 
 

@@ -66,7 +66,7 @@ public class McProvider extends ContentProvider {
             case DEVICES_ID:
                 devId = McContract.Device.getDeviceIdFromUri(uri);
                 mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
-                mQueryBuilder.appendWhere(McContract.Device.COLUMN_DEVICE_ID + "='" + devId +"'");
+                mQueryBuilder.appendWhere(McContract.Device.COLUMN_DEVICE_ID + "='" + devId + "'");
 
                 break;
 
@@ -82,7 +82,7 @@ public class McProvider extends ContentProvider {
             case INSTALLED_APPLICATIONS_ON_DEVICE:
                 devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
                 mQueryBuilder.setTables(McContract.INSTALLED_APPLICATION_TABLE_NAME);
-                mQueryBuilder.appendWhere(McContract.InstalledApplications.DEVICE_ID + "='" + devId +"'");
+                mQueryBuilder.appendWhere(McContract.InstalledApplications.DEVICE_ID + "='" + devId + "'");
                 break;
 
             case INSTALLED_APPLICATION_PKG_NAME:
@@ -114,7 +114,7 @@ public class McProvider extends ContentProvider {
                 break;
 
             case PROFILE_DEVICE_ID:
-                devId = McContract.Profile.getDeviceIdFromUri(uri);
+                devId = McContract.Profile.getUriId(uri);
                 String join = McContract.PROFILE_TABLE_NAME + " INNER JOIN "
                         + McContract.PROFILE_DEVICE_TABLE_NAME + " ON " + McContract.PROFILE_TABLE_NAME + "." + McContract.Profile._ID
                         + " = " + McContract.PROFILE_DEVICE_TABLE_NAME + "." + McContract.ProfileDevice.PROFILE_ID
@@ -325,7 +325,7 @@ public class McProvider extends ContentProvider {
                 database.execSQL("INSERT INTO " + McContract.PROFILE_DEVICE_TABLE_NAME + " ("
                         + McContract.ProfileDevice.PROFILE_ID + " , " + McContract.ProfileDevice.DEVICE_ID + ") VALUES ('"
                         + newRowID + "','" + McContract.Device.getDeviceIdFromUri(uri) + "');");
-                return McContract.Profile.buildUriWithProfileID(String.valueOf(newRowID));
+                return McContract.Profile.buildUriWithID(String.valueOf(newRowID));
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }
@@ -345,24 +345,26 @@ public class McProvider extends ContentProvider {
                 deleted = database.delete(McContract.DEVICE_TABLE_NAME, null, null);
                 Logger.log(LOG_TAG, "Devices deleted:" + deleted, Log.VERBOSE);
                 break;
-            case DEVICES_ID:
-                String deviceId = McContract.Device.getDeviceIdFromUri(uri);
+            case DEVICES_ID: {
+                String devId = McContract.Device.getDeviceIdFromUri(uri);
                 String where = McContract.Device.COLUMN_DEVICE_ID + " = ?";
-                String[] parameters = {deviceId};
+                String[] parameters = {devId};
                 deleted = database.delete(McContract.DEVICE_TABLE_NAME, where, parameters);
                 if (deleted > 0) {
-                    Logger.log(LOG_TAG, "Device (" + deviceId + ") deleted", Log.VERBOSE);
+                    Logger.log(LOG_TAG, "Device (" + devId + ") deleted", Log.VERBOSE);
                 } else {
-                    Logger.log(LOG_TAG, "Device (" + deviceId + ") not deleted", Log.VERBOSE);
+                    Logger.log(LOG_TAG, "Device (" + devId + ") not deleted", Log.VERBOSE);
                 }
                 break;
+            }
 
-            case INSTALLED_APPLICATIONS_ON_DEVICE:
+            case INSTALLED_APPLICATIONS_ON_DEVICE: {
                 String devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
                 deleted = database.delete(McContract.DEVICE_TABLE_NAME, McContract.InstalledApplications.DEVICE_ID + " =?",
                         new String[]{devId});
                 Logger.log(LOG_TAG, "InstalledApps deleted:" + deleted, Log.VERBOSE);
                 break;
+            }
             case MANAGEMENT_SERVERS:
                 deleted = database.delete(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, null);
                 Logger.log(LOG_TAG, "MS deleted:" + deleted, Log.VERBOSE);
@@ -380,6 +382,22 @@ public class McProvider extends ContentProvider {
                 deleted = database.delete(McContract.USER_TABLE_NAME, null, null);
                 Logger.log(LOG_TAG, "User deleted: " + deleted, Log.VERBOSE);
                 break;
+
+            case PROFILE_ID:
+                String profileId = McContract.Profile.getUriId(uri);
+                deleted = database.delete(McContract.PROFILE_DEVICE_TABLE_NAME,
+                        McContract.ProfileDevice.PROFILE_ID + "=?", new String[]{profileId});
+                Logger.log(LOG_TAG, "Profile (" + profileId + ") deleted", Log.VERBOSE);
+                break;
+
+            case PROFILE_DEVICE_ID: {
+                String devId = McContract.Profile.getUriId(uri);
+                deleted = database.delete(McContract.PROFILE_DEVICE_TABLE_NAME,
+                        McContract.ProfileDevice.DEVICE_ID + "=?", new String[]{devId});
+                Logger.log(LOG_TAG, "Profiles deleted:" + deleted + " (device " + devId + ")", Log.VERBOSE);
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
 

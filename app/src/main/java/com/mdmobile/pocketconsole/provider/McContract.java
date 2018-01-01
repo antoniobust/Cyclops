@@ -315,15 +315,15 @@ public class McContract {
         public final static String IS_MANDATORY = "IsMandatory";
         public final static String ASSIGNMENT_DATE = "AssignmentDate";
 
-        public static Uri buildUriWithDeviceID(@NonNull String deviceID) {
+        public static Uri buildUriWithID(@NonNull String deviceID) {
             return CONTENT_URI.buildUpon().appendPath(deviceID).build();
         }
 
-        public static Uri buildUriWithProfileID(@NonNull String profileId) {
-            return CONTENT_URI.buildUpon().appendPath(profileId).build();
+        public static Uri buildUriWithDeviceId(@NonNull String profileId) {
+            return CONTENT_URI.buildUpon().appendPath("device").appendPath(profileId).build();
         }
 
-        public static String getDeviceIdFromUri(@NonNull Uri uri) {
+        public static String getUriId(@NonNull Uri uri) {
             return uri.getLastPathSegment();
         }
     }

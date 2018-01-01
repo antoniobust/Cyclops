@@ -8,13 +8,11 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.github.mikephil.charting.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.dataModels.api.Profile;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.DbData;
-import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.io.UnsupportedEncodingException;
@@ -54,13 +52,15 @@ public class ProfilesRequest extends BasicRequest<String> {
             Gson gson = new Gson();
             ArrayList<Profile> profiles = gson.fromJson(jsonResponseString, type);
             Logger.log(LOG_TAG,  profiles.size() + " profiles received for: " +devId, Log.VERBOSE);
+            //Delete old data
+            applicationContext.getContentResolver().delete(McContract.Profile.buildUriWithDeviceId(devId),null,null);
             //Parse Profiles and save in DB
             if (profiles.size() == 1) {
                 ContentValues values = DbData.prepareProfilesValue(profiles.get(0));
-                applicationContext.getContentResolver().insert(McContract.Profile.buildUriWithDeviceID(devId), values);
+                applicationContext.getContentResolver().insert(McContract.Profile.buildUriWithDeviceId(devId), values);
             } else if (profiles.size() > 1) {
                 ContentValues[] appValues = DbData.prepareProfilesValue(profiles);
-                applicationContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceID(devId), appValues);
+                applicationContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceId(devId), appValues);
             }
 
             return Response.success(null,

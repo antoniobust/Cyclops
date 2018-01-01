@@ -33,7 +33,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.USER_TABLE_NAME;
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 28;
+    private static final int DB_VERSION = 29;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -72,7 +72,6 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.Device.COLUMN_PLATFORM + " INTEGER, "
                 + McContract.Device.COLUMN_EXTRA_INFO + " TEXT, "
                 + "UNIQUE(" + McContract.Device.COLUMN_DEVICE_ID + ") ON CONFLICT REPLACE );");
-
 
 
         //Create MsInfo table
@@ -217,7 +216,8 @@ public class McHelper extends SQLiteOpenHelper {
                 + " FOREIGN KEY (" + McContract.ProfileDevice.DEVICE_ID + ") REFERENCES "
                 + DEVICE_TABLE_NAME + "(" + McContract.Device.COLUMN_DEVICE_ID + "), "
                 + " FOREIGN KEY(" + McContract.ProfileDevice.PROFILE_ID + ") REFERENCES "
-                + PROFILE_TABLE_NAME + "( " + McContract.Profile.REFERENCE_ID + "));");
+                + PROFILE_TABLE_NAME + "( " + McContract.Profile.REFERENCE_ID + ") ON DELETE CASCADE);");
+
 
         //Insert standard script in Script table
         Resources res = mContext.getResources();

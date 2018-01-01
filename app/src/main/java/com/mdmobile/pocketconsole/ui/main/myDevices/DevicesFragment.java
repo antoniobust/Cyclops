@@ -108,7 +108,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         recyclerView.setLayoutManager(mLinearLayoutManager);
 
         //Set Swipe to refresh layout
-        mSwipeToRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.devices_swipe_refresh);
+        mSwipeToRefresh = rootView.findViewById(R.id.devices_swipe_refresh);
         mSwipeToRefresh.setOnRefreshListener(this);
 
         //Create an adapter for recycler

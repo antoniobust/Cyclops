@@ -3,8 +3,10 @@ package com.mdmobile.pocketconsole.ui.deviceDetails;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -18,15 +20,17 @@ import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.ui.Dialogs.MessageDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.ScriptDialog;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 import static android.support.v4.view.ViewCompat.animate;
 
-public class DeviceDetailsActivity extends AppCompatActivity {
+public class DeviceDetailsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     public final static String DEVICE_NAME_EXTRA_KEY = "DeviceNameIntentExtraKey";
     public final static String DEVICE_ID_EXTRA_KEY = "DeviceIdIntentExtraKey";
     public static final String EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY = "DeviceIconTransition";
     public static final String EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY = "DeviceNameTransition";
+    private final String LOG_TAG = DeviceDetailsActivity.class.getSimpleName();
     FloatingActionButton mainFab;
     FloatingActionButton subFab1;
     FloatingActionButton subFab2;
@@ -38,9 +42,19 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     TextView label4;
     String deviceName;
     String deviceId;
+    SwipeRefreshLayout swipeLayout;
     private String nameTransitionName;
     private String iconTransitionName;
 
+    // -- Interface methods
+    @Override
+    public void onRefresh() {
+        Logger.log(LOG_TAG, "Device " + deviceId + " info update requested", Log.VERBOSE);
+        ApiRequestManager.getInstance().getDeviceInfo(deviceId);
+        swipeLayout.setRefreshing(false);
+    }
+
+    // -- Lifecycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,16 +70,18 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_device_details);
 
-        mainFab = (FloatingActionButton) findViewById(R.id.details_main_fab);
-        subFab1 = (FloatingActionButton) findViewById(R.id.sub_fab1);
-        subFab2 = (FloatingActionButton) findViewById(R.id.sub_fab2);
-        subFab3 = (FloatingActionButton) findViewById(R.id.sub_fab3);
-        subFab4 = (FloatingActionButton) findViewById(R.id.sub_fab4);
-        label1 = (TextView) findViewById(R.id.fab_label1);
-        label2 = (TextView) findViewById(R.id.fab_label2);
-        label3 = (TextView) findViewById(R.id.fab_label3);
-        label4 = (TextView) findViewById(R.id.fab_label4);
+        swipeLayout = findViewById(R.id.device_info_swipe_to_refresh);
+        mainFab = findViewById(R.id.details_main_fab);
+        subFab1 = findViewById(R.id.sub_fab1);
+        subFab2 = findViewById(R.id.sub_fab2);
+        subFab3 = findViewById(R.id.sub_fab3);
+        subFab4 = findViewById(R.id.sub_fab4);
+        label1 = findViewById(R.id.fab_label1);
+        label2 = findViewById(R.id.fab_label2);
+        label3 = findViewById(R.id.fab_label3);
+        label4 = findViewById(R.id.fab_label4);
 
+        swipeLayout.setOnRefreshListener(this);
 
         //Set up main fab onClick action
         mainFab.setOnClickListener(new View.OnClickListener() {
@@ -184,4 +200,5 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         }
         hideFabs();
     }
+
 }

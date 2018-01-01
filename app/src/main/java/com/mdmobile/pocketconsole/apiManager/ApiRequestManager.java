@@ -117,7 +117,27 @@ public class ApiRequestManager {
 
     }
 
-    public void getDevices() {
+    public void getDeviceInfo(@NonNull String devId) {
+        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String api = ApiModel.DevicesApi.SelectDevice.Builder(apiAuthority, devId).build();
+
+        DeviceRequest deviceRequest = new DeviceRequest<>(ApplicationLoader.applicationContext, Request.Method.GET, api,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
+            }
+        }, DeviceRequest.UPDATE_EXISTING_DEVICE_INFO);
+
+        requestsQueue.add(deviceRequest);
+    }
+
+    public void getDeviceInfo() {
         String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
 

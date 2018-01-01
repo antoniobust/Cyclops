@@ -10,7 +10,6 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
 import com.mdmobile.pocketconsole.dataModels.api.RuntimeTypeAdapterFactory;
 import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidForWorkDevice;
 import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidGenericDevice;
@@ -24,6 +23,7 @@ import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsDesktop;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsDesktopLegacy;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsPhone;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsRuntime;
+import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 import java.io.UnsupportedEncodingException;
@@ -62,10 +62,6 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             String jsonResponseString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
 
-
-            Type deviceCollectionType = new TypeToken<ArrayList<BasicDevice>>() {
-            }.getType();
-
             final RuntimeTypeAdapterFactory<BasicDevice> typeFactory = RuntimeTypeAdapterFactory
                     .of(BasicDevice.class, "Kind")
                     .registerSubtype(IosDevice.class, ComplexDataType.DeviceKind.iOS.toString())
@@ -82,10 +78,13 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
 
             Gson gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();
-            ArrayList<BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
+
 
             //If we are refreshing all device data delete the old info first
             if (insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
+                Type deviceCollectionType = new TypeToken<ArrayList<BasicDevice>>() {
+                }.getType();
+                ArrayList<BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
                 mContext.getContentResolver().delete(McContract.Device.CONTENT_URI, null, null);
 
                 //Parse devices to extract common properties and put other as extra string
@@ -97,7 +96,15 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                     mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
                 }
             } else if (insertInfoMethod == UPDATE_EXISTING_DEVICE_INFO) {
+                Type deviceCollectionType = new TypeToken<BasicDevice>() {
+                }.getType();
+                BasicDevice deviceInfo = gson.fromJson(jsonResponseString, deviceCollectionType);
+
 //                TODO:implement old data update method
+                ContentValues device = prepareDeviceValues(deviceInfo);
+                String devId = device.getAsString(McContract.Device.COLUMN_DEVICE_ID);
+                mContext.getContentResolver()
+                        .update(McContract.Device.buildUriWithDeviceID(devId), device, null, null);
             }
 
 

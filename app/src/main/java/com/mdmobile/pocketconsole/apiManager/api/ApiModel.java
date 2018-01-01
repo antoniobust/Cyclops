@@ -64,7 +64,12 @@ public class ApiModel {
             private static Uri.Builder currentApi;
 
             private SelectDevice(String authority, String deviceID) {
+
                 currentApi = Uri.parse(authority).buildUpon().appendPath(ApiTypes.devicesApi).appendPath(deviceID);
+            }
+
+            public static SelectDevice Builder(String authority, String devId) {
+                return new SelectDevice(authority.concat("/" + MobiControl), devId);
             }
 
             public SelectDevice getCollectedData(@NonNull String startDate, @NonNull String endDate,

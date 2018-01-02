@@ -1,16 +1,35 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/devices_swipe_refresh"
     style="@style/AppTheme.MainActivity.Fragment"
     android:layout_width="@dimen/max_content_size"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/devices_recycler"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/device_list_item" />
+        android:layout_height="wrap_content">
+
+        <com.mdmobile.pocketconsole.utils.RecyclerEmptyView
+            android:id="@+id/devices_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/device_list_item"/>
+
+        <TextView
+            android:id="@+id/devices_recycler_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/empty_device_list_label"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:visibility="gone"
+            />
+    </FrameLayout>
+
 </android.support.v4.widget.SwipeRefreshLayout>
 
 

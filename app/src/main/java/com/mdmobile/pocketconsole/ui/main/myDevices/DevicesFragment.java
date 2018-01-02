@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
@@ -34,6 +35,7 @@ import com.mdmobile.pocketconsole.sync.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.Dialogs.PinFolderDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.SortingDeviceDialog;
 import com.mdmobile.pocketconsole.utils.Logger;
+import com.mdmobile.pocketconsole.utils.RecyclerEmptyView;
 
 import static android.content.Context.SEARCH_SERVICE;
 
@@ -46,12 +48,13 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     private final static String SEARCH_QUERY_KEY = "searchQueryKey";
     private final String sortingOptionKey = "SortingOptionKey";
     private final String pinnedFolderOptionKey = "PinnedFolderOptionKey";
-    RecyclerView recyclerView;
+    RecyclerEmptyView recyclerView;
     private DevicesListAdapter mAdapter;
     private SharedPreferences preferences;
     private int currentSortingOption;
     private String currentPinnedPath;
     private TextView filtersView;
+    TextView emptyView;
     private SwipeRefreshLayout mSwipeToRefresh;
 
     public DevicesFragment() {
@@ -93,19 +96,16 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         //Clone inflater using the contextTHemeWrapper
         inflater = inflater.cloneInContext(contextThemeWrapper);
 
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_devices, container, false);
 
-        //Get recycler instance
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.devices_recycler);
-
+        recyclerView = rootView.findViewById(R.id.devices_recycler);
         recyclerView.setHasFixedSize(true);
+        emptyView = rootView.findViewById(R.id.devices_recycler_empty_view);
 
-
-        //Set recycler layout manager
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLinearLayoutManager);
+        recyclerView.setEmptyView(emptyView);
 
         //Set Swipe to refresh layout
         mSwipeToRefresh = rootView.findViewById(R.id.devices_swipe_refresh);

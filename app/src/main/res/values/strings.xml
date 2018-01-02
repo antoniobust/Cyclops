@@ -118,10 +118,11 @@
     <string name="charts_preference">selectedCharts</string>
     <string name="folder_preference">pinnedFolderPreferenceKey</string>
     <string name="unknown_label">Unknown</string>
-    <string name="add_filter_label">Add a filter...</string>
+    <string name="add_filter_label">Add a filter…</string>
     <string name="add_new_user_label">Add new user</string>
     <string name="add_server_label">Add server</string>
     <string name="xml_file_read">Server XML file read</string>
+    <string name="empty_device_list_label">:(\nNo devices enrolled</string>
 
 
 </resources>

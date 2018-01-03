@@ -8,14 +8,25 @@
     android:layout_margin="8dp"
     app:cardElevation="2dp">
 
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/no_data_chart_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="@color/colorPrimaryDark"
+        android:visibility="visible"/>
+
     <ImageView
         android:id="@+id/chart_refresh_button"
         android:layout_width="32dp"
         android:layout_height="?listPreferredItemHeightSmall"
-        android:tint="@color/colorPrimary"
         android:layout_gravity="end"
         android:layout_margin="8dp"
         android:background="?selectableItemBackgroundBorderless"
+        android:tint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_refresh"/>
 
     <FrameLayout

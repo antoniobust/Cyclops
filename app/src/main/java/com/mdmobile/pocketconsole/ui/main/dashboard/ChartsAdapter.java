@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -71,7 +72,8 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
     public void onBindViewHolder(ChartViewHolder holder, int position) {
 
         if (statistics == null || statistics.size() == 0) {
-            return; //TODO: set empty states
+            holder.emptyView.setVisibility(View.VISIBLE);
+            return;
         }
 
         List<PieEntry> pieEntries;
@@ -184,11 +186,13 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
     static class ChartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView refreshButton;
         FrameLayout chartContainer;
+        TextView emptyView;
 
         ChartViewHolder(View itemView) {
             super(itemView);
             chartContainer = itemView.findViewById(R.id.chart_container);
             refreshButton = itemView.findViewById(R.id.chart_refresh_button);
+            emptyView = itemView.findViewById(R.id.empty_view);
             refreshButton.setOnClickListener(this);
         }
 

@@ -16,6 +16,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mdmobile.pocketconsole.ApplicationLoader;
 import com.mdmobile.pocketconsole.BuildConfig;
+import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.api.ApiModel;
 import com.mdmobile.pocketconsole.dataModels.api.Action;
 import com.mdmobile.pocketconsole.dataModels.api.Token;
@@ -28,12 +29,14 @@ import com.mdmobile.pocketconsole.networkRequests.ProfilesRequest;
 import com.mdmobile.pocketconsole.networkRequests.ServerInfoRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
 import com.mdmobile.pocketconsole.networkRequests.UserRequest;
+import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.ServerUtility;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
 import org.json.JSONArray;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,7 +120,7 @@ public class ApiRequestManager {
 
     }
 
-    public void getDeviceInfo(@NonNull String devId) {
+    public void getDeviceInfo(@NonNull final String devId) {
         String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.SelectDevice.Builder(apiAuthority, devId).build();
 
@@ -125,12 +128,12 @@ public class ApiRequestManager {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
+                        Logger.log(LOG_TAG, "Device:" + devId + " synced...", Log.VERBOSE);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
+                Logger.log(LOG_TAG, "Error updating " + devId, Log.ERROR);
             }
         }, DeviceRequest.UPDATE_EXISTING_DEVICE_INFO);
 
@@ -145,12 +148,17 @@ public class ApiRequestManager {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
+                        Logger.log(LOG_TAG, "Devices synced...", Log.VERBOSE);
+                        GeneralUtility.setSharedPreference(
+                                ApplicationLoader.applicationContext,
+                                ApplicationLoader.applicationContext.getString(R.string.last_dev_sync_pref),
+                                Calendar.getInstance().toString());
+
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Logger.log(LOG_TAG, "Error requesting devices", Log.ERROR);
+                Logger.log(LOG_TAG, "Error syncing devices", Log.ERROR);
             }
         }, DeviceRequest.ERASE_OLD_DEVICE_INFO);
 
@@ -164,7 +172,7 @@ public class ApiRequestManager {
         ProfilesRequest request = new ProfilesRequest(Request.Method.GET, api, deviceID, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
+                Logger.log(LOG_TAG, "Device (" + deviceID + ") profiles received", Log.VERBOSE);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -184,7 +192,7 @@ public class ApiRequestManager {
                 api, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Logger.log(LOG_TAG, " done with request", Log.VERBOSE);
+                Logger.log(LOG_TAG, "Device (" + devID + ") apps received", Log.VERBOSE);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -234,11 +242,15 @@ public class ApiRequestManager {
             @Override
             public void onResponse(String response) {
                 Logger.log(LOG_TAG, "Done with server info request", Log.VERBOSE);
+                GeneralUtility.setSharedPreference(
+                        ApplicationLoader.applicationContext,
+                        ApplicationLoader.applicationContext.getString(R.string.last_server_sync_pref),
+                        Calendar.getInstance().toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Logger.log(LOG_TAG, "Error requesting servers info", Log.ERROR);
+                Logger.log(LOG_TAG, "Error requesting server info", Log.ERROR);
             }
         });
 
@@ -248,12 +260,23 @@ public class ApiRequestManager {
     public void getUsers() {
         String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.UserSecurityApi.Builder(apiAuthority).getAllUsers(false, null, null).build();
-        UserRequest userRequest = new UserRequest(api, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        UserRequest userRequest = new UserRequest(api,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Logger.log(LOG_TAG, "Users synced...", Log.VERBOSE);
+                        GeneralUtility.setSharedPreference(
+                                ApplicationLoader.applicationContext,
+                                ApplicationLoader.applicationContext.getString(R.string.last_user_sync_pref),
+                                Calendar.getInstance().toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
-            }
-        });
+                    }
+                });
 
         requestsQueue.add(userRequest);
     }

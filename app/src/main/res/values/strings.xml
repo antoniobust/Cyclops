@@ -124,6 +124,9 @@
     <string name="xml_file_read">Server XML file read</string>
     <string name="empty_device_list_label">:(\nNo devices enrolled</string>
     <string name="no_data_chart_label">Data could not be displayed</string>
+    <string name="last_dev_sync_pref">last_device_sync</string>
+    <string name="last_user_sync_pref">last_user_sync</string>
+    <string name="last_server_sync_pref">last_server_sync</string>
 
 
 </resources>

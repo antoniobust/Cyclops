@@ -18,8 +18,11 @@ import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 
 public class UserRequest extends BasicRequest<String> {
 
-    public UserRequest(String url, Response.ErrorListener errorListener) {
+    private Response.Listener<String> responseListener;
+
+    public UserRequest(String url, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
         super(Method.GET, url, errorListener);
+        this.responseListener = responseListener;
     }
 
     @Override
@@ -47,6 +50,6 @@ public class UserRequest extends BasicRequest<String> {
 
     @Override
     protected void deliverResponse(String response) {
-
+        responseListener.onResponse(response);
     }
 }

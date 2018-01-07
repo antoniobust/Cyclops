@@ -1,8 +1,10 @@
 package com.mdmobile.pocketconsole.apiManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.mdmobile.pocketconsole.networkRequests.ProfilesRequest;
 import com.mdmobile.pocketconsole.networkRequests.ServerInfoRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
 import com.mdmobile.pocketconsole.networkRequests.UserRequest;
+import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.ServerUtility;
@@ -153,6 +156,16 @@ public class ApiRequestManager {
                                 ApplicationLoader.applicationContext,
                                 ApplicationLoader.applicationContext.getString(R.string.last_dev_sync_pref),
                                 Calendar.getInstance().getTimeInMillis());
+
+                        Intent intent = new Intent(MainActivity.DEV_SYNC_BROADCAST_ACTION);
+                        intent.setPackage(ApplicationLoader.applicationContext.getPackageName());
+                        ApplicationLoader.applicationContext.sendBroadcast(intent);
+
+//                        if (LocalBroadcastManager.getInstance(ApplicationLoader.applicationContext).sendBroadcast(intent)) {
+//                            Logger.log(LOG_TAG, "Broadcast sync dev intent sent", Log.VERBOSE);
+//                        } else{
+//                            Logger.log(LOG_TAG, "Broadcast sync dev intent NOT sent", Log.VERBOSE);
+//                        }
 
                     }
                 }, new Response.ErrorListener() {

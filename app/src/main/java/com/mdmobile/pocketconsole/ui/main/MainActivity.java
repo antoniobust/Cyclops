@@ -3,14 +3,17 @@ package com.mdmobile.pocketconsole.ui.main;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.animation.Animator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -45,6 +48,7 @@ import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.
 
 public class MainActivity extends BaseActivity implements DevicesListAdapter.DeviceSelected,
         ServerListAdapter.onClick {
+    public static final String DEV_SYNC_BROADCAST_ACTION = "com.mdmobile.pocketconsole.DEVICE_SYNC_DONE";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
     //Define a flag if we are in tablet layout or not
@@ -53,28 +57,18 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     Toolbar filtersToolbar;
     RecyclerEmptyView filtersRecycler;
     private TextView lastSyncTimeView;
-    SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener =
-            new SharedPreferences.OnSharedPreferenceChangeListener() {
-                @Override
-                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                    if (!key.equals(getString(R.string.last_dev_sync_pref))) {
-                        return;
-                    }
-                    Fragment[] frags = {getSupportFragmentManager().findFragmentByTag("DevicesFragment"),
-                            getSupportFragmentManager().findFragmentByTag("DashboardFragment")};
+    private final BroadcastReceiver devSyncReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SharedPreferences preferences =
+                    getApplicationContext().getSharedPreferences(getString(R.string.general_shared_preference), MODE_MULTI_PROCESS);
 
-                    for (Fragment f : frags) {
-                        if (f.isAdded() && f.isVisible() &&
-                                ((f.getTag().equals("DashboardFragment")) || (f.getTag().equals("DevicesFragment")))) {
-                            long syncTime = sharedPreferences.getLong(key, 0);
-                            updateSyncTimeView(syncTime);
-                            break;
-                        }
-                    }
-                }
-            };
-
-    private SharedPreferences preferences;
+            long lastSync = preferences.getLong(getString(R.string.last_dev_sync_pref), 0);
+            if (lastSync != 0) {
+                updateSyncTimeView(lastSync);
+            }
+        }
+    };
     // -- Interface methods
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -155,9 +149,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
 
-        preferences = getSharedPreferences(getString(R.string.general_shared_preference), MODE_MULTI_PROCESS);
-        preferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
-
         setFiltersView();
         setLastSyncTimeView();
 
@@ -211,14 +202,15 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        preferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+    protected void onResume() {
+        super.onResume();
+        this.registerReceiver(devSyncReceiver, new IntentFilter(DEV_SYNC_BROADCAST_ACTION));
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(devSyncReceiver);
     }
 
     @Override
@@ -305,6 +297,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     }
 
     private void setLastSyncTimeView() {
+        SharedPreferences preferences = getApplicationContext()
+                .getSharedPreferences(getString(R.string.general_shared_preference), MODE_MULTI_PROCESS);
+
         long lastSync = preferences.getLong(getString(R.string.last_dev_sync_pref), 0);
         updateSyncTimeView(lastSync);
     }
@@ -317,6 +312,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             return;
         }
         try {
+            if (syncTime == 0) {
+                return;
+            }
             long currentTime = Calendar.getInstance().getTime().getTime();
             long diff = currentTime - syncTime;
             long secondsInMilli = 1000;
@@ -348,5 +346,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         }
 
     }
+
 
 }

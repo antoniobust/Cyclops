@@ -3,10 +3,8 @@ package com.mdmobile.pocketconsole.ui.deviceDetails;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -20,11 +18,10 @@ import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataTypes.ApiActions;
 import com.mdmobile.pocketconsole.ui.Dialogs.MessageDialog;
 import com.mdmobile.pocketconsole.ui.Dialogs.ScriptDialog;
-import com.mdmobile.pocketconsole.utils.Logger;
 
 import static android.support.v4.view.ViewCompat.animate;
 
-public class DeviceDetailsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class DeviceDetailsActivity extends AppCompatActivity {
 
     public final static String DEVICE_NAME_EXTRA_KEY = "DeviceNameIntentExtraKey";
     public final static String DEVICE_ID_EXTRA_KEY = "DeviceIdIntentExtraKey";
@@ -42,17 +39,9 @@ public class DeviceDetailsActivity extends AppCompatActivity implements SwipeRef
     TextView label4;
     String deviceName;
     String deviceId;
-    SwipeRefreshLayout swipeLayout;
     private String nameTransitionName;
     private String iconTransitionName;
 
-    // -- Interface methods
-    @Override
-    public void onRefresh() {
-        Logger.log(LOG_TAG, "Device " + deviceId + " info update requested", Log.VERBOSE);
-        ApiRequestManager.getInstance().getDeviceInfo(deviceId);
-        swipeLayout.setRefreshing(false);
-    }
 
     // -- Lifecycle methods
     @Override
@@ -70,7 +59,6 @@ public class DeviceDetailsActivity extends AppCompatActivity implements SwipeRef
 
         setContentView(R.layout.activity_device_details);
 
-        swipeLayout = findViewById(R.id.device_info_swipe_to_refresh);
         mainFab = findViewById(R.id.details_main_fab);
         subFab1 = findViewById(R.id.sub_fab1);
         subFab2 = findViewById(R.id.sub_fab2);
@@ -80,8 +68,6 @@ public class DeviceDetailsActivity extends AppCompatActivity implements SwipeRef
         label2 = findViewById(R.id.fab_label2);
         label3 = findViewById(R.id.fab_label3);
         label4 = findViewById(R.id.fab_label4);
-
-        swipeLayout.setOnRefreshListener(this);
 
         //Set up main fab onClick action
         mainFab.setOnClickListener(new View.OnClickListener() {

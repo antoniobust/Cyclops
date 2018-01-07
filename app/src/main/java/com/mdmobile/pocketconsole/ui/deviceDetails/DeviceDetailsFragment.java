@@ -16,10 +16,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +37,7 @@ import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.DbData;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.util.HashMap;
 
@@ -44,12 +47,15 @@ import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.
 import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY;
 
 
-public class DeviceDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+public class DeviceDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
+    private final String LOG_TAG = DeviceDetailsFragment.class.getSimpleName();
     private String deviceName;
     private String deviceId;
     private String iconTransitionName;
     private String nameTransitionName;
     private ImageView batteryView, wifiView, simView, ramView, sdCardView;
+    private SwipeRefreshLayout swipeLayout;
 
     public DeviceDetailsFragment() {
     }
@@ -69,6 +75,16 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         return fragment;
     }
 
+    // -- Interface methods
+    @Override
+    public void onRefresh() {
+        Logger.log(LOG_TAG, "Device " + deviceId + " info update requested", Log.VERBOSE);
+        ApiRequestManager.getInstance().getDeviceInfo(deviceId);
+        swipeLayout.setRefreshing(false);
+    }
+
+    // -- Lifecycle methods
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +93,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         deviceName = getArguments().getString(DEVICE_NAME_EXTRA_KEY);
         nameTransitionName = getArguments().getString(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY, null);
         iconTransitionName = getArguments().getString(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY, null);
+
     }
 
     @Override
@@ -99,6 +116,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
+        swipeLayout = rootView.findViewById(R.id.device_info_swipe_to_refresh);
+        swipeLayout.setOnRefreshListener(this);
 
         ImageView titleIconView = rootView.findViewById(R.id.device_detail_icon);
         TextView titleView = rootView.findViewById(R.id.device_detail_title_view);
@@ -285,7 +305,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                 break;
             case R.id.device_details_profiles_card:
                 transaction.replace(R.id.device_details_fragment_container, ProfilesFragment.newInstance(deviceId))
-                .commit();
+                        .commit();
                 break;
             case R.id.device_details_apps_card:
 

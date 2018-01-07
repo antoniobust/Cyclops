@@ -6,563 +6,571 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/max_content_size"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:orientation="vertical">
 
     <include layout="@layout/actionbar"/>
 
-    <ScrollView
-        android:id="@+id/device_details_fragment_container"
+    <android.support.v4.widget.SwipeRefreshLayout
+
+        android:id="@+id/device_info_swipe_to_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment">
+        android:layout_marginTop="@dimen/activity_vertical_margin">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/device_details_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="12dp"
-                android:layout_marginTop="12dp"
-                tools:targetApi="lollipop">
-
-                <ImageView
-                    android:id="@+id/device_detail_icon"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerHorizontal="true"
-                    tools:src="@drawable/ic_tablet_android"/>
-
-                <TextView
-                    android:id="@+id/device_detail_title_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="4dp"
-                    android:layout_toEndOf="@+id/device_detail_icon"
-                    android:maxLines="1"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="AndroidPlus 000100"/>
-
-                <TextView
-                    android:id="@+id/device_detail_subtitle_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/device_detail_title_view"
-                    android:layout_marginStart="4dp"
-                    android:layout_toEndOf="@+id/device_detail_icon"
-                    android:maxLines="1"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    tools:text="Samsung SM-T500"/>
-
-            </RelativeLayout>
+            android:layout_height="match_parent"
+            tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginTop="12dp"
+                    tools:targetApi="lollipop">
+
+                    <ImageView
+                        android:id="@+id/device_detail_icon"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerHorizontal="true"
+                        tools:src="@drawable/ic_tablet_android"/>
+
+                    <TextView
+                        android:id="@+id/device_detail_title_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="4dp"
+                        android:layout_toEndOf="@+id/device_detail_icon"
+                        android:maxLines="1"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                        tools:text="AndroidPlus 000100"/>
+
+                    <TextView
+                        android:id="@+id/device_detail_subtitle_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/device_detail_title_view"
+                        android:layout_marginStart="4dp"
+                        android:layout_toEndOf="@+id/device_detail_icon"
+                        android:maxLines="1"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        tools:text="Samsung SM-T500"/>
+
+                </RelativeLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginBottom="8dp"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        app:srcCompat="@drawable/ic_battery_std"/>
+                        android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/device_details_battery"
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:drawableTint="@color/colorPrimaryDark"
+                            app:srcCompat="@drawable/ic_battery_std"/>
+
+                        <ImageView
+                            android:id="@+id/device_details_battery"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/clip_bar"/>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/clip_bar"/>
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:drawableTint="@color/colorPrimaryDark"
+                            app:srcCompat="@drawable/ic_sim_card"/>
+
+                        <ImageView
+                            android:id="@+id/device_details_simcard"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:src="@drawable/clip_bar"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:drawableTint="@color/colorPrimaryDark"
+                            app:srcCompat="@drawable/ic_network_wifi"/>
+
+                        <ImageView
+                            android:id="@+id/device_details_wifi"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/clip_bar"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:drawableTint="@color/colorPrimaryDark"
+                            app:srcCompat="@drawable/ic_memory"/>
+
+                        <ImageView
+                            android:id="@+id/device_details_memory"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/clip_bar"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:drawableTint="@color/colorPrimaryDark"
+                            app:srcCompat="@drawable/ic_sd_card"/>
+
+                        <ImageView
+                            android:id="@+id/device_details_sdcard"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/clip_bar"/>
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/device_details_info_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:minHeight="150dp"
+                    android:transitionName="details_card_transition"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:contentPadding="8dp">
 
-                    <ImageView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        app:srcCompat="@drawable/ic_sim_card"/>
+                        android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/device_details_simcard"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:src="@drawable/clip_bar"/>
-                </LinearLayout>
+                        <android.support.v7.widget.GridLayout
+                            android:id="@+id/device_details_info_grid"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:longClickable="false"
+                            app:columnCount="2"
+                            app:rowCount="1"
+                            app:useDefaultMargins="true">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/device_info_view_label"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                                app:layout_columnSpan="2"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:maxLength="20"
+                                android:text="@string/info_operating_system_label"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                />
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                tools:text="Android 7.1.1"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:maxLength="20"
+                                android:text="@string/MobiControl"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="13.3.1010 (ELM)"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:text="@string/info_last_agent_check_in_label"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="05-05-17 18:09:20"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:text="@string/info_hostname_label"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="192.168.0.1"/>
+
+                        </android.support.v7.widget.GridLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_margin="8dp"
+                            android:background="@color/colorPrimary"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/more_label"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/device_details_profiles_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:minHeight="150dp"
+                    android:transitionName="profiles_card_transition"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:contentPadding="8dp">
 
-                    <ImageView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        app:srcCompat="@drawable/ic_network_wifi"/>
+                        android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/device_details_wifi"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/clip_bar"/>
-                </LinearLayout>
+                        <android.support.v7.widget.GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:longClickable="false"
+                            app:columnCount="2"
+                            app:contentPadding="8dp"
+                            app:rowCount="1"
+                            app:useDefaultMargins="true">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/details_profiles_view_label"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                                app:layout_columnSpan="2"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:maxLength="20"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                tools:text="Profile test 01"
+                                />
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="Pending Install"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:maxLength="20"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                tools:text="LockDown"
+                                />
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="Installed"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:maxLength="20"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                tools:text="Restrictions"
+                                />
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="Administratively removed"/>
+
+                        </android.support.v7.widget.GridLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_margin="8dp"
+                            android:background="@color/colorPrimary"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/more_label"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/device_details_apps_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:minHeight="150dp"
+                    android:transitionName="application_card_transition"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:contentPadding="8dp">
 
-                    <ImageView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        app:srcCompat="@drawable/ic_memory"/>
+                        android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/device_details_memory"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/clip_bar"/>
-                </LinearLayout>
+                        <android.support.v7.widget.GridLayout
+                            android:id="@+id/device_details_apps_grid_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:longClickable="false"
+                            app:columnCount="2"
+                            app:contentPadding="8dp"
+                            app:rowCount="1"
+                            app:useDefaultMargins="true">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/details_installed_apps_view_label"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                                app:layout_columnSpan="2"/>
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        app:srcCompat="@drawable/ic_sd_card"/>
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:maxLength="20"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                tools:text="Facebook"
+                                />
 
-                    <ImageView
-                        android:id="@+id/device_details_sdcard"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/clip_bar"/>
-                </LinearLayout>
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="Installed"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:maxLength="20"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                tools:text="MobiControl"
+                                />
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="Installed"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:maxLength="20"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                tools:text="YouTube"
+                                />
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="Uninstalled"/>
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:maxLength="20"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                tools:text="YouTube"
+                                />
+
+                            <TextView
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                app:layout_columnSpan="1"
+                                app:layout_columnWeight="1"
+                                app:layout_gravity="fill"
+                                app:layout_rowWeight="1"
+                                tools:text="Uninstalled"/>
+
+                        </android.support.v7.widget.GridLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_margin="8dp"
+                            android:background="@color/colorPrimary"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/more_label"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
             </LinearLayout>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/device_details_info_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:minHeight="150dp"
-                android:transitionName="details_card_transition"
-                app:cardBackgroundColor="@android:color/white"
-                app:contentPadding="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.GridLayout
-                        android:id="@+id/device_details_info_grid"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:longClickable="false"
-                        app:columnCount="2"
-                        app:rowCount="1"
-                        app:useDefaultMargins="true">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/device_info_view_label"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                            app:layout_columnSpan="2"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:maxLength="20"
-                            android:text="@string/info_operating_system_label"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            />
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            tools:text="Android 7.1.1"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:maxLength="20"
-                            android:text="@string/MobiControl"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="13.3.1010 (ELM)"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:text="@string/info_last_agent_check_in_label"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="05-05-17 18:09:20"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:text="@string/info_hostname_label"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="192.168.0.1"/>
-
-                    </android.support.v7.widget.GridLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_margin="8dp"
-                        android:background="@color/colorPrimary"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/more_label"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/device_details_profiles_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:minHeight="150dp"
-                android:transitionName="profiles_card_transition"
-                app:cardBackgroundColor="@android:color/white"
-                app:contentPadding="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.GridLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:longClickable="false"
-                        app:columnCount="2"
-                        app:contentPadding="8dp"
-                        app:rowCount="1"
-                        app:useDefaultMargins="true">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/details_profiles_view_label"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                            app:layout_columnSpan="2"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:maxLength="20"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            tools:text="Profile test 01"
-                            />
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="Pending Install"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:maxLength="20"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            tools:text="LockDown"
-                            />
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="Installed"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:maxLength="20"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            tools:text="Restrictions"
-                            />
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="Administratively removed"/>
-
-                    </android.support.v7.widget.GridLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_margin="8dp"
-                        android:background="@color/colorPrimary"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/more_label"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/device_details_apps_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:minHeight="150dp"
-                android:transitionName="application_card_transition"
-                app:cardBackgroundColor="@android:color/white"
-                app:contentPadding="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.GridLayout
-                        android:id="@+id/device_details_apps_grid_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:longClickable="false"
-                        app:columnCount="2"
-                        app:contentPadding="8dp"
-                        app:rowCount="1"
-                        app:useDefaultMargins="true">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/details_installed_apps_view_label"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                            app:layout_columnSpan="2"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:maxLength="20"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            tools:text="Facebook"
-                            />
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="Installed"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:maxLength="20"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            tools:text="MobiControl"
-                            />
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="Installed"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:maxLength="20"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            tools:text="YouTube"
-                            />
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="Uninstalled"/>
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:maxLength="20"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            tools:text="YouTube"
-                            />
-
-                        <TextView
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                            app:layout_columnSpan="1"
-                            app:layout_columnWeight="1"
-                            app:layout_gravity="fill"
-                            app:layout_rowWeight="1"
-                            tools:text="Uninstalled"/>
-
-                    </android.support.v7.widget.GridLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_margin="8dp"
-                        android:background="@color/colorPrimary"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/more_label"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
 

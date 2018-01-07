@@ -152,7 +152,7 @@ public class ApiRequestManager {
                         GeneralUtility.setSharedPreference(
                                 ApplicationLoader.applicationContext,
                                 ApplicationLoader.applicationContext.getString(R.string.last_dev_sync_pref),
-                                Calendar.getInstance().toString());
+                                Calendar.getInstance().getTimeInMillis());
 
                     }
                 }, new Response.ErrorListener() {
@@ -241,16 +241,16 @@ public class ApiRequestManager {
         ServerInfoRequest request = new ServerInfoRequest(api, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Logger.log(LOG_TAG, "Done with server info request", Log.VERBOSE);
+                Logger.log(LOG_TAG, "Server info synced...", Log.VERBOSE);
                 GeneralUtility.setSharedPreference(
                         ApplicationLoader.applicationContext,
                         ApplicationLoader.applicationContext.getString(R.string.last_server_sync_pref),
-                        Calendar.getInstance().toString());
+                        Calendar.getInstance().getTimeInMillis());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Logger.log(LOG_TAG, "Error requesting server info", Log.ERROR);
+                Logger.log(LOG_TAG, "Error syncing server info", Log.ERROR);
             }
         });
 
@@ -268,7 +268,7 @@ public class ApiRequestManager {
                         GeneralUtility.setSharedPreference(
                                 ApplicationLoader.applicationContext,
                                 ApplicationLoader.applicationContext.getString(R.string.last_user_sync_pref),
-                                Calendar.getInstance().toString());
+                                Calendar.getInstance().getTimeInMillis());
                     }
                 },
                 new Response.ErrorListener() {

@@ -7,10 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="42dp"
     android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:animateLayoutChanges="true"
     android:paddingEnd="8dp"
     android:paddingStart="8dp"
-    app:elevation="8dp"
-    android:animateLayoutChanges="true">
+    app:elevation="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +44,6 @@
             android:layout_gravity="end|center_vertical"
             android:drawableStart="@drawable/ic_restore"
             android:gravity="end"
-            android:text="@string/last_synced"
             tools:text="1 hour ago"/>
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

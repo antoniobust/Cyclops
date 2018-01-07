@@ -4,10 +4,12 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.animation.Animator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
@@ -33,6 +36,8 @@ import com.mdmobile.pocketconsole.utils.BaseActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.RecyclerEmptyView;
 
+import java.util.Calendar;
+
 import static com.mdmobile.pocketconsole.R.id.main_activity_fragment_container;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
@@ -47,8 +52,30 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     String devId, devName;
     Toolbar filtersToolbar;
     RecyclerEmptyView filtersRecycler;
+    private TextView lastSyncTimeView;
+    SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener =
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                    if (!key.equals(getString(R.string.last_dev_sync_pref))) {
+                        return;
+                    }
+                    Fragment[] frags = {getSupportFragmentManager().findFragmentByTag("DevicesFragment"),
+                            getSupportFragmentManager().findFragmentByTag("DashboardFragment")};
 
-    //Bottom navigation bar, navigation listener
+                    for (Fragment f : frags) {
+                        if (f.isAdded() && f.isVisible() &&
+                                ((f.getTag().equals("DashboardFragment")) || (f.getTag().equals("DevicesFragment")))) {
+                            long syncTime = sharedPreferences.getLong(key, 0);
+                            updateSyncTimeView(syncTime);
+                            break;
+                        }
+                    }
+                }
+            };
+
+    private SharedPreferences preferences;
+    // -- Interface methods
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -99,7 +126,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     };
     private AccountManager accountManager;
 
-    // -- Interface methods
     @Override
     public void itemCLicked(Parcelable serverParcel) {
         Intent intent = new Intent(this, ServerDetailsActivity.class);
@@ -119,17 +145,21 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     // -- Life cycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-         super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         filtersToolbar = findViewById(R.id.filters_toolbar);
-//        supportPostponeEnterTransition();
+        lastSyncTimeView = filtersToolbar.findViewById(R.id.last_sync_view);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(TOOLBAR_FILTER_STATUS)) {
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
 
+        preferences = getSharedPreferences(getString(R.string.general_shared_preference), MODE_MULTI_PROCESS);
+        preferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+
         setFiltersView();
+        setLastSyncTimeView();
 
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -148,7 +178,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         //Set account manager to be used in this activity
         accountManager = AccountManager.get(getApplicationContext());
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -184,6 +213,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     @Override
     protected void onPause() {
         super.onPause();
+        preferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
     }
 
     @Override
@@ -273,4 +303,50 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             }).start();
         }
     }
+
+    private void setLastSyncTimeView() {
+        long lastSync = preferences.getLong(getString(R.string.last_dev_sync_pref), 0);
+        updateSyncTimeView(lastSync);
+    }
+
+    private void updateSyncTimeView(long syncTime) {
+        String[] labels = getResources().getStringArray(R.array.last_sync_labels);
+        String label = labels[4];
+
+        if (lastSyncTimeView == null) {
+            return;
+        }
+        try {
+            long currentTime = Calendar.getInstance().getTime().getTime();
+            long diff = currentTime - syncTime;
+            long secondsInMilli = 1000;
+            long minutesInMilli = secondsInMilli * 60;
+            long hoursInMilli = minutesInMilli * 60;
+            long daysInMilli = hoursInMilli * 24;
+            long elapsedDays = diff / daysInMilli;
+
+            if (elapsedDays > 0) {
+                label = labels[3];
+                label = String.format(label, elapsedDays);
+                return;
+            }
+            long elapsedHours = diff / hoursInMilli;
+            if (elapsedHours > 0) {
+                label = labels[2];
+                label = String.format(label, elapsedHours);
+                return;
+            }
+            long elapsedMinutes = diff / minutesInMilli;
+            if (elapsedMinutes > 0) {
+                label = labels[1];
+                label = String.format(label, elapsedMinutes);
+            } else if (elapsedDays == 0) {
+                label = labels[0];
+            }
+        } finally {
+            lastSyncTimeView.setText(label);
+        }
+
+    }
+
 }

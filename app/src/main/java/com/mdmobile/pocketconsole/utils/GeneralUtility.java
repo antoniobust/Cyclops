@@ -1,11 +1,11 @@
 package com.mdmobile.pocketconsole.utils;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.mdmobile.pocketconsole.R;
 
@@ -79,6 +79,13 @@ public class GeneralUtility {
         mContext
                 .getSharedPreferences(pocketConsolePref, Context.MODE_PRIVATE).edit()
                 .putString(prefKey, prefValue).apply();
+    }
+
+    public static void setSharedPreference(Context mContext, String prefKey, long prefValue) {
+        String pocketConsolePref = mContext.getString(R.string.general_shared_preference);
+        mContext
+                .getSharedPreferences(pocketConsolePref, Context.MODE_PRIVATE).edit()
+                .putLong(prefKey, prefValue).apply();
     }
 
     public static boolean isTabletMode(Context mContext) {

@@ -4,6 +4,7 @@ package com.mdmobile.pocketconsole.ui.deviceDetails;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -32,8 +33,12 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
 
     }
 
-    public static InstalledAppsFragment newInstance() {
-        return new InstalledAppsFragment();
+    public static InstalledAppsFragment newInstance(@NonNull String devId) {
+        Bundle arg = new Bundle(1);
+        arg.putString(DEVICE_ID_EXTRA_KEY, devId);
+        InstalledAppsFragment frag = new InstalledAppsFragment();
+        frag.setArguments(arg);
+        return frag;
     }
 
     @Override

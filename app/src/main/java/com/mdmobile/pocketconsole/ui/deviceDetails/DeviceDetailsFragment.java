@@ -297,29 +297,25 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onClick(View v) {
         FragmentTransaction transaction = (getActivity()).getSupportFragmentManager().beginTransaction();
+        Fragment newFrag;
 
         switch (v.getId()) {
             case R.id.device_details_info_card:
-                transaction.replace(R.id.device_details_fragment_container, FullDeviceInfoFragment.newInstance(deviceId))
-                        .commit();
+                newFrag = FullDeviceInfoFragment.newInstance(deviceId);
                 break;
             case R.id.device_details_profiles_card:
-                transaction.replace(R.id.device_details_fragment_container, ProfilesFragment.newInstance(deviceId))
-                        .commit();
+                newFrag = ProfilesFragment.newInstance(deviceId);
                 break;
             case R.id.device_details_apps_card:
-
-                InstalledAppsFragment fragment = InstalledAppsFragment.newInstance();
-                Bundle args = new Bundle();
-                args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
-                fragment.setArguments(args);
-
-                transaction.addSharedElement(v, ViewCompat.getTransitionName(v));
-                transaction.addToBackStack(DeviceDetailsFragment.class.getSimpleName());
-                transaction.replace(R.id.device_details_fragment_container, fragment)
-                        .commit();
+                newFrag = InstalledAppsFragment.newInstance(deviceId);
                 break;
+            default:
+                Logger.log(LOG_TAG, v.getId() + " view not supported in OnClick", Log.ERROR);
+                return;
         }
+        transaction.addSharedElement(v, ViewCompat.getTransitionName(v));
+        transaction.addToBackStack(DeviceDetailsFragment.class.getSimpleName());
+        transaction.replace(R.id.device_details_fragment_container, newFrag).commit();
     }
 
     private void hideDetailsFragment() {

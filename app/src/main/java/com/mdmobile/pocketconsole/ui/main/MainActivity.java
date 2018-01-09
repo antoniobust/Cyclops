@@ -13,7 +13,6 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -210,7 +209,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     @Override
     protected void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(devSyncReceiver);
+        this.unregisterReceiver(devSyncReceiver);
     }
 
     @Override

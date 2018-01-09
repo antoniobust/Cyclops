@@ -54,6 +54,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private String deviceId;
     private String iconTransitionName;
     private String nameTransitionName;
+    private View rootView;
     private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
 
@@ -99,7 +100,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
+        rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
 
 
         Toolbar toolbar = rootView.findViewById(R.id.toolbar);
@@ -189,8 +190,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                 return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
             case 11:
                 //Return Profiles information
-                //TODO: implement this
-                return null;
+                return new CursorLoader(getContext(),
+                        McContract.Profile.buildUriWithDeviceId(deviceId),
+                        null, null, null, McContract.Profile.ASSIGNMENT_DATE + " DESC");
             case 12:
                 uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
                 return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
@@ -200,17 +202,27 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
         switch (loader.getId()) {
             case 10:
                 Cursor c = data;
                 setCharts(c);
                 setDeviceInfoCard(c);
                 break;
-            case 11:
+            case 11: {
+                GridLayout gridLayout = rootView.findViewById(R.id.device_details_profiles_grid_view);
+                String[] columns = {McContract.Profile.NAME,
+                        McContract.Profile.STATUS};
+                setCards(data, gridLayout, columns);
                 break;
-            case 12:
-                setInstalledAppInfoCard(data);
+            }
+            case 12: {
+                GridLayout gridLayout = rootView.findViewById(R.id.device_details_apps_grid_view);
+                String[] columns = {McContract.InstalledApplications.APPLICATION_NAME,
+                        McContract.InstalledApplications.APPLICATION_STATUS};
+                setCards(data, gridLayout, columns);
                 break;
+            }
             default:
                 throw new UnsupportedOperationException("Unsupported id: " + loader.getId());
         }
@@ -259,16 +271,17 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         }
     }
 
-    private void setInstalledAppInfoCard(Cursor c) {
-        GridLayout infoGrid = getActivity().findViewById(R.id.device_details_apps_grid_view);
-
+    private void setCards(Cursor c, GridLayout gridLayout, String... columnName) {
         if (!c.moveToFirst()) {
             return;
         }
 
-        for (int i = 1; i < infoGrid.getChildCount() - 1; i = i + 2) {
-            ((TextView) infoGrid.getChildAt(i)).setText(c.getString(c.getColumnIndex(McContract.InstalledApplications.APPLICATION_NAME)));
-            ((TextView) infoGrid.getChildAt(i + 1)).setText(c.getString(c.getColumnIndex(McContract.InstalledApplications.APPLICATION_STATUS)));
+        for (int i = 1; i < gridLayout.getChildCount() - 1; i = i + 2) {
+            if (!c.moveToPosition(i - 1)) {
+                return;
+            }
+            ((TextView) gridLayout.getChildAt(i)).setText(c.getString(c.getColumnIndex(columnName[0])));
+            ((TextView) gridLayout.getChildAt(i + 1)).setText(c.getString(c.getColumnIndex(columnName[1])));
             if (!c.moveToNext()) {
                 break;
             }

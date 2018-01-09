@@ -343,6 +343,7 @@
                         android:orientation="vertical">
 
                         <android.support.v7.widget.GridLayout
+                            android:id="@+id/device_details_profiles_grid_view"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:longClickable="false"

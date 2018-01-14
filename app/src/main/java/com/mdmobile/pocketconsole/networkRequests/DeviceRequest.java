@@ -24,6 +24,7 @@ import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsDesktopLegacy;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsPhone;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsRuntime;
 import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
+import com.mdmobile.pocketconsole.dataTypes.DeviceKind;
 import com.mdmobile.pocketconsole.provider.McContract;
 
 import java.io.UnsupportedEncodingException;
@@ -64,17 +65,17 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
             final RuntimeTypeAdapterFactory<BasicDevice> typeFactory = RuntimeTypeAdapterFactory
                     .of(BasicDevice.class, "Kind")
-                    .registerSubtype(IosDevice.class, ComplexDataType.DeviceKind.iOS.toString())
-                    .registerSubtype(AndroidGenericDevice.class, ComplexDataType.DeviceKind.AndroidGeneric.toString())
-                    .registerSubtype(AndroidForWorkDevice.class, ComplexDataType.DeviceKind.AndroidForWork.toString())
-                    .registerSubtype(AndroidPlusDevice.class, ComplexDataType.DeviceKind.AndroidPlus.toString())
-                    .registerSubtype(SamsungKnoxDevice.class, ComplexDataType.DeviceKind.AndroidKnox.toString())
-                    .registerSubtype(SamsungElmDevice.class, ComplexDataType.DeviceKind.AndroidElm.toString())
-                    .registerSubtype(WindowsDesktop.class, ComplexDataType.DeviceKind.WindowsDesktop.toString())
-                    .registerSubtype(WindowsDesktopLegacy.class, ComplexDataType.DeviceKind.WindowsDesktopLegacy.toString())
-                    .registerSubtype(WindowsPhone.class, ComplexDataType.DeviceKind.WindowsPhone.toString())
-                    .registerSubtype(WindowsRuntime.class, ComplexDataType.DeviceKind.WindowsRuntime.toString())
-                    .registerSubtype(WindowsCE.class, ComplexDataType.DeviceKind.WindowsCE.toString());
+                    .registerSubtype(IosDevice.class, DeviceKind.IOS)
+                    .registerSubtype(AndroidGenericDevice.class, DeviceKind.ANDROID_GENERIC)
+                    .registerSubtype(AndroidForWorkDevice.class, DeviceKind.ANDROID_FOR_WORK)
+                    .registerSubtype(AndroidPlusDevice.class, DeviceKind.ANDROID_PLUS)
+                    .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
+                    .registerSubtype(SamsungElmDevice.class, DeviceKind.ANDROID_ELM)
+                    .registerSubtype(WindowsDesktop.class, DeviceKind.WINDOWS_DESKTOP)
+                    .registerSubtype(WindowsDesktopLegacy.class, DeviceKind.WINDOWS_DESKTOP_LEGACY)
+                    .registerSubtype(WindowsPhone.class, DeviceKind.WINDOWS_PHONE)
+                    .registerSubtype(WindowsRuntime.class, DeviceKind.WINDOWS_RUNTIME)
+                    .registerSubtype(WindowsCE.class, DeviceKind.WINDOWS_CE);
 
 
             Gson gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();

@@ -6,7 +6,7 @@ public class ComplexDataType {
     //Represent the possible option for DataCollection
     public enum BuiltInDataType {
         ForegroundApp,
-        MissedCallls,
+        MissedCalls,
         SuccessCalls,
         DroppedCalls,
         AvailableExternalStorage,
@@ -35,8 +35,8 @@ public class ComplexDataType {
         Both, User, Group
     }
 
-    public enum DeviceKind {
-        AndroidForWork, AndroidElm, AndroidKnox, AndroidPlus, AndroidGeneric, iOS, Mac, WindowsCE, WindowsDesktop,
-        WindowsDesktopLegacy, WindowsPhone, WindowsRuntime, ZebraPrinter
-    }
+//    public enum DeviceKind {
+//        AndroidForWork, AndroidElm, AndroidKnox, AndroidPlus, AndroidGeneric, iOS, Mac, WindowsCE, WindowsDesktop,
+//        WindowsDesktopLegacy, WindowsPhone, WindowsRuntime, ZebraPrinter
+//    }
 }

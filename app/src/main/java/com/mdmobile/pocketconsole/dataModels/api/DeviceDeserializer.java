@@ -12,10 +12,9 @@ import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidPlusDevice;
 import com.mdmobile.pocketconsole.dataModels.api.devices.IosDevice;
 import com.mdmobile.pocketconsole.dataModels.api.devices.SamsungElmDevice;
 import com.mdmobile.pocketconsole.dataModels.api.devices.SamsungKnoxDevice;
+import com.mdmobile.pocketconsole.dataTypes.DeviceKind;
 
 import java.lang.reflect.Type;
-
-import static com.mdmobile.pocketconsole.dataTypes.ComplexDataType.DeviceKind;
 
 /**
  * Custom Gson deserializer for devices
@@ -33,18 +32,18 @@ public class DeviceDeserializer implements JsonDeserializer {
 
             String kind = jsonObject.get("Kind").getAsString();
 
-            switch (DeviceKind.valueOf(kind)) {
-                case iOS:
+            switch (kind) {
+                case DeviceKind.IOS:
                     return new Gson().fromJson(json.getAsJsonObject(), IosDevice.class);
-                case AndroidPlus:
+                case DeviceKind.ANDROID_PLUS:
                     return new Gson().fromJson(json.getAsJsonObject(), AndroidPlusDevice.class);
-                case AndroidForWork:
+                case DeviceKind.ANDROID_FOR_WORK:
                     return new Gson().fromJson(json.getAsJsonArray(), AndroidForWorkDevice.class);
-                case AndroidGeneric:
+                case DeviceKind.ANDROID_GENERIC:
                     return new Gson().fromJson(json.getAsJsonArray(), AndroidGenericDevice.class);
-                case AndroidElm:
+                case DeviceKind.ANDROID_ELM:
                     return new Gson().fromJson(json.getAsJsonArray(), SamsungElmDevice.class);
-                case AndroidKnox:
+                case DeviceKind.ANDROID_KNOX:
                     return new Gson().fromJson(json.getAsJsonArray(), SamsungKnoxDevice.class);
             }
 

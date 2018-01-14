@@ -1,332 +1,422 @@
 package com.mdmobile.pocketconsole.dataTypes;
 
+/**
+ * Device attributes is a list of possible attributes divided by platform
+ * The first element of the array is the label as we receive it from API or DB.
+ * The second is the corresponding label that we can use in UI to display the value
+ */
 
 public class DeviceAttributes {
 
-    public static class BaseAttributes {
-        public static final String ComplianceStatus = "ComplianceStatus";
-        public static final String ComplianceItems = "ComplianceItems";
-        public static final String DeviceId = "DeviceId";
-        public static final String DeviceName = "DeviceName";
-        public static final String EnrollmentTime = "EnrollmentTime";
-        public static final String Family = "Family";
-        public static final String HostName = "HostName";
-        public static final String IsAgentOnline = "IsAgentOnline";
-        public static final String IsVirtual = "IsVirtual";
-        public static final String CustomAttributes = "CustomAttributes";
-        public static final String MACAddress = "MACAddress";
-        public static final String Manufacturer = "Manufacturer";
-        public static final String Mode = "Mode";
-        public static final String Model = "Model";
-        public static final String OSVersion = "OSVersion";
-        public static final String Path = "Path";
+    public final static int INTERNAL_LABEL = 0;
+    public final static int UI_LABEL = 1;
+
+    public interface BaseAttributes {
+        String[] ComplianceStatus = {"ComplianceStatus", "Compliance status"};
+        String[] ComplianceItems = {"ComplianceItems", "Compliance item"};
+        String[] DeviceId = {"DeviceId", "Device ID"};
+        String[] DeviceName = {"DeviceName", "Device name"};
+        String[] EnrollmentTime = {"EnrollmentTime", "Enrollment Time"};
+        String[] Family = {"Family", "Family"};
+        String[] HostName = {"HostName", "Host name"};
+        String[] IsAgentOnline = {"IsAgentOnline", "Online"};
+        String[] IsVirtual = {"IsVirtual", "Virtual"};
+        String[] CustomAttributes = {"CustomAttributes", "Custom attributes"};
+        String[] MACAddress = {"MACAddress", "MAC Address"};
+        String[] Manufacturer = {"Manufacturer", "Manufacturer"};
+        String[] Mode = {"Mode", "Mode"};
+        String[] Model = {"Model", "Model"};
+        String[] OSVersion = {"OSVersion", "OS version"};
+        String[] Path = {"Path", "Path"};
     }
 
-    public static class AndroidPlusAttributes {
-        public static final String AgentVersion = "AgentVersion";
-        public static final String AndroidDeviceAdmin = "AndroidDeviceAdmin";
-        public static final String Antivirus = "Antivirus";
-        public static final String Memory = "Memory";
-        public static final String BatteryStatus = "BatteryStatus";
-        public static final String CanResetPassword = "CanResetPassword";
-        public static final String CellularCarrier = "CellularCarrier";
-        public static final String CellularSignalStrength = "CellularSignalStrength";
-        public static final String CustomData = "CustomData";
-        public static final String DeviceTerms = "DeviceTerms";
-        public static final String DeviceUserInfo = "DeviceUserInfo";
-        public static final String ExchangeBlocked = "ExchangeBlocked";
-        public static final String ExchangeStatus = "ExchangeStatus";
-        public static final String HardwareEncryptionCaps = "HardwareEncryptionCaps";
-        public static final String HardwareSerialNumber = "HardwareSerialNumber";
-        public static final String HardwareVersion = "HardwareVersion";
-        public static final String IMEI_MEID_ESN = "IMEI_MEID_ESN";
-        public static final String InRoaming = "InRoaming";
-        public static final String IntegratedApplications = "IntegratedApplications";
-        public static final String Ipv6 = "Ipv6";
-        public static final String IsAgentCompatible = "IsAgentCompatible";
-        public static final String IsAgentless = "IsAgentless";
-        public static final String IsEncrypted = "IsEncrypted";
-        public static final String IsOSSecure = "IsOSSecure";
-        public static final String LastCheckInTime = "LastCheckInTime";
-        public static final String LastAgentConnectTime = "LastAgentConnectTime";
-        public static final String LastAgentDisconnectTime = "LastAgentDisconnectTime";
-        public static final String LastLoggedOnUser = "LastLoggedOnUser";
-        public static final String NetworkBSSID = "NetworkBSSID";
-        public static final String NetworkConnectionType = "NetworkConnectionType";
-        public static final String NetworkRSSI = "NetworkRSSI";
-        public static final String NetworkSSID = "NetworkSSID";
-        public static final String OEMVersion = "OEMVersion";
-        public static final String PasscodeEnabled = "PasscodeEnabled";
-        public static final String PasscodeStatus = "PasscodeStatus";
-        public static final String PhoneNumber = "PhoneNumber";
-        public static final String SubscriberNumber = "SubscriberNumber";
-        public static final String SupportedApis = "SupportedApis";
+    public interface AndroidPlusAttributes {
+        String[] AgentVersion = {"AgentVersion", "Agent version"};
+        String[] AndroidDeviceAdmin = {"AndroidDeviceAdmin", "Device admin"};
+        String[] Antivirus = {"Antivirus", "Antivirus"};
+        String[] Memory = {"Memory", "Memory"};
+        String[] BatteryStatus = {"BatteryStatus", "Battery status"};
+        String[] CanResetPassword = {"CanResetPassword", "Can reset password"};
+        String[] CellularCarrier = {"CellularCarrier", "Cellular carrier"};
+        String[] CellularSignalStrength = {"CellularSignalStrength", "Cellular signal strength"};
+        String[] CustomData = {"CustomData", "Custom data"};
+        String[] DeviceTerms = {"DeviceTerms", "Device terms"};
+        String[] DeviceUserInfo = {"DeviceUserInfo", "Device user info"};
+        String[] ExchangeBlocked = {"ExchangeBlocked", "Exchange blocked"};
+        String[] ExchangeStatus = {"ExchangeStatus", "Exchange status"};
+        String[] HardwareEncryptionCaps = {"HardwareEncryptionCaps", "Hardware encryption caps"};
+        String[] HardwareSerialNumber = {"HardwareSerialNumber", "Hardware serial number"};
+        String[] HardwareVersion = {"HardwareVersion", "Hardware version"};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", "IMEI MEID ESN"};
+        String[] InRoaming = {"InRoaming", "Roaming"};
+        String[] IntegratedApplications = {"IntegratedApplications", "Integrated applications"};
+        String[] Ipv6 = {"Ipv6", "Ipv6"};
+        String[] IsAgentCompatible = {"IsAgentCompatible", "Agent compatible"};
+        String[] IsAgentless = {"IsAgentless", "Agentless"};
+        String[] IsEncrypted = {"IsEncrypted", "encrypted"};
+        String[] IsOSSecure = {"IsOSSecure", "OS secure"};
+        String[] LastCheckInTime = {"LastCheckInTime", "Last check in time"};
+        String[] LastAgentConnectTime = {"LastAgentConnectTime", "Last agent connection"};
+        String[] LastAgentDisconnectTime = {"LastAgentDisconnectTime", "Last agent disconnection"};
+        String[] LastLoggedOnUser = {"LastLoggedOnUser", "Last logged on user"};
+        String[] NetworkBSSID = {"NetworkBSSID", "Network BSSID"};
+        String[] NetworkConnectionType = {"NetworkConnectionType", "Network connection type"};
+        String[] NetworkRSSI = {"NetworkRSSI", "Network RSSI"};
+        String[] NetworkSSID = {"NetworkSSID", "Network SSID"};
+        String[] OEMVersion = {"OEMVersion", "OEM version"};
+        String[] PasscodeEnabled = {"PasscodeEnabled", "Passcode enabled"};
+        String[] PasscodeStatus = {"PasscodeStatus", "Passcode status"};
+        String[] PhoneNumber = {"PhoneNumber", "Phone number"};
+        String[] SubscriberNumber = {"SubscriberNumber", "Subscriber number"};
+        String[] SupportedApis = {"SupportedApis", "Supported APIs"};
     }
 
-    public static class AfwAttributes {
-        public static final String BluetoothMACAddress = "BluetoothMACAddress";
-        public static final String BuildVersion = "BuildVersion";
-        public static final String CellularTechnology = "CellularTechnology";
-        public static final String UserIdentities = "UserIdentities";
+    public interface AfwAttributes {
+        String[] BluetoothMACAddress = {"BluetoothMACAddress", "Bluetooth MAC address"};
+        String[] BuildVersion = {"BuildVersion", "Build version"};
+        String[] CellularTechnology = {"CellularTechnology", "Cellular technology"};
+        String[] UserIdentities = {"UserIdentities", "User identities"};
     }
 
-    public static class AndroidElmAttributes {
-        public static final String ElmStatus = "ElmStatus";
+    public interface AndroidElmAttributes {
+        String[] ElmStatus = {"ElmStatus", "ELM status"};
     }
 
-    public static class AndroidKnoxAttributes {
-        public static final String IntegrityServiceBaselineStatus = "IntegrityServiceBaselineStatus";
-        public static final String Knox = "Knox";
+    public interface AndroidKnoxAttributes {
+        String[] IntegrityServiceBaselineStatus = {"IntegrityServiceBaselineStatus", "Integrity service baseline status"};
+        String[] Knox = {"Knox", "Knox"};
     }
 
-    public static class AndroidGenericAttributes {
-        public static final String AgentVersion = "AgentVersion";
-        public static final String AndroidDeviceAdmin = "AndroidDeviceAdmin";
-        public static final String Antivirus = "Antivirus";
-        public static final String Memory = "Memory";
-        public static final String BatteryStatus = "BatteryStatus";
-        public static final String CanResetPassword = "CanResetPassword";
-        public static final String CellularCarrier = "CellularCarrier";
-        public static final String CellularSignalStrength = "CellularSignalStrength";
-        public static final String CustomData = "CustomData";
-        public static final String DeviceTerms = "DeviceTerms";
-        public static final String DeviceUserInfo = "DeviceUserInfo";
-        public static final String ExchangeBlocked = "ExchangeBlocked";
-        public static final String ExchangeStatus = "ExchangeStatus";
-        public static final String HardwareEncryptionCaps = "HardwareEncryptionCaps";
-        public static final String IMEI_MEID_ESN = "IMEI_MEID_ESN";
-        public static final String InRoaming = "InRoaming";
-        public static final String Ipv6 = "Ipv6";
-        public static final String IsAgentCompatible = "IsAgentCompatible";
-        public static final String IsAgentless = "IsAgentless";
-        public static final String IsEncrypted = "IsEncrypted";
-        public static final String IsOSSecure = "IsOSSecure";
-        public static final String LastCheckInTime = "LastCheckInTime";
-        public static final String LastAgentConnectTime = "LastAgentConnectTime";
-        public static final String LastAgentDisconnectTime = "LastAgentDisconnectTime";
-        public static final String LastLoggedOnUser = "LastLoggedOnUser";
-        public static final String NetworkBSSID = "NetworkBSSID";
-        public static final String NetworkConnectionType = "NetworkConnectionType";
-        public static final String NetworkRSSI = "NetworkRSSI";
-        public static final String NetworkSSID = "NetworkSSID";
-        public static final String PasscodeEnabled = "PasscodeEnabled";
-        public static final String PhoneNumber = "PhoneNumber";
-        public static final String SubscriberNumber = "SubscriberNumber";
+    public interface AndroidGenericAttributes {
+        String[] AgentVersion = {"AgentVersion", "Agent version"};
+        String[] AndroidDeviceAdmin = {"AndroidDeviceAdmin", "Android device admin"};
+        String[] Antivirus = {"Antivirus", "Antivirus"};
+        String[] Memory = {"Memory", "Memory"};
+        String[] BatteryStatus = {"BatteryStatus", "Battery status"};
+        String[] CanResetPassword = {"CanResetPassword", "Can reset password"};
+        String[] CellularCarrier = {"CellularCarrier", "Cellular carrier"};
+        String[] CellularSignalStrength = {"CellularSignalStrength", "Signal strength"};
+        String[] CustomData = {"CustomData", "Custom data"};
+        String[] DeviceTerms = {"DeviceTerms", "Device terms"};
+        String[] DeviceUserInfo = {"DeviceUserInfo", "Device user info"};
+        String[] ExchangeBlocked = {"ExchangeBlocked", "Exchange blocked"};
+        String[] ExchangeStatus = {"ExchangeStatus", "Exchange status"};
+        String[] HardwareEncryptionCaps = {"HardwareEncryptionCaps", "Hardware encryption caps"};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", "IMEI MEID ESN"};
+        String[] InRoaming = {"InRoaming", "Roaming"};
+        String[] Ipv6 = {"Ipv6", "Ipv6"};
+        String[] IsAgentCompatible = {"IsAgentCompatible", "Agent compatible"};
+        String[] IsAgentless = {"IsAgentless", "Agentless"};
+        String[] IsEncrypted = {"IsEncrypted", "Encrypted"};
+        String[] IsOSSecure = {"IsOSSecure", "OS secure"};
+        String[] LastCheckInTime = {"LastCheckInTime", "Last check in time"};
+        String[] LastAgentConnectTime = {"LastAgentConnectTime", "Last agent Connection"};
+        String[] LastAgentDisconnectTime = {"LastAgentDisconnectTime", "Last agent disconnection"};
+        String[] LastLoggedOnUser = {"LastLoggedOnUser", "Last logged on user"};
+        String[] NetworkBSSID = {"NetworkBSSID", "Network BSSID"};
+        String[] NetworkConnectionType = {"NetworkConnectionType", "Network Connection type"};
+        String[] NetworkRSSI = {"NetworkRSSI", "Network RSSI"};
+        String[] NetworkSSID = {"NetworkSSID", "Network SSID"};
+        String[] PasscodeEnabled = {"PasscodeEnabled", "Passcode enabled"};
+        String[] PhoneNumber = {"PhoneNumber", "Phone number"};
+        String[] SubscriberNumber = {"SubscriberNumber", "Subscriber number"};
     }
 
-    public static class iOSAttributes {
-        public static final String AgentVersion = "AgentVersion";
-        public static final String Memory = "Memory";
-        public static final String BatteryStatus = "BatteryStatus";
-        public static final String BluetoothMACAddress = "BluetoothMACAddress";
-        public static final String BuildVersion = "BuildVersion";
-        public static final String CarrierSettingsVersion = "CarrierSettingsVersion";
-        public static final String CellularCarrier = "CellularCarrier";
-        public static final String CellularTechnology = "CellularTechnology";
-        public static final String CurrentMCC = "CurrentMCC";
-        public static final String CurrentMNC = "CurrentMNC";
-        public static final String DataRoamingEnabled = "DataRoamingEnabled";
-        public static final String DeviceTerms = "DeviceTerms";
-        public static final String DeviceUserInfo = "DeviceUserInfo";
-        public static final String ExchangeBlocked = "ExchangeBlocked";
-        public static final String ExchangeStatus = "ExchangeStatus";
-        public static final String FirmwareVersion = "FirmwareVersion";
-        public static final String HardwareEncryptionCaps = "HardwareEncryptionCaps";
-        public static final String ICCID = "ICCID";
-        public static final String IMEI_MEID_ESN = "IMEI_MEID_ESN";
-        public static final String InRoaming = "InRoaming";
-        public static final String Ipv6 = "Ipv6";
-        public static final String IsAgentCompatible = "IsAgentCompatible";
-        public static final String IsAgentless = "IsAgentless";
-        public static final String IsDeviceLocatorServiceEnabled = "IsDeviceLocatorServiceEnabled";
-        public static final String IsDoNotDisturbInEffect = "IsDoNotDisturbInEffect";
-        public static final String IsEncrypted = "IsEncrypted";
-        public static final String IsEnrolled = "IsEnrolled";
-        public static final String IsITunesStoreAccountActive = "IsITunesStoreAccountActive";
-        public static final String IsOSSecure = "IsOSSecure";
-        public static final String IsPersonalHotspotEnabled = "IsPersonalHotspotEnabled";
-        public static final String IsSupervised = "IsSupervised";
-        public static final String LastCheckInTime = "LastCheckInTime";
-        public static final String LastAgentConnectTime = "LastAgentConnectTime";
-        public static final String LastAgentDisconnectTime = "LastAgentDisconnectTime";
-        public static final String LastLoggedOnUser = "LastLoggedOnUser";
-        public static final String LastStatusUpdate = "LastStatusUpdate";
-        public static final String ManufacturerSerialNumber = "ManufacturerSerialNumber";
-        public static final String ModelNumber = "ModelNumber";
-        public static final String ModemFirmwareVersion = "ModemFirmwareVersion";
-        public static final String NetworkConnectionType = "NetworkConnectionType";
-        public static final String PasscodeEnabled = "PasscodeEnabled";
-        public static final String PasscodeStatus = "PasscodeStatus";
-        public static final String PersonalizedName = "PersonalizedName";
-        public static final String PhoneNumber = "PhoneNumber";
-        public static final String ProductName = "ProductName";
-        public static final String SIMCarrierNetwork = "SIMCarrierNetwork";
-        public static final String SubscriberMCC = "SubscriberMCC";
-        public static final String SubscriberMNC = "SubscriberMNC";
-        public static final String SubscriberNumber = "SubscriberNumber";
-        public static final String UserIdHash = "UserIdHash";
-        public static final String VoiceRoamingEnabled = "VoiceRoamingEnabled";
+    public interface iOSAttributes {
+        String[] AgentVersion = {"AgentVersion", ""};
+        String[] Memory = {"Memory", ""};
+        String[] BatteryStatus = {"BatteryStatus", ""};
+        String[] BluetoothMACAddress = {"BluetoothMACAddress", ""};
+        String[] BuildVersion = {"BuildVersion", ""};
+        String[] CarrierSettingsVersion = {"CarrierSettingsVersion", ""};
+        String[] CellularCarrier = {"CellularCarrier", ""};
+        String[] CellularTechnology = {"CellularTechnology", ""};
+        String[] CurrentMCC = {"CurrentMCC", ""};
+        String[] CurrentMNC = {"CurrentMNC", ""};
+        String[] DataRoamingEnabled = {"DataRoamingEnabled", ""};
+        String[] DeviceTerms = {"DeviceTerms", ""};
+        String[] DeviceUserInfo = {"DeviceUserInfo", ""};
+        String[] ExchangeBlocked = {"ExchangeBlocked", ""};
+        String[] ExchangeStatus = {"ExchangeStatus", ""};
+        String[] FirmwareVersion = {"FirmwareVersion", ""};
+        String[] HardwareEncryptionCaps = {"HardwareEncryptionCaps", ""};
+        String[] ICCID = {"ICCID", ""};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", ""};
+        String[] InRoaming = {"InRoaming", ""};
+        String[] Ipv6 = {"Ipv6", ""};
+        String[] IsAgentCompatible = {"IsAgentCompatible", ""};
+        String[] IsAgentless = {"IsAgentless", ""};
+        String[] IsDeviceLocatorServiceEnabled = {"IsDeviceLocatorServiceEnabled", ""};
+        String[] IsDoNotDisturbInEffect = {"IsDoNotDisturbInEffect", ""};
+        String[] IsEncrypted = {"IsEncrypted", ""};
+        String[] IsEnrolled = {"IsEnrolled", ""};
+        String[] IsITunesStoreAccountActive = {"IsITunesStoreAccountActive", ""};
+        String[] IsOSSecure = {"IsOSSecure", ""};
+        String[] IsPersonalHotspotEnabled = {"IsPersonalHotspotEnabled", ""};
+        String[] IsSupervised = {"IsSupervised", ""};
+        String[] LastCheckInTime = {"LastCheckInTime", ""};
+        String[] LastAgentConnectTime = {"LastAgentConnectTime", ""};
+        String[] LastAgentDisconnectTime = {"LastAgentDisconnectTime", ""};
+        String[] LastLoggedOnUser = {"LastLoggedOnUser", ""};
+        String[] LastStatusUpdate = {"LastStatusUpdate", ""};
+        String[] ManufacturerSerialNumber = {"ManufacturerSerialNumber", ""};
+        String[] ModelNumber = {"ModelNumber", ""};
+        String[] ModemFirmwareVersion = {"ModemFirmwareVersion", ""};
+        String[] NetworkConnectionType = {"NetworkConnectionType", ""};
+        String[] PasscodeEnabled = {"PasscodeEnabled", ""};
+        String[] PasscodeStatus = {"PasscodeStatus", ""};
+        String[] PersonalizedName = {"PersonalizedName", ""};
+        String[] PhoneNumber = {"PhoneNumber", ""};
+        String[] ProductName = {"ProductName", ""};
+        String[] SIMCarrierNetwork = {"SIMCarrierNetwork", ""};
+        String[] SubscriberMCC = {"SubscriberMCC", ""};
+        String[] SubscriberMNC = {"SubscriberMNC", ""};
+        String[] SubscriberNumber = {"SubscriberNumber", ""};
+        String[] UserIdHash = {"UserIdHash", ""};
+        String[] VoiceRoamingEnabled = {"VoiceRoamingEnabled", ""};
     }
 
-    public static class MacAttributes {
-        public static final String AgentVersion = "AgentVersion";
-        public static final String Memory = "Memory";
-        public static final String BatteryStatus = "BatteryStatus";
-        public static final String BluetoothMACAddress = "BluetoothMACAddress";
-        public static final String BuildVersion = "BuildVersion";
-        public static final String DeviceTerms = "DeviceTerms";
-        public static final String DeviceUserInfo = "DeviceUserInfo";
-        public static final String HardwareEncryptionCaps = "HardwareEncryptionCaps";
-        public static final String IMEI_MEID_ESN = "IMEI_MEID_ESN";
-        public static final String Ipv6 = "Ipv6";
-        public static final String IsAgentCompatible = "IsAgentCompatible";
-        public static final String IsAgentless = "IsAgentless";
-        public static final String IsITunesStoreAccountActive = "IsITunesStoreAccountActive";
-        public static final String IsPersonalHotspotEnabled = "IsPersonalHotspotEnabled";
-        public static final String LastCheckInTime = "LastCheckInTime";
-        public static final String LastAgentConnectTime = "LastAgentConnectTime";
-        public static final String LastAgentDisconnectTime = "LastAgentDisconnectTime";
-        public static final String ManufacturerSerialNumber = "ManufacturerSerialNumber";
-        public static final String NetworkConnectionType = "NetworkConnectionType";
-        public static final String PasscodeEnabled = "PasscodeEnabled";
-        public static final String PersonalizedName = "PersonalizedName";
-        public static final String ProductName = "ProductName";
+    public interface MacAttributes {
+        String[] AgentVersion = {"AgentVersion", ""};
+        String[] Memory = {"Memory", ""};
+        String[] BatteryStatus = {"BatteryStatus", ""};
+        String[] BluetoothMACAddress = {"BluetoothMACAddress", ""};
+        String[] BuildVersion = {"BuildVersion", ""};
+        String[] DeviceTerms = {"DeviceTerms", ""};
+        String[] DeviceUserInfo = {"DeviceUserInfo", ""};
+        String[] HardwareEncryptionCaps = {"HardwareEncryptionCaps", ""};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", ""};
+        String[] Ipv6 = {"Ipv6", ""};
+        String[] IsAgentCompatible = {"IsAgentCompatible", ""};
+        String[] IsAgentless = {"IsAgentless", ""};
+        String[] IsITunesStoreAccountActive = {"IsITunesStoreAccountActive", ""};
+        String[] IsPersonalHotspotEnabled = {"IsPersonalHotspotEnabled", ""};
+        String[] LastCheckInTime = {"LastCheckInTime", ""};
+        String[] LastAgentConnectTime = {"LastAgentConnectTime", ""};
+        String[] LastAgentDisconnectTime = {"LastAgentDisconnectTime", ""};
+        String[] ManufacturerSerialNumber = {"ManufacturerSerialNumber", ""};
+        String[] NetworkConnectionType = {"NetworkConnectionType", ""};
+        String[] PasscodeEnabled = {"PasscodeEnabled", ""};
+        String[] PersonalizedName = {"PersonalizedName", ""};
+        String[] ProductName = {"ProductName", ""};
     }
 
-    public static class WindowsMobileCeAttributes {
-        public static final String AgentVersion = "AgentVersion";
-        public static final String Memory = "Memory";
-        public static final String BackupBatteryStatus = "BackupBatteryStatus";
-        public static final String BatteryStatus = "BatteryStatus";
-        public static final String CellularCarrier = "CellularCarrier";
-        public static final String CellularSignalStrength = "CellularSignalStrength";
-        public static final String CustomData = "CustomData";
-        public static final String DeviceTerms = "DeviceTerms";
-        public static final String DeviceUserInfo = "DeviceUserInfo";
-        public static final String ExchangeBlocked = "ExchangeBlocked";
-        public static final String ExchangeStatus = "ExchangeStatus";
-        public static final String HardwareSerialNumber = "HardwareSerialNumber";
-        public static final String IMEI_MEID_ESN = "IMEI_MEID_ESN";
-        public static final String InRoaming = "InRoaming";
-        public static final String Ipv6 = "Ipv6";
-        public static final String IsAgentCompatible = "IsAgentCompatible";
-        public static final String IsAgentless = "IsAgentless";
-        public static final String IsLearning = "IsLearning";
-        public static final String LastCheckInTime = "LastCheckInTime";
-        public static final String LastAgentConnectTime = "LastAgentConnectTime";
-        public static final String LastAgentDisconnectTime = "LastAgentDisconnectTime";
-        public static final String LastLoggedOnAt = "LastLoggedOnAt";
-        public static final String LastLoggedOnUser = "LastLoggedOnUser";
-        public static final String NetworkConnectionType = "NetworkConnectionType";
-        public static final String NetworkRSSI = "NetworkRSSI";
-        public static final String NetworkSSID = "NetworkSSID";
-        public static final String PasscodeEnabled = "PasscodeEnabled";
-        public static final String PhoneNumber = "PhoneNumber";
-        public static final String Processor = "Processor";
-        public static final String SubscriberNumber = "SubscriberNumber";
+    public interface WindowsMobileCeAttributes {
+        String[] AgentVersion = {"AgentVersion", ""};
+        String[] Memory = {"Memory", ""};
+        String[] BackupBatteryStatus = {"BackupBatteryStatus", ""};
+        String[] BatteryStatus = {"BatteryStatus", ""};
+        String[] CellularCarrier = {"CellularCarrier", ""};
+        String[] CellularSignalStrength = {"CellularSignalStrength", ""};
+        String[] CustomData = {"CustomData", ""};
+        String[] DeviceTerms = {"DeviceTerms", ""};
+        String[] DeviceUserInfo = {"DeviceUserInfo", ""};
+        String[] ExchangeBlocked = {"ExchangeBlocked", ""};
+        String[] ExchangeStatus = {"ExchangeStatus", ""};
+        String[] HardwareSerialNumber = {"HardwareSerialNumber", ""};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", ""};
+        String[] InRoaming = {"InRoaming", ""};
+        String[] Ipv6 = {"Ipv6", ""};
+        String[] IsAgentCompatible = {"IsAgentCompatible", ""};
+        String[] IsAgentless = {"IsAgentless", ""};
+        String[] IsLearning = {"IsLearning", ""};
+        String[] LastCheckInTime = {"LastCheckInTime", ""};
+        String[] LastAgentConnectTime = {"LastAgentConnectTime", ""};
+        String[] LastAgentDisconnectTime = {"LastAgentDisconnectTime", ""};
+        String[] LastLoggedOnAt = {"LastLoggedOnAt", ""};
+        String[] LastLoggedOnUser = {"LastLoggedOnUser", ""};
+        String[] NetworkConnectionType = {"NetworkConnectionType", ""};
+        String[] NetworkRSSI = {"NetworkRSSI", ""};
+        String[] NetworkSSID = {"NetworkSSID", ""};
+        String[] PasscodeEnabled = {"PasscodeEnabled", ""};
+        String[] PhoneNumber = {"PhoneNumber", ""};
+        String[] Processor = {"Processor", ""};
+        String[] SubscriberNumber = {"SubscriberNumber", ""};
     }
 
-    public static class WindowsDesktopAttributes {
-        public static final String BiosVersion = "BiosVersion";
-        public static final String DeviceUserInfo = "DeviceUserInfo";
-        public static final String DMRevision = "DMRevision";
-        public static final String FirmwareVersion = "FirmwareVersion";
-        public static final String HardwareEncryptionCaps = "HardwareEncryptionCaps";
-        public static final String HardwareVersion = "HardwareVersion";
-        public static final String IMEI_MEID_ESN = "IMEI_MEID_ESN";
-        public static final String InRoaming = "InRoaming";
-        public static final String Language = "Language";
-        public static final String PasscodeEnabled = "PasscodeEnabled";
-        public static final String PasscodeStatus = "PasscodeStatus";
-        public static final String ScreenResolution = "ScreenResolution";
-        public static final String SubscriberNumber = "SubscriberNumber";
-        public static final String TimeZone = "TimeZone";
+    public interface WindowsDesktopAttributes {
+        String[] BiosVersion = {"BiosVersion", ""};
+        String[] DeviceUserInfo = {"DeviceUserInfo", ""};
+        String[] DMRevision = {"DMRevision", ""};
+        String[] FirmwareVersion = {"FirmwareVersion", ""};
+        String[] HardwareEncryptionCaps = {"HardwareEncryptionCaps", ""};
+        String[] HardwareVersion = {"HardwareVersion", ""};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", ""};
+        String[] InRoaming = {"InRoaming", ""};
+        String[] Language = {"Language", ""};
+        String[] PasscodeEnabled = {"PasscodeEnabled", ""};
+        String[] PasscodeStatus = {"PasscodeStatus", ""};
+        String[] ScreenResolution = {"ScreenResolution", ""};
+        String[] SubscriberNumber = {"SubscriberNumber", ""};
+        String[] TimeZone = {"TimeZone", ""};
     }
 
-    public static class WindowsDesktopLegacyAttributes {
-        public static final String AgentVersion = "AgentVersion";
-        public static final String Memory = "Memory";
-        public static final String BatteryStatus = "BatteryStatus";
-        public static final String CustomData = "CustomData";
-        public static final String DeviceTerms = "DeviceTerms";
-        public static final String DeviceUserInfo = "DeviceUserInfo";
-        public static final String Ipv6 = "Ipv6";
-        public static final String IsAgentCompatible = "IsAgentCompatible";
-        public static final String IsAgentless = "IsAgentless";
-        public static final String LastCheckInTime = "LastCheckInTime";
-        public static final String LastAgentConnectTime = "LastAgentConnectTime";
-        public static final String LastAgentDisconnectTime = "LastAgentDisconnectTime";
-        public static final String LastLoggedOnAt = "LastLoggedOnAt";
-        public static final String LastLoggedOnUser = "LastLoggedOnUser";
-        public static final String NetworkConnectionType = "NetworkConnectionType";
-        public static final String NetworkRSSI = "NetworkRSSI";
-        public static final String NetworkSSID = "NetworkSSID";
-        public static final String PasscodeEnabled = "PasscodeEnabled";
-        public static final String Processor = "Processor";
+    public interface WindowsDesktopLegacyAttributes {
+        String[] AgentVersion = {"AgentVersion", ""};
+        String[] Memory = {"Memory", ""};
+        String[] BatteryStatus = {"BatteryStatus", ""};
+        String[] CustomData = {"CustomData", ""};
+        String[] DeviceTerms = {"DeviceTerms", ""};
+        String[] DeviceUserInfo = {"DeviceUserInfo", ""};
+        String[] Ipv6 = {"Ipv6", ""};
+        String[] IsAgentCompatible = {"IsAgentCompatible", ""};
+        String[] IsAgentless = {"IsAgentless", ""};
+        String[] LastCheckInTime = {"LastCheckInTime", ""};
+        String[] LastAgentConnectTime = {"LastAgentConnectTime", ""};
+        String[] LastAgentDisconnectTime = {"LastAgentDisconnectTime", ""};
+        String[] LastLoggedOnAt = {"LastLoggedOnAt", ""};
+        String[] LastLoggedOnUser = {"LastLoggedOnUser", ""};
+        String[] NetworkConnectionType = {"NetworkConnectionType", ""};
+        String[] NetworkRSSI = {"NetworkRSSI", ""};
+        String[] NetworkSSID = {"NetworkSSID", ""};
+        String[] PasscodeEnabled = {"PasscodeEnabled", ""};
+        String[] Processor = {"Processor", ""};
     }
 
-    public static class WindowsPhoneAttributes {
-
-        public static final String BiosVersion = "BiosVersion";
-        public static final String CellularCarrier = "CellularCarrier";
-        public static final String CpuId = "CpuId";
-        public static final String DeviceUserInfo = "DeviceUserInfo";
-        public static final String DMRevision = "DMRevision";
-        public static final String FirmwareVersion = "FirmwareVersion";
-        public static final String HardwareEncryptionCaps = "HardwareEncryptionCaps";
-        public static final String HardwareVersion = "HardwareVersion";
-        public static final String IMEI_MEID_ESN = "IMEI_MEID_ESN";
-        public static final String IMEI_MEID_ESN_SIM2 = "IMEI_MEID_ESN_SIM2";
-        public static final String InRoaming = "InRoaming";
-        public static final String InRoamingSIM2 = "InRoamingSIM2";
-        public static final String Language = "Language";
-        public static final String PasscodeEnabled = "PasscodeEnabled";
-        public static final String PasscodeStatus = "PasscodeStatus";
-        public static final String PhoneNumber = "PhoneNumber";
-        public static final String PhoneNumberSIM2 = "PhoneNumberSIM2";
-        public static final String RadioVersion = "RadioVersion";
-        public static final String ScreenResolution = "ScreenResolution";
-        public static final String SIMCarrierNetwork = "SIMCarrierNetwork";
-        public static final String SubscriberNumber = "SubscriberNumber";
-        public static final String SubscriberNumberSIM2 = "SubscriberNumberSIM2";
-        public static final String TimeZone = "TimeZone";
-
-    }
-
-    public static class WindowsRunTImeAttributes {
-
-        public static final String BatteryStatus = "BatteryStatus";
-        public static final String CellularCarrier = "CellularCarrier";
-        public static final String CompanyHubStatus = "CompanyHubStatus";
-        public static final String DeviceUserInfo = "DeviceUserInfo";
-        public static final String DMRevision = "DMRevision";
-        public static final String FirmwareVersion = "FirmwareVersion";
-        public static final String HardwareEncryptionCaps = "HardwareEncryptionCaps";
-        public static final String HardwareVersion = "HardwareVersion";
-        public static final String IMEI_MEID_ESN = "IMEI_MEID_ESN";
-        public static final String InRoaming = "InRoaming";
-        public static final String IsEncrypted = "IsEncrypted";
-        public static final String Language = "Language";
-        public static final String NetworkConnectionType = "NetworkConnectionType";
-        public static final String PasscodeEnabled = "PasscodeEnabled";
-        public static final String PasscodeStatus = "PasscodeStatus";
-        public static final String ScreenResolution = "ScreenResolution";
-        public static final String SubscriberNumber = "SubscriberNumber";
-        public static final String TimeZone = "TimeZone";
+    public interface WindowsPhoneAttributes {
+        String[] BiosVersion = {"BiosVersion", ""};
+        String[] CellularCarrier = {"CellularCarrier", ""};
+        String[] CpuId = {"CpuId", ""};
+        String[] DeviceUserInfo = {"DeviceUserInfo", ""};
+        String[] DMRevision = {"DMRevision", ""};
+        String[] FirmwareVersion = {"FirmwareVersion", ""};
+        String[] HardwareEncryptionCaps = {"HardwareEncryptionCaps", ""};
+        String[] HardwareVersion = {"HardwareVersion", ""};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", ""};
+        String[] IMEI_MEID_ESN_SIM2 = {"IMEI_MEID_ESN_SIM2", ""};
+        String[] InRoaming = {"InRoaming", ""};
+        String[] InRoamingSIM2 = {"InRoamingSIM2", ""};
+        String[] Language = {"Language", ""};
+        String[] PasscodeEnabled = {"PasscodeEnabled", ""};
+        String[] PasscodeStatus = {"PasscodeStatus", ""};
+        String[] PhoneNumber = {"PhoneNumber", ""};
+        String[] PhoneNumberSIM2 = {"PhoneNumberSIM2", ""};
+        String[] RadioVersion = {"RadioVersion", ""};
+        String[] ScreenResolution = {"ScreenResolution", ""};
+        String[] SIMCarrierNetwork = {"SIMCarrierNetwork", ""};
+        String[] SubscriberNumber = {"SubscriberNumber", ""};
+        String[] SubscriberNumberSIM2 = {"SubscriberNumberSIM2", ""};
+        String[] TimeZone = {"TimeZone", ""};
 
     }
 
-    public static class ZebraPrintersAttributes {
-        public static final String Memory = "Memory";
-        public static final String BatteryStatus = "BatteryStatus";
-        public static final String DeviceUserRole = "DeviceUserRole";
-        public static final String FirmwareVersion = "FirmwareVersion";
-        public static final String LastCheckInTime = "LastCheckInTime";
-        public static final String LastAgentConnectTime = "LastAgentConnectTime";
-        public static final String LastAgentDisconnectTime = "LastAgentDisconnectTime";
-        public static final String NetworkConnectionType = "NetworkConnectionType";
-        public static final String NetworkSSID = "NetworkSSID";
-        public static final String PrinterAdminServer = "PrinterAdminServer";
-        public static final String ProductIdentification = "ProductIdentification";
+    public interface WindowsRunTimeAttributes {
+        String[] BatteryStatus = {"BatteryStatus", ""};
+        String[] CellularCarrier = {"CellularCarrier", ""};
+        String[] CompanyHubStatus = {"CompanyHubStatus", ""};
+        String[] DeviceUserInfo = {"DeviceUserInfo", ""};
+        String[] DMRevision = {"DMRevision", ""};
+        String[] FirmwareVersion = {"FirmwareVersion", ""};
+        String[] HardwareEncryptionCaps = {"HardwareEncryptionCaps", "Hardware encryption caps"};
+        String[] HardwareVersion = {"HardwareVersion", ""};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", "IMEI MEID ESN"};
+        String[] InRoaming = {"InRoaming", "Roaming"};
+        String[] IsEncrypted = {"IsEncrypted", "Is encrypted"};
+        String[] Language = {"Language", "Language"};
+        String[] NetworkConnectionType = {"NetworkConnectionType", "Network connection type"};
+        String[] PasscodeEnabled = {"PasscodeEnabled", "Passcode enabled"};
+        String[] PasscodeStatus = {"PasscodeStatus", "Passcode status"};
+        String[] ScreenResolution = {"ScreenResolution", "Screen resolution"};
+        String[] SubscriberNumber = {"SubscriberNumber", "Subscriber number"};
+        String[] TimeZone = {"TimeZone", ""};
+
     }
+
+    public interface ZebraPrintersAttributes {
+        String[] Memory = {"Memory", "Memory"};
+        String[] BatteryStatus = {"BatteryStatus", "Battery status"};
+        String[] DeviceUserRole = {"DeviceUserRole", "Device user role"};
+        String[] FirmwareVersion = {"FirmwareVersion", "Firmware version"};
+        String[] LastCheckInTime = {"LastCheckInTime", "Last check in"};
+        String[] LastAgentConnectTime = {"LastAgentConnectTime", "Last agent connection"};
+        String[] LastAgentDisconnectTime = {"LastAgentDisconnectTime", "Last disconnection time"};
+        String[] NetworkConnectionType = {"NetworkConnectionType", "Network connection type"};
+        String[] NetworkSSID = {"NetworkSSID", "Network SSID"};
+        String[] PrinterAdminServer = {"PrinterAdminServer", "Printer admin server"};
+        String[] ProductIdentification = {"ProductIdentification", "Product identification"};
+    }
+
+    public class BasicDevice implements BaseAttributes {
+        public BasicDevice() {
+        }
+    }
+
+    public class AndroidPlusDevice extends BasicDevice implements AndroidPlusAttributes {
+        public AndroidPlusDevice() {
+            super();
+        }
+    }
+
+    public class AfwDevice extends AndroidPlusDevice implements AfwAttributes {
+        public AfwDevice() {
+            super();
+        }
+    }
+
+    public class AndroidElmDevice extends AndroidPlusDevice implements AndroidElmAttributes {
+        public AndroidElmDevice() {
+            super();
+        }
+    }
+
+    public class KnoxDevice extends AndroidPlusDevice implements AndroidKnoxAttributes {
+        public KnoxDevice() {
+            super();
+        }
+    }
+
+    public class AndroidGenericDevice extends BasicDevice implements AndroidGenericAttributes {
+        public AndroidGenericDevice() {
+            super();
+        }
+    }
+
+    public class IosDevice extends BasicDevice implements iOSAttributes {
+        public IosDevice() {
+            super();
+        }
+    }
+
+    public class MacDevice extends BasicDevice implements MacAttributes {
+        public MacDevice() {
+            super();
+        }
+    }
+
+    public class WindowsMobileDevice extends BasicDevice implements WindowsMobileCeAttributes {
+        public WindowsMobileDevice() {
+            super();
+        }
+    }
+
+    public class WindowsDesktopDevice extends BasicDevice implements WindowsDesktopAttributes {
+        public WindowsDesktopDevice() {
+            super();
+        }
+    }
+
+    public class WindowsDesktopLegacyDevice extends BasicDevice implements WindowsDesktopLegacyAttributes {
+        public WindowsDesktopLegacyDevice() {
+            super();
+        }
+    }
+
+    public class WindowsPhoneDevice extends BasicDevice implements WindowsPhoneAttributes {
+        public WindowsPhoneDevice() {
+            super();
+        }
+    }
+
+    public class WindowsRunTimeDevice extends BasicDevice implements WindowsRunTimeAttributes {
+        public WindowsRunTimeDevice() {
+            super();
+        }
+    }
+
+    public class ZebraPrinterDevice extends BasicDevice implements ZebraPrintersAttributes {
+        public ZebraPrinterDevice() {
+            super();
+        }
+    }
+
 }

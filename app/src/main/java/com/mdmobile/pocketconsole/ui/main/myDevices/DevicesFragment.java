@@ -16,7 +16,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +24,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
@@ -49,12 +47,12 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     private final String sortingOptionKey = "SortingOptionKey";
     private final String pinnedFolderOptionKey = "PinnedFolderOptionKey";
     RecyclerEmptyView recyclerView;
+    TextView emptyView;
     private DevicesListAdapter mAdapter;
     private SharedPreferences preferences;
     private int currentSortingOption;
     private String currentPinnedPath;
     private TextView filtersView;
-    TextView emptyView;
     private SwipeRefreshLayout mSwipeToRefresh;
 
     public DevicesFragment() {
@@ -112,7 +110,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         mSwipeToRefresh.setOnRefreshListener(this);
 
         //Create an adapter for recycler
-        mAdapter = new DevicesListAdapter(getContext(),null, (DevicesListAdapter.DeviceSelected) getActivity());
+        mAdapter = new DevicesListAdapter(getContext(), null, (DevicesListAdapter.DeviceSelected) getActivity());
 
         return rootView;
     }
@@ -215,9 +213,10 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 //                    + McContract.Device.COLUMN_EXTRA_INFO + " LIKE ? ";
 //            String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery + "%"};
 
-            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? ";
+            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? OR " + McContract.Device.COLUMN_PATH
+                    + " LIKE ? OR " + McContract.Device.COLUMN_DEVICE_ID + " LIKE ?";
 
-            String[] arguments = {"%" + searchQuery + "%"};
+            String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery, "%" + searchQuery + "%"};
 
             return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null,
                     selection, arguments, sortingParameter);

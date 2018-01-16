@@ -50,6 +50,7 @@ import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.
 public class DeviceDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener {
     private final String LOG_TAG = DeviceDetailsFragment.class.getSimpleName();
+    private final int LOAD_PROFILE = 111, LOAD_APPS = 112, LOAD_INFO = 113;
     private String deviceName;
     private String deviceId;
     private String iconTransitionName;
@@ -160,12 +161,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
 //        getActivity().supportStartPostponedEnterTransition();
-        getLoaderManager().initLoader(10, null, this);
-        getLoaderManager().initLoader(11, null, this);
-        getLoaderManager().initLoader(12, null, this);
-
-        ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
-        ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
+        getLoaderManager().initLoader(LOAD_INFO, null, this);
+        getLoaderManager().initLoader(LOAD_PROFILE, null, this);
+        getLoaderManager().initLoader(LOAD_APPS, null, this);
     }
 
 
@@ -184,16 +182,14 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri;
         switch (id) {
-            case 10:
-                //Return device information
+            case LOAD_INFO:
                 uri = McContract.Device.buildUriWithDeviceID(deviceId);
                 return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
-            case 11:
-                //Return Profiles information
+            case LOAD_PROFILE:
                 return new CursorLoader(getContext(),
                         McContract.Profile.buildUriWithDeviceId(deviceId),
                         null, null, null, McContract.Profile.ASSIGNMENT_DATE + " DESC");
-            case 12:
+            case LOAD_APPS:
                 uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
                 return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
         }
@@ -204,19 +200,29 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         switch (loader.getId()) {
-            case 10:
+            case LOAD_INFO:
                 Cursor c = data;
                 setCharts(c);
                 setDeviceInfoCard(c);
                 break;
-            case 11: {
+            case LOAD_PROFILE: {
+                if (data != null && data.getCount() == 0) {
+                    ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
+                    return;
+                }
+
                 GridLayout gridLayout = rootView.findViewById(R.id.device_details_profiles_grid_view);
                 String[] columns = {McContract.Profile.NAME,
                         McContract.Profile.STATUS};
                 setCards(data, gridLayout, columns);
                 break;
             }
-            case 12: {
+            case LOAD_APPS: {
+                if (data != null && data.getCount() == 0) {
+                    ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
+                    return;
+                }
+
                 GridLayout gridLayout = rootView.findViewById(R.id.device_details_apps_grid_view);
                 String[] columns = {McContract.InstalledApplications.APPLICATION_NAME,
                         McContract.InstalledApplications.APPLICATION_STATUS};

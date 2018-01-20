@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -25,16 +26,21 @@ import com.mdmobile.pocketconsole.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactoryManager.BAR_CHART;
+import static com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactoryManager.PIE_CHART;
+
 /**
  * Chart recycler nameView adapter
  */
 
 public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> implements OnChartValueSelectedListener {
 
-    private static int ONLINE_CHART = 0;
-    private static int MANUFACTURERS_CHART = 1;
-    private static int OUT_OF_CONTACT_CHART = 2;
-    private static int BATTERY_CHART = 3;
+    private final int PLATFORM_CHART = 0;
+    private final int ONLINE_CHART = 1;
+    private final int BATTERY_CHART = 2;
+    private final int OUT_OF_CONTACT_CHART = 3;
+    private final int[] CHART_SET = {PLATFORM_CHART, ONLINE_CHART, OUT_OF_CONTACT_CHART, BATTERY_CHART};
+    private IChartFactory chartFactory;
 
     private Bundle statistics;
     private String[] enabledCharts;
@@ -44,17 +50,29 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
             statistics = data;
         }
         setHasStableIds(true);
-//        enabledCharts = c.getApplicationContext().getSharedPreferences
-//                (c.getString(R.string.shared_preference), Context.MODE_PRIVATE)
-//                .getStringSet(c.getString(R.string.charts_preference),);
-//        )
-
     }
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        switch (position) {
+            case PLATFORM_CHART:
+                return PIE_CHART;
+            case ONLINE_CHART:
+                return PIE_CHART;
+            case OUT_OF_CONTACT_CHART:
+                return BAR_CHART;
+            case BATTERY_CHART:
+                return BAR_CHART;
+            default:
+                return super.getItemViewType(position);
+        }
+
     }
+
+    public int getItemCount() {
+        return CHART_SET.length;
+    }
+
 
     @Override
     public long getItemId(int position) {
@@ -64,7 +82,8 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
     @Override
     public ChartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_item, parent, false);
-        return new ChartViewHolder(item);
+        ChartViewHolder vh = new ChartViewHolder(item);
+        return vh;
     }
 
 
@@ -78,11 +97,15 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
         List<PieEntry> pieEntries;
         PieDataSet pieDataSet;
-        View chart;
+
+        chartFactory = ChartFactoryManager.instantiate(holder.chartContainer.getContext(),
+                holder.getItemViewType());
+
+        Chart chart = chartFactory.createChart(holder.chartContainer.getContext());
 
         switch (position) {
-            case 0:
-                //Online vs offline devices
+            case ONLINE_CHART:
+
                 pieEntries = new ArrayList<>();
                 pieEntries.add(new PieEntry(statistics.getInt("OnlineDevs"), "Online"));
                 pieEntries.add(new PieEntry(statistics.getInt("OfflineDevs"), "Offline"));
@@ -93,12 +116,12 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
                 pieData.addDataSet(pieDataSet);
                 pieData.setValueTextSize(0f);
 
-                chart = createPieChart(holder.chartContainer.getContext(), pieData, position);
+                chart = createPieChart(holder.chartContainer.getContext(), (PieChart) chart, pieData, position);
                 holder.chartContainer.addView(chart);
-                chart.invalidate();
+                holder.chartContainer.invalidate();
                 break;
 
-            case 1:
+            case PLATFORM_CHART:
                 //Device platforms
                 pieEntries = new ArrayList<>();
 
@@ -117,30 +140,20 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
                 pieData.addDataSet(pieDataSet);
                 pieData.setValueTextSize(0f);
 
-                chart = createPieChart(holder.chartContainer.getContext(), pieData, position);
+                chart = createPieChart(holder.chartContainer.getContext(), (PieChart) chart, pieData, position);
                 holder.chartContainer.addView(chart);
                 chart.invalidate();
                 break;
-            case 2:
-                //Out of contact
+            case OUT_OF_CONTACT_CHART:
+
                 break;
-            case 3:
-                //Average memory
+            case BATTERY_CHART:
                 break;
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return 6;
-    }
-
-    private PieChart createPieChart(Context mContext, PieData data, int position) {
-
-        PieChart pieChart =
-                (PieChart) ChartFactoryManager.instantiate(mContext, position, ChartFactoryManager.PIE_CHART).createChart(mContext);
+    private PieChart createPieChart(Context mContext, PieChart pieChart, PieData data, int position) {
         pieChart.setData(data);
-
 
         Legend legend = pieChart.getLegend();
         legend.setWordWrapEnabled(true);
@@ -153,7 +166,6 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
         Description descriptionLabel = new Description();
         descriptionLabel.setEnabled(true);
-
 
         switch (position) {
             case 0:

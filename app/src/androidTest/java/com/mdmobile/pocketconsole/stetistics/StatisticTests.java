@@ -4,12 +4,15 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
 import com.mdmobile.pocketconsole.provider.McContract;
-import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.DeviceStat;
+import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.CounterStat;
+import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatValue;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.Statistic;
-import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatsManager;
+import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatisticFactory;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -23,23 +26,25 @@ public class StatisticTests {
 
     @Before
     public void setUp() {
-        mContext = InstrumentationRegistry.getTargetContext();
+        mContext = InstrumentationRegistry.getContext();
 
     }
 
     @Test
     public void manufacturerTest() {
-        DeviceStat stat = (DeviceStat) StatsManager.createFactory(Statistic.DEVICE_STAT, McContract.Device.COLUMN_MANUFACTURER);
+        CounterStat stat = (CounterStat) StatisticFactory.createStatistic(Statistic.COUNTER_STAT,McContract.Device.COLUMN_MANUFACTURER);
         stat.initPoll(mContext);
-        assertTrue("Statistic returned 0 manufacturer", stat.getData().length > 0);
+        List<StatValue> values =  stat.getData();
+
+        assertTrue("Statistic returned 0 manufacturer", !stat.getData().isEmpty());
     }
 
-    @Test
-    public void deviceOsTest() {
-        DeviceStat stat = (DeviceStat) StatsManager.createFactory(Statistic.DEVICE_STAT, McContract.Device.COLUMN_FAMILY);
-        stat.initPoll(mContext);
-        assertTrue("Statistic returned 0 platforms", stat.getData().length > 0);
-
-    }
+//    @Test
+//    public void deviceOsTest() {
+//        CounterStatistic stat = (CounterStatistic) StatsManager.createFactory(Statistic.SUM_STAT, McContract.Device.COLUMN_FAMILY);
+//        stat.initPoll(mContext);
+//        assertTrue("Statistic returned 0 platforms", stat.getData().length > 0);
+//
+//    }
 
 }

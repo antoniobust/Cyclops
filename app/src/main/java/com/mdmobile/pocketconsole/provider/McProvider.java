@@ -48,6 +48,8 @@ public class McProvider extends ContentProvider {
         Logger.log(LOG_TAG, "Query( uri:" + uri.toString() + ", data selected: " + Arrays.toString(projection)
                 + " selection parameters: " + selection + " values:" + Arrays.toString(selectionArgs), Log.VERBOSE);
 
+        String groupBy = "";
+
         //Get DB is an expensive operation check if we already have opened it
         if (database == null) {
             database = mcHelper.getWritableDatabase();
@@ -71,11 +73,8 @@ public class McProvider extends ContentProvider {
                 break;
 
             case DEVICES_GROUP_BY:
-                HashMap<String, String> mProjection = new HashMap<>();
-                mProjection.put("COUNT(" + McContract.Device._ID + ")", "COUNT(" + McContract.Device._ID + ")");
-
                 mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
-                mQueryBuilder.setProjectionMap(mProjection);
+                groupBy = McContract.Device.getGroupByFromUri(uri);
 
                 break;
 
@@ -133,7 +132,7 @@ public class McProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }
         //Execute built query
-        c = mQueryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
+        c = mQueryBuilder.query(database, projection, selection, selectionArgs, groupBy, null, sortOrder);
 
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;

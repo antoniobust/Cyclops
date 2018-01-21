@@ -14,7 +14,7 @@ import java.util.List;
  * Class responsible for managing charts creation
  */
 
-public class ChartFactoryManager {
+public class ChartFactory {
 
     public static final int PIE_CHART = 1;
     public static final int BAR_CHART = 2;

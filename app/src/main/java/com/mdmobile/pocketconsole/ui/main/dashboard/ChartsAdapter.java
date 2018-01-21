@@ -12,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -26,8 +28,8 @@ import com.mdmobile.pocketconsole.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactoryManager.BAR_CHART;
-import static com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactoryManager.PIE_CHART;
+import static com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactory.BAR_CHART;
+import static com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactory.PIE_CHART;
 
 /**
  * Chart recycler nameView adapter
@@ -95,16 +97,16 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
             return;
         }
 
-        List<PieEntry> pieEntries;
-        PieDataSet pieDataSet;
-
-        chartFactory = ChartFactoryManager.instantiate(holder.chartContainer.getContext(),
+        chartFactory = ChartFactory.instantiate(holder.chartContainer.getContext(),
                 holder.getItemViewType());
 
         Chart chart = chartFactory.createChart(holder.chartContainer.getContext());
 
         switch (position) {
-            case ONLINE_CHART:
+            case ONLINE_CHART: {
+                List<PieEntry> pieEntries;
+                PieDataSet pieDataSet;
+                PieData pieData = new PieData();
 
                 pieEntries = new ArrayList<>();
                 pieEntries.add(new PieEntry(statistics.getInt("OnlineDevs"), "Online"));
@@ -112,7 +114,6 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
                 pieDataSet = new PieDataSet(pieEntries, null);
                 pieDataSet.setColors(new int[]{R.color.colorPrimaryDark, R.color.colorPrimary}, holder.chartContainer.getContext());
-                PieData pieData = new PieData();
                 pieData.addDataSet(pieDataSet);
                 pieData.setValueTextSize(0f);
 
@@ -120,10 +121,12 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
                 holder.chartContainer.addView(chart);
                 holder.chartContainer.invalidate();
                 break;
-
-            case PLATFORM_CHART:
-                //Device platforms
+            }
+            case PLATFORM_CHART: {
+                List<PieEntry> pieEntries;
+                PieDataSet pieDataSet;
                 pieEntries = new ArrayList<>();
+                PieData pieData = new PieData();
 
                 pieEntries.add(new PieEntry(statistics.getInt("Android"), "Android"));
                 pieEntries.add(new PieEntry(statistics.getInt("Apple"), "iOS"));
@@ -136,7 +139,6 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
                 pieDataSet.setColors(
                         new int[]{R.color.androidColor, R.color.iosSpaceGrey, R.color.windowsColor, R.color.windowsColor,
                                 R.color.darkGreen, R.color.printerColor}, holder.chartContainer.getContext());
-                pieData = new PieData();
                 pieData.addDataSet(pieDataSet);
                 pieData.setValueTextSize(0f);
 
@@ -144,8 +146,9 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
                 holder.chartContainer.addView(chart);
                 chart.invalidate();
                 break;
+            }
             case OUT_OF_CONTACT_CHART:
-
+                List<BarEntry> entries = new ArrayList<>();
                 break;
             case BATTERY_CHART:
                 break;
@@ -181,7 +184,8 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         return pieChart;
     }
 
-    private void createBarsChart() {
+    private HorizontalBarChart createBarsChart() {
+return null;
 
     }
 

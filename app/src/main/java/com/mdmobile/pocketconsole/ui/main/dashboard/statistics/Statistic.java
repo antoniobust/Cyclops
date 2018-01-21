@@ -3,75 +3,67 @@ package com.mdmobile.pocketconsole.ui.main.dashboard.statistics;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.mdmobile.pocketconsole.dataModels.StatValue;
-
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class responsible for creating a new statistic and return data from DB
  */
 
-public abstract class Statistic implements IStatisticFactory {
-    public final static int DEVICE_STAT = 1;
-
-    String element;
-    protected StatValue[] entries;
+public abstract class Statistic {
+    public final static int COUNTER_STAT = 1;
+    public final static int COUNTER_RANGE = 2;
+    protected List<StatValue> entries;
+    String mProperty;
 
     // - Constructor
-    public Statistic(String element) {
-        this.element = element;
+    public Statistic(String property) {
+        mProperty = property;
     }
-
-    // - Stat factory interface method
-    @Override
-    public Statistic createStatistic(int statisticType, String element) {
-        if (statisticType == DEVICE_STAT) {
-            return new DeviceStat(element);
-        }
-        return null;
-    }
-
 
     public abstract void initPoll(Context context);
 
-    public StatValue[] getData() {
+    public List<StatValue> getData() {
         return entries;
     }
 
-
     public int getPopulationSize() {
-        if (entries.length > 0) {
-            int counter = 0;
-            for (StatValue entry : entries) {
-                counter += entry.getCounter();
-            }
-            return counter;
+        if (entries.isEmpty()) {
+            return entries.size();
         }
-        return entries.length;
+        int counter = 0;
+        for (StatValue entry : entries) {
+            counter += entry.getValue();
+        }
+        return counter;
     }
 
     public String[] getGroupsLabels() {
-        if (entries.length > 0) {
-            ArrayList<String> label = new ArrayList<>(entries.length);
-
-            for (StatValue entry : entries) {
-                label.add(entry.getGroupLabel());
-            }
-            return label.toArray(new String[label.size()]);
+        if (entries.isEmpty()) {
+            return null;
         }
-        return null;
+        ArrayList<String> label = new ArrayList<>(entries.size());
+        for (StatValue entry : entries) {
+            label.add(entry.getLabel());
+        }
+        return label.toArray(new String[label.size()]);
     }
 
-    StatValue[] statValuesFromCursor(Cursor c) {
+    public int getGroupsCount() {
+        return entries.size();
+    }
+
+    List<StatValue> statValuesFromCursor(Cursor c) {
         if (!c.moveToFirst()) {
             return null;
         }
+
         ArrayList<StatValue> statValues = new ArrayList<>(c.getCount());
 
         while (!c.isLast()) {
             statValues.add(new StatValue(c.getString(1), c.getInt(0)));
             c.moveToNext();
         }
-        return statValues.toArray(new StatValue[statValues.size()]);
+        return statValues;
     }
 }

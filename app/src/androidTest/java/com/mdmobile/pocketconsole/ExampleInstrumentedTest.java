@@ -44,10 +44,10 @@ public class ExampleInstrumentedTest {
                 "https://uk.mobicontrolcloud.com/MobiControl/api/devices?skip=20&take=10&order=+osversion,-model&filter=manufacturer:Apple";
 
         //Create the filter parameter
-        filter.add(new Pair<>(DeviceAttributes.BaseAttributes.Manufacturer, "Apple"));
+        filter.add(new Pair<>(DeviceAttributes.BaseAttributes.Manufacturer[1], "Apple"));
         //Create order parameter
-        order.add(new Pair<>("+", DeviceAttributes.BaseAttributes.OSVersion));
-        order.add(new Pair<>("-", DeviceAttributes.BaseAttributes.Model));
+        order.add(new Pair<>("+", DeviceAttributes.BaseAttributes.OSVersion[1]));
+        order.add(new Pair<>("-", DeviceAttributes.BaseAttributes.Model[1]));
 
 
         String apiReq =

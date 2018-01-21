@@ -103,7 +103,7 @@ public class DbData {
         deviceValues.put(McContract.Device.COLUMN_PATH, device.getPath());
         deviceValues.put(McContract.Device.COLUMN_PLATFORM, device.getPlatform());
         //Memory info is not on some specific windows phone so I rather check here if is null than
-        // remove memory form basic device info just for windows phone platform
+        // remove memory from basic device info just for windows phone platform
         if (device.memory != null) {
             deviceValues.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, device.memory.getAvailableExternalStorage());
             deviceValues.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, device.memory.getAvailableMemory());

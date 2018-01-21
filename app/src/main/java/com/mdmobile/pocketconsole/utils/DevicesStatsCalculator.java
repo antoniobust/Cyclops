@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import com.mdmobile.pocketconsole.provider.McContract;
 
+import java.util.HashMap;
+
 
 public class DevicesStatsCalculator extends AsyncTask<Cursor, Void, Bundle> {
 
@@ -28,19 +30,48 @@ public class DevicesStatsCalculator extends AsyncTask<Cursor, Void, Bundle> {
     }
 
     private Bundle fetchDeviceData(Cursor mCursor) {
-        int onlineDeviceCounter = 0, totMemoryCounter = 0, androidCounter = 0, iosCounter = 0, windowsMobileCounter = 0,
+        int onlineDeviceCounter = 0, androidCounter = 0, iosCounter = 0, windowsMobileCounter = 0,
                 windowsDesktopCounter = 0, windowsModernCounter = 0, printersCounter = 0;
+        HashMap<String, Integer> batteryCounter = new HashMap<>();
+        batteryCounter.put("Unknown", 0);
+        batteryCounter.put("10+", 0);
+        batteryCounter.put("20+", 0);
+        batteryCounter.put("40+", 0);
+        batteryCounter.put("60+", 0);
+        batteryCounter.put("80+", 0);
         String deviceFamily;
         Bundle stats = new Bundle();
+        String extraInfo;
+        String batteryStatus;
+        int batteryValue;
 
         if (!mCursor.moveToFirst()) {
             return null;
         }
 
         do {
-            if (mCursor.getInt(mCursor.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1) {
-                onlineDeviceCounter++;
+            extraInfo = mCursor.getString(mCursor.getColumnIndex(McContract.Device.COLUMN_EXTRA_INFO));
+            batteryStatus = DbData.getDeviceExtraInfo(extraInfo).getString("tBatteryStatus");
+            if (batteryStatus == null) {
+                batteryCounter.put("Unknown", batteryCounter.get("Unknown") + 1);
+            } else {
+                batteryValue = Integer.valueOf(batteryStatus);
+                if (batteryValue >= 0 && batteryValue <= 10) {
+                    batteryCounter.put("0+", batteryCounter.get("Unknown") + 1);
+                } else if (batteryValue >= 10 && batteryValue <= 20) {
+                    batteryCounter.put("10+", batteryCounter.get("Unknown") + 1);
+                } else if (batteryValue >= 20 && batteryValue <= 40) {
+                    batteryCounter.put("20+", batteryCounter.get("Unknown") + 1);
+                } else if (batteryValue >= 40 && batteryValue <= 60) {
+                    batteryCounter.put("40+", batteryCounter.get("Unknown") + 1);
+                } else if (batteryValue >= 60 && batteryValue <= 80) {
+                    batteryCounter.put("60+", batteryCounter.get("Unknown") + 1);
+                } else if (batteryValue >= 80) {
+                    batteryCounter.put("Unknown", batteryCounter.get("Unknown") + 1);
+                }
             }
+
+            getOnlineStatus(mCursor);
 
             deviceFamily = mCursor.getString(mCursor.getColumnIndex(McContract.Device.COLUMN_FAMILY));
             if (deviceFamily.startsWith("Android")) {
@@ -61,6 +92,7 @@ public class DevicesStatsCalculator extends AsyncTask<Cursor, Void, Bundle> {
         stats.putInt("OnlineDevs", onlineDeviceCounter);
         stats.putInt("OfflineDevs", mCursor.getCount() - onlineDeviceCounter);
 
+
         if (androidCounter > 0) {
             stats.putInt("Android", androidCounter);
         }
@@ -79,8 +111,12 @@ public class DevicesStatsCalculator extends AsyncTask<Cursor, Void, Bundle> {
         if (printersCounter > 0) {
             stats.putInt("Printer", printersCounter);
         }
-
         return stats;
+    }
+
+    private int getOnlineStatus(Cursor mCursor) {
+        return mCursor.getInt(mCursor.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE));
+
     }
 
     public interface Listener {

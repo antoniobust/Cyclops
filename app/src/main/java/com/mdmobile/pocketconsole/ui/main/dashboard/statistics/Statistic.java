@@ -1,6 +1,7 @@
 package com.mdmobile.pocketconsole.ui.main.dashboard.statistics;
 
-import android.content.Context;
+import android.content.AsyncQueryHandler;
+import android.content.ContentResolver;
 import android.database.Cursor;
 
 import java.util.ArrayList;
@@ -10,18 +11,38 @@ import java.util.List;
  * Class responsible for creating a new statistic and return data from DB
  */
 
-public abstract class Statistic {
+public abstract class Statistic extends AsyncQueryHandler {
     public final static int COUNTER_STAT = 1;
     public final static int COUNTER_RANGE = 2;
-    protected List<StatValue> entries;
     String mProperty;
+    private List<StatValue> entries;
+    private IStatisticReady listener;
 
     // - Constructor
-    public Statistic(String property) {
+    Statistic(ContentResolver cr, String property) {
+        super(cr);
         mProperty = property;
     }
 
-    public abstract void initPoll(Context context);
+    @Override
+    protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+        if (cursor == null || !cursor.moveToFirst()) {
+            return;
+        }
+        entries = statValuesFromCursor(cursor);
+        cursor.close();
+        listener.getData(entries);
+    }
+
+    public abstract void initPoll();
+
+    public void registerListener(IStatisticReady listener) {
+        this.listener = listener;
+    }
+
+    public void unRegisterListener() {
+        this.listener = null;
+    }
 
     public List<StatValue> getData() {
         return entries;
@@ -53,11 +74,7 @@ public abstract class Statistic {
         return entries.size();
     }
 
-    List<StatValue> statValuesFromCursor(Cursor c) {
-        if (!c.moveToFirst()) {
-            return null;
-        }
-
+    private List<StatValue> statValuesFromCursor(Cursor c) {
         ArrayList<StatValue> statValues = new ArrayList<>(c.getCount());
 
         while (!c.isLast()) {
@@ -65,5 +82,9 @@ public abstract class Statistic {
             c.moveToNext();
         }
         return statValues;
+    }
+
+    public interface IStatisticReady {
+        void getData(List<StatValue> values);
     }
 }

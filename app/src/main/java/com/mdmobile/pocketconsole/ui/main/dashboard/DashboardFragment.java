@@ -20,12 +20,20 @@ import android.view.ViewGroup;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
+import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.CounterStat;
+import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatValue;
+import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.Statistic;
+import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatisticFactory;
 import com.mdmobile.pocketconsole.utils.DevicesStatsCalculator;
 
+import java.util.List;
 
-public class DashboardFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, DevicesStatsCalculator.Listener {
+
+public class DashboardFragment extends Fragment implements
+        LoaderManager.LoaderCallbacks<Cursor>, DevicesStatsCalculator.Listener, Statistic.IStatisticReady {
 
     private RecyclerView recyclerView;
+    private CounterStat counterStat;
 
 
     public DashboardFragment() {
@@ -37,6 +45,37 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
         return new DashboardFragment();
     }
 
+    // --  Interfaces methods
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//        String[] projection = {McContract.Device.COLUMN_AGENT_ONLINE, McContract.Device.COLUMN_FAMILY,
+//                McContract.Device.COLUMN_KIND};
+        return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        DevicesStatsCalculator statsTask = new DevicesStatsCalculator();
+        statsTask.registerListener(this);
+        statsTask.execute(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    @Override
+    public void OnFinished(Bundle result) {
+        recyclerView.swapAdapter(new ChartsAdapter(getContext(), result), true);
+    }
+
+    @Override
+    public void getData(List<StatValue> values) {
+       //TODO: get data and pass them to the adapter
+    }
+
+
+    // -- Lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +98,7 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
-        ChartsAdapter recyclerAdapter = new ChartsAdapter(getContext(),null);
+        ChartsAdapter recyclerAdapter = new ChartsAdapter(getContext(), null);
         recyclerView.setAdapter(recyclerAdapter);
 
 //        //Get devices pie chart
@@ -72,38 +111,22 @@ public class DashboardFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.dashboard_fragment_menu,menu);
+        inflater.inflate(R.menu.dashboard_fragment_menu, menu);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //Initialize loader
         getLoaderManager().initLoader(20, null, this);
+        counterStat = (CounterStat)
+                StatisticFactory.createStatistic(getContext(),Statistic.COUNTER_STAT,McContract.Device.COLUMN_MANUFACTURER);
+        counterStat.registerListener(this);
+        counterStat.initPoll();
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-//        String[] projection = {McContract.Device.COLUMN_AGENT_ONLINE, McContract.Device.COLUMN_FAMILY,
-//                McContract.Device.COLUMN_KIND};
-
-        return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null, null, null, null);
-
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        DevicesStatsCalculator statsTask = new DevicesStatsCalculator();
-        statsTask.registerListener(this);
-        statsTask.execute(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-    }
-
-    @Override
-    public void OnFinished(Bundle result) {
-        recyclerView.swapAdapter(new ChartsAdapter(getContext(),result), true);
+    public void onPause() {
+        super.onPause();
+        counterStat.unRegisterListener();
     }
 }

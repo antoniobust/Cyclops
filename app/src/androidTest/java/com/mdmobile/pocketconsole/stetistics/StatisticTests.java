@@ -30,15 +30,6 @@ public class StatisticTests {
 
     }
 
-    @Test
-    public void manufacturerTest() {
-        CounterStat stat = (CounterStat) StatisticFactory.createStatistic(Statistic.COUNTER_STAT,McContract.Device.COLUMN_MANUFACTURER);
-        stat.initPoll(mContext);
-        List<StatValue> values =  stat.getData();
-
-        assertTrue("Statistic returned 0 manufacturer", !stat.getData().isEmpty());
-    }
-
 //    @Test
 //    public void deviceOsTest() {
 //        CounterStatistic stat = (CounterStatistic) StatsManager.createFactory(Statistic.SUM_STAT, McContract.Device.COLUMN_FAMILY);

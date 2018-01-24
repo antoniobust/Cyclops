@@ -21,12 +21,9 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.CounterStat;
-import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatValue;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.Statistic;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatisticFactory;
 import com.mdmobile.pocketconsole.utils.DevicesStatsCalculator;
-
-import java.util.List;
 
 
 public class DashboardFragment extends Fragment implements
@@ -34,6 +31,7 @@ public class DashboardFragment extends Fragment implements
 
     private RecyclerView recyclerView;
     private CounterStat counterStat;
+    private NewChartsAdapter recyclerAdapter;
 
 
     public DashboardFragment() {
@@ -66,12 +64,12 @@ public class DashboardFragment extends Fragment implements
 
     @Override
     public void OnFinished(Bundle result) {
-        recyclerView.swapAdapter(new ChartsAdapter(getContext(), result), true);
+//        recyclerView.swapAdapter(new NewChartsAdapter(getContext(), result), true);
     }
 
     @Override
-    public void getData(List<StatValue> values) {
-       //TODO: get data and pass them to the adapter
+    public void getData(Bundle value) {
+        recyclerAdapter.addNewStat(value);
     }
 
 
@@ -98,13 +96,9 @@ public class DashboardFragment extends Fragment implements
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
-        ChartsAdapter recyclerAdapter = new ChartsAdapter(getContext(), null);
+//        ChartsAdapter recyclerAdapter = new ChartsAdapter(getContext(), null);
+        recyclerAdapter = new NewChartsAdapter(getContext(), null, null);
         recyclerView.setAdapter(recyclerAdapter);
-
-//        //Get devices pie chart
-//        devicesChart = (PieChart) rootView.findViewById(R.id.devices_chart);
-//        //Get Online devices chart
-//        onlineDevicesChart = (PieChart) rootView.findViewById(R.id.online_devices_chart);
 
         return rootView;
     }
@@ -117,9 +111,9 @@ public class DashboardFragment extends Fragment implements
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //Initialize loader
-        getLoaderManager().initLoader(20, null, this);
+//        getLoaderManager().initLoader(20, null, this);
         counterStat = (CounterStat)
-                StatisticFactory.createStatistic(getContext(),Statistic.COUNTER_STAT,McContract.Device.COLUMN_MANUFACTURER);
+                StatisticFactory.createStatistic(getContext(), Statistic.COUNTER_STAT, McContract.Device.COLUMN_MANUFACTURER);
         counterStat.registerListener(this);
         counterStat.initPoll();
     }

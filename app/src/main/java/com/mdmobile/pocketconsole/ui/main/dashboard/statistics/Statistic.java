@@ -3,6 +3,7 @@ package com.mdmobile.pocketconsole.ui.main.dashboard.statistics;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public abstract class Statistic extends AsyncQueryHandler {
     public final static int COUNTER_STAT = 1;
     public final static int COUNTER_RANGE = 2;
     String mProperty;
-    private List<StatValue> entries;
+    private ArrayList<StatValue> entries;
     private IStatisticReady listener;
 
     // - Constructor
@@ -31,7 +32,9 @@ public abstract class Statistic extends AsyncQueryHandler {
         }
         entries = statValuesFromCursor(cursor);
         cursor.close();
-        listener.getData(entries);
+        Bundle data = new Bundle();
+        data.putParcelableArrayList(mProperty, entries);
+        listener.getData(data);
     }
 
     public abstract void initPoll();
@@ -74,17 +77,16 @@ public abstract class Statistic extends AsyncQueryHandler {
         return entries.size();
     }
 
-    private List<StatValue> statValuesFromCursor(Cursor c) {
+    private ArrayList<StatValue> statValuesFromCursor(Cursor c) {
         ArrayList<StatValue> statValues = new ArrayList<>(c.getCount());
-
-        while (!c.isLast()) {
+        c.moveToFirst();
+        do{
             statValues.add(new StatValue(c.getString(1), c.getInt(0)));
-            c.moveToNext();
-        }
+        }while (c.moveToNext());
         return statValues;
     }
 
     public interface IStatisticReady {
-        void getData(List<StatValue> values);
+        void getData(Bundle values);
     }
 }

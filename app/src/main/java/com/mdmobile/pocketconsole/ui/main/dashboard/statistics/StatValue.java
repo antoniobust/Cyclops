@@ -1,5 +1,8 @@
 package com.mdmobile.pocketconsole.ui.main.dashboard.statistics;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.mdmobile.pocketconsole.R;
 
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
@@ -8,7 +11,7 @@ import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
  * Java class that represent a single data for a statistic
  */
 
-public class StatValue {
+public class StatValue implements Parcelable {
 
     private int mValue;
     private String label;
@@ -17,6 +20,34 @@ public class StatValue {
         this.mValue = counter;
         this.label = label;
     }
+
+    protected StatValue(Parcel in) {
+        mValue = in.readInt();
+        label = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mValue);
+        dest.writeString(label);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<StatValue> CREATOR = new Creator<StatValue>() {
+        @Override
+        public StatValue createFromParcel(Parcel in) {
+            return new StatValue(in);
+        }
+
+        @Override
+        public StatValue[] newArray(int size) {
+            return new StatValue[size];
+        }
+    };
 
     public int getValue() {
         return mValue;

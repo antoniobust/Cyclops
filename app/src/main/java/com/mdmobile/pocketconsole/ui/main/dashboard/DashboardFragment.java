@@ -68,7 +68,7 @@ public class DashboardFragment extends Fragment implements
     }
 
     @Override
-    public void getData(Bundle value) {
+    public void getData(int statId,Bundle value) {
         recyclerAdapter.addNewStat(value);
     }
 
@@ -113,7 +113,9 @@ public class DashboardFragment extends Fragment implements
         //Initialize loader
 //        getLoaderManager().initLoader(20, null, this);
         counterStat = (CounterStat)
-                StatisticFactory.createStatistic(getContext(), Statistic.COUNTER_STAT, McContract.Device.COLUMN_MANUFACTURER);
+                StatisticFactory.createStatistic(getContext(), Statistic.COUNTER_STAT,
+                        McContract.Device.COLUMN_MANUFACTURER, McContract.Device.COLUMN_AGENT_ONLINE,
+                        McContract.Device.COLUMN_FAMILY);
         counterStat.registerListener(this);
         counterStat.initPoll();
     }

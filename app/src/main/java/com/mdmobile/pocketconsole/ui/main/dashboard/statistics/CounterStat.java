@@ -1,7 +1,6 @@
 package com.mdmobile.pocketconsole.ui.main.dashboard.statistics;
 
 import android.content.ContentResolver;
-import android.net.Uri;
 
 import com.mdmobile.pocketconsole.provider.McContract;
 
@@ -12,16 +11,24 @@ import com.mdmobile.pocketconsole.provider.McContract;
 
 public class CounterStat extends Statistic {
 
-    CounterStat(ContentResolver cr, String property) {
+    CounterStat(ContentResolver cr, String... property) {
         super(cr, property);
     }
 
     @Override
     public void initPoll() {
-        final Uri uri = McContract.Device.buildUriWithGroup(mProperty);
         final String count = "COUNT(" + McContract.Device._ID + ")";
-        final String orderBy = "COUNT(" + mProperty + ")" + " DESC";
-        startQuery(1, null, uri, new String[]{count, mProperty}, null, null, orderBy);
+        final String orderBy = "COUNT(?) DESC";
+
+        for (int i = 0; i < mProperties.length; i++) {
+            startQuery(i,
+                    mProperties[i],
+                    McContract.Device.buildUriWithGroup(mProperties[i]),
+                    new String[]{count, mProperties[i]},
+                    null,
+                    null,
+                    orderBy.replace("?", mProperties[i]));
+        }
     }
 }
 

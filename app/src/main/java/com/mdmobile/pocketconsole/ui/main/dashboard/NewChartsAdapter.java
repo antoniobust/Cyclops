@@ -87,7 +87,7 @@ public class NewChartsAdapter extends RecyclerView.Adapter<NewChartsAdapter.Char
         }
 
         pieDataSet = new PieDataSet(pieEntries,null);
-        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
         pieData.addDataSet(pieDataSet);
         pieData.setValueTextSize(0f);
 
@@ -108,6 +108,8 @@ public class NewChartsAdapter extends RecyclerView.Adapter<NewChartsAdapter.Char
             if (getItemCount() == 0) {
                 chartValues = new ArrayList<>();
                 chartsProperties = new ArrayList<>();
+            } else if(chartsProperties.contains(key)){
+                continue;
             }
             chartValues.add(valueList);
             chartsProperties.add(key);

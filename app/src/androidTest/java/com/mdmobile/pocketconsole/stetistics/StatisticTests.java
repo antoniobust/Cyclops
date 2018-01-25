@@ -34,7 +34,7 @@ public class StatisticTests {
 //    public void deviceOsTest() {
 //        CounterStatistic stat = (CounterStatistic) StatsManager.createFactory(Statistic.SUM_STAT, McContract.Device.COLUMN_FAMILY);
 //        stat.initPoll(mContext);
-//        assertTrue("Statistic returned 0 platforms", stat.getData().length > 0);
+//        assertTrue("Statistic returned 0 platforms", stat.getStatsData().length > 0);
 //
 //    }
 

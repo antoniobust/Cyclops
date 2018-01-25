@@ -8,7 +8,7 @@ import com.mdmobile.pocketconsole.R;
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 
 /**
- * Java class that represent a single data for a statistic
+ * Java class that represent a single statsData for a statistic
  */
 
 public class StatValue implements Parcelable {
@@ -24,6 +24,14 @@ public class StatValue implements Parcelable {
     protected StatValue(Parcel in) {
         mValue = in.readInt();
         label = in.readString();
+    }
+
+    public void setValue(int mValue) {
+        this.mValue = mValue;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @Override

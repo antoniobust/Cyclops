@@ -9,20 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class responsible for creating a new statistic and return data from DB
+ * Class responsible for creating a new statistic and return statsData from DB
  */
 
 public abstract class Statistic extends AsyncQueryHandler {
     public final static int COUNTER_STAT = 1;
     public final static int COUNTER_RANGE = 2;
-    String mProperty;
-    private ArrayList<StatValue> entries;
+    String[] mProperties;
+    private Bundle statsData = new Bundle();
     private IStatisticReady listener;
 
     // - Constructor
-    Statistic(ContentResolver cr, String property) {
+    Statistic(ContentResolver cr, String... properties) {
         super(cr);
-        mProperty = property;
+        mProperties = properties;
     }
 
     @Override
@@ -30,11 +30,21 @@ public abstract class Statistic extends AsyncQueryHandler {
         if (cursor == null || !cursor.moveToFirst()) {
             return;
         }
-        entries = statValuesFromCursor(cursor);
+        ArrayList<StatValue> entries = statValuesFromCursor(cursor);
         cursor.close();
-        Bundle data = new Bundle();
-        data.putParcelableArrayList(mProperty, entries);
-        listener.getData(data);
+
+        //If collection is bigger than 6 different values we will just show "others" with the sum of other entries
+        if (entries != null && entries.size() > 7) {
+            StatValue other = new StatValue("Other", 0);
+            for (int i = entries.size(); i > 5; i--) {
+                other.setValue(other.getValue() + entries.get(i-1).getValue());
+                entries.remove(i-1);
+            }
+            entries.add(other);
+        }
+
+        statsData.putParcelableArrayList((String) cookie, entries);
+        listener.getData(token, statsData);
     }
 
     public abstract void initPoll();
@@ -47,46 +57,44 @@ public abstract class Statistic extends AsyncQueryHandler {
         this.listener = null;
     }
 
-    public List<StatValue> getData() {
-        return entries;
+    public List<StatValue> getData(String property) {
+        return statsData.getParcelableArrayList(property);
     }
 
-    public int getPopulationSize() {
-        if (entries.isEmpty()) {
-            return entries.size();
-        }
+    public int getPopulationSize(String property) {
+        List<StatValue> statVal = getData(property);
         int counter = 0;
-        for (StatValue entry : entries) {
+        for (StatValue entry : statVal) {
             counter += entry.getValue();
         }
         return counter;
     }
 
-    public String[] getGroupsLabels() {
-        if (entries.isEmpty()) {
-            return null;
-        }
-        ArrayList<String> label = new ArrayList<>(entries.size());
-        for (StatValue entry : entries) {
+    public String[] getGroupsLabels(String property) {
+        List<StatValue> statVal = getData(property);
+        ArrayList<String> label = new ArrayList<>(statVal.size());
+        for (StatValue entry : statVal) {
             label.add(entry.getLabel());
         }
         return label.toArray(new String[label.size()]);
     }
 
-    public int getGroupsCount() {
-        return entries.size();
+    public int getGroupsCount(String property) {
+        return getData(property).size();
     }
 
     private ArrayList<StatValue> statValuesFromCursor(Cursor c) {
         ArrayList<StatValue> statValues = new ArrayList<>(c.getCount());
-        c.moveToFirst();
-        do{
+        if (!c.moveToFirst()) {
+            return null;
+        }
+        do {
             statValues.add(new StatValue(c.getString(1), c.getInt(0)));
-        }while (c.moveToNext());
+        } while (c.moveToNext());
         return statValues;
     }
 
     public interface IStatisticReady {
-        void getData(Bundle values);
+        void getData(int statId, Bundle values);
     }
 }

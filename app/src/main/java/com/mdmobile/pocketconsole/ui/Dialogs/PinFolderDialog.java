@@ -41,7 +41,7 @@ public class PinFolderDialog extends DialogFragment implements Dialog.OnClickLis
         View view = inflater.inflate(R.layout.pin_folder_dialog, container, false);
 
 
-        folderPathView = (EditText) view.findViewById(R.id.dialog_folder_path_edit_text);
+        folderPathView = view.findViewById(R.id.dialog_folder_path_edit_text);
         folderPathView.setOnKeyListener(this);
 
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity())

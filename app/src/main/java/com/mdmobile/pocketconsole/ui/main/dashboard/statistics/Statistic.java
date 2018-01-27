@@ -15,6 +15,7 @@ import java.util.List;
 public abstract class Statistic extends AsyncQueryHandler {
     public final static int COUNTER_STAT = 1;
     public final static int COUNTER_RANGE = 2;
+    private final int MAX_POPULATION = 7;
     String[] mProperties;
     private Bundle statsData = new Bundle();
     private IStatisticReady listener;
@@ -34,11 +35,11 @@ public abstract class Statistic extends AsyncQueryHandler {
         cursor.close();
 
         //If collection is bigger than 6 different values we will just show "others" with the sum of other entries
-        if (entries != null && entries.size() > 7) {
+        if (entries != null && entries.size() > MAX_POPULATION) {
             StatValue other = new StatValue("Other", 0);
             for (int i = entries.size(); i > 5; i--) {
-                other.setValue(other.getValue() + entries.get(i-1).getValue());
-                entries.remove(i-1);
+                other.setValue(other.getValue() + entries.get(i - 1).getValue());
+                entries.remove(i - 1);
             }
             entries.add(other);
         }

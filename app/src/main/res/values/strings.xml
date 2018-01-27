@@ -141,6 +141,8 @@
     <string name="last_dev_sync_pref">last_device_sync</string>
     <string name="last_user_sync_pref">last_user_sync</string>
     <string name="last_server_sync_pref">last_server_sync</string>
+    <string name="property_2_label">Second property</string>
+    <string name="property_1_label">First property</string>
 
 
 </resources>

@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -68,7 +69,7 @@ public class DashboardFragment extends Fragment implements
     }
 
     @Override
-    public void getData(int statId,Bundle value) {
+    public void getData(int statId, Bundle value) {
         recyclerAdapter.addNewStat(value);
     }
 
@@ -108,6 +109,7 @@ public class DashboardFragment extends Fragment implements
         inflater.inflate(R.menu.dashboard_fragment_menu, menu);
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //Initialize loader
@@ -124,5 +126,15 @@ public class DashboardFragment extends Fragment implements
     public void onPause() {
         super.onPause();
         counterStat.unRegisterListener();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_add_chart) {
+            AddChartDialog dialog = AddChartDialog.Companion.createDialog();
+            dialog.show(getChildFragmentManager(), null);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

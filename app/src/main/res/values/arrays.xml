@@ -24,7 +24,6 @@
         <item>reset /w /delay 0</item>
     </string-array>
 
-
     <string-array name="ds_information_labels">
         <item>Name</item>
         <item>Status</item>
@@ -70,13 +69,16 @@
         <item>Compliance status</item>
         <item>Online</item>
         <item>Virtual device</item>
-
-
+    </string-array>
+    <string-array name="chart_types_label">
+        <item>Donut chart</item>
+        <item>Bar Chart</item>
+        <item>Horizontal bar chart</item>
     </string-array>
 
-    Mode, Model,
-    OSVersion, Path, Platform;
-    private Boolean ComplianceStatus, IsAgentOnline, IsVirtual;
+    <!--Mode, Model,-->
+    <!--OSVersion, Path, Platform;-->
+    <!--private Boolean ComplianceStatus, IsAgentOnline, IsVirtual;-->
 
 
 </resources>

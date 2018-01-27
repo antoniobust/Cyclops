@@ -48,7 +48,7 @@ public class NewChartsAdapter extends RecyclerView.Adapter<NewChartsAdapter.Char
 
     @Override
     public int getItemViewType(int position) {
-        return 1;
+        return 0;
     }
 
     public int getItemCount() {

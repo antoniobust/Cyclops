@@ -7,18 +7,15 @@ import com.mdmobile.pocketconsole.ui.main.dashboard.Charts.BarChart;
 import com.mdmobile.pocketconsole.ui.main.dashboard.Charts.LineChart;
 import com.mdmobile.pocketconsole.ui.main.dashboard.Charts.PieChart;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Class responsible for managing charts creation
  */
 
 public class ChartFactory {
 
-    public static final int PIE_CHART = 1;
-    public static final int BAR_CHART = 2;
-    public static final int LINE_CHART = 3;
+    public static final int PIE_CHART = 0;
+    public static final int BAR_CHART = 1;
+    public static final int HORIZONTAL_BAR_CHART = 2;
 
     public static IChartFactory instantiate(@NonNull Context context, @NonNull int type) {
         return createChart(context, type);
@@ -30,8 +27,8 @@ public class ChartFactory {
                 return new PieChart(context);
             case BAR_CHART:
                 return new BarChart(context);
-            case LINE_CHART:
-                return new LineChart(context);
+            case HORIZONTAL_BAR_CHART:
+                return new BarChart(context);
             default:
                 throw new UnsupportedOperationException("Non supported chart type:" + type);
         }

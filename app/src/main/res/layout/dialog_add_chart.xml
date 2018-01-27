@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="top|center_horizontal"
+    android:padding="?attr/dialogPreferredPadding">
+
+
+    <TextView
+        android:id="@+id/chart_type_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        tool:text="Chart type"/>
+
+    <Spinner
+        android:id="@+id/chart_type_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/chart_property_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/property_1_label"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/chart_property_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/property_2_label"/>
+
+
+</LinearLayout>

@@ -10,6 +10,8 @@ import android.util.Log;
 import com.mdmobile.pocketconsole.R;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 
@@ -86,6 +88,13 @@ public class GeneralUtility {
         mContext
                 .getSharedPreferences(pocketConsolePref, Context.MODE_PRIVATE).edit()
                 .putLong(prefKey, prefValue).apply();
+    }
+
+    public static void setSharedPreference(Context mContext, String prefKey, Set<String> prefValue) {
+        String pocketConsolePref = mContext.getString(R.string.general_shared_preference);
+        mContext
+                .getSharedPreferences(pocketConsolePref, Context.MODE_PRIVATE).edit()
+                .putStringSet(prefKey, prefValue).apply();
     }
 
     public static boolean isTabletMode(Context mContext) {

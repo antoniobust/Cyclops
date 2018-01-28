@@ -3,27 +3,39 @@ package com.mdmobile.pocketconsole.ui.main.dashboard
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Spinner
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.mdmobile.pocketconsole.R
+import com.mdmobile.pocketconsole.dataModels.api.sharedPref.ChartSharedPref
+import com.mdmobile.pocketconsole.utils.GeneralUtility
+import com.mdmobile.pocketconsole.utils.Logger
 
 /**
  * Dialog to be presented in order to create a new chart
  */
 class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, DialogInterface.OnClickListener, TextWatcher {
     private var selectedChartType: Int = -1
-    private lateinit var property1: AutoCompleteTextView
-    private lateinit var property2: AutoCompleteTextView
+    private lateinit var property1TextView: AutoCompleteTextView
+    private lateinit var property2TextView: AutoCompleteTextView
+    private lateinit var chartTypeSpinner: Spinner
     private lateinit var dialog: AlertDialog
     private val APPLY_LABEL_VISIBILITY_KEY = "APPLY_VISIBILITY_KEY"
+    private val LOG_TAG = AddChartDialog::class.java.simpleName
 
     companion object {
         fun createDialog(): AddChartDialog {
@@ -36,9 +48,9 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         //TODO: here we always hide property 2 -> once stacked charts are implemented modify this condition
         selectedChartType = position
         if (position == ChartFactory.PIE_CHART || position == ChartFactory.BAR_CHART || position == ChartFactory.HORIZONTAL_BAR_CHART) {
-            property2.visibility = View.GONE
-        } else if (property2.visibility == View.GONE) {
-            property2.visibility = View.VISIBLE
+            property2TextView.visibility = View.GONE
+        } else if (property2TextView.visibility == View.GONE) {
+            property2TextView.visibility = View.VISIBLE
         }
     }
 
@@ -48,8 +60,25 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
         if (which == Dialog.BUTTON_POSITIVE) {
+            val prefCurrentValue: String = context.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
+                    .getString(getString(R.string.charts_preference), String())
+            var listType = object : TypeToken<List<ChartSharedPref>>() {}.type
+            val gson = Gson()
+            var chartList: ArrayList<ChartSharedPref> = ArrayList()
 
+            if (prefCurrentValue.isNotEmpty()) {
+                chartList = gson.fromJson(prefCurrentValue, listType)
+            }
+            chartList.add(getCurrentValues())
+            listType = object : TypeToken<List<ChartSharedPref>>() {}.type
+            val jsonString = gson.toJson(chartList, listType)
+            GeneralUtility.setSharedPreference(context, getString(R.string.charts_preference), jsonString)
+
+            Logger.log(LOG_TAG,
+                    "Added:\n${jsonString.replace("},{", "}\n{", true)}\n in saved charts",
+                    Log.VERBOSE)
         } else if (which == Dialog.BUTTON_NEGATIVE) {
+            Logger.log(LOG_TAG, "Cancel pressed returning", Log.VERBOSE)
             return
         }
     }
@@ -59,11 +88,11 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
     }
 
     override fun afterTextChanged(s: Editable?) {
-        if (property2.visibility == View.GONE) {
-            dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = !TextUtils.isEmpty(property1.text)
-        } else if (property2.visibility == View.VISIBLE) {
+        if (property2TextView.visibility == View.GONE) {
+            dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = !TextUtils.isEmpty(property1TextView.text)
+        } else if (property2TextView.visibility == View.VISIBLE) {
             dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled =
-                    !TextUtils.isEmpty(property1.text) && !TextUtils.isEmpty(property2.text)
+                    !TextUtils.isEmpty(property1TextView.text) && !TextUtils.isEmpty(property2TextView.text)
         }
     }
 
@@ -78,13 +107,10 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         val layoutInflater: LayoutInflater = context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val rootView: View = layoutInflater.inflate(R.layout.dialog_add_chart, container, false)
 
-        property1 = rootView.findViewById(R.id.chart_property_1)
-        property2 = rootView.findViewById(R.id.chart_property_2)
+        property1TextView = rootView.findViewById(R.id.chart_property_1)
+        property2TextView = rootView.findViewById(R.id.chart_property_2)
 
-        val autoCompleteAdapter:ArrayAdapter<String> = ArrayAdapter(context)
-
-
-        val chartTypeSpinner: Spinner = rootView.findViewById(R.id.chart_type_spinner)
+        chartTypeSpinner = rootView.findViewById(R.id.chart_type_spinner)
         val spinnerAdapter: ArrayAdapter<CharSequence> =
                 ArrayAdapter.createFromResource(context, R.array.chart_types_label, android.R.layout.simple_dropdown_item_1line)
 
@@ -113,20 +139,27 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
 
     override fun onResume() {
         super.onResume()
-        property1.addTextChangedListener(this);
-        property2.addTextChangedListener(this);
+        property1TextView.addTextChangedListener(this);
+        property2TextView.addTextChangedListener(this);
     }
 
     override fun onPause() {
         super.onPause()
-        property1.removeTextChangedListener(this);
-        property2.removeTextChangedListener(this);
+        property1TextView.removeTextChangedListener(this);
+        property2TextView.removeTextChangedListener(this);
 
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putBoolean(APPLY_LABEL_VISIBILITY_KEY, dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled);
+    }
+
+    private fun getCurrentValues(): ChartSharedPref {
+        if (property2TextView.text.isEmpty()) {
+            return ChartSharedPref(chartTypeSpinner.selectedItemPosition, property1TextView.text.toString())
+        }
+        return ChartSharedPref(chartTypeSpinner.selectedItemPosition, property1TextView.text.toString(), property2TextView.text.toString())
     }
 
 }

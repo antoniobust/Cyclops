@@ -11,7 +11,7 @@ public class DeviceAttributes {
     public final static int INTERNAL_LABEL = 0;
     public final static int UI_LABEL = 1;
 
-    public interface BaseAttributes {
+    private interface BaseAttributes {
         String[] ComplianceStatus = {"ComplianceStatus", "Compliance status"};
         String[] ComplianceItems = {"ComplianceItems", "Compliance item"};
         String[] DeviceId = {"DeviceId", "Device ID"};
@@ -30,7 +30,7 @@ public class DeviceAttributes {
         String[] Path = {"Path", "Path"};
     }
 
-    public interface AndroidPlusAttributes {
+    private interface AndroidPlusAttributes {
         String[] AgentVersion = {"AgentVersion", "Agent version"};
         String[] AndroidDeviceAdmin = {"AndroidDeviceAdmin", "Device admin"};
         String[] Antivirus = {"Antivirus", "Antivirus"};
@@ -71,23 +71,23 @@ public class DeviceAttributes {
         String[] SupportedApis = {"SupportedApis", "Supported APIs"};
     }
 
-    public interface AfwAttributes {
+    private interface AfwAttributes {
         String[] BluetoothMACAddress = {"BluetoothMACAddress", "Bluetooth MAC address"};
         String[] BuildVersion = {"BuildVersion", "Build version"};
         String[] CellularTechnology = {"CellularTechnology", "Cellular technology"};
         String[] UserIdentities = {"UserIdentities", "User identities"};
     }
 
-    public interface AndroidElmAttributes {
+    private interface AndroidElmAttributes {
         String[] ElmStatus = {"ElmStatus", "ELM status"};
     }
 
-    public interface AndroidKnoxAttributes {
+    private interface AndroidKnoxAttributes {
         String[] IntegrityServiceBaselineStatus = {"IntegrityServiceBaselineStatus", "Integrity service baseline status"};
         String[] Knox = {"Knox", "Knox"};
     }
 
-    public interface AndroidGenericAttributes {
+    private interface AndroidGenericAttributes {
         String[] AgentVersion = {"AgentVersion", "Agent version"};
         String[] AndroidDeviceAdmin = {"AndroidDeviceAdmin", "Android device admin"};
         String[] Antivirus = {"Antivirus", "Antivirus"};
@@ -122,7 +122,7 @@ public class DeviceAttributes {
         String[] SubscriberNumber = {"SubscriberNumber", "Subscriber number"};
     }
 
-    public interface iOSAttributes {
+    private interface iOSAttributes {
         String[] AgentVersion = {"AgentVersion", ""};
         String[] Memory = {"Memory", ""};
         String[] BatteryStatus = {"BatteryStatus", ""};
@@ -176,7 +176,7 @@ public class DeviceAttributes {
         String[] VoiceRoamingEnabled = {"VoiceRoamingEnabled", ""};
     }
 
-    public interface MacAttributes {
+    private interface MacAttributes {
         String[] AgentVersion = {"AgentVersion", ""};
         String[] Memory = {"Memory", ""};
         String[] BatteryStatus = {"BatteryStatus", ""};
@@ -201,40 +201,40 @@ public class DeviceAttributes {
         String[] ProductName = {"ProductName", ""};
     }
 
-    public interface WindowsMobileCeAttributes {
-        String[] AgentVersion = {"AgentVersion", ""};
-        String[] Memory = {"Memory", ""};
-        String[] BackupBatteryStatus = {"BackupBatteryStatus", ""};
-        String[] BatteryStatus = {"BatteryStatus", ""};
-        String[] CellularCarrier = {"CellularCarrier", ""};
-        String[] CellularSignalStrength = {"CellularSignalStrength", ""};
-        String[] CustomData = {"CustomData", ""};
-        String[] DeviceTerms = {"DeviceTerms", ""};
-        String[] DeviceUserInfo = {"DeviceUserInfo", ""};
-        String[] ExchangeBlocked = {"ExchangeBlocked", ""};
-        String[] ExchangeStatus = {"ExchangeStatus", ""};
-        String[] HardwareSerialNumber = {"HardwareSerialNumber", ""};
-        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", ""};
-        String[] InRoaming = {"InRoaming", ""};
-        String[] Ipv6 = {"Ipv6", ""};
-        String[] IsAgentCompatible = {"IsAgentCompatible", ""};
-        String[] IsAgentless = {"IsAgentless", ""};
-        String[] IsLearning = {"IsLearning", ""};
-        String[] LastCheckInTime = {"LastCheckInTime", ""};
-        String[] LastAgentConnectTime = {"LastAgentConnectTime", ""};
-        String[] LastAgentDisconnectTime = {"LastAgentDisconnectTime", ""};
-        String[] LastLoggedOnAt = {"LastLoggedOnAt", ""};
-        String[] LastLoggedOnUser = {"LastLoggedOnUser", ""};
-        String[] NetworkConnectionType = {"NetworkConnectionType", ""};
-        String[] NetworkRSSI = {"NetworkRSSI", ""};
-        String[] NetworkSSID = {"NetworkSSID", ""};
-        String[] PasscodeEnabled = {"PasscodeEnabled", ""};
-        String[] PhoneNumber = {"PhoneNumber", ""};
-        String[] Processor = {"Processor", ""};
-        String[] SubscriberNumber = {"SubscriberNumber", ""};
+    private interface WindowsMobileCeAttributes {
+        String[] AgentVersion = {"AgentVersion", "Agent version"};
+        String[] Memory = {"Memory", "Memory"};
+        String[] BackupBatteryStatus = {"BackupBatteryStatus", "Backup battery status"};
+        String[] BatteryStatus = {"BatteryStatus", "Battery status"};
+        String[] CellularCarrier = {"CellularCarrier", "Cellular carrier"};
+        String[] CellularSignalStrength = {"CellularSignalStrength", "Cellular carrier strength"};
+        String[] CustomData = {"CustomData", "Custom data"};
+        String[] DeviceTerms = {"DeviceTerms", "Device terms"};
+        String[] DeviceUserInfo = {"DeviceUserInfo", "Device user info"};
+        String[] ExchangeBlocked = {"ExchangeBlocked", "Exchange blocked"};
+        String[] ExchangeStatus = {"ExchangeStatus", "Exchange status"};
+        String[] HardwareSerialNumber = {"HardwareSerialNumber", "Hardware serial number"};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", "IMEI(MEID ESN)"};
+        String[] InRoaming = {"InRoaming", "Is roaming"};
+        String[] Ipv6 = {"Ipv6", "IPv6"};
+        String[] IsAgentCompatible = {"IsAgentCompatible", "Is agent compatible"};
+        String[] IsAgentless = {"IsAgentless", "Is agentless"};
+        String[] IsLearning = {"IsLearning", "Is learning"};
+        String[] LastCheckInTime = {"LastCheckInTime", "Last checkin time"};
+        String[] LastAgentConnectTime = {"LastAgentConnectTime", "Last Agent connection"};
+        String[] LastAgentDisconnectTime = {"LastAgentDisconnectTime", "Last agent disconnection"};
+        String[] LastLoggedOnAt = {"LastLoggedOnAt", "Last logon"};
+        String[] LastLoggedOnUser = {"LastLoggedOnUser", "Last logged user"};
+        String[] NetworkConnectionType = {"NetworkConnectionType", "Network connection type"};
+        String[] NetworkRSSI = {"NetworkRSSI", "Network RSSI"};
+        String[] NetworkSSID = {"NetworkSSID", "Network SSID"};
+        String[] PasscodeEnabled = {"PasscodeEnabled", "Is passcode enabled"};
+        String[] PhoneNumber = {"PhoneNumber", "Phone number"};
+        String[] Processor = {"Processor", "Processor"};
+        String[] SubscriberNumber = {"SubscriberNumber", "Subscriber number"};
     }
 
-    public interface WindowsDesktopAttributes {
+    private interface WindowsDesktopAttributes {
         String[] BiosVersion = {"BiosVersion", ""};
         String[] DeviceUserInfo = {"DeviceUserInfo", ""};
         String[] DMRevision = {"DMRevision", ""};
@@ -251,7 +251,7 @@ public class DeviceAttributes {
         String[] TimeZone = {"TimeZone", ""};
     }
 
-    public interface WindowsDesktopLegacyAttributes {
+    private interface WindowsDesktopLegacyAttributes {
         String[] AgentVersion = {"AgentVersion", ""};
         String[] Memory = {"Memory", ""};
         String[] BatteryStatus = {"BatteryStatus", ""};
@@ -273,34 +273,34 @@ public class DeviceAttributes {
         String[] Processor = {"Processor", ""};
     }
 
-    public interface WindowsPhoneAttributes {
-        String[] BiosVersion = {"BiosVersion", ""};
-        String[] CellularCarrier = {"CellularCarrier", ""};
-        String[] CpuId = {"CpuId", ""};
-        String[] DeviceUserInfo = {"DeviceUserInfo", ""};
-        String[] DMRevision = {"DMRevision", ""};
-        String[] FirmwareVersion = {"FirmwareVersion", ""};
-        String[] HardwareEncryptionCaps = {"HardwareEncryptionCaps", ""};
-        String[] HardwareVersion = {"HardwareVersion", ""};
-        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", ""};
-        String[] IMEI_MEID_ESN_SIM2 = {"IMEI_MEID_ESN_SIM2", ""};
-        String[] InRoaming = {"InRoaming", ""};
-        String[] InRoamingSIM2 = {"InRoamingSIM2", ""};
-        String[] Language = {"Language", ""};
-        String[] PasscodeEnabled = {"PasscodeEnabled", ""};
-        String[] PasscodeStatus = {"PasscodeStatus", ""};
-        String[] PhoneNumber = {"PhoneNumber", ""};
-        String[] PhoneNumberSIM2 = {"PhoneNumberSIM2", ""};
-        String[] RadioVersion = {"RadioVersion", ""};
-        String[] ScreenResolution = {"ScreenResolution", ""};
-        String[] SIMCarrierNetwork = {"SIMCarrierNetwork", ""};
-        String[] SubscriberNumber = {"SubscriberNumber", ""};
-        String[] SubscriberNumberSIM2 = {"SubscriberNumberSIM2", ""};
-        String[] TimeZone = {"TimeZone", ""};
+    private interface WindowsPhoneAttributes {
+        String[] BiosVersion = {"BiosVersion", "BIOS version"};
+        String[] CellularCarrier = {"CellularCarrier", "Cellular carrier"};
+        String[] CpuId = {"CpuId", "CPU id"};
+        String[] DeviceUserInfo = {"DeviceUserInfo", "Device user info"};
+        String[] DMRevision = {"DMRevision", "DM revision"};
+        String[] FirmwareVersion = {"FirmwareVersion", "Firmware version"};
+        String[] HardwareEncryptionCaps = {"HardwareEncryptionCaps", "Hardware encryption caps"};
+        String[] HardwareVersion = {"HardwareVersion", "Hardware version"};
+        String[] IMEI_MEID_ESN = {"IMEI_MEID_ESN", "IMEI (MEID ESN)"};
+        String[] IMEI_MEID_ESN_SIM2 = {"IMEI_MEID_ESN_SIM2", "IMEI(MEID ESN SIM2)"};
+        String[] InRoaming = {"InRoaming", "Roaming"};
+        String[] InRoamingSIM2 = {"InRoamingSIM2", "SIM2 in roaming"};
+        String[] Language = {"Language", "Language"};
+        String[] PasscodeEnabled = {"PasscodeEnabled", "Passcode enabled"};
+        String[] PasscodeStatus = {"PasscodeStatus", "Passcode status"};
+        String[] PhoneNumber = {"PhoneNumber", "Phone number"};
+        String[] PhoneNumberSIM2 = {"PhoneNumberSIM2", "Phone number SIM2"};
+        String[] RadioVersion = {"RadioVersion", "Radio version"};
+        String[] ScreenResolution = {"ScreenResolution", "Screen resolution"};
+        String[] SIMCarrierNetwork = {"SIMCarrierNetwork", "SIM carrier"};
+        String[] SubscriberNumber = {"SubscriberNumber", "Subscriber number"};
+        String[] SubscriberNumberSIM2 = {"SubscriberNumberSIM2", "Subscriber num SIM2"};
+        String[] TimeZone = {"TimeZone", "Time zone"};
 
     }
 
-    public interface WindowsRunTimeAttributes {
+    private interface WindowsRunTimeAttributes {
         String[] BatteryStatus = {"BatteryStatus", ""};
         String[] CellularCarrier = {"CellularCarrier", ""};
         String[] CompanyHubStatus = {"CompanyHubStatus", ""};
@@ -322,7 +322,7 @@ public class DeviceAttributes {
 
     }
 
-    public interface ZebraPrintersAttributes {
+    private interface ZebraPrintersAttributes {
         String[] Memory = {"Memory", "Memory"};
         String[] BatteryStatus = {"BatteryStatus", "Battery status"};
         String[] DeviceUserRole = {"DeviceUserRole", "Device user role"};

@@ -167,6 +167,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
             mSwipeToRefresh.destroyDrawingCache();
             mSwipeToRefresh.clearAnimation();
         }
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override

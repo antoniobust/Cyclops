@@ -7,9 +7,9 @@ import com.google.gson.annotations.SerializedName
  */
 
 class ChartSharedPref(chartType: Int, property1: String, property2: String = "N/A") {
-    private val property1: String
-    private val property2: String
-    private val type: Int
+    @JvmField  val property1: String
+    @JvmField val property2: String
+    @JvmField val type: Int
 
     init {
         @SerializedName("Type")

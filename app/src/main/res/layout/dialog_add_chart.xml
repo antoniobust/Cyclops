@@ -4,8 +4,8 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_gravity="top|center_horizontal"
+    android:orientation="vertical"
     android:padding="?attr/dialogPreferredPadding">
 
 
@@ -26,13 +26,19 @@
         android:id="@+id/chart_property_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/property_1_label"/>
+        android:hint="@string/property_1_label"
+        android:maxLines="1"
+        android:lines="1"
+        android:singleLine="true"/>
 
     <AutoCompleteTextView
+        android:singleLine="true"
+        android:lines="1"
         android:id="@+id/chart_property_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/property_2_label"/>
+        android:hint="@string/property_2_label"
+        android:maxLines="1"/>
 
 
 </LinearLayout>

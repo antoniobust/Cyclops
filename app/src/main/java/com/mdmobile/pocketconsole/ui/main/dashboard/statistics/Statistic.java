@@ -16,12 +16,12 @@ public abstract class Statistic extends AsyncQueryHandler {
     public final static int COUNTER_STAT = 1;
     public final static int COUNTER_RANGE = 2;
     private final int MAX_POPULATION = 7;
-    String[] mProperties;
+    List<String> mProperties;
     private Bundle statsData = new Bundle();
     private IStatisticReady listener;
 
     // - Constructor
-    Statistic(ContentResolver cr, String... properties) {
+    Statistic(ContentResolver cr, List<String> properties) {
         super(cr);
         mProperties = properties;
     }

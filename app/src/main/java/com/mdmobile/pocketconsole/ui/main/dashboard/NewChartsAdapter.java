@@ -24,6 +24,8 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatValue;
 import com.mdmobile.pocketconsole.utils.Logger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +40,7 @@ public class NewChartsAdapter extends RecyclerView.Adapter<NewChartsAdapter.Char
     private ArrayList<ArrayList<StatValue>> chartValues;
     private ArrayList<String> chartsProperties;
 
-    public NewChartsAdapter(Context c, @Nullable ArrayList<StatValue> data, @Nullable List<String> chartsProperties) {
+    public NewChartsAdapter(@Nullable ArrayList<StatValue> data, @Nullable List<String> chartsProperties) {
         if (data != null && chartsProperties != null) {
             chartValues.add(data);
             this.chartsProperties.addAll(chartsProperties);
@@ -97,6 +99,12 @@ public class NewChartsAdapter extends RecyclerView.Adapter<NewChartsAdapter.Char
 
     }
 
+
+    public void resetCharts(){
+        Logger.log(LOG_TAG, "Scrapping old chartValues, replacing with new ones", Log.VERBOSE);
+        this.chartsProperties = new ArrayList<>();
+        this.chartValues = new ArrayList<>();
+    }
 
     public void addNewStat(@NonNull Bundle val) {
         Set<String> keySet = val.keySet();

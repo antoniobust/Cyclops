@@ -23,6 +23,7 @@ import com.google.gson.reflect.TypeToken
 import com.mdmobile.pocketconsole.R
 import com.mdmobile.pocketconsole.dataModels.api.sharedPref.ChartSharedPref
 import com.mdmobile.pocketconsole.utils.GeneralUtility
+import com.mdmobile.pocketconsole.utils.LabelHelper
 import com.mdmobile.pocketconsole.utils.Logger
 
 /**
@@ -60,6 +61,7 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
         if (which == Dialog.BUTTON_POSITIVE) {
+
             val prefCurrentValue: String = context!!.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
                     .getString(getString(R.string.charts_preference), String())
             var listType = object : TypeToken<List<ChartSharedPref>>() {}.type
@@ -119,6 +121,13 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         chartTypeSpinner.adapter = spinnerAdapter
         chartTypeSpinner.onItemSelectedListener = this
 
+        val properties = LabelHelper.getStatisticProperties()
+        val labelsList: ArrayList<String> = ArrayList()
+        properties.mapTo(labelsList) { it.uiLabel }
+        property1TextView.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, labelsList))
+        property2TextView.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, labelsList))
+
+
         dialog = AlertDialog.Builder(context).setTitle("Create a new chart...")
                 .setPositiveButton(R.string.dialog_apply_label, this)
                 .setNegativeButton(R.string.dialog_cancel_label, this)
@@ -156,10 +165,11 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
     }
 
     private fun getCurrentValues(): ChartSharedPref {
-        if (property2TextView.text.isEmpty()) {
-            return ChartSharedPref(chartTypeSpinner.selectedItemPosition, property1TextView.text.toString())
+        val firstProperty = LabelHelper.getInternalLabelFor(property1TextView.text.toString())
+        if (property2TextView.visibility == View.GONE) {
+            return ChartSharedPref(chartTypeSpinner.selectedItemPosition, firstProperty)
         }
-        return ChartSharedPref(chartTypeSpinner.selectedItemPosition, property1TextView.text.toString(), property2TextView.text.toString())
+        return ChartSharedPref(chartTypeSpinner.selectedItemPosition, firstProperty,
+                LabelHelper.getInternalLabelFor(property2TextView.text.toString()))
     }
-
 }

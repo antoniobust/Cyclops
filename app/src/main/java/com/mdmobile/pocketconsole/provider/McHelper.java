@@ -33,7 +33,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.USER_TABLE_NAME;
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 29;
+    private static final int DB_VERSION = 30;
     private Context mContext;
 
     public McHelper(Context context) {

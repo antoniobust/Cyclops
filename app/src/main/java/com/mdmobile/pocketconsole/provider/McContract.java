@@ -60,7 +60,7 @@ public class McContract {
         String COLUMN_DEVICE_NAME = "DeviceName";
         String COLUMN_FAMILY = "Family";
         String COLUMN_HOST_NAME = "HostName";
-        String COLUMN_AGENT_ONLINE = "Online";
+        String COLUMN_AGENT_ONLINE = "IsAgentOnline";
         String COLUMN_VIRTUAL = "Virtual";
         String COLUMN_MAC_ADDRESS = "MAC";
         String COLUMN_MANUFACTURER = "Manufacturer";

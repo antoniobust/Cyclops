@@ -10,6 +10,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,12 +109,10 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
         return rootView;
     }
 
-//    TODO: uncomment this when custom chart are supported
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.dashboard_fragment_menu, menu);
-//    }
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.dashboard_fragment_menu, menu);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -145,34 +145,24 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     }
 
     private void createCharts() {
-        //TODO: un-comment this once custom charts are supported - right now I only show some default ones
-//        String jsonPref = preferences.getString(getString(R.string.charts_preference), "");
-//        Gson gson = new Gson();
-//        Type listType = new TypeToken<ArrayList<ChartSharedPref>>() {
-//        }.getType();
-//
-//        ArrayList<ChartSharedPref> chartList = gson.fromJson(jsonPref, listType);
-//        if (chartList != null) {
-//            ArrayList<String> properties = new ArrayList<>(chartList.size());
-//            for (ChartSharedPref chart : chartList) {
-//                properties.add(chart.property1);
-//            }
-//            //TODO this only creates counter stat type implement other stat type
-//            counterStat = (CounterStat)
-//                    StatisticFactory.createStatistic(getContext(), 1, properties);
-//            counterStat.registerListener(this);
-//            counterStat.initPoll();
-//        }
 
-        ArrayList<String> properties = new ArrayList<>();
-        properties.add(McContract.Device.COLUMN_MANUFACTURER);
-        properties.add(McContract.Device.COLUMN_AGENT_ONLINE);
-        properties.add(McContract.Device.COLUMN_FAMILY);
+        String jsonPref = preferences.getString(getString(R.string.charts_preference), "");
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<ChartSharedPref>>() {
+        }.getType();
 
-        counterStat = (CounterStat)
-                StatisticFactory.createStatistic(getContext(), 1, properties);
-        counterStat.registerListener(this);
-        counterStat.initPoll();
+        ArrayList<ChartSharedPref> chartList = gson.fromJson(jsonPref, listType);
+        if (chartList != null) {
+            ArrayList<String> properties = new ArrayList<>(chartList.size());
+            for (ChartSharedPref chart : chartList) {
+                properties.add(chart.property1);
+            }
+            //TODO this only creates counter stat type implement other stat type
+            counterStat = (CounterStat)
+                    StatisticFactory.createStatistic(getContext(), 1, properties);
+            counterStat.registerListener(this);
+            counterStat.initPoll();
+        }
     }
 
 }

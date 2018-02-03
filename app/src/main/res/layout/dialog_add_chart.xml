@@ -29,6 +29,7 @@
         android:hint="@string/property_1_label"
         android:maxLines="1"
         android:lines="1"
+        android:completionThreshold="0"
         android:singleLine="true"/>
 
     <AutoCompleteTextView

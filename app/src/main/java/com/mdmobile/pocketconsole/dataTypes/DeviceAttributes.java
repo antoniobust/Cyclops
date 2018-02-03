@@ -336,7 +336,7 @@ public class DeviceAttributes {
         String[] ProductIdentification = {"ProductIdentification", "Product identification"};
     }
 
-    public class BasicDevice implements BaseAttributes {
+    public static class BasicDevice implements BaseAttributes {
         public BasicDevice() {
         }
     }

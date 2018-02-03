@@ -60,7 +60,7 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
         if (which == Dialog.BUTTON_POSITIVE) {
-            val prefCurrentValue: String = context.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
+            val prefCurrentValue: String = context!!.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
                     .getString(getString(R.string.charts_preference), String())
             var listType = object : TypeToken<List<ChartSharedPref>>() {}.type
             val gson = Gson()
@@ -103,8 +103,8 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
     // -- Lifecycle methods
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val container: ViewGroup = activity.window.decorView as ViewGroup
-        val layoutInflater: LayoutInflater = context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val container: ViewGroup = activity!!.window.decorView as ViewGroup
+        val layoutInflater: LayoutInflater = context!!.getSystemService(Activity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val rootView: View = layoutInflater.inflate(R.layout.dialog_add_chart, container, false)
 
         property1TextView = rootView.findViewById(R.id.chart_property_1)
@@ -150,9 +150,9 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
 
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.putBoolean(APPLY_LABEL_VISIBILITY_KEY, dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled);
+        outState.putBoolean(APPLY_LABEL_VISIBILITY_KEY, dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled);
     }
 
     private fun getCurrentValues(): ChartSharedPref {

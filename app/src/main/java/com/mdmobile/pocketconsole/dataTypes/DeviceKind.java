@@ -39,3 +39,4 @@ public @interface DeviceKind {
     String WINDOWS_RUNTIME = "WindowsRuntime";
     String ZEBRA_PRINTER = "ZebraPrinter";
 }
+

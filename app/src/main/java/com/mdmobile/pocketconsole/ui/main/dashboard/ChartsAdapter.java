@@ -1,9 +1,10 @@
 package com.mdmobile.pocketconsole.ui.main.dashboard;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,68 +12,46 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatValue;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactory.BAR_CHART;
-import static com.mdmobile.pocketconsole.ui.main.dashboard.ChartFactory.PIE_CHART;
+import java.util.Set;
 
 /**
  * Chart recycler nameView adapter
  */
 
-public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> implements OnChartValueSelectedListener {
+public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> {
 
-    private final int PLATFORM_CHART = 0;
-    private final int ONLINE_CHART = 1;
-    private final int BATTERY_CHART = 2;
-    private final int OUT_OF_CONTACT_CHART = 3;
-    private final int[] CHART_SET = {PLATFORM_CHART, ONLINE_CHART, OUT_OF_CONTACT_CHART, BATTERY_CHART};
-    private IChartFactory chartFactory;
+    private final String LOG_TAG = ChartsAdapter.class.getSimpleName();
+    private ArrayList<ArrayList<StatValue>> chartValues;
+    private ArrayList<String> chartsProperties;
 
-    private Bundle statistics;
-    private String[] enabledCharts;
-
-    public ChartsAdapter(Context c, @Nullable Bundle data) {
-        if (data != null) {
-            statistics = data;
+    public ChartsAdapter(@Nullable ArrayList<StatValue> data, @Nullable List<String> chartsProperties) {
+        if (data != null && chartsProperties != null) {
+            chartValues.add(data);
+            this.chartsProperties.addAll(chartsProperties);
         }
         setHasStableIds(true);
     }
 
     @Override
     public int getItemViewType(int position) {
-        switch (position) {
-            case PLATFORM_CHART:
-                return PIE_CHART;
-            case ONLINE_CHART:
-                return PIE_CHART;
-            case OUT_OF_CONTACT_CHART:
-                return BAR_CHART;
-            case BATTERY_CHART:
-                return BAR_CHART;
-            default:
-                return super.getItemViewType(position);
-        }
-
+        return 0;
     }
 
     public int getItemCount() {
-        return CHART_SET.length;
+        return chartValues == null || chartValues.isEmpty() ? 0 : chartValues.size();
     }
 
 
@@ -84,78 +63,66 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
     @Override
     public ChartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_item, parent, false);
-        ChartViewHolder vh = new ChartViewHolder(item);
-        return vh;
+        return new ChartViewHolder(item);
     }
 
 
     @Override
     public void onBindViewHolder(ChartViewHolder holder, int position) {
-
-        if (statistics == null || statistics.size() == 0) {
-            holder.emptyView.setVisibility(View.VISIBLE);
+        if (getItemCount() == 0) {
             return;
         }
-
-        chartFactory = ChartFactory.instantiate(holder.chartContainer.getContext(),
+        //TODO: this will always create a pie chart -> fix this
+        IChartFactory chartFactory = ChartFactory.instantiate(holder.chartContainer.getContext(),
                 holder.getItemViewType());
+        PieChart chart = (PieChart) chartFactory.createChart(holder.chartContainer.getContext());
+        List<PieEntry> pieEntries = new ArrayList<>();
+        PieDataSet pieDataSet;
+        PieData pieData = new PieData();
+        ArrayList<StatValue> statValues = chartValues.get(position);
 
-        Chart chart = chartFactory.createChart(holder.chartContainer.getContext());
-
-        switch (position) {
-            case ONLINE_CHART: {
-                List<PieEntry> pieEntries;
-                PieDataSet pieDataSet;
-                PieData pieData = new PieData();
-
-                pieEntries = new ArrayList<>();
-                pieEntries.add(new PieEntry(statistics.getInt("OnlineDevs"), "Online"));
-                pieEntries.add(new PieEntry(statistics.getInt("OfflineDevs"), "Offline"));
-
-                pieDataSet = new PieDataSet(pieEntries, null);
-                pieDataSet.setColors(new int[]{R.color.colorPrimaryDark, R.color.colorPrimary}, holder.chartContainer.getContext());
-                pieData.addDataSet(pieDataSet);
-                pieData.setValueTextSize(0f);
-
-                chart = createPieChart(holder.chartContainer.getContext(), (PieChart) chart, pieData, position);
-                holder.chartContainer.addView(chart);
-                holder.chartContainer.invalidate();
-                break;
-            }
-            case PLATFORM_CHART: {
-                List<PieEntry> pieEntries;
-                PieDataSet pieDataSet;
-                pieEntries = new ArrayList<>();
-                PieData pieData = new PieData();
-
-                pieEntries.add(new PieEntry(statistics.getInt("Android"), "Android"));
-                pieEntries.add(new PieEntry(statistics.getInt("Apple"), "iOS"));
-                pieEntries.add(new PieEntry(statistics.getInt("WindowsDesktop"), "Desktop"));
-                pieEntries.add(new PieEntry(statistics.getInt("WindowsCE"), "Win CE / Mobile"));
-                pieEntries.add(new PieEntry(statistics.getInt("WindowsModern"), "Win Modern"));
-                pieEntries.add(new PieEntry(statistics.getInt("Printer"), "Printers"));
-
-                pieDataSet = new PieDataSet(pieEntries, null);
-                pieDataSet.setColors(
-                        new int[]{R.color.androidColor, R.color.iosSpaceGrey, R.color.windowsColor, R.color.windowsColor,
-                                R.color.darkGreen, R.color.printerColor}, holder.chartContainer.getContext());
-                pieData.addDataSet(pieDataSet);
-                pieData.setValueTextSize(0f);
-
-                chart = createPieChart(holder.chartContainer.getContext(), (PieChart) chart, pieData, position);
-                holder.chartContainer.addView(chart);
-                chart.invalidate();
-                break;
-            }
-            case OUT_OF_CONTACT_CHART:
-                List<BarEntry> entries = new ArrayList<>();
-                break;
-            case BATTERY_CHART:
-                break;
+        for (StatValue value : statValues) {
+            pieEntries.add(new PieEntry(value.getValue(), value.getLabel()));
         }
+
+        pieDataSet = new PieDataSet(pieEntries, null);
+        pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+        pieData.addDataSet(pieDataSet);
+        pieData.setValueTextSize(0f);
+
+        chart = createPieChart(chart, pieData, position);
+        holder.chartContainer.addView(chart);
+        holder.chartContainer.invalidate();
+
     }
 
-    private PieChart createPieChart(Context mContext, PieChart pieChart, PieData data, int position) {
+
+    public void resetCharts() {
+        Logger.log(LOG_TAG, "Scrapping old chartValues, replacing with new ones", Log.VERBOSE);
+        this.chartsProperties = new ArrayList<>();
+        this.chartValues = new ArrayList<>();
+    }
+
+    public void addNewStat(@NonNull Bundle val) {
+        Set<String> keySet = val.keySet();
+        ArrayList<StatValue> valueList;
+        for (String key : keySet) {
+            Logger.log(LOG_TAG, "Current chartValues size: " + getItemCount() + " adding: " + key + " chart to adapter", Log.VERBOSE);
+            valueList = val.getParcelableArrayList(key);
+
+            if (getItemCount() == 0) {
+                chartValues = new ArrayList<>();
+                chartsProperties = new ArrayList<>();
+            } else if (chartsProperties.contains(key)) {
+                continue;
+            }
+            chartValues.add(valueList);
+            chartsProperties.add(key);
+        }
+        this.notifyDataSetChanged();
+    }
+
+    private PieChart createPieChart(PieChart pieChart, PieData data, int position) {
         pieChart.setData(data);
 
         Legend legend = pieChart.getLegend();
@@ -169,34 +136,11 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
         Description descriptionLabel = new Description();
         descriptionLabel.setEnabled(true);
+        descriptionLabel.setText(chartsProperties.get(position));
 
-        switch (position) {
-            case 0:
-                descriptionLabel.setText(mContext.getString(R.string.offline_chart_label));
-                break;
-            case 1:
-                descriptionLabel.setText(mContext.getString(R.string.platform_chart_label));
-                break;
-        }
         pieChart.setDescription(descriptionLabel);
-        pieChart.setOnChartValueSelectedListener(this);
 
         return pieChart;
-    }
-
-    private HorizontalBarChart createBarsChart() {
-return null;
-
-    }
-
-    @Override
-    public void onValueSelected(Entry entry, Highlight highlight) {
-//        highlight
-    }
-
-    @Override
-    public void onNothingSelected() {
-
     }
 
     static class ChartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -218,3 +162,55 @@ return null;
         }
     }
 }
+
+//switch (position) {
+//        case ONLINE_CHART: {
+//        List<PieEntry> pieEntries;
+//        PieDataSet pieDataSet;
+//        PieData pieData = new PieData();
+//
+//        pieEntries = new ArrayList<>();
+//        pieEntries.add(new PieEntry(chartValues.getInt("OnlineDevs"), "Online"));
+//        pieEntries.add(new PieEntry(chartValues.getInt("OfflineDevs"), "Offline"));
+//
+//        pieDataSet = new PieDataSet(pieEntries, null);
+//        pieDataSet.setColors(new int[]{R.color.colorPrimaryDark, R.color.colorPrimary}, holder.chartContainer.getContext());
+//        pieData.addDataSet(pieDataSet);
+//        pieData.setValueTextSize(0f);
+//
+//        chart = createPieChart(holder.chartContainer.getContext(), (PieChart) chart, pieData, position);
+//        holder.chartContainer.addView(chart);
+//        holder.chartContainer.invalidate();
+//        break;
+//        }
+//        case PLATFORM_CHART: {
+//        List<PieEntry> pieEntries;
+//        PieDataSet pieDataSet;
+//        pieEntries = new ArrayList<>();
+//        PieData pieData = new PieData();
+//
+//        pieEntries.add(new PieEntry(chartValues.getInt("Android"), "Android"));
+//        pieEntries.add(new PieEntry(chartValues.getInt("Apple"), "iOS"));
+//        pieEntries.add(new PieEntry(chartValues.getInt("WindowsDesktop"), "Desktop"));
+//        pieEntries.add(new PieEntry(chartValues.getInt("WindowsCE"), "Win CE / Mobile"));
+//        pieEntries.add(new PieEntry(chartValues.getInt("WindowsModern"), "Win Modern"));
+//        pieEntries.add(new PieEntry(chartValues.getInt("Printer"), "Printers"));
+//
+//        pieDataSet = new PieDataSet(pieEntries, null);
+//        pieDataSet.setColors(
+//        new int[]{R.color.androidColor, R.color.iosSpaceGrey, R.color.windowsColor, R.color.windowsColor,
+//        R.color.darkGreen, R.color.printerColor}, holder.chartContainer.getContext());
+//        pieData.addDataSet(pieDataSet);
+//        pieData.setValueTextSize(0f);
+//
+//        chart = createPieChart(holder.chartContainer.getContext(), (PieChart) chart, pieData, position);
+//        holder.chartContainer.addView(chart);
+//        chart.invalidate();
+//        break;
+//        }
+//        case OUT_OF_CONTACT_CHART:
+//        List<BarEntry> entries = new ArrayList<>();
+//        break;
+//        case BATTERY_CHART:
+//        break;
+//        }

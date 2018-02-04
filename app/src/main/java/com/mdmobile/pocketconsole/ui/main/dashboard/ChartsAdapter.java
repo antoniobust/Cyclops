@@ -76,24 +76,10 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         IChartFactory chartFactory = ChartFactory.instantiate(holder.chartContainer.getContext(),
                 holder.getItemViewType());
         PieChart chart = (PieChart) chartFactory.createChart(holder.chartContainer.getContext());
-        List<PieEntry> pieEntries = new ArrayList<>();
-        PieDataSet pieDataSet;
-        PieData pieData = new PieData();
-        ArrayList<StatValue> statValues = chartValues.get(position);
+        createPieChart(chart, position);
 
-        for (StatValue value : statValues) {
-            pieEntries.add(new PieEntry(value.getValue(), value.getLabel()));
-        }
-
-        pieDataSet = new PieDataSet(pieEntries, null);
-        pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
-        pieData.addDataSet(pieDataSet);
-        pieData.setValueTextSize(0f);
-
-        chart = createPieChart(chart, pieData, position);
         holder.chartContainer.addView(chart);
         holder.chartContainer.invalidate();
-
     }
 
 
@@ -122,8 +108,22 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         this.notifyDataSetChanged();
     }
 
-    private PieChart createPieChart(PieChart pieChart, PieData data, int position) {
-        pieChart.setData(data);
+    private void createPieChart(PieChart pieChart, int position) {
+        List<PieEntry> pieEntries = new ArrayList<>();
+        PieDataSet pieDataSet;
+        PieData pieData = new PieData();
+        ArrayList<StatValue> statValues = chartValues.get(position);
+
+        for (StatValue value : statValues) {
+            pieEntries.add(new PieEntry(value.getValue(), value.getLabel()));
+        }
+
+        pieDataSet = new PieDataSet(pieEntries, null);
+        pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+        pieData.addDataSet(pieDataSet);
+        pieData.setValueTextSize(0f);
+
+        pieChart.setData(pieData);
 
         Legend legend = pieChart.getLegend();
         legend.setWordWrapEnabled(true);
@@ -139,8 +139,6 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         descriptionLabel.setText(chartsProperties.get(position));
 
         pieChart.setDescription(descriptionLabel);
-
-        return pieChart;
     }
 
     static class ChartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -162,55 +160,3 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         }
     }
 }
-
-//switch (position) {
-//        case ONLINE_CHART: {
-//        List<PieEntry> pieEntries;
-//        PieDataSet pieDataSet;
-//        PieData pieData = new PieData();
-//
-//        pieEntries = new ArrayList<>();
-//        pieEntries.add(new PieEntry(chartValues.getInt("OnlineDevs"), "Online"));
-//        pieEntries.add(new PieEntry(chartValues.getInt("OfflineDevs"), "Offline"));
-//
-//        pieDataSet = new PieDataSet(pieEntries, null);
-//        pieDataSet.setColors(new int[]{R.color.colorPrimaryDark, R.color.colorPrimary}, holder.chartContainer.getContext());
-//        pieData.addDataSet(pieDataSet);
-//        pieData.setValueTextSize(0f);
-//
-//        chart = createPieChart(holder.chartContainer.getContext(), (PieChart) chart, pieData, position);
-//        holder.chartContainer.addView(chart);
-//        holder.chartContainer.invalidate();
-//        break;
-//        }
-//        case PLATFORM_CHART: {
-//        List<PieEntry> pieEntries;
-//        PieDataSet pieDataSet;
-//        pieEntries = new ArrayList<>();
-//        PieData pieData = new PieData();
-//
-//        pieEntries.add(new PieEntry(chartValues.getInt("Android"), "Android"));
-//        pieEntries.add(new PieEntry(chartValues.getInt("Apple"), "iOS"));
-//        pieEntries.add(new PieEntry(chartValues.getInt("WindowsDesktop"), "Desktop"));
-//        pieEntries.add(new PieEntry(chartValues.getInt("WindowsCE"), "Win CE / Mobile"));
-//        pieEntries.add(new PieEntry(chartValues.getInt("WindowsModern"), "Win Modern"));
-//        pieEntries.add(new PieEntry(chartValues.getInt("Printer"), "Printers"));
-//
-//        pieDataSet = new PieDataSet(pieEntries, null);
-//        pieDataSet.setColors(
-//        new int[]{R.color.androidColor, R.color.iosSpaceGrey, R.color.windowsColor, R.color.windowsColor,
-//        R.color.darkGreen, R.color.printerColor}, holder.chartContainer.getContext());
-//        pieData.addDataSet(pieDataSet);
-//        pieData.setValueTextSize(0f);
-//
-//        chart = createPieChart(holder.chartContainer.getContext(), (PieChart) chart, pieData, position);
-//        holder.chartContainer.addView(chart);
-//        chart.invalidate();
-//        break;
-//        }
-//        case OUT_OF_CONTACT_CHART:
-//        List<BarEntry> entries = new ArrayList<>();
-//        break;
-//        case BATTERY_CHART:
-//        break;
-//        }

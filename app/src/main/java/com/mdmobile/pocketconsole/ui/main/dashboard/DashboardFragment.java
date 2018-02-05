@@ -68,6 +68,7 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     @Override
     public void getData(int statId, Bundle values) {
         recyclerAdapter.addNewStat(values);
+
     }
 
 

@@ -4,6 +4,9 @@ import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +19,7 @@ public abstract class Statistic extends AsyncQueryHandler {
     public final static int COUNTER_STAT = 1;
     public final static int COUNTER_RANGE = 2;
     private final int MAX_POPULATION = 7;
+    private final String LOG_TAG = Statistic.class.getSimpleName();
     List<String> mProperties;
     private Bundle statsData = new Bundle();
     private IStatisticReady listener;
@@ -43,9 +47,11 @@ public abstract class Statistic extends AsyncQueryHandler {
             }
             entries.add(other);
         }
-
-        statsData.putParcelableArrayList((String) cookie, entries);
-        listener.getData(token, statsData);
+        statsData.putParcelableArrayList(cookie.toString(), entries);
+        Logger.log(LOG_TAG, ++token + "/" + mProperties.size() + " poll (" + cookie.toString() + ") complete", Log.VERBOSE);
+        if (token == mProperties.size()) {
+            listener.getData(token, statsData);
+        }
     }
 
     public abstract void initPoll();

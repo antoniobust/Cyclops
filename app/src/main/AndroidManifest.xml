@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".utils.BaseActivity"/>
+        <activity android:name=".ui.BaseActivity"/>
 
         <activity
             android:name=".ui.logIn.LoginActivity"

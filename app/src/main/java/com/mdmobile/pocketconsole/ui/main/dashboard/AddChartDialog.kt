@@ -64,21 +64,20 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
 
             val prefCurrentValue: String = context!!.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
                     .getString(getString(R.string.charts_preference), String())
-            var listType = object : TypeToken<List<ChartSharedPref>>() {}.type
+            val listType = object : TypeToken<List<ChartSharedPref>>() {}.type
             val gson = Gson()
             var chartList: ArrayList<ChartSharedPref> = ArrayList()
-
             if (prefCurrentValue.isNotEmpty()) {
                 chartList = gson.fromJson(prefCurrentValue, listType)
             }
             chartList.add(getCurrentValues())
-            listType = object : TypeToken<List<ChartSharedPref>>() {}.type
             val jsonString = gson.toJson(chartList, listType)
             GeneralUtility.setSharedPreference(context, getString(R.string.charts_preference), jsonString)
 
             Logger.log(LOG_TAG,
                     "Added:\n${jsonString.replace("},{", "}\n{", true)}\n in saved charts",
                     Log.VERBOSE)
+
         } else if (which == Dialog.BUTTON_NEGATIVE) {
             Logger.log(LOG_TAG, "Cancel pressed returning", Log.VERBOSE)
             return

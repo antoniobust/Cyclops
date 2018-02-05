@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatValue;
+import com.mdmobile.pocketconsole.utils.LabelHelper;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.util.ArrayList;
@@ -87,25 +88,20 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         Logger.log(LOG_TAG, "Scrapping old chartValues, replacing with new ones", Log.VERBOSE);
         this.chartsProperties = new ArrayList<>();
         this.chartValues = new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     public void addNewStat(@NonNull Bundle val) {
         Set<String> keySet = val.keySet();
         ArrayList<StatValue> valueList;
+        resetCharts();
         for (String key : keySet) {
             Logger.log(LOG_TAG, "Current chartValues size: " + getItemCount() + " adding: " + key + " chart to adapter", Log.VERBOSE);
             valueList = val.getParcelableArrayList(key);
-
-            if (getItemCount() == 0) {
-                chartValues = new ArrayList<>();
-                chartsProperties = new ArrayList<>();
-            } else if (chartsProperties.contains(key)) {
-                continue;
-            }
             chartValues.add(valueList);
             chartsProperties.add(key);
         }
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     private void createPieChart(PieChart pieChart, int position) {
@@ -117,6 +113,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         for (StatValue value : statValues) {
             pieEntries.add(new PieEntry(value.getValue(), value.getLabel()));
         }
+
 
         pieDataSet = new PieDataSet(pieEntries, null);
         pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
@@ -134,9 +131,11 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         legend.setMaxSizePercent(0.1f);
 
+        String chartProperty = chartsProperties.get(position);
+        chartProperty = LabelHelper.Companion.getUiLabelFor(chartProperty);
         Description descriptionLabel = new Description();
         descriptionLabel.setEnabled(true);
-        descriptionLabel.setText(chartsProperties.get(position));
+        descriptionLabel.setText(chartProperty);
 
         pieChart.setDescription(descriptionLabel);
     }
@@ -149,7 +148,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         ChartViewHolder(View itemView) {
             super(itemView);
             chartContainer = itemView.findViewById(R.id.chart_container);
-            refreshButton = itemView.findViewById(R.id.chart_refresh_button);
+            refreshButton = itemView.findViewById(R.id.chart_option_button);
             emptyView = itemView.findViewById(R.id.empty_view);
             refreshButton.setOnClickListener(this);
         }

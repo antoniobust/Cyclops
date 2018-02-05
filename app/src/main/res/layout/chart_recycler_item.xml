@@ -20,14 +20,14 @@
         android:visibility="visible"/>
 
     <ImageView
-        android:id="@+id/chart_refresh_button"
-        android:layout_width="32dp"
+        android:id="@+id/chart_option_button"
+        android:layout_width="24dp"
         android:layout_height="?listPreferredItemHeightSmall"
         android:layout_gravity="end"
         android:layout_margin="8dp"
         android:background="?selectableItemBackgroundBorderless"
         android:tint="@color/colorPrimary"
-        app:srcCompat="@drawable/ic_refresh"/>
+        app:srcCompat="@drawable/ic_option_24dp"/>
 
     <FrameLayout
         android:id="@+id/chart_container"

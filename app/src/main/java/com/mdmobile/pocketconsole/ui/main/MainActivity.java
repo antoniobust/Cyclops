@@ -34,7 +34,7 @@ import com.mdmobile.pocketconsole.ui.main.myDevices.DevicesFragment;
 import com.mdmobile.pocketconsole.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.pocketconsole.ui.main.server.ServerFragment;
 import com.mdmobile.pocketconsole.ui.main.users.UsersFragment;
-import com.mdmobile.pocketconsole.utils.BaseActivity;
+import com.mdmobile.pocketconsole.ui.BaseActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.RecyclerEmptyView;
 

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dashboard_card_height"
     android:layout_gravity="center"
-    android:layout_margin="8dp"
+    android:layout_margin="12dp"
+    android:padding="8dp"
     app:cardElevation="2dp">
 
     <TextView
@@ -21,18 +22,18 @@
 
     <ImageView
         android:id="@+id/chart_option_button"
-        android:layout_width="24dp"
+        android:layout_width="wrap_content"
         android:layout_height="?listPreferredItemHeightSmall"
-        android:layout_gravity="end"
-        android:layout_margin="8dp"
+        android:layout_gravity="end|top"
         android:background="?selectableItemBackgroundBorderless"
         android:tint="@color/colorPrimary"
-        app:srcCompat="@drawable/ic_option_24dp"/>
+        app:srcCompat="@drawable/ic_option_24dp"
+        android:scaleType="center"/>
 
     <FrameLayout
         android:id="@+id/chart_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/activity_horizontal_margin"/>
+        android:padding="@dimen/activity_horizontal_margin"/>
 </android.support.v7.widget.CardView>
 

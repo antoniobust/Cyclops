@@ -33,7 +33,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.USER_TABLE_NAME;
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 31;
+    private static final int DB_VERSION = 32;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -171,6 +171,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + DEVICE_TABLE_NAME + " (" + McContract.Device.COLUMN_DEVICE_ID + "), "
                 + "UNIQUE(" + McContract.InstalledApplications.APPLICATION_ID + ") ON CONFLICT REPLACE );");
 
+
         //Create Script table
         db.execSQL("CREATE TABLE " + McContract.SCRIPT_TABLE_NAME + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -219,6 +220,23 @@ public class McHelper extends SQLiteOpenHelper {
                 + DEVICE_TABLE_NAME + "(" + McContract.Device.COLUMN_DEVICE_ID + "), "
                 + " FOREIGN KEY(" + McContract.ProfileDevice.PROFILE_ID + ") REFERENCES "
                 + PROFILE_TABLE_NAME + "( " + McContract.Profile.REFERENCE_ID + ") ON DELETE CASCADE);");
+
+        //Triggers
+
+        //Whenever we delete a device we delete related installed apps
+        db.execSQL("CREATE TRIGGER RemoveDeviceApps BEFORE DELETE ON " + McContract.DEVICE_TABLE_NAME
+                + " BEGIN "
+                + "DELETE FROM " + McContract.INSTALLED_APPLICATION_TABLE_NAME
+                + " WHERE " + McContract.INSTALLED_APPLICATION_TABLE_NAME + "." + McContract.InstalledApplications.DEVICE_ID
+                + "= OLD." + McContract.Device.COLUMN_DEVICE_ID + ";"
+                + "END;");
+        //Whenever we delete we delete reference to this device in PROFILE-DEVICE lookup table
+        db.execSQL("CREATE TRIGGER RemoveDeviceProfiles BEFORE DELETE ON " + McContract.DEVICE_TABLE_NAME
+                + " BEGIN "
+                + "DELETE FROM " + McContract.PROFILE_DEVICE_TABLE_NAME
+                + " WHERE " + McContract.PROFILE_DEVICE_TABLE_NAME + "." + McContract.ProfileDevice.DEVICE_ID
+                + "= OLD." + McContract.Device.COLUMN_DEVICE_ID + ";"
+                + "END;");
 
 
         //Insert standard script in Script table

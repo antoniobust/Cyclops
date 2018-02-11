@@ -85,6 +85,68 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         swipeLayout.setRefreshing(false);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri uri;
+        switch (id) {
+            case LOAD_INFO:
+                uri = McContract.Device.buildUriWithDeviceID(deviceId);
+                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
+            case LOAD_PROFILE:
+                return new CursorLoader(getContext(),
+                        McContract.Profile.buildUriWithDeviceId(deviceId),
+                        null, null, null, McContract.Profile.ASSIGNMENT_DATE + " DESC");
+            case LOAD_APPS:
+                uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
+                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        switch (loader.getId()) {
+            case LOAD_INFO:
+                Cursor c = data;
+                setCharts(c);
+                setDeviceInfoCard(c);
+                break;
+            case LOAD_PROFILE: {
+                if (data != null && data.getCount() == 0) {
+                    ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
+                    return;
+                }
+
+                GridLayout gridLayout = rootView.findViewById(R.id.device_details_profiles_grid_view);
+                String[] columns = {McContract.Profile.NAME,
+                        McContract.Profile.STATUS};
+                setCards(data, gridLayout, columns);
+                break;
+            }
+            case LOAD_APPS: {
+                if (data != null && data.getCount() == 0) {
+                    ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
+                    return;
+                }
+
+                GridLayout gridLayout = rootView.findViewById(R.id.device_details_apps_grid_view);
+                String[] columns = {McContract.InstalledApplications.APPLICATION_NAME,
+                        McContract.InstalledApplications.APPLICATION_STATUS};
+                setCards(data, gridLayout, columns);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unsupported id: " + loader.getId());
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+
     // -- Lifecycle methods
 
     @Override
@@ -176,67 +238,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri;
-        switch (id) {
-            case LOAD_INFO:
-                uri = McContract.Device.buildUriWithDeviceID(deviceId);
-                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
-            case LOAD_PROFILE:
-                return new CursorLoader(getContext(),
-                        McContract.Profile.buildUriWithDeviceId(deviceId),
-                        null, null, null, McContract.Profile.ASSIGNMENT_DATE + " DESC");
-            case LOAD_APPS:
-                uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
-                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
-        }
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-        switch (loader.getId()) {
-            case LOAD_INFO:
-                Cursor c = data;
-                setCharts(c);
-                setDeviceInfoCard(c);
-                break;
-            case LOAD_PROFILE: {
-                if (data != null && data.getCount() == 0) {
-                    ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
-                    return;
-                }
-
-                GridLayout gridLayout = rootView.findViewById(R.id.device_details_profiles_grid_view);
-                String[] columns = {McContract.Profile.NAME,
-                        McContract.Profile.STATUS};
-                setCards(data, gridLayout, columns);
-                break;
-            }
-            case LOAD_APPS: {
-                if (data != null && data.getCount() == 0) {
-                    ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
-                    return;
-                }
-
-                GridLayout gridLayout = rootView.findViewById(R.id.device_details_apps_grid_view);
-                String[] columns = {McContract.InstalledApplications.APPLICATION_NAME,
-                        McContract.InstalledApplications.APPLICATION_STATUS};
-                setCards(data, gridLayout, columns);
-                break;
-            }
-            default:
-                throw new UnsupportedOperationException("Unsupported id: " + loader.getId());
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     private void setDeviceInfoCard(Cursor c) {

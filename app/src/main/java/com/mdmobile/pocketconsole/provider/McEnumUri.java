@@ -47,7 +47,9 @@ public enum McEnumUri {
 
     PROFILE_DEVICE_ID(519, McContract.PROFILE_TABLE_NAME + "/device/*", true, McContract.PROFILE_TABLE_NAME),
 
-    PROFILE_ID(520, McContract.PROFILE_TABLE_NAME + "/*", true, McContract.PROFILE_TABLE_NAME);
+    PROFILE_ID(520, McContract.PROFILE_TABLE_NAME + "/*", true, McContract.PROFILE_TABLE_NAME),
+
+    SERVER(521, McContract.SERVER_INFO_TABLE_NAME + "/*", true, McContract.SERVER_INFO_TABLE_NAME);
 
 
     public String path, contentType, tableName;

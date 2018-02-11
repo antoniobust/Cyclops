@@ -33,7 +33,7 @@ import static com.mdmobile.pocketconsole.provider.McContract.USER_TABLE_NAME;
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 30;
+    private static final int DB_VERSION = 31;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -47,30 +47,30 @@ public class McHelper extends SQLiteOpenHelper {
         //Create device table
         db.execSQL(" CREATE TABLE " + McContract.DEVICE_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + McContract.Device.COLUMN_DEVICE_ID + " TEXT NOT NULL, "
-                + McContract.Device.COLUMN_KIND + " TEXT, "
-                + McContract.Device.COLUMN_DEVICE_NAME + " TEXT, "
-                + McContract.Device.COLUMN_AGENT_ONLINE + " INTEGER, "
-                + McContract.Device.COLUMN_FAMILY + " TEXT, "
-                + McContract.Device.COLUMN_HOST_NAME + " TEXT, "
-                + McContract.Device.COLUMN_ENROLLMENT_TIME + " TEXT, "
-                + McContract.Device.COLUMN_COMPLIANCE_STATUS + " INTEGER, "
-                + McContract.Device.COLUMN_VIRTUAL + " INTEGER, "
-                + McContract.Device.COLUMN_MAC_ADDRESS + " TEXT, "
-                + McContract.Device.COLUMN_MANUFACTURER + " TEXT, "
-                + McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE + " INTEGER, "
-                + McContract.Device.COLUMN_AVAILABLE_MEMORY + " INTEGER, "
-                + McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE + " INTEGER, "
-                + McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE + " INTEGER, "
-                + McContract.Device.COLUMN_TOTAL_MEMORY + " INTEGER, "
-                + McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE + " INTEGER, "
-                + McContract.Device.COLUMN_TOTAL_STORAGE + " INTEGER, "
-                + McContract.Device.COLUMN_MODE + " INTEGER, "
-                + McContract.Device.COLUMN_MODEL + " TEXT, "
-                + McContract.Device.COLUMN_OS_VERSION + " TEXT, "
-                + McContract.Device.COLUMN_PATH + " TEXT, "
-                + McContract.Device.COLUMN_PLATFORM + " INTEGER, "
-                + McContract.Device.COLUMN_EXTRA_INFO + " TEXT, "
+                + McContract.Device.COLUMN_DEVICE_ID + " TEXT NOT NULL,"
+                + McContract.Device.COLUMN_KIND + " TEXT,"
+                + McContract.Device.COLUMN_DEVICE_NAME + " TEXT,"
+                + McContract.Device.COLUMN_AGENT_ONLINE + " INTEGER,"
+                + McContract.Device.COLUMN_FAMILY + " TEXT,"
+                + McContract.Device.COLUMN_HOST_NAME + " TEXT,"
+                + McContract.Device.COLUMN_ENROLLMENT_TIME + " TEXT,"
+                + McContract.Device.COLUMN_COMPLIANCE_STATUS + " INTEGER,"
+                + McContract.Device.COLUMN_VIRTUAL + " INTEGER,"
+                + McContract.Device.COLUMN_MAC_ADDRESS + " TEXT,"
+                + McContract.Device.COLUMN_MANUFACTURER + " TEXT,"
+                + McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE + " INTEGER,"
+                + McContract.Device.COLUMN_AVAILABLE_MEMORY + " INTEGER,"
+                + McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE + " INTEGER,"
+                + McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE + " INTEGER,"
+                + McContract.Device.COLUMN_TOTAL_MEMORY + " INTEGER,"
+                + McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE + " INTEGER,"
+                + McContract.Device.COLUMN_TOTAL_STORAGE + " INTEGER,"
+                + McContract.Device.COLUMN_MODE + " INTEGER,"
+                + McContract.Device.COLUMN_MODEL + " TEXT,"
+                + McContract.Device.COLUMN_OS_VERSION + " TEXT,"
+                + McContract.Device.COLUMN_PATH + " TEXT,"
+                + McContract.Device.COLUMN_PLATFORM + " INTEGER,"
+                + McContract.Device.COLUMN_EXTRA_INFO + " TEXT,"
                 + "UNIQUE(" + McContract.Device.COLUMN_DEVICE_ID + ") ON CONFLICT REPLACE );");
 
 
@@ -194,7 +194,9 @@ public class McHelper extends SQLiteOpenHelper {
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + McContract.ServerInfo.CLIENT_ID + " TEXT NOT NULL, "
                 + McContract.ServerInfo.CLIENT_SECRET + " TEXT NOT NULL, "
-                + McContract.ServerInfo.NAME + " TEXT,"
+                + McContract.ServerInfo.NAME + " TEXT NOT NULL,"
+                + McContract.ServerInfo.PRODUCT_VERSION + " TEXT,"
+                + McContract.ServerInfo.PRODUCT_BUILD_NUMBER + " TEXT,"
                 + "UNIQUE(" + McContract.ServerInfo.NAME + ") ON CONFLICT ABORT );");
 
         //Create profile table

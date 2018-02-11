@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class  ServerInfo implements Parcelable {
+public class ServerInfo implements Parcelable {
 
     public static final Creator<ServerInfo> CREATOR = new Creator<ServerInfo>() {
         @Override
@@ -25,10 +25,29 @@ public class  ServerInfo implements Parcelable {
     List<DeploymentServer> deploymentServers;
     @SerializedName("ManagementServers")
     List<ManagementServer> managementServers;
+    String ProductVersion, ProductVersionBuild;
 
     public ServerInfo(Parcel in) {
         deploymentServers = in.createTypedArrayList(DeploymentServer.CREATOR);
         managementServers = in.createTypedArrayList(ManagementServer.CREATOR);
+    }
+
+    public ServerInfo(String ProductVersion, String ProductVersionBuild) {
+        this.ProductVersion = ProductVersion;
+        this.ProductVersionBuild = ProductVersionBuild;
+
+    }
+
+    public String getProductVersion() {
+        //If product version is not populated is because in v13 APIs there wasn't such info.
+        //Assuming we are using a v13.3
+        return ProductVersion == null ? "13.3" : ProductVersion;
+    }
+
+    public String getProductVersionBuild() {
+        //If product version is not populated is because in v13 APIs there wasn't such info.
+        //Assuming we are using build 3766
+        return ProductVersionBuild == null ? "3766" : ProductVersionBuild;
     }
 
     public List<DeploymentServer> getDeploymentServers() {

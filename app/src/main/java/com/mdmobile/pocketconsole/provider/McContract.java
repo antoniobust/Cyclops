@@ -52,7 +52,6 @@ public class McContract {
 
     // ************ Table's columns interfaces **********************
     interface DeviceInfo {
-
         //Columns
         String COLUMN_KIND = "Kind";
         String COLUMN_COMPLIANCE_STATUS = "ComplianceStatus";
@@ -181,6 +180,8 @@ public class McContract {
         String NAME = "Name";
         String CLIENT_ID = "ClientId";
         String CLIENT_SECRET = "ClientSecret";
+        String PRODUCT_VERSION = "ProductVersion";
+        String PRODUCT_BUILD_NUMBER = "ProductBuildNumber";
     }
 
     //***************************************************************
@@ -399,6 +400,13 @@ public class McContract {
 
         public static Uri buildUriWithId(long id) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();
+        }
+
+        public static String getServerNameFromUri(@NonNull Uri uri) {
+            return uri.getLastPathSegment();
+        }
+        public static Uri buildServerInfoUriWithName(@NonNull String serverName) {
+            return CONTENT_URI.buildUpon().appendPath(serverName).build();
         }
     }
 

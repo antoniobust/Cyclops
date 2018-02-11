@@ -15,15 +15,14 @@ import android.widget.Toast;
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
+import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.ServerUtility;
 
-import static com.mdmobile.pocketconsole.utils.ServerUtility.API_SECRET_KEY;
-import static com.mdmobile.pocketconsole.utils.ServerUtility.CLIENT_ID_KEY;
 import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 
-public class AddNewUserFragment extends Fragment implements View.OnClickListener{
+public class AddNewUserFragment extends Fragment implements View.OnClickListener {
 
     private static final String LOG_TAG = AddNewUserFragment.class.getSimpleName();
     private static final String USER_NAME_KEY = "USER_NAME_KEY";
@@ -46,7 +45,7 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         String userName = userNameView.getText().toString();
         String password = passwordView.getText().toString();
-        if (! (userName.length() > 0  && password.length() > 0)) {
+        if (!(userName.length() > 0 && password.length() > 0)) {
             return;
         }
         Bundle serverInfo = ServerUtility.getServer();
@@ -59,8 +58,8 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
         ApiRequestManager.getInstance().getToken(
                 serverInfo.getString(SERVER_ADDRESS_KEY),
-                serverInfo.getString(CLIENT_ID_KEY),
-                serverInfo.getString(API_SECRET_KEY),
+                serverInfo.getString(McContract.ServerInfo.CLIENT_ID),
+                serverInfo.getString(McContract.ServerInfo.CLIENT_SECRET),
                 userName, password, (NetworkCallBack) getActivity());
     }
 

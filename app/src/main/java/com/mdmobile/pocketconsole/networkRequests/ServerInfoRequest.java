@@ -21,10 +21,12 @@ import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 
 public class ServerInfoRequest extends BasicRequest<String> {
     private Response.Listener<String> responseListener;
+    private final String serverSynced;
 
-    public ServerInfoRequest(String url, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
+    public ServerInfoRequest(String url, String serverName, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
         super(Method.GET, url, errorListener);
         this.responseListener = responseListener;
+        serverSynced = serverName;
     }
 
     @Override
@@ -42,6 +44,11 @@ public class ServerInfoRequest extends BasicRequest<String> {
 
             ArrayList<ServerInfo.ManagementServer> managementServers = new ArrayList<>(servers.getManagementServers());
             ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(servers.getDeploymentServers());
+
+            //Update server info -> version could have changed since last sync
+            applicationContext.getContentResolver().update(
+                    McContract.ServerInfo.buildServerInfoUriWithName(serverSynced),
+                    DbData.prepareServerInfoValues(servers), null, null);
 
             //Delete any existing data in DB
             applicationContext.getContentResolver().delete(McContract.MsInfo.CONTENT_URI, null, null);

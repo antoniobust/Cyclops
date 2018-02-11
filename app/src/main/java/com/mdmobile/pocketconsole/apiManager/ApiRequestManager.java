@@ -31,6 +31,7 @@ import com.mdmobile.pocketconsole.networkRequests.ProfilesRequest;
 import com.mdmobile.pocketconsole.networkRequests.ServerInfoRequest;
 import com.mdmobile.pocketconsole.networkRequests.SimpleRequest;
 import com.mdmobile.pocketconsole.networkRequests.UserRequest;
+import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 import com.mdmobile.pocketconsole.utils.Logger;
@@ -43,6 +44,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 /**
@@ -57,7 +59,7 @@ public class ApiRequestManager {
     private RequestQueue requestsQueue;
 
     private ApiRequestManager() {
-        requestsQueue = Volley.newRequestQueue(ApplicationLoader.applicationContext);
+        requestsQueue = Volley.newRequestQueue(applicationContext);
     }
 
     public static synchronized ApiRequestManager getInstance() {
@@ -127,7 +129,7 @@ public class ApiRequestManager {
         String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.SelectDevice.Builder(apiAuthority, devId).build();
 
-        DeviceRequest deviceRequest = new DeviceRequest<>(ApplicationLoader.applicationContext, Request.Method.GET, api,
+        DeviceRequest deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -147,19 +149,19 @@ public class ApiRequestManager {
         String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
 
-        DeviceRequest deviceRequest = new DeviceRequest<>(ApplicationLoader.applicationContext, Request.Method.GET, api,
+        DeviceRequest deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Logger.log(LOG_TAG, "Devices synced...", Log.VERBOSE);
                         GeneralUtility.setSharedPreference(
-                                ApplicationLoader.applicationContext,
-                                ApplicationLoader.applicationContext.getString(R.string.last_dev_sync_pref),
+                                applicationContext,
+                                applicationContext.getString(R.string.last_dev_sync_pref),
                                 Calendar.getInstance().getTimeInMillis());
 
                         Intent intent = new Intent(MainActivity.DEV_SYNC_BROADCAST_ACTION);
-                        intent.setPackage(ApplicationLoader.applicationContext.getPackageName());
-                        ApplicationLoader.applicationContext.sendBroadcast(intent);
+                        intent.setPackage(applicationContext.getPackageName());
+                        applicationContext.sendBroadcast(intent);
 
 //                        if (LocalBroadcastManager.getInstance(ApplicationLoader.applicationContext).sendBroadcast(intent)) {
 //                            Logger.log(LOG_TAG, "Broadcast sync dev intent sent", Log.VERBOSE);
@@ -244,20 +246,22 @@ public class ApiRequestManager {
 
         requestsQueue.add(actionRequest);
         Logger.log(LOG_TAG, "Request( " + action + " -> " + message + ") requested to device: " + deviceID, Log.VERBOSE);
-        Toast.makeText(ApplicationLoader.applicationContext, action + " request sent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(applicationContext, action + " request sent", Toast.LENGTH_SHORT).show();
     }
 
     public void getServerInfo() {
         String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.ServerApi.Builder(apiAuthority).getServerInfo().build();
 
-        ServerInfoRequest request = new ServerInfoRequest(api, new Response.Listener<String>() {
+        ServerInfoRequest request = new ServerInfoRequest(api,
+                ServerUtility.getServer().getString(McContract.ServerInfo.NAME),
+                new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Logger.log(LOG_TAG, "Server info synced...", Log.VERBOSE);
                 GeneralUtility.setSharedPreference(
-                        ApplicationLoader.applicationContext,
-                        ApplicationLoader.applicationContext.getString(R.string.last_server_sync_pref),
+                        applicationContext,
+                        applicationContext.getString(R.string.last_server_sync_pref),
                         Calendar.getInstance().getTimeInMillis());
             }
         }, new Response.ErrorListener() {
@@ -279,8 +283,8 @@ public class ApiRequestManager {
                     public void onResponse(String response) {
                         Logger.log(LOG_TAG, "Users synced...", Log.VERBOSE);
                         GeneralUtility.setSharedPreference(
-                                ApplicationLoader.applicationContext,
-                                ApplicationLoader.applicationContext.getString(R.string.last_user_sync_pref),
+                                applicationContext,
+                                applicationContext.getString(R.string.last_user_sync_pref),
                                 Calendar.getInstance().getTimeInMillis());
                     }
                 },

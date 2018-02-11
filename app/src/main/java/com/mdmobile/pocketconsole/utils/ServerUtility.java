@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
+import com.mdmobile.pocketconsole.provider.McContract;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
@@ -18,9 +19,6 @@ import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
  */
 
 public class ServerUtility {
-
-    public final static String SERVER_NAME_KEY = "serverNameKey", SERVER_ADDRESS_KEY = "serverAddressKey",
-            CLIENT_ID_KEY = "clientIdKey", API_SECRET_KEY = "apiSecretKey";
     public static int SERVER_STOPPED = 0;
     public static int SERVER_STARTED = 1;
     public static int SERVER_DISABLED = 2;
@@ -30,6 +28,8 @@ public class ServerUtility {
     public static int SERVER_OFFLINE = 6;
     public static int SERVER_STATUS_UNKNOWN = 7;
     public static int SERVER_STARTED_BUT_NOT_CONNECTED = 5;
+
+    public static final String SERVER_ADDRESS_KEY = "ServerAddressKey";
 
     public static void saveServerInfo(String serverName, String apiSecret, String clientId, String serverAddress) {
         SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
@@ -57,11 +57,10 @@ public class ServerUtility {
 
         if (serverName != null && apiSecret != null && clientId != null && address != null) {
             Bundle bundle = new Bundle(4);
-            bundle.putString(SERVER_NAME_KEY, serverName);
+            bundle.putString(McContract.ServerInfo.NAME, serverName);
             bundle.putString(SERVER_ADDRESS_KEY, address);
-            bundle.putString(CLIENT_ID_KEY, clientId);
-            bundle.putString(API_SECRET_KEY, apiSecret);
-
+            bundle.putString(McContract.ServerInfo.CLIENT_ID, clientId);
+            bundle.putString(McContract.ServerInfo.CLIENT_SECRET, apiSecret);
             return bundle;
         } else {
             return null;

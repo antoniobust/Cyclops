@@ -426,6 +426,14 @@ public class McProvider extends ContentProvider {
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
                 break;
+            case SERVER:
+                String serverName = McContract.ServerInfo.getServerNameFromUri(uri);
+                updated = database.update(McContract.SERVER_INFO_TABLE_NAME, values, McContract.ServerInfo.NAME + "=?", new String[]{serverName});
+                Logger.log(LOG_TAG, " Server(" + serverName + ") updated", Log.VERBOSE);
+                if (updated > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                break;
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }

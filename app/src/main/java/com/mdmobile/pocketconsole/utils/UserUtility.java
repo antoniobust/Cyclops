@@ -9,12 +9,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mdmobile.pocketconsole.R;
+import com.mdmobile.pocketconsole.provider.McContract;
 
 import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_EXPIRATION_KEY;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
-import static com.mdmobile.pocketconsole.utils.ServerUtility.API_SECRET_KEY;
-import static com.mdmobile.pocketconsole.utils.ServerUtility.CLIENT_ID_KEY;
 import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 /**
@@ -23,9 +22,8 @@ import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 public class UserUtility {
 
+    public final static String USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
     private static final String LOG_TAG = UserUtility.class.getSimpleName();
-    public final static String  USER_NAME_KEY = "userNameKey", PASSWORD_KEY = "passwordKey";
-
 
     public static Account checkUserExists(Context context, String userName) {
         Logger.log(LOG_TAG, "Checking any users exists", Log.VERBOSE);
@@ -84,11 +82,11 @@ public class UserUtility {
         Account account = getUser();
 
         //Update accountsUpdateListener with new user data (token type would be teh same, the others may have changed)
-        if (userInfo.containsKey(CLIENT_ID_KEY)) {
-            manager.setUserData(account, CLIENT_ID_KEY, userInfo.getString(CLIENT_ID_KEY));
+        if (userInfo.containsKey(McContract.ServerInfo.CLIENT_ID)) {
+            manager.setUserData(account, McContract.ServerInfo.CLIENT_ID, userInfo.getString(McContract.ServerInfo.CLIENT_ID));
         }
-        if (userInfo.containsKey(API_SECRET_KEY)) {
-            manager.setUserData(account, API_SECRET_KEY, userInfo.getString(API_SECRET_KEY));
+        if (userInfo.containsKey(McContract.ServerInfo.CLIENT_SECRET)) {
+            manager.setUserData(account, McContract.ServerInfo.CLIENT_SECRET, userInfo.getString(McContract.ServerInfo.CLIENT_SECRET));
         }
         if (userInfo.containsKey(SERVER_ADDRESS_KEY)) {
             manager.setUserData(account, SERVER_ADDRESS_KEY, userInfo.getString(SERVER_ADDRESS_KEY));

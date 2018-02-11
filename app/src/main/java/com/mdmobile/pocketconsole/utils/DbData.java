@@ -279,4 +279,11 @@ public class DbData {
         }
         return extraBundle;
     }
+
+    public static ContentValues prepareServerInfoValues(ServerInfo serverInfo){
+        ContentValues serverValues = new ContentValues();
+        serverValues.put(McContract.ServerInfo.PRODUCT_VERSION, serverInfo.getProductVersion());
+        serverValues.put(McContract.ServerInfo.PRODUCT_BUILD_NUMBER, serverInfo.getProductVersionBuild());
+        return serverValues;
+    }
 }

@@ -19,9 +19,7 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.adapters.DeviceInfoAdapter;
 import com.mdmobile.pocketconsole.dataModels.api.sharedPref.ChartSharedPref;
-import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.CounterStat;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.Statistic;
@@ -34,12 +32,10 @@ import java.util.ArrayList;
 public class DashboardFragment extends Fragment implements Statistic.IStatisticReady,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private RecyclerView recyclerView;
     private CounterStat counterStat;
     private ChartsAdapter recyclerAdapter;
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private SharedPreferences preferences;
-    private ArrayList<ChartSharedPref> currentCharts;
+//    private ArrayList<ChartSharedPref> currentCharts;
 
 
     public DashboardFragment() {
@@ -68,7 +64,6 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     @Override
     public void getData(int statId, Bundle values) {
         recyclerAdapter.addNewStat(values);
-
     }
 
 
@@ -78,24 +73,24 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         preferences = getActivity().getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE);
-        String currentPreference = preferences.getString(getString(R.string.charts_preference), "");
-        Type listType = new TypeToken<ArrayList<ChartSharedPref>>() {
-        }.getType();
-        Gson gson = new Gson();
-        if (!currentPreference.isEmpty()) {
-            currentCharts = gson.fromJson(currentPreference, listType);
-        }
+//        String currentPreference = preferences.getString(getString(R.string.charts_preference), "");
+//        Type listType = new TypeToken<ArrayList<ChartSharedPref>>() {
+//        }.getType();
+//        Gson gson = new Gson();
+//        if (!currentPreference.isEmpty()) {
+//            currentCharts = gson.fromJson(currentPreference, listType);
+//        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final Context contextThemeWrapper = new android.view.ContextThemeWrapper(getActivity(), R.style.AppTheme_MainActivity_Fragment);
         inflater = inflater.cloneInContext(contextThemeWrapper);
 
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        recyclerView = rootView.findViewById(R.id.dashboard_recycler_view);
+        RecyclerView recyclerView = rootView.findViewById(R.id.dashboard_recycler_view);
 
         if (MainActivity.TABLET_MODE) {
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false));

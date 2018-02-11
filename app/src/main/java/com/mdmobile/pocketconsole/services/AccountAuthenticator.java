@@ -16,13 +16,12 @@ import com.android.volley.VolleyError;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.dataModels.api.Token;
 import com.mdmobile.pocketconsole.interfaces.NetworkCallBack;
+import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.utils.Logger;
 import com.mdmobile.pocketconsole.utils.ServerUtility;
 import com.mdmobile.pocketconsole.utils.UserUtility;
 
-import static com.mdmobile.pocketconsole.utils.ServerUtility.API_SECRET_KEY;
-import static com.mdmobile.pocketconsole.utils.ServerUtility.CLIENT_ID_KEY;
 import static com.mdmobile.pocketconsole.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
@@ -69,8 +68,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         final Bundle serverInfo = ServerUtility.getServer();
 
         final String password = accountManager.getPassword(account);
-        final String clientID = serverInfo.getString(CLIENT_ID_KEY);
-        final String apiSecret = serverInfo.getString(API_SECRET_KEY);
+        final String clientID = serverInfo.getString(McContract.ServerInfo.CLIENT_ID);
+        final String apiSecret = serverInfo.getString(McContract.ServerInfo.CLIENT_SECRET);
         final String serverUrl = serverInfo.getString(SERVER_ADDRESS_KEY);
 
 
@@ -81,7 +80,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     .getToken(serverUrl, clientID, apiSecret, account.name, password,
                             new NetworkCallBack() {
                                 @Override
-                                public void tokenReceived(Bundle userInfo,Token JsonToken) {
+                                public void tokenReceived(Bundle userInfo, Token JsonToken) {
                                     //Credentials still valid, token received
                                     //Returning data back to authenticatorResponse
                                     Bundle result = new Bundle();

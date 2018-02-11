@@ -321,7 +321,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
         switch (v.getId()) {
             case R.id.device_details_info_card:
-                newFrag = FullDeviceInfoFragment.newInstance(deviceId);
+                newFrag = FullDeviceInfoFragment.Companion.newInstance(deviceId);
                 break;
             case R.id.device_details_profiles_card:
                 newFrag = ProfilesFragment.newInstance(deviceId);

@@ -52,8 +52,7 @@ public class ProfilesRequest extends BasicRequest<String> {
             Gson gson = new Gson();
             ArrayList<Profile> profiles = gson.fromJson(jsonResponseString, type);
             Logger.log(LOG_TAG,  profiles.size() + " profiles received for: " +devId, Log.VERBOSE);
-            //Delete old data
-            applicationContext.getContentResolver().delete(McContract.Profile.buildUriWithDeviceId(devId),null,null);
+
             //Parse Profiles and save in DB
             if (profiles.size() == 1) {
                 ContentValues values = DbData.prepareProfilesValue(profiles.get(0));

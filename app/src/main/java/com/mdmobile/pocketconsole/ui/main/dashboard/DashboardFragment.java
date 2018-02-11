@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +26,7 @@ import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.CounterStat;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.Statistic;
 import com.mdmobile.pocketconsole.ui.main.dashboard.statistics.StatisticFactory;
+import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     private CounterStat counterStat;
     private ChartsAdapter recyclerAdapter;
     private SharedPreferences preferences;
+    private RecyclerView chartsRecycler;
 //    private ArrayList<ChartSharedPref> currentCharts;
 
 
@@ -64,6 +68,7 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     @Override
     public void getData(int statId, Bundle values) {
         recyclerAdapter.addNewStat(values);
+
     }
 
 
@@ -85,22 +90,23 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final Context contextThemeWrapper = new android.view.ContextThemeWrapper(getActivity(), R.style.AppTheme_MainActivity_Fragment);
+        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.AppTheme_MainActivity_Fragment);
         inflater = inflater.cloneInContext(contextThemeWrapper);
 
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.dashboard_recycler_view);
+        chartsRecycler = rootView.findViewById(R.id.dashboard_recycler_view);
+
 
         if (MainActivity.TABLET_MODE) {
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false));
+            chartsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false));
         } else {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            chartsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
 //        ChartsAdapter recyclerAdapter = new ChartsAdapter(getContext(), null);
         recyclerAdapter = new ChartsAdapter(null, null);
-        recyclerView.setAdapter(recyclerAdapter);
+        chartsRecycler.setAdapter(recyclerAdapter);
 
         return rootView;
     }

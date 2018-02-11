@@ -39,6 +39,12 @@ class LabelHelper {
             return (BasicDeviceProperties.BASIC_DEVICE_PROPERTIES.filter(filter) +
                     SpecialDeviceProperties.SPECIAL_DEVICE_PROPERTIES.filter(filter)) as ArrayList<Property>
         }
+
+        fun getAllUILabels(): Array<String> {
+            return BasicDeviceProperties.BASIC_DEVICE_PROPERTIES.map {
+                it.uiLabel
+            }.toTypedArray()
+        }
     }
 
     object BasicDeviceProperties {

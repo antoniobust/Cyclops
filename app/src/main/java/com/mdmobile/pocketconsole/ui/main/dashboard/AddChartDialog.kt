@@ -8,7 +8,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -60,8 +59,10 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
     }
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
-        if (which == Dialog.BUTTON_POSITIVE) {
-
+        if (property1TextView.text.isEmpty() || which == Dialog.BUTTON_NEGATIVE) {
+            Logger.log(LOG_TAG, "Chart canceled returning", Log.VERBOSE)
+            return
+        } else if (which == Dialog.BUTTON_POSITIVE) {
             val prefCurrentValue: String = context!!.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
                     .getString(getString(R.string.charts_preference), String())
             val listType = object : TypeToken<List<ChartSharedPref>>() {}.type
@@ -78,9 +79,6 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
                     "Added:\n${jsonString.replace("},{", "}\n{", true)}\n in saved charts",
                     Log.VERBOSE)
 
-        } else if (which == Dialog.BUTTON_NEGATIVE) {
-            Logger.log(LOG_TAG, "Cancel pressed returning", Log.VERBOSE)
-            return
         }
     }
 
@@ -89,7 +87,7 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
     }
 
     override fun afterTextChanged(s: Editable?) {
-        val enabled : Boolean = !LabelHelper.getInternalLabelFor(property1TextView.text.toString()).isEmpty()
+        val enabled: Boolean = !LabelHelper.getInternalLabelFor(property1TextView.text.toString()).isEmpty()
 
         if (property2TextView.visibility == View.GONE) {
             dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = enabled;

@@ -12,11 +12,10 @@ class LabelHelper {
             val filter: (Property) -> Boolean = {
                 it.internalLabel == property
             }
-            val s = BasicDeviceProperties.BASIC_DEVICE_PROPERTIES.single(filter).uiLabel
-            return if (s != "") {
-                s
-            } else {
-                SpecialDeviceProperties.SPECIAL_DEVICE_PROPERTIES.single(filter).uiLabel
+            return try {
+                BasicDeviceProperties.BASIC_DEVICE_PROPERTIES.single(filter).uiLabel
+            } catch (e: NoSuchElementException) {
+                ""
             }
         }
 
@@ -24,11 +23,10 @@ class LabelHelper {
             val filter: (Property) -> Boolean = {
                 it.uiLabel == property
             }
-            val s = BasicDeviceProperties.BASIC_DEVICE_PROPERTIES.single(filter).internalLabel
-            return if (s != "") {
-                s
-            } else {
-                SpecialDeviceProperties.SPECIAL_DEVICE_PROPERTIES.single(filter).internalLabel
+            return try {
+                BasicDeviceProperties.BASIC_DEVICE_PROPERTIES.single(filter).internalLabel
+            } catch (e: NoSuchElementException) {
+                ""
             }
         }
 

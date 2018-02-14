@@ -148,9 +148,9 @@ public class DbData {
         return getInstalledAppContentValues(installedApp);
     }
 
-    public static ContentValues[] prepareProfilesValue(ArrayList<Profile> profiles){
+    public static ContentValues[] prepareProfilesValue(ArrayList<Profile> profiles) {
         ArrayList<ContentValues> values = new ArrayList<>(profiles.size());
-        for(int i = 0 ; i < profiles.size(); i ++){
+        for (int i = 0; i < profiles.size(); i++) {
             values.add(prepareProfilesValue(profiles.get(i)));
         }
         ContentValues[] values1 = new ContentValues[values.size()];
@@ -158,7 +158,7 @@ public class DbData {
         return values1;
     }
 
-    public static ContentValues prepareProfilesValue(Profile profile){
+    public static ContentValues prepareProfilesValue(Profile profile) {
         ContentValues values = new ContentValues();
         values.put(McContract.Profile.REFERENCE_ID, profile.getReferenceId());
         values.put(McContract.Profile.NAME, profile.getName());
@@ -267,20 +267,21 @@ public class DbData {
 
     public static Bundle getDeviceExtraInfo(String extraInfo) {
         String[] extras = extraInfo.split(";");
-        String[]temp;
+        String[] temp;
         Bundle extraBundle = new Bundle();
         for (int i = 0; i < extras.length; i++) {
             temp = extras[i].split("=");
-            if(temp.length == 1){
+            if (temp.length == 1) {
                 extraBundle.putString(temp[0], "N/A");
                 continue;
             }
+            temp[0] = temp[0].substring(1, temp[0].length());
             extraBundle.putString(temp[0], temp[1]);
         }
         return extraBundle;
     }
 
-    public static ContentValues prepareServerInfoValues(ServerInfo serverInfo){
+    public static ContentValues prepareServerInfoValues(ServerInfo serverInfo) {
         ContentValues serverValues = new ContentValues();
         serverValues.put(McContract.ServerInfo.PRODUCT_VERSION, serverInfo.getProductVersion());
         serverValues.put(McContract.ServerInfo.PRODUCT_BUILD_NUMBER, serverInfo.getProductVersionBuild());

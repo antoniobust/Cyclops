@@ -89,11 +89,13 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
     }
 
     override fun afterTextChanged(s: Editable?) {
+        val enabled : Boolean = !LabelHelper.getInternalLabelFor(property1TextView.text.toString()).isEmpty()
+
         if (property2TextView.visibility == View.GONE) {
-            dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = !TextUtils.isEmpty(property1TextView.text)
+            dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = enabled;
         } else if (property2TextView.visibility == View.VISIBLE) {
             dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled =
-                    !TextUtils.isEmpty(property1TextView.text) && !TextUtils.isEmpty(property2TextView.text)
+                    enabled && LabelHelper.getInternalLabelFor(property2TextView.text.toString()).isEmpty()
         }
     }
 

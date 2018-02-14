@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
+import com.mdmobile.pocketconsole.dataTypes.DeviceAttributes;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.DbData;
@@ -109,7 +110,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         switch (loader.getId()) {
             case LOAD_INFO:
                 Cursor c = data;
-                setCharts(c);
+                setLevelBars(c);
                 setDeviceInfoCard(c);
                 break;
             case LOAD_PROFILE: {
@@ -295,22 +296,47 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         }
     }
 
-    private void setCharts(Cursor data) {
+    private void setLevelBars(Cursor data) {
         data.moveToFirst();
-        Bundle extraInfo = DbData.getDeviceExtraInfo(data.getString(24));
+        Bundle extraInfo = DbData.getDeviceExtraInfo(
+                data.getString(data.getColumnIndex(McContract.Device.COLUMN_EXTRA_INFO)));
 
-        String value = extraInfo.getString("tBatteryStatus");
-        if (value == null) {
-            value = "0";
+        String[] value = {extraInfo.getString(DeviceAttributes.AndroidPlusDevice.BatteryStatus),
+                extraInfo.getString(DeviceAttributes.AndroidPlusDevice.CellularSignalStrength),
+                extraInfo.getString(DeviceAttributes.AndroidPlusDevice.NetworkRSSI),
+                extraInfo.getString(DeviceAttributes.AndroidPlusDevice.Memory)};
+        for (int i = 0; i < value.length; i++) {
+            if (value[i] == null || value[i].equals("N/A")) {
+                value[i] = "0";
+            }
         }
-        int val = Integer.valueOf(value);
-        LayerDrawable clipBar = (LayerDrawable) batteryView.getDrawable();
 
+        int val = Integer.valueOf(value[0]);
+        LayerDrawable clipBar = (LayerDrawable) batteryView.getDrawable();
         Drawable barFilling = clipBar.findDrawableByLayerId(R.id.horizontal_bar_filling);
+
         if (val > 0 && val < 20) {
             barFilling.setTint(getContext().getResources().getColor(android.R.color.holo_red_light));
         }
         barFilling.setLevel(val * 100);
+        clipBar.invalidateSelf();
+
+        val = Integer.valueOf(value[1]);
+        clipBar = (LayerDrawable) simView.getDrawable();
+        if (val > 0 && val < 20) {
+            barFilling.setTint(getContext().getResources().getColor(android.R.color.holo_red_light));
+        }
+        barFilling.setLevel(val * 100);
+
+        val = Integer.valueOf(value[2]);
+        val = val * -1;
+        val = 100 - val;
+        clipBar = (LayerDrawable) wifiView.getDrawable();
+        if (val > 0 && val < 20) {
+            barFilling.setTint(getContext().getResources().getColor(android.R.color.holo_red_light));
+        }
+        barFilling.setLevel(val * 100);
+
     }
 
 

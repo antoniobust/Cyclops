@@ -9,14 +9,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.mdmobile.pocketconsole.R
 import com.mdmobile.pocketconsole.adapters.LabelsCursorAdapter
 import com.mdmobile.pocketconsole.provider.McContract
-
 import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY
 import com.mdmobile.pocketconsole.utils.LabelHelper
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
 class FullDeviceInfoFragment : Fragment(), android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
@@ -63,6 +60,5 @@ class FullDeviceInfoFragment : Fragment(), android.support.v4.app.LoaderManager.
         loaderManager.initLoader(200, Bundle(), this)
         return rootView
     }
-
-
+    
 }

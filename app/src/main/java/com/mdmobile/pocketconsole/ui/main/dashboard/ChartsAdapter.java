@@ -80,7 +80,6 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         createPieChart(chart, position);
 
         holder.chartContainer.addView(chart);
-        holder.chartContainer.invalidate();
     }
 
 

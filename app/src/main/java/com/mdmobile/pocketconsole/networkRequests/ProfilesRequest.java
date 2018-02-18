@@ -29,7 +29,6 @@ import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 public class ProfilesRequest extends BasicRequest<String> {
 
     private static final String LOG_TAG =ProfilesRequest.class.getSimpleName() ;
-    Context mContext;
     private Response.Listener<String> responseListener;
     private final String devId;
 
@@ -52,6 +51,10 @@ public class ProfilesRequest extends BasicRequest<String> {
             Gson gson = new Gson();
             ArrayList<Profile> profiles = gson.fromJson(jsonResponseString, type);
             Logger.log(LOG_TAG,  profiles.size() + " profiles received for: " +devId, Log.VERBOSE);
+
+            if(profiles.size() == 0){
+                profiles.add(new Profile("N/A","N/A","N/A","N/A",0,false));
+            }
 
             //Parse Profiles and save in DB
             if (profiles.size() == 1) {

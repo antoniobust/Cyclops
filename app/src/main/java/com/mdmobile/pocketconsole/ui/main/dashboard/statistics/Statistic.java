@@ -64,31 +64,31 @@ public abstract class Statistic extends AsyncQueryHandler {
         this.listener = null;
     }
 
-    public List<StatValue> getData(String property) {
-        return statsData.getParcelableArrayList(property);
-    }
+//    public List<StatValue> getData(String property) {
+//        return statsData.getParcelableArrayList(property);
+//    }
 
-    public int getPopulationSize(String property) {
-        List<StatValue> statVal = getData(property);
-        int counter = 0;
-        for (StatValue entry : statVal) {
-            counter += entry.getValue();
-        }
-        return counter;
-    }
+//    public int getPopulationSize(String property) {
+//        List<StatValue> statVal = getData(property);
+//        int counter = 0;
+//        for (StatValue entry : statVal) {
+//            counter += entry.getValue();
+//        }
+//        return counter;
+//    }
+//
+//    public String[] getGroupsLabels(String property) {
+//        List<StatValue> statVal = getData(property);
+//        ArrayList<String> label = new ArrayList<>(statVal.size());
+//        for (StatValue entry : statVal) {
+//            label.add(entry.getLabel());
+//        }
+//        return label.toArray(new String[label.size()]);
+//    }
 
-    public String[] getGroupsLabels(String property) {
-        List<StatValue> statVal = getData(property);
-        ArrayList<String> label = new ArrayList<>(statVal.size());
-        for (StatValue entry : statVal) {
-            label.add(entry.getLabel());
-        }
-        return label.toArray(new String[label.size()]);
-    }
-
-    public int getGroupsCount(String property) {
-        return getData(property).size();
-    }
+//    public int getGroupsCount(String property) {
+//        return getData(property).size();
+//    }
 
     private ArrayList<StatValue> statValuesFromCursor(Cursor c) {
         ArrayList<StatValue> statValues = new ArrayList<>(c.getCount());

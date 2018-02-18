@@ -72,15 +72,9 @@
     </string-array>
     <string-array name="chart_types_label">
         <item>Donut chart</item>
-        <item>Bar Chart</item>
-        <item>Horizontal bar chart</item>
+        <!--<item>Bar Chart</item>-->
+        <!--<item>Horizontal bar chart</item>-->
     </string-array>
-
-    <!--Mode, Model,-->
-    <!--OSVersion, Path, Platform;-->
-    <!--private Boolean ComplianceStatus, IsAgentOnline, IsVirtual;-->
-
-
 </resources>
 
 

@@ -1,7 +1,20 @@
-<android.support.v7.widget.RecyclerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dashboard_recycler_view"
-    style="@style/AppTheme.MainActivity.Fragment"
-    android:layout_width="@dimen/max_content_size"
-    android:layout_height="match_parent"/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="@dimen/match_parent"
+             android:layout_height="match_parent">
+
+    <com.mdmobile.pocketconsole.utils.RecyclerEmptyView
+        android:id="@+id/dashboard_recycler_view"
+        style="@style/AppTheme.MainActivity.Fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/dashboard_recycler_empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:text="@string/dashboard_recycler_empty_view_label"
+        android:visibility="gone"
+        />
+</FrameLayout>
 

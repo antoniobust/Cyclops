@@ -143,6 +143,7 @@
     <string name="last_server_sync_pref">last_server_sync</string>
     <string name="property_2_label">Second property</string>
     <string name="property_1_label">First property</string>
+    <string name="dashboard_recycler_empty_view_label">Click the + button to create new charts</string>
 
 
 </resources>

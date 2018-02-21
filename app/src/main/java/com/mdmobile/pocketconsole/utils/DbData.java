@@ -102,17 +102,13 @@ public class DbData {
         deviceValues.put(McContract.Device.COLUMN_OS_VERSION, device.getOSVersion());
         deviceValues.put(McContract.Device.COLUMN_PATH, device.getPath());
         deviceValues.put(McContract.Device.COLUMN_PLATFORM, device.getPlatform());
-        //Memory info is not on some specific windows phone so I rather check here if is null than
-        // remove memory from basic device info just for windows phone platform
-        if (device.memory != null) {
-            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, device.memory.getAvailableExternalStorage());
-            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, device.memory.getAvailableMemory());
-            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, device.memory.getAvailableSDCardStorage());
-            deviceValues.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, device.memory.getTotalExternalStorage());
-            deviceValues.put(McContract.Device.COLUMN_TOTAL_MEMORY, device.memory.getTotalMemory());
-            deviceValues.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, device.memory.getTotalSDCardStorage());
-            deviceValues.put(McContract.Device.COLUMN_TOTAL_STORAGE, device.memory.getTotalStorage());
-        }
+        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, device.getMemory().getAvailableExternalStorage());
+        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, device.getMemory().getAvailableMemory());
+        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, device.getMemory().getAvailableSDCardStorage());
+        deviceValues.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, device.getMemory().getTotalExternalStorage());
+        deviceValues.put(McContract.Device.COLUMN_TOTAL_MEMORY, device.getMemory().getTotalMemory());
+        deviceValues.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, device.getMemory().getTotalSDCardStorage());
+        deviceValues.put(McContract.Device.COLUMN_TOTAL_STORAGE, device.getMemory().getTotalStorage());
         deviceValues.put(McContract.Device.COLUMN_PLATFORM, device.getPlatform());
 
         return deviceValues;
@@ -269,8 +265,8 @@ public class DbData {
         String[] extras = extraInfo.split(";");
         String[] temp;
         Bundle extraBundle = new Bundle();
-        for (int i = 0; i < extras.length; i++) {
-            temp = extras[i].split("=");
+        for (String extra : extras) {
+            temp = extra.split("=");
             if (temp.length == 1) {
                 extraBundle.putString(temp[0], "N/A");
                 continue;

@@ -27,7 +27,7 @@ import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
 import com.mdmobile.pocketconsole.adapters.ServerListAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.sync.DevicesSyncAdapter;
-import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
+import com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.ui.logIn.LoginActivity;
 import com.mdmobile.pocketconsole.ui.main.dashboard.DashboardFragment;
 import com.mdmobile.pocketconsole.ui.main.myDevices.DevicesFragment;
@@ -42,7 +42,7 @@ import java.util.Calendar;
 
 import static com.mdmobile.pocketconsole.R.id.main_activity_fragment_container;
 import static com.mdmobile.pocketconsole.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
-import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
+import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
 
 
 public class MainActivity extends BaseActivity implements DevicesListAdapter.DeviceSelected,

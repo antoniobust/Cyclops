@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui.deviceDetails
+package com.mdmobile.pocketconsole.ui.main.deviceDetails
 
 import android.database.Cursor
 import android.os.Bundle
@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import com.mdmobile.pocketconsole.R
 import com.mdmobile.pocketconsole.adapters.LabelsCursorAdapter
 import com.mdmobile.pocketconsole.provider.McContract
-import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY
+import com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY
 import com.mdmobile.pocketconsole.utils.LabelHelper
 
 

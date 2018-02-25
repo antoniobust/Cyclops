@@ -102,14 +102,16 @@ public class DbData {
         deviceValues.put(McContract.Device.COLUMN_OS_VERSION, device.getOSVersion());
         deviceValues.put(McContract.Device.COLUMN_PATH, device.getPath());
         deviceValues.put(McContract.Device.COLUMN_PLATFORM, device.getPlatform());
-        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, device.getMemory().getAvailableExternalStorage());
-        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, device.getMemory().getAvailableMemory());
-        deviceValues.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, device.getMemory().getAvailableSDCardStorage());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, device.getMemory().getTotalExternalStorage());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_MEMORY, device.getMemory().getTotalMemory());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, device.getMemory().getTotalSDCardStorage());
-        deviceValues.put(McContract.Device.COLUMN_TOTAL_STORAGE, device.getMemory().getTotalStorage());
-        deviceValues.put(McContract.Device.COLUMN_PLATFORM, device.getPlatform());
+        if (device.getMemory() != null) {
+            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, device.getMemory().getAvailableExternalStorage());
+            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, device.getMemory().getAvailableMemory());
+            deviceValues.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, device.getMemory().getAvailableSDCardStorage());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, device.getMemory().getTotalExternalStorage());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_MEMORY, device.getMemory().getTotalMemory());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, device.getMemory().getTotalSDCardStorage());
+            deviceValues.put(McContract.Device.COLUMN_TOTAL_STORAGE, device.getMemory().getTotalStorage());
+        }
+
 
         return deviceValues;
     }

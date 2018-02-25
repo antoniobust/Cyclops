@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui.deviceDetails;
+package com.mdmobile.pocketconsole.ui.main.deviceDetails;
 
 import android.database.Cursor;
 import android.graphics.Color;
@@ -19,6 +19,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,17 +34,19 @@ import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
+import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
+import com.mdmobile.pocketconsole.utils.LabelHelper;
 import com.mdmobile.pocketconsole.utils.Logger;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
-import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
-import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
-import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY;
-import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY;
+import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
+import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
+import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY;
+import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY;
 
 
 public class DeviceDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener,
@@ -55,6 +59,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private String nameTransitionName;
     private View rootView;
     private CardView profilesCard;
+    private RecyclerView devInfoRecycler;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
 
@@ -108,6 +113,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         switch (loader.getId()) {
             case LOAD_INFO:
 //                setLevelBars(c);
+                BasicDevice dev = new BasicDevice();
+                Bundle a = new Bundle();
+                a.putParcelable("S", dev);
                 setDeviceInfoCard(data);
                 break;
             case LOAD_PROFILE: {
@@ -192,6 +200,10 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         CardView infoCard = rootView.findViewById(R.id.device_details_info_card);
         CardView appsCard = rootView.findViewById(R.id.device_details_apps_card);
         profilesCard = rootView.findViewById(R.id.device_details_profiles_card);
+        devInfoRecycler = rootView.findViewById(R.id.device_info_grid_view);
+        devInfoRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        devInfoRecycler.setAdapter(new InfoAdapter(new ArrayList<String[]>(), true));
 //        batteryView = rootView.findViewById(R.id.device_details_battery);
 //        wifiView = rootView.findViewById(R.id.device_details_wifi);
 //        simView = rootView.findViewById(R.id.device_details_simcard);
@@ -245,41 +257,40 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     private void setDeviceInfoCard(Cursor c) {
-        GridLayout infoGrid = getActivity().findViewById(R.id.device_details_info_grid);
-        TextView devName = getActivity().findViewById(R.id.device_detail_title_view);
-
-        if (c.moveToFirst()) {
-            Boolean online = c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1;
-            String platform = c.getString(c.getColumnIndex(McContract.Device.COLUMN_PLATFORM));
-            String osVersion = c.getString(c.getColumnIndex(McContract.Device.COLUMN_OS_VERSION));
-            String hostName = c.getString(c.getColumnIndex(McContract.Device.COLUMN_HOST_NAME));
-            HashMap<String, String> extraInfo = GeneralUtility
-                    .formatDeviceExtraInfo(c.getString(c.getColumnIndex(McContract.Device.COLUMN_EXTRA_INFO)));
-
-            Drawable dot;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot, null);
-            } else {
-                dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot);
-            }
-            devName.setCompoundDrawablePadding(50);
-
-            if (online) {
-                ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.darkGreen));
-            } else {
-                ((GradientDrawable) dot).setColor(Color.LTGRAY);
-            }
-            devName.setCompoundDrawablesWithIntrinsicBounds(null, null, dot, null);
-
-            ((TextView) infoGrid.getChildAt(1)).setText(getString(R.string.info_operating_system_label));
-            ((TextView) infoGrid.getChildAt(2)).setText(platform.concat(" ").concat(osVersion));
-            ((TextView) infoGrid.getChildAt(3)).setText(getString(R.string.info_last_agent_check_in_label));
-            ((TextView) infoGrid.getChildAt(4)).setText(extraInfo.get("tLastCheckInTime"));
-            ((TextView) infoGrid.getChildAt(5)).setText(getString(R.string.MobiControl));
-            ((TextView) infoGrid.getChildAt(6)).setText(extraInfo.get("tAgentVersion"));
-            ((TextView) infoGrid.getChildAt(7)).setText(getString(R.string.info_hostname_label));
-            ((TextView) infoGrid.getChildAt(8)).setText(hostName);
+        ArrayList<String[]> infoList = new ArrayList<>();
+        if (!c.moveToFirst()) {
+            return;
         }
+
+        TextView devName = getActivity().findViewById(R.id.device_detail_title_view);
+        //Set online dot
+        Drawable dot;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot, null);
+        } else {
+            dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot);
+        }
+        devName.setCompoundDrawablePadding(50);
+        Boolean online = c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1;
+        if (online) {
+            ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.darkGreen));
+        } else {
+            ((GradientDrawable) dot).setColor(Color.LTGRAY);
+        }
+        devName.setCompoundDrawablesWithIntrinsicBounds(null, null, dot, null);
+
+        //Populates card info
+        String[] columns = c.getColumnNames();
+        String label;
+        //TODO: need to get EXTRA INFO Properties
+        for (String column : columns) {
+            label = LabelHelper.Companion.getUiLabelFor(column);
+            if (label.equals("")) {
+                continue;
+            }
+            infoList.add(new String[]{LabelHelper.Companion.getUiLabelFor(column), c.getString(c.getColumnIndex(column))});
+        }
+        devInfoRecycler.swapAdapter(new InfoAdapter(infoList, true), true);
     }
 
     private void setCards(Cursor c, GridLayout gridLayout, String... columnName) {

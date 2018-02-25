@@ -14,7 +14,7 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.ui.Dialogs.ConfirmActionDialog;
 import com.mdmobile.pocketconsole.ui.ViewHolder.InstalledAppViewHolder;
-import com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity;
+import com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
 
 

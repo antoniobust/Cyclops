@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui.deviceDetails;
+package com.mdmobile.pocketconsole.ui.main.deviceDetails;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

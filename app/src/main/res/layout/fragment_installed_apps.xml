@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:transitionName="application_card_transition_name"
-    tools:context="com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsFragment">
+    tools:context="com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.mdmobile.pocketconsole.ui.deviceDetails;
+package com.mdmobile.pocketconsole.ui.main.deviceDetails;
 
 
 import android.database.Cursor;
@@ -22,7 +22,7 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.InstalledAppsAdapter;
 import com.mdmobile.pocketconsole.provider.McContract;
 
-import static com.mdmobile.pocketconsole.ui.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
+import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
 
 public class InstalledAppsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private String deviceId;

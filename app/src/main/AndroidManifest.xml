@@ -51,7 +51,7 @@
             android:theme="@style/AppTheme"/>
 
         <activity
-            android:name=".ui.deviceDetails.DeviceDetailsActivity"
+            android:name=".ui.main.deviceDetails.DeviceDetailsActivity"
             android:label="@string/title_activity_device_details"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/AppTheme.DetailsActivity">

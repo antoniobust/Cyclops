@@ -1,12 +1,17 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices
 
+import android.annotation.SuppressLint
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@SuppressLint("ParcelCreator")
+@Parcelize
 open class BasicDevice(val Kind: String = "", val DeviceId: String = "", val DeviceName: String = "", val EnrollmentTime: String = "",
                        val Family: String = "", val HostName: String = "", val MACAddress: String = "", val Manufacturer: String = "",
                        val Mode: String = "", val Model: String = "", val OSVersion: String = "", val Path: String = "",
                        private val ComplianceStatus: Boolean = false, private val IsAgentOnline: Boolean = false,
-                       private val IsVirtual: Boolean = false, val Platform: String = "") {
+                       private val IsVirtual: Boolean = false, val Platform: String = "") : Parcelable {
 
     @SerializedName("Memory")
     var memory: Memory = Memory()
@@ -26,42 +31,29 @@ open class BasicDevice(val Kind: String = "", val DeviceId: String = "", val Dev
 
 
     //Inner class for nested objects
-    inner class CustomAttributes(name: String = "", value: String = "", internal var dataType: Boolean = false) {
-        var name: String = ""
-            internal set
-        var value: String = ""
-            internal set
-
-        init {
-            this.name = name
-            this.value = value
-        }
-
-        fun getDataType(): Int {
-            return if (dataType) 1 else 0
-        }
+    @Parcelize
+    class CustomAttributes(val Name: String = "", val Value: String = "", val DataType: Boolean = false) : Parcelable {
+        val dataType: Int
+            get() = if (DataType) 1 else 0
     }
 
     //Inner class for nested objects
-    inner class ComplianceItems(complianceType: String = "", var ComplianceValue: Boolean = false) {
-        var complianceType: String = ""
-            internal set
-
+    @Parcelize
+    class ComplianceItems(val ComplianceType: String = "", val ComplianceValue: Boolean = false) : Parcelable {
         val complianceValue: Int
             get() = if (ComplianceValue) 1 else 0
 
-        init {
-            this.complianceType = complianceType
-        }
     }
 
     //Inner class for nested objects
-    inner class Memory(val availableExternalStorage: Long = 0, val availableMemory: Long = 0, val availableSDCardStorage: Long = 0, val availableStorage: Long = 0,
-                       val totalExternalStorage: Long = 0, val totalMemory: Long = 0, val totalSDCardStorage: Long = 0, val totalStorage: Long = 0)
+    inner class Memory(val AvailableExternalStorage: Long = 0, val AvailableMemory: Long = 0,
+                 val AvailableSDCardStorage: Long = 0, val AvailableStorage: Long = 0,
+                 val TotalExternalStorage: Long = 0, val TotalMemory: Long = 0, val TotalSDCardStorage: Long = 0,
+                 val TotalStorage: Long = 0)
 
 
-    inner class ComplianceItem(val complianceType: String = "", private val ComplianceValue: Boolean = false) {
-
+    @Parcelize
+    class ComplianceItem(val ComplianceType: String = "", private val ComplianceValue: Boolean = false) : Parcelable {
         val complianceValue: Int
             get() = if (ComplianceValue) 1 else 0
     }

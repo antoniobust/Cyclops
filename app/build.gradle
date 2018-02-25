@@ -74,3 +74,6 @@ apply plugin: 'kotlin-android-extensions'
 repositories {
     mavenCentral()
 }
+androidExtensions {
+    experimental = true
+}

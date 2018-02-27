@@ -127,27 +127,29 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                     return;
                 }
 
-                String[] columns = {McContract.Profile.NAME, McContract.Profile.STATUS};
-                String label;
+                if(!data.moveToFirst()){
+                    return;
+                }
                 ArrayList<String[]> profileList = new ArrayList<>();
                 do {
                     profileList.add(new String[]{data.getString(data.getColumnIndex(McContract.Profile.NAME)),
-                            data.getString(data.getColumnIndex(McContract.Profile.NAME))});
-                } while (!data.isLast());
+                            data.getString(data.getColumnIndex(McContract.Profile.STATUS))});
+                    data.moveToNext();
+                } while (data.isLast());
 
                 profilesRecycler.swapAdapter(new InfoAdapter(profileList, true), true);
                 profilesCard.setOnClickListener(this);
                 break;
             }
             case LOAD_APPS: {
-                if (data != null && data.getCount() == 0) {
-                    ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
-                    return;
-                }
-
-                GridLayout gridLayout = rootView.findViewById(R.id.device_details_apps_grid_view);
-                String[] columns = {McContract.InstalledApplications.APPLICATION_NAME,
-                        McContract.InstalledApplications.APPLICATION_STATUS};
+//                if (data != null && data.getCount() == 0) {
+//                    ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
+//                    return;
+//                }
+//
+//                GridLayout gridLayout = rootView.findViewById(R.id.device_details_apps_grid_view);
+//                String[] columns = {McContract.InstalledApplications.APPLICATION_NAME,
+//                        McContract.InstalledApplications.APPLICATION_STATUS};
 //                setCards(data, gridLayout, columns);
                 break;
             }
@@ -210,8 +212,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         devInfoRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         profilesRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-        devInfoRecycler.setAdapter(new InfoAdapter(new ArrayList<String[]>(), true));
-        profilesRecycler.setAdapter(new InfoAdapter(new ArrayList<String[]>(), true));
+        devInfoRecycler.setAdapter(null);
+        profilesRecycler.setAdapter(null);
 //        batteryView = rootView.findViewById(R.id.device_details_battery);
 //        wifiView = rootView.findViewById(R.id.device_details_wifi);
 //        simView = rootView.findViewById(R.id.device_details_simcard);

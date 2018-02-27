@@ -15,11 +15,15 @@ class InfoAdapter(val values: ArrayList<Array<String>>, private val isPreview: B
     private val PREVIEW_ROWS_NUM = 5
 
     override fun getItemCount(): Int {
-        return if(isPreview) PREVIEW_ROWS_NUM * getColumnsCount() else values.size * getColumnsCount()
+        return if (isPreview) {
+            if (values.size * getColumnsCount() > PREVIEW_ROWS_NUM * 2) PREVIEW_ROWS_NUM * 2 else values.size * getColumnsCount()
+        } else {
+            values.size * getColumnsCount()
+        }
     }
 
     private fun getRowsCount(): Int {
-        return if(isPreview) PREVIEW_ROWS_NUM else values.size
+        return if (isPreview) PREVIEW_ROWS_NUM else values.size
     }
 
     private fun getColumnsCount(): Int {
@@ -27,7 +31,7 @@ class InfoAdapter(val values: ArrayList<Array<String>>, private val isPreview: B
     }
 
     private fun getRowPosition(viewPosition: Int): Int {
-        return if (viewPosition == 0) viewPosition else viewPosition / getColumnsCount()
+        return if (viewPosition == 0) viewPosition else (viewPosition / getColumnsCount())
     }
 
     private fun getColumnPosition(viewPosition: Int): Int {
@@ -43,7 +47,7 @@ class InfoAdapter(val values: ArrayList<Array<String>>, private val isPreview: B
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.textView?.text = values[getRowPosition(position)][getColumnPosition(position)]
+            holder?.textView?.text = values[getRowPosition(position)][getColumnPosition(position)]
     }
 
 

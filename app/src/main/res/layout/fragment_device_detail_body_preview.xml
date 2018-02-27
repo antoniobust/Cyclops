@@ -41,6 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="5"
+                android:minHeight="150dp"
+                android:nestedScrollingEnabled="false"
                 android:stretchMode="columnWidth"
                 app:layoutManager="GridLayoutManager"
                 app:spanCount="2"/>
@@ -48,14 +50,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
+                android:layout_gravity="top"
                 android:layout_margin="8dp"
                 android:background="@color/colorPrimary"/>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
                 android:text="@string/more_label"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
         </LinearLayout>
@@ -93,7 +95,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="5"
+                android:minHeight="150dp"
                 android:stretchMode="columnWidth"
+                android:nestedScrollingEnabled="false"
                 app:layoutManager="GridLayoutManager"
                 app:spanCount="2"/>
 

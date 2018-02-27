@@ -18,7 +18,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -58,7 +57,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private String nameTransitionName;
     private View rootView;
     private CardView profilesCard;
-    private RecyclerView devInfoRecycler, profilesRecycler;
+    private RecyclerView devInfoRecycler, profilesRecycler, installedAppsRecycler;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
 
@@ -127,7 +126,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                     return;
                 }
 
-                if(!data.moveToFirst()){
+                if (!data.moveToFirst()) {
                     return;
                 }
                 ArrayList<String[]> profileList = new ArrayList<>();
@@ -135,22 +134,27 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                     profileList.add(new String[]{data.getString(data.getColumnIndex(McContract.Profile.NAME)),
                             data.getString(data.getColumnIndex(McContract.Profile.STATUS))});
                     data.moveToNext();
-                } while (data.isLast());
+                } while (!data.isAfterLast());
 
                 profilesRecycler.swapAdapter(new InfoAdapter(profileList, true), true);
                 profilesCard.setOnClickListener(this);
                 break;
             }
             case LOAD_APPS: {
-//                if (data != null && data.getCount() == 0) {
-//                    ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
-//                    return;
-//                }
-//
-//                GridLayout gridLayout = rootView.findViewById(R.id.device_details_apps_grid_view);
-//                String[] columns = {McContract.InstalledApplications.APPLICATION_NAME,
-//                        McContract.InstalledApplications.APPLICATION_STATUS};
-//                setCards(data, gridLayout, columns);
+                if (data != null && data.getCount() == 0) {
+                    ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
+                    return;
+                }
+                if (data == null || !data.moveToFirst()) {
+                    return;
+                }
+                ArrayList<String[]> appList = new ArrayList<>();
+                do {
+                    appList.add(new String[]{data.getString(data.getColumnIndex(McContract.InstalledApplications.APPLICATION_NAME)),
+                            data.getString(data.getColumnIndex(McContract.InstalledApplications.APPLICATION_STATUS))});
+                    data.moveToNext();
+                } while (!data.isAfterLast());
+                installedAppsRecycler.swapAdapter(new InfoAdapter(appList, true), true);
                 break;
             }
             default:
@@ -206,14 +210,17 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         CardView infoCard = rootView.findViewById(R.id.device_details_info_card);
         CardView appsCard = rootView.findViewById(R.id.device_details_apps_card);
         profilesCard = rootView.findViewById(R.id.device_details_profiles_card);
-        devInfoRecycler = rootView.findViewById(R.id.device_details_info_recycler);
+        devInfoRecycler = infoCard.findViewById(R.id.device_details_info_recycler);
         profilesRecycler = rootView.findViewById(R.id.device_details_profiles_recycler);
+        installedAppsRecycler = appsCard.findViewById(R.id.device_details_apps_recycler);
 
         devInfoRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         profilesRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        installedAppsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         devInfoRecycler.setAdapter(null);
         profilesRecycler.setAdapter(null);
+        installedAppsRecycler.setAdapter(null);
 //        batteryView = rootView.findViewById(R.id.device_details_battery);
 //        wifiView = rootView.findViewById(R.id.device_details_wifi);
 //        simView = rootView.findViewById(R.id.device_details_simcard);

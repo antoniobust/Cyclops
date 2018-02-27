@@ -55,22 +55,27 @@ public class LoginActivity extends com.mdmobile.pocketconsole.utils.AccountAuthe
 
     @Override
     public void errorReceivingToken(VolleyError error) {
+
         String message;
-        switch (error.networkResponse.statusCode) {
-            case HttpsURLConnection.HTTP_BAD_REQUEST:
-                message = "Login failed... Check your credentials";
-                break;
-            case HttpsURLConnection.HTTP_FORBIDDEN:
-                message = "Login failed... Check your credentials";
-                break;
-            case HttpURLConnection.HTTP_INTERNAL_ERROR:
-                message = "Internal server error";
-                break;
-            case HttpURLConnection.HTTP_NOT_FOUND:
-                message = "Server not found";
-                break;
-            default:
-                message = "Login failed";
+        if (error == null || error.networkResponse == null) {
+            message = "Login failed...Please try again";
+        } else {
+            switch (error.networkResponse.statusCode) {
+                case HttpsURLConnection.HTTP_BAD_REQUEST:
+                    message = "Login failed... Check your credentials";
+                    break;
+                case HttpsURLConnection.HTTP_FORBIDDEN:
+                    message = "Login failed... Check your credentials";
+                    break;
+                case HttpURLConnection.HTTP_INTERNAL_ERROR:
+                    message = "Internal server error";
+                    break;
+                case HttpURLConnection.HTTP_NOT_FOUND:
+                    message = "Server not found";
+                    break;
+                default:
+                    message = "Login failed";
+            }
         }
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }

@@ -30,20 +30,20 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
                 android:text="@string/device_info_view_label"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 app:layout_columnSpan="2"/>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/device_info_grid_view"
+                android:id="@+id/device_details_info_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="5"
                 android:stretchMode="columnWidth"
                 app:layoutManager="GridLayoutManager"
-                app:spanCount="2" />
+                app:spanCount="2"/>
 
             <View
                 android:layout_width="match_parent"
@@ -53,8 +53,9 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:text="@string/more_label"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
         </LinearLayout>
@@ -79,85 +80,84 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v7.widget.GridLayout
-                android:id="@+id/device_details_profiles_grid_view"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:longClickable="false"
-                app:columnCount="2"
-                app:contentPadding="8dp"
-                app:rowCount="1"
-                app:useDefaultMargins="true">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/details_profiles_view_label"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                app:layout_columnSpan="2"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/details_profiles_view_label"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    app:layout_columnSpan="2"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/device_details_profiles_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="5"
+                android:stretchMode="columnWidth"
+                app:layoutManager="GridLayoutManager"
+                app:spanCount="2"/>
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:maxLength="20"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="fill"
-                    tools:text="Profile test 01"
-                    />
+            <!--<TextView-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="start"-->
+            <!--android:maxLength="20"-->
+            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"-->
+            <!--app:layout_columnWeight="1"-->
+            <!--app:layout_gravity="fill"-->
+            <!--tools:text="Profile test 01"-->
+            <!--/>-->
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                    app:layout_columnSpan="1"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="fill"
-                    app:layout_rowWeight="1"
-                    tools:text="Pending Install"/>
+            <!--<TextView-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="start"-->
+            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"-->
+            <!--app:layout_columnSpan="1"-->
+            <!--app:layout_columnWeight="1"-->
+            <!--app:layout_gravity="fill"-->
+            <!--app:layout_rowWeight="1"-->
+            <!--tools:text="Pending Install"/>-->
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:maxLength="20"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="fill"
-                    tools:text="LockDown"
-                    />
+            <!--<TextView-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="start"-->
+            <!--android:maxLength="20"-->
+            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"-->
+            <!--app:layout_columnWeight="1"-->
+            <!--app:layout_gravity="fill"-->
+            <!--tools:text="LockDown"-->
+            <!--/>-->
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                    app:layout_columnSpan="1"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="fill"
-                    app:layout_rowWeight="1"
-                    tools:text="Installed"/>
+            <!--<TextView-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="start"-->
+            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"-->
+            <!--app:layout_columnSpan="1"-->
+            <!--app:layout_columnWeight="1"-->
+            <!--app:layout_gravity="fill"-->
+            <!--app:layout_rowWeight="1"-->
+            <!--tools:text="Installed"/>-->
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:maxLength="20"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="fill"
-                    tools:text="Restrictions"
-                    />
+            <!--<TextView-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="start"-->
+            <!--android:maxLength="20"-->
+            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"-->
+            <!--app:layout_columnWeight="1"-->
+            <!--app:layout_gravity="fill"-->
+            <!--tools:text="Restrictions"-->
+            <!--/>-->
 
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                    app:layout_columnSpan="1"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="fill"
-                    app:layout_rowWeight="1"
-                    tools:text="Administratively removed"/>
+            <!--<TextView-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="start"-->
+            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"-->
+            <!--app:layout_columnSpan="1"-->
+            <!--app:layout_columnWeight="1"-->
+            <!--app:layout_gravity="fill"-->
+            <!--app:layout_rowWeight="1"-->
+            <!--tools:text="Administratively removed"/>-->
 
-            </android.support.v7.widget.GridLayout>
+            <!--</android.support.v7.widget.GridLayout>-->
 
             <View
                 android:layout_width="match_parent"

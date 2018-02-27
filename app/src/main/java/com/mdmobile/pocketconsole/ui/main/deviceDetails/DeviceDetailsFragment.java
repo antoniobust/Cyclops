@@ -34,7 +34,6 @@ import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
-import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
@@ -59,7 +58,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private String nameTransitionName;
     private View rootView;
     private CardView profilesCard;
-    private RecyclerView devInfoRecycler;
+    private RecyclerView devInfoRecycler, profilesRecycler;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
 
@@ -113,9 +112,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         switch (loader.getId()) {
             case LOAD_INFO:
 //                setLevelBars(c);
-                BasicDevice dev = new BasicDevice();
-                Bundle a = new Bundle();
-                a.putParcelable("S", dev);
+//                BasicDevice dev = new BasicDevice();
+//                Bundle a = new Bundle();
+//                a.putParcelable("S", dev);
                 setDeviceInfoCard(data);
                 break;
             case LOAD_PROFILE: {
@@ -128,10 +127,15 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                     return;
                 }
 
-                GridLayout gridLayout = rootView.findViewById(R.id.device_details_profiles_grid_view);
-                String[] columns = {McContract.Profile.NAME,
-                        McContract.Profile.STATUS};
-                setCards(data, gridLayout, columns);
+                String[] columns = {McContract.Profile.NAME, McContract.Profile.STATUS};
+                String label;
+                ArrayList<String[]> profileList = new ArrayList<>();
+                do {
+                    profileList.add(new String[]{data.getString(data.getColumnIndex(McContract.Profile.NAME)),
+                            data.getString(data.getColumnIndex(McContract.Profile.NAME))});
+                } while (!data.isLast());
+
+                profilesRecycler.swapAdapter(new InfoAdapter(profileList, true), true);
                 profilesCard.setOnClickListener(this);
                 break;
             }
@@ -144,7 +148,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                 GridLayout gridLayout = rootView.findViewById(R.id.device_details_apps_grid_view);
                 String[] columns = {McContract.InstalledApplications.APPLICATION_NAME,
                         McContract.InstalledApplications.APPLICATION_STATUS};
-                setCards(data, gridLayout, columns);
+//                setCards(data, gridLayout, columns);
                 break;
             }
             default:
@@ -200,10 +204,14 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         CardView infoCard = rootView.findViewById(R.id.device_details_info_card);
         CardView appsCard = rootView.findViewById(R.id.device_details_apps_card);
         profilesCard = rootView.findViewById(R.id.device_details_profiles_card);
-        devInfoRecycler = rootView.findViewById(R.id.device_info_grid_view);
+        devInfoRecycler = rootView.findViewById(R.id.device_details_info_recycler);
+        profilesRecycler = rootView.findViewById(R.id.device_details_profiles_recycler);
+
         devInfoRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        profilesRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         devInfoRecycler.setAdapter(new InfoAdapter(new ArrayList<String[]>(), true));
+        profilesRecycler.setAdapter(new InfoAdapter(new ArrayList<String[]>(), true));
 //        batteryView = rootView.findViewById(R.id.device_details_battery);
 //        wifiView = rootView.findViewById(R.id.device_details_wifi);
 //        simView = rootView.findViewById(R.id.device_details_simcard);
@@ -293,17 +301,17 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         devInfoRecycler.swapAdapter(new InfoAdapter(infoList, true), true);
     }
 
-    private void setCards(Cursor c, GridLayout gridLayout, String... columnName) {
+    private void setCards(Cursor c, RecyclerView recyclerView, String... columnName) {
         if (!c.moveToFirst()) {
             return;
         }
 
-        for (int i = 1; i < gridLayout.getChildCount() - 1; i = i + 2) {
+        for (int i = 1; i < recyclerView.getChildCount() - 1; i = i + 2) {
             if (!c.moveToPosition(i - 1)) {
                 return;
             }
-            ((TextView) gridLayout.getChildAt(i)).setText(c.getString(c.getColumnIndex(columnName[0])));
-            ((TextView) gridLayout.getChildAt(i + 1)).setText(c.getString(c.getColumnIndex(columnName[1])));
+            ((TextView) recyclerView.getChildAt(i)).setText(c.getString(c.getColumnIndex(columnName[0])));
+            ((TextView) recyclerView.getChildAt(i + 1)).setText(c.getString(c.getColumnIndex(columnName[1])));
             if (!c.moveToNext()) {
                 break;
             }

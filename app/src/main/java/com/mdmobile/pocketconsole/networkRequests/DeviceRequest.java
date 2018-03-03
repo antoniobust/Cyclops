@@ -23,7 +23,6 @@ import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsDesktop;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsDesktopLegacy;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsPhone;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsRuntime;
-import com.mdmobile.pocketconsole.dataTypes.ComplexDataType;
 import com.mdmobile.pocketconsole.dataTypes.DeviceKind;
 import com.mdmobile.pocketconsole.provider.McContract;
 
@@ -83,31 +82,25 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                     .setLenient()
                     .create();
 
+            //TODO: this will not work updating a single device
+            Type deviceCollectionType = new TypeToken<ArrayList<? extends BasicDevice>>() {
+            }.getType();
+            ArrayList<? extends BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
+            mContext.getContentResolver().delete(McContract.Device.CONTENT_URI, null, null);
 
-
-            //If we are refreshing all device data delete the old info first
-            if (insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
-                Type deviceCollectionType = new TypeToken<ArrayList<? extends BasicDevice>>() {
-                }.getType();
-                ArrayList<? extends BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
-                mContext.getContentResolver().delete(McContract.Device.CONTENT_URI, null, null);
-
-                //Parse devices to extract common properties and put other as extra string
-                if (devices.size() == 1) {
-                    ContentValues device = prepareDeviceValues(devices.get(0));
+            //Parse devices to extract common properties and put other as extra string
+            if (devices.size() == 1) {
+                ContentValues device = prepareDeviceValues(devices.get(0));
+                if (insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
                     mContext.getContentResolver().insert(McContract.Device.CONTENT_URI, device);
-                } else if (devices.size() > 1) {
-                    ContentValues[] devicesValues = prepareDeviceValues(devices);
-                    mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
+                } else if (insertInfoMethod == UPDATE_EXISTING_DEVICE_INFO) {
+                    String devId = devices.get(0).getDeviceId();
+                    mContext.getContentResolver()
+                            .update(McContract.Device.buildUriWithDeviceID(devId), device, null, null);
                 }
-            } else if (insertInfoMethod == UPDATE_EXISTING_DEVICE_INFO) {
-                Type deviceCollectionType = new TypeToken<BasicDevice>() {
-                }.getType();
-                BasicDevice deviceInfo = gson.fromJson(jsonResponseString, deviceCollectionType);
-                ContentValues device = prepareDeviceValues(deviceInfo);
-                String devId = device.getAsString(McContract.Device.COLUMN_DEVICE_ID);
-                mContext.getContentResolver()
-                        .update(McContract.Device.buildUriWithDeviceID(devId), device, null, null);
+            } else if (devices.size() > 1 && insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
+                ContentValues[] devicesValues = prepareDeviceValues(devices);
+                mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
             }
 
 

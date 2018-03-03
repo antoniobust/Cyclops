@@ -30,8 +30,6 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import static com.mdmobile.pocketconsole.utils.DbData.prepareDeviceValues;
-
 /**
  * Request devices
  * Pass API request in the constructor
@@ -53,7 +51,6 @@ public class DeviceRequest<T> extends BasicRequest<T> {
         this.listener = listener;
         insertInfoMethod = insertDataMethod;
     }
-
 
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
@@ -90,7 +87,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
             //Parse devices to extract common properties and put other as extra string
             if (devices.size() == 1) {
-                ContentValues device = prepareDeviceValues(devices.get(0));
+                ContentValues device = devices.get(0).toContentValues();
                 if (insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
                     mContext.getContentResolver().insert(McContract.Device.CONTENT_URI, device);
                 } else if (insertInfoMethod == UPDATE_EXISTING_DEVICE_INFO) {
@@ -99,10 +96,15 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                             .update(McContract.Device.buildUriWithDeviceID(devId), device, null, null);
                 }
             } else if (devices.size() > 1 && insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
-                ContentValues[] devicesValues = prepareDeviceValues(devices);
-                mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues);
+                ArrayList<ContentValues> devicesValues = new ArrayList<>(devices.size());
+                for (Object device : devices) {
+                    if (device instanceof BasicDevice) {
+                        devicesValues.add(((BasicDevice) device).toContentValues());
+                    }
+                }
+                ContentValues[] array = new ContentValues[]{};
+                mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues.toArray(array));
             }
-
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));
@@ -110,7 +112,6 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             e.printStackTrace();
             return Response.error(new ParseError(e));
         }
-
     }
 
     @Override

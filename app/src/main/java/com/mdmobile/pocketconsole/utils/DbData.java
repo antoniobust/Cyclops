@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class DbData {
 
-    public static ContentValues[] prepareDeviceValues(ArrayList<BasicDevice> devices) {
+    public static ContentValues[] prepareDeviceValues(ArrayList<? extends BasicDevice> devices) {
         //TODO: not sure why gson sometimes skips some indexes so need to check here if the object exists at this index
         // Workaround: collect devices in an array list of content values and then convert it to content values array
         // to pass it to content provider

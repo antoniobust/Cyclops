@@ -78,14 +78,18 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                     .registerSubtype(WindowsCE.class, DeviceKind.WINDOWS_CE);
 
 
-            Gson gson = new GsonBuilder().registerTypeAdapterFactory(typeFactory).create();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapterFactory(typeFactory)
+                    .setLenient()
+                    .create();
+
 
 
             //If we are refreshing all device data delete the old info first
             if (insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
-                Type deviceCollectionType = new TypeToken<ArrayList<BasicDevice>>() {
+                Type deviceCollectionType = new TypeToken<ArrayList<? extends BasicDevice>>() {
                 }.getType();
-                ArrayList<BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
+                ArrayList<? extends BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
                 mContext.getContentResolver().delete(McContract.Device.CONTENT_URI, null, null);
 
                 //Parse devices to extract common properties and put other as extra string

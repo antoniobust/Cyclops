@@ -1,9 +1,12 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices;
 
+import android.annotation.SuppressLint;
+
 /**
  * Represent gson class for iOS device
  */
 
+@SuppressLint("ParcelCreator")
 public class IosDevice extends BasicDevice {
     private String AgentVersion, BluetoothMACAddress, BuildVersion, CarrierSettingsVersion, CellularCarrier,
             CurrentMCC, CurrentMNC, FirmwareVersion, CellularTechnology, ExchangeStatus, ICCID, IMEI_MEID_ESN,
@@ -40,10 +43,10 @@ public class IosDevice extends BasicDevice {
                      boolean isDoNotDisturbInEffect, boolean isEncrypted, boolean isEnrolled, boolean isITunesStoreAccountActive,
                      boolean isOSSecure, boolean isPersonalHotspotEnabled, boolean isSupervised, boolean passcodeEnabled,
                      boolean voiceRoamingEnabled, boolean exchangeBlocked, String Platform) {
-
-        super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
-                OSVersion,
-                path, complianceStatus, isAgentOnline, isVirtual, Platform);
+            super();
+//        super(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
+//                OSVersion,
+//                path, complianceStatus, isAgentOnline, isVirtual, Platform);
 
         AgentVersion = agentVersion;
         BluetoothMACAddress = bluetoothMACAddress;

@@ -62,7 +62,7 @@ open class BasicDevice(val Kind: String = "", val DeviceId: String = "", val Dev
     }
 
     @CallSuper
-    fun toContentValues(): ContentValues {
+    open fun toContentValues(): ContentValues {
         var values = ContentValues()
         values.put(McContract.Device.COLUMN_KIND, this.Kind)
         values.put(McContract.Device.COLUMN_DEVICE_ID, this.DeviceId)

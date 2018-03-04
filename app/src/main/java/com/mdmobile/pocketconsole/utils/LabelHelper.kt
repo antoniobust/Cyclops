@@ -53,18 +53,19 @@ class LabelHelper {
             BASIC_DEVICE_PROPERTIES.add(Property("ComplianceItems", "Compliance item"))
             BASIC_DEVICE_PROPERTIES.add(Property("DeviceId", "Device ID"))
             BASIC_DEVICE_PROPERTIES.add(Property("DeviceName", "Device name"))
+            BASIC_DEVICE_PROPERTIES.add(Property("Kind", statisticable = true))
             BASIC_DEVICE_PROPERTIES.add(Property("EnrollmentTime", "Enrollment Time", true))
-            BASIC_DEVICE_PROPERTIES.add(Property("Family", "Family", true))
+            BASIC_DEVICE_PROPERTIES.add(Property("Family", statisticable = true))
             BASIC_DEVICE_PROPERTIES.add(Property("HostName", "Host name"))
             BASIC_DEVICE_PROPERTIES.add(Property("IsAgentOnline", "Online", true))
             BASIC_DEVICE_PROPERTIES.add(Property("IsVirtual", "Is virtual"))
             BASIC_DEVICE_PROPERTIES.add(Property("CustomAttributes", "Custom attributes"))
             BASIC_DEVICE_PROPERTIES.add(Property("MACAddress", "MAC Address"))
             BASIC_DEVICE_PROPERTIES.add(Property("Manufacturer", "Manufacturer", true))
-            BASIC_DEVICE_PROPERTIES.add(Property("Mode", "Mode", true))
-            BASIC_DEVICE_PROPERTIES.add(Property("Model", "Model", true))
+            BASIC_DEVICE_PROPERTIES.add(Property("Mode", statisticable = true))
+            BASIC_DEVICE_PROPERTIES.add(Property("Model", statisticable = true))
             BASIC_DEVICE_PROPERTIES.add(Property("OSVersion", "OS version", true))
-            BASIC_DEVICE_PROPERTIES.add(Property("Path", "Path"))
+            BASIC_DEVICE_PROPERTIES.add(Property("Path"))
         }
     }
 

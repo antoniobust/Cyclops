@@ -41,13 +41,13 @@ class InfoAdapter(val values: ArrayList<Array<String>>, private val isPreview: B
         return Math.round(viewPosition % getColumnsCount().toDouble()).toInt()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(android.R.layout.simple_list_item_1, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-            holder?.textView?.text = values[getRowPosition(position)][getColumnPosition(position)]
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.textView.text = values[getRowPosition(position)][getColumnPosition(position)]
     }
 
 

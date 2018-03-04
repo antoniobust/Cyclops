@@ -3,6 +3,7 @@ package com.mdmobile.pocketconsole.ui.main.deviceDetails
 import android.database.Cursor
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.Loader
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -32,7 +33,8 @@ class FullDeviceInfoFragment : Fragment(), android.support.v4.app.LoaderManager.
     }
 
     // -- Interface methods
-    override fun onCreateLoader(id: Int, args: Bundle): android.support.v4.content.Loader<Cursor> {
+
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         return android.support.v4.content.CursorLoader(context!!, McContract.Device.buildUriWithDeviceID(deviceID), null, null, null, null)
     }
 

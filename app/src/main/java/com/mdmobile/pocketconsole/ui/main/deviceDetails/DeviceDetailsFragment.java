@@ -55,7 +55,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private String deviceId;
     private String iconTransitionName;
     private String nameTransitionName;
-    private View rootView;
     private CardView profilesCard;
     private RecyclerView devInfoRecycler, profilesRecycler, installedAppsRecycler;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
@@ -87,6 +86,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         swipeLayout.setRefreshing(false);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri;
@@ -95,18 +95,19 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                 uri = McContract.Device.buildUriWithDeviceID(deviceId);
                 return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
             case LOAD_PROFILE:
-                return new CursorLoader(getContext(),
+                return new CursorLoader(getContext().getApplicationContext(),
                         McContract.Profile.buildUriWithDeviceId(deviceId),
                         null, null, null, McContract.Profile.ASSIGNMENT_DATE + " DESC");
             case LOAD_APPS:
                 uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
                 return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
+            default:
+                throw new UnsupportedOperationException("Loader id:" + id + " not supported");
         }
-        return null;
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
 
         switch (loader.getId()) {
             case LOAD_INFO:
@@ -163,7 +164,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 
     }
 
@@ -183,7 +184,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
 
 
         Toolbar toolbar = rootView.findViewById(R.id.toolbar);
@@ -253,7 +254,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
 //        getActivity().supportStartPostponedEnterTransition();
         getLoaderManager().initLoader(LOAD_INFO, null, this);
@@ -308,23 +309,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             infoList.add(new String[]{LabelHelper.Companion.getUiLabelFor(column), c.getString(c.getColumnIndex(column))});
         }
         devInfoRecycler.swapAdapter(new InfoAdapter(infoList, true), true);
-    }
-
-    private void setCards(Cursor c, RecyclerView recyclerView, String... columnName) {
-        if (!c.moveToFirst()) {
-            return;
-        }
-
-        for (int i = 1; i < recyclerView.getChildCount() - 1; i = i + 2) {
-            if (!c.moveToPosition(i - 1)) {
-                return;
-            }
-            ((TextView) recyclerView.getChildAt(i)).setText(c.getString(c.getColumnIndex(columnName[0])));
-            ((TextView) recyclerView.getChildAt(i + 1)).setText(c.getString(c.getColumnIndex(columnName[1])));
-            if (!c.moveToNext()) {
-                break;
-            }
-        }
     }
 
 //    private void setLevelBars(Cursor data) {

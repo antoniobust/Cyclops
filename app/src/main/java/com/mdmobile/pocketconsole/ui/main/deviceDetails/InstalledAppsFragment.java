@@ -50,7 +50,7 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_installed_apps, container, false);
         gridView = rootView.findViewById(R.id.installed_apps_gridView);
 

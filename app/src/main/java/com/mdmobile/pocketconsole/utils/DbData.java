@@ -20,54 +20,6 @@ import java.util.ArrayList;
 
 public class DbData {
 
-
-//    public static ContentValues prepareDeviceValues(BasicDevice device) {
-//
-//        ContentValues deviceBasicValues = getDeviceBasicValues(device);
-//
-//        try {
-//            Class<?> c = Class.forName(device.getClass().getName());
-//            Method[] methods = c.getMethods();
-//            String append, propertyName;
-//            StringBuilder extraStringBuilder = new StringBuilder();
-//
-//            Object o;
-//
-//            for (Method method : methods) {
-//                //Getter method form gson classes don't have any parameter
-//                if (method.getGenericParameterTypes().length > 0) {
-//                    continue;
-//                }
-//
-//                //Skip BasicDevice methods and Objects methods
-//                if (method.getDeclaringClass() == BasicDevice.class || method.getDeclaringClass() == Object.class) {
-//                    continue;
-//                }
-//
-//                o = method.invoke(device);
-//                if (o == null) {
-//                    append = "null";
-//                } else {
-//                    append = o.toString();
-//                }
-//                propertyName = method.getName();
-//                if (propertyName.startsWith("get")) {
-//                    propertyName = propertyName.substring(2);
-//                } else if (propertyName.startsWith("is")) {
-//                    propertyName = propertyName.substring(1);
-//                }
-//                extraStringBuilder.append(propertyName).append("=").append(append).append(";");
-//            }
-//
-//            deviceBasicValues.put(McContract.Device.COLUMN_EXTRA_INFO, extraStringBuilder.toString());
-//
-//        } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
-//        return deviceBasicValues;
-//    }
-
-
     private static ContentValues getInstalledAppContentValues(InstalledApp app) {
         ContentValues contentValues = new ContentValues();
 

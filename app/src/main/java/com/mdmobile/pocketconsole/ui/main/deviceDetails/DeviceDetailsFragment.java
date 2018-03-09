@@ -33,6 +33,11 @@ import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
+import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidPlus;
+import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
+import com.mdmobile.pocketconsole.dataModels.api.devices.DeviceFactory;
+import com.mdmobile.pocketconsole.dataModels.api.devices.IDevice;
+import com.mdmobile.pocketconsole.dataTypes.DeviceKind;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
@@ -115,47 +120,16 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //                BasicDevice dev = new BasicDevice();
 //                Bundle a = new Bundle();
 //                a.putParcelable("S", dev);
+                createDeviceObject();
+                setHeader(data);
                 setDeviceInfoCard(data);
                 break;
             case LOAD_PROFILE: {
-                if (data == null || data.getCount() == 0) {
-                    ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
-                    return;
-                }
-                if (data.getCount() == 1 && data.moveToFirst() &&
-                        data.getString(data.getColumnIndex(McContract.Profile.REFERENCE_ID)).equals("N/A")) {
-                    return;
-                }
-
-                if (!data.moveToFirst()) {
-                    return;
-                }
-                ArrayList<String[]> profileList = new ArrayList<>();
-                do {
-                    profileList.add(new String[]{data.getString(data.getColumnIndex(McContract.Profile.NAME)),
-                            data.getString(data.getColumnIndex(McContract.Profile.STATUS))});
-                    data.moveToNext();
-                } while (!data.isAfterLast());
-
-                profilesRecycler.swapAdapter(new InfoAdapter(profileList, true), true);
-                profilesCard.setOnClickListener(this);
+                setProfilesCard(data);
                 break;
             }
             case LOAD_APPS: {
-                if (data != null && data.getCount() == 0) {
-                    ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
-                    return;
-                }
-                if (data == null || !data.moveToFirst()) {
-                    return;
-                }
-                ArrayList<String[]> appList = new ArrayList<>();
-                do {
-                    appList.add(new String[]{data.getString(data.getColumnIndex(McContract.InstalledApplications.APPLICATION_NAME)),
-                            data.getString(data.getColumnIndex(McContract.InstalledApplications.APPLICATION_STATUS))});
-                    data.moveToNext();
-                } while (!data.isAfterLast());
-                installedAppsRecycler.swapAdapter(new InfoAdapter(appList, true), true);
+                setAppsCard(data);
                 break;
             }
             default:
@@ -274,52 +248,15 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    private void setDeviceInfoCard(Cursor c) {
-        ArrayList<String[]> infoList = new ArrayList<>();
-        if (!c.moveToFirst()) {
-            return;
-        }
-
-        TextView devName = getActivity().findViewById(R.id.device_detail_title_view);
-        //Set online dot
-        Drawable dot;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot, null);
-        } else {
-            dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot);
-        }
-        devName.setCompoundDrawablePadding(50);
-        Boolean online = c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1;
-        if (online) {
-            ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.darkGreen));
-        } else {
-            ((GradientDrawable) dot).setColor(Color.LTGRAY);
-        }
-        devName.setCompoundDrawablesWithIntrinsicBounds(null, null, dot, null);
-
-        //Populates card info
-        String[] columns = c.getColumnNames();
-        String label;
-        //TODO: need to get EXTRA INFO Properties
-        for (String column : columns) {
-            label = LabelHelper.Companion.getUiLabelFor(column);
-            if (label.equals("")) {
-                continue;
-            }
-            infoList.add(new String[]{LabelHelper.Companion.getUiLabelFor(column), c.getString(c.getColumnIndex(column))});
-        }
-        devInfoRecycler.swapAdapter(new InfoAdapter(infoList, true), true);
-    }
-
 //    private void setLevelBars(Cursor data) {
 //        data.moveToFirst();
 //        Bundle extraInfo = DbData.getDeviceExtraInfo(
 //                data.getString(data.getColumnIndex(McContract.Device.COLUMN_EXTRA_INFO)));
 //
-//        String[] value = {extraInfo.getString(DeviceAttributes.AndroidPlusDevice.BatteryStatus),
-//                extraInfo.getString(DeviceAttributes.AndroidPlusDevice.CellularSignalStrength),
-//                extraInfo.getString(DeviceAttributes.AndroidPlusDevice.NetworkRSSI),
-//                extraInfo.getString(DeviceAttributes.AndroidPlusDevice.Memory)};
+//        String[] value = {extraInfo.getString(DeviceAttributes.AndroidPlus.BatteryStatus),
+//                extraInfo.getString(DeviceAttributes.AndroidPlus.CellularSignalStrength),
+//                extraInfo.getString(DeviceAttributes.AndroidPlus.NetworkRSSI),
+//                extraInfo.getString(DeviceAttributes.AndroidPlus.Memory)};
 //        for (int i = 0; i < value.length; i++) {
 //            if (value[i] == null || value[i].equals("N/A")) {
 //                value[i] = "0";
@@ -354,7 +291,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //
 //    }
 
-
     @Override
     public void onClick(View v) {
         FragmentTransaction transaction = (getActivity()).getSupportFragmentManager().beginTransaction();
@@ -379,6 +315,90 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         transaction.replace(R.id.device_details_fragment_container, newFrag).commit();
     }
 
+    private void setHeader(Cursor c ){
+        if (!c.moveToFirst()) {
+            return;
+        }
+
+        TextView devName = getActivity().findViewById(R.id.device_detail_title_view);
+        //Set online dot
+        Drawable dot;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot, null);
+        } else {
+            dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot);
+        }
+        devName.setCompoundDrawablePadding(50);
+        Boolean online = c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1;
+        if (online) {
+            ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.darkGreen));
+        } else {
+            ((GradientDrawable) dot).setColor(Color.LTGRAY);
+        }
+        devName.setCompoundDrawablesWithIntrinsicBounds(null, null, dot, null);
+
+    }
+
+    private void setDeviceInfoCard(Cursor c) {
+        ArrayList<String[]> infoList = new ArrayList<>();
+        if (!c.moveToFirst()) {
+            return;
+        }
+        //Populates card info
+        String[] columns = c.getColumnNames();
+        String label;
+        //TODO: need to get EXTRA INFO Properties
+        for (String column : columns) {
+            label = LabelHelper.Companion.getUiLabelFor(column);
+            if (label.equals("")) {
+                continue;
+            }
+            infoList.add(new String[]{LabelHelper.Companion.getUiLabelFor(column), c.getString(c.getColumnIndex(column))});
+        }
+        devInfoRecycler.swapAdapter(new InfoAdapter(infoList, true), true);
+    }
+
+    private void setProfilesCard(Cursor data){
+        if (data == null || data.getCount() == 0) {
+            ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
+            return;
+        }
+        if (data.getCount() == 1 && data.moveToFirst() &&
+                data.getString(data.getColumnIndex(McContract.Profile.REFERENCE_ID)).equals("N/A")) {
+            return;
+        }
+
+        if (!data.moveToFirst()) {
+            return;
+        }
+        ArrayList<String[]> profileList = new ArrayList<>();
+        do {
+            profileList.add(new String[]{data.getString(data.getColumnIndex(McContract.Profile.NAME)),
+                    data.getString(data.getColumnIndex(McContract.Profile.STATUS))});
+            data.moveToNext();
+        } while (!data.isAfterLast());
+
+        profilesRecycler.swapAdapter(new InfoAdapter(profileList, true), true);
+        profilesCard.setOnClickListener(this);
+    }
+
+    private void setAppsCard(Cursor data){
+        if (data != null && data.getCount() == 0) {
+            ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
+            return;
+        }
+        if (data == null || !data.moveToFirst()) {
+            return;
+        }
+        ArrayList<String[]> appList = new ArrayList<>();
+        do {
+            appList.add(new String[]{data.getString(data.getColumnIndex(McContract.InstalledApplications.APPLICATION_NAME)),
+                    data.getString(data.getColumnIndex(McContract.InstalledApplications.APPLICATION_STATUS))});
+            data.moveToNext();
+        } while (!data.isAfterLast());
+        installedAppsRecycler.swapAdapter(new InfoAdapter(appList, true), true);
+    }
+
     private void hideDetailsFragment() {
 //        LinearLayout mainContainer = (LinearLayout) getActivity().findViewById(R.id.main_activity_linear_layout);
 //        SwipeRefreshLayout deviceList = (SwipeRefreshLayout) mainContainer.findViewById(R.id.devices_swipe_refresh);
@@ -394,5 +414,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //
 //        deviceList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 //        deviceList.requestLayout();
+    }
+
+    private void createDeviceObject(){
+       IDevice device =  DeviceFactory.Companion.createDevice(DeviceKind.ANDROID_PLUS);
     }
 }

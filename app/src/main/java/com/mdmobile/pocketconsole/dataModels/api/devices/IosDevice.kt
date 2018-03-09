@@ -1,32 +1,32 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 
 /**
  * Represent gson class for iOS device
  */
 
 @SuppressLint("ParcelCreator")
-class IosDevice(Kind: String, DeviceId: String, DeviceName: String, EnrollmentTime: String, Family: String, HostName: String, MACAddress: String, Manufacturer: String, Mode: String, Model: String,
-                OSVersion: String, Path: String, ComplianceStatus: Boolean,
-                IsAgentOnline: Boolean, IsVirtual: Boolean, val AgentVersion: String, val BluetoothMACAddress: String,
-                val BuildVersion: String, val CarrierSettingsVersion: String, val CellularCarrier: String, val CurrentMCC: String,
-                val CurrentMNC: String, val FirmwareVersion: String, val CellularTechnology: String, val ExchangeStatus: String, val ICCID: String,
-                val IMEI_MEID_ESN: String, val Ipv6: String, val LastCheckInTime: String, val LastAgentConnectTime: String,
-                val LastAgentDisconnectTime: String, val LastLoggedOnUser: String, val LastStatusUpdate: String, val ManufacturerSerialNumber: String,
-                val ModelNumber: String, val ModemFirmwareVersion: String, val PersonalizedName: String, val PhoneNumber: String,
-                val ProductName: String, val SimCarrierNetwork: String, val SubscriberMCC: String, val SubscriberMNC: String,
-                val SubscriberNumber: String, val UserIdHash: String, val PasscodeStatus: String, val HardwareEncryptionCaps: Int,
-                val NetworkConnectionType: Int, val BatteryStatus: Short, private val InRoaming: Boolean, private val DataRoamingEnabled: Boolean,
-                private val IsAgentCompatible: Boolean, private val IsAgentless: Boolean,
-                private val IsDeviceLocatorServiceEnabled: Boolean, private val IsDoNotDisturbInEffect: Boolean,
-                private val IsEncrypted: Boolean, private val IsEnrolled: Boolean, private val IsITunesStoreAccountActive: Boolean,
-                private val IsOSSecure: Boolean, private val IsPersonalHotspotEnabled: Boolean,
-                private val IsSupervised: Boolean, private val PasscodeEnabled: Boolean,
-                private val VoiceRoamingEnabled: Boolean, private val ExchangeBlocked: Boolean, Platform: String)
+class IosDevice(Kind: String = "N/A", DeviceId: String = "N/A", DeviceName: String = "N/A", EnrollmentTime: String = "N/A",
+                Family: String = "N/A", HostName: String = "N/A", MACAddress: String = "N/A", Manufacturer: String = "N/A",
+                Mode: String = "N/A", Model: String = "N/A", OSVersion: String = "N/A", Path: String = "N/A",
+                ComplianceStatus: Boolean = false, IsAgentOnline: Boolean = false,
+                IsVirtual: Boolean = false, Platform: String = "N/A", val AgentVersion: String = "N/A", val BluetoothMACAddress: String = "N/A",
+                val BuildVersion: String = "N/A", val CarrierSettingsVersion: String = "N/A", val CellularCarrier: String = "N/A", val CurrentMCC: String = "N/A",
+                val CurrentMNC: String = "N/A", val FirmwareVersion: String = "N/A", val CellularTechnology: String = "N/A", val ExchangeStatus: String = "N/A", val ICCID: String = "N/A",
+                val IMEI_MEID_ESN: String = "N/A", val Ipv6: String = "N/A", val LastCheckInTime: String = "N/A", val LastAgentConnectTime: String = "N/A",
+                val LastAgentDisconnectTime: String = "N/A", val LastLoggedOnUser: String = "N/A", val LastStatusUpdate: String = "N/A", val ManufacturerSerialNumber: String = "N/A",
+                val ModelNumber: String = "N/A", val ModemFirmwareVersion: String = "N/A", val PersonalizedName: String = "N/A", val PhoneNumber: String = "N/A",
+                val ProductName: String = "N/A", val SimCarrierNetwork: String = "N/A", val SubscriberMCC: String = "N/A", val SubscriberMNC: String = "N/A",
+                val SubscriberNumber: String = "N/A", val UserIdHash: String = "N/A", val PasscodeStatus: String = "N/A", val HardwareEncryptionCaps: Int = -1,
+                val NetworkConnectionType: Int = -1, val BatteryStatus: Short = -1, private val InRoaming: Boolean = false, private val DataRoamingEnabled: Boolean = false,
+                val IsAgentCompatible: Boolean = false, val IsAgentless: Boolean = false,
+                val IsDeviceLocatorServiceEnabled: Boolean = false, val IsDoNotDisturbInEffect: Boolean = false,
+                val IsEncrypted: Boolean = false, val IsEnrolled: Boolean = false, val IsITunesStoreAccountActive: Boolean = false,
+                val IsOSSecure: Boolean = false, val IsPersonalHotspotEnabled: Boolean = false, val IsSupervised: Boolean = false,
+                val PasscodeEnabled: Boolean = false, val VoiceRoamingEnabled: Boolean = false, val ExchangeBlocked: Boolean = false)
     : BasicDevice(Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
-        OSVersion, Path, ComplianceStatus, IsAgentOnline, IsVirtual, Platform) {
+        OSVersion, Path, ComplianceStatus, IsAgentOnline, IsVirtual, Platform), IDevice<IosDevice> {
 
     //    TODO:Support following info
     //    DeviceTerms	DeviceTerms
@@ -77,7 +77,8 @@ class IosDevice(Kind: String, DeviceId: String, DeviceName: String, EnrollmentTi
     private val isExchangeBlocked: Int
         get() = if (ExchangeBlocked) 1 else 0
 
-    override fun toContentValues(): ContentValues {
-        return super.toContentValues()
+    override fun getDevice(): IosDevice {
+        return this
     }
+
 }

@@ -65,7 +65,7 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     public void getData(int statId, Bundle values) {
         //Poll finished update charts list
         recyclerAdapter.addNewStat(values);
-        chartsRecycler.swapAdapter(recyclerAdapter,true);
+        chartsRecycler.swapAdapter(recyclerAdapter, true);
     }
 
 
@@ -75,13 +75,6 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         preferences = getActivity().getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE);
-//        String currentPreference = preferences.getString(getString(R.string.charts_preference), "");
-//        Type listType = new TypeToken<ArrayList<ChartSharedPref>>() {
-//        }.getType();
-//        Gson gson = new Gson();
-//        if (!currentPreference.isEmpty()) {
-//            currentCharts = gson.fromJson(currentPreference, listType);
-//        }
     }
 
     @Override
@@ -100,8 +93,6 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
         } else {
             chartsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         }
-
-//        ChartsAdapter recyclerAdapter = new ChartsAdapter(getContext(), null);
         recyclerAdapter = new ChartsAdapter(null, null);
         chartsRecycler.setAdapter(recyclerAdapter);
         chartsRecycler.setEmptyView(rootView.findViewById(R.id.dashboard_recycler_empty_view));

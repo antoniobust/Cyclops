@@ -5,16 +5,17 @@ import android.content.ContentValues
 import android.os.Parcelable
 import android.support.annotation.CallSuper
 import com.google.gson.annotations.SerializedName
+import com.mdmobile.pocketconsole.dataTypes.DeviceAttributes.BasicDevice.*
 import com.mdmobile.pocketconsole.provider.McContract
 import kotlinx.android.parcel.Parcelize
 
 @SuppressLint("ParcelCreator")
 @Parcelize
-open class BasicDevice(val Kind: String = "", val DeviceId: String = "", val DeviceName: String = "", val EnrollmentTime: String = "",
-                       val Family: String = "", val HostName: String = "", val MACAddress: String = "", val Manufacturer: String = "",
-                       val Mode: String = "", val Model: String = "", val OSVersion: String = "", val Path: String = "",
+open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", val DeviceName: String = "N/A", val EnrollmentTime: String = "N/A",
+                       val Family: String = "N/A", val HostName: String = "N/A", val MACAddress: String = "N/A", val Manufacturer: String = "N/A",
+                       val Mode: String = "N/A", val Model: String = "N/A", val OSVersion: String = "N/A", val Path: String = "N/A",
                        private val ComplianceStatus: Boolean = false, private val IsAgentOnline: Boolean = false,
-                       private val IsVirtual: Boolean = false, val Platform: String = "") : Parcelable {
+                       private val IsVirtual: Boolean = false, val Platform: String = "N/A") : Parcelable {
 
     @SerializedName("Memory")
     var memory: Memory = Memory()
@@ -33,16 +34,17 @@ open class BasicDevice(val Kind: String = "", val DeviceId: String = "", val Dev
         get() = if (IsVirtual) 1 else 0
 
 
+
     //Inner class for nested objects
     @Parcelize
-    class CustomAttributes(val Name: String = "", val Value: String = "", val DataType: Boolean = false) : Parcelable {
+    class CustomAttributes(val Name: String = "N/A", val Value: String = "N/A", val DataType: Boolean = false) : Parcelable {
         val dataType: Int
             get() = if (DataType) 1 else 0
     }
 
     //Inner class for nested objects
     @Parcelize
-    class ComplianceItems(val ComplianceType: String = "", val ComplianceValue: Boolean = false) : Parcelable {
+    class ComplianceItems(val ComplianceType: String = "N/A", val ComplianceValue: Boolean = false) : Parcelable {
         val complianceValue: Int
             get() = if (ComplianceValue) 1 else 0
 
@@ -56,14 +58,14 @@ open class BasicDevice(val Kind: String = "", val DeviceId: String = "", val Dev
 
 
     @Parcelize
-    class ComplianceItem(val ComplianceType: String = "", private val ComplianceValue: Boolean = false) : Parcelable {
+    class ComplianceItem(val ComplianceType: String = "N/A", private val ComplianceValue: Boolean = false) : Parcelable {
         val complianceValue: Int
             get() = if (ComplianceValue) 1 else 0
     }
 
     @CallSuper
-    open fun toContentValues(): ContentValues {
-        var values = ContentValues()
+    public open fun toContentValues(): ContentValues {
+        val values = ContentValues()
         values.put(McContract.Device.COLUMN_KIND, this.Kind)
         values.put(McContract.Device.COLUMN_DEVICE_ID, this.DeviceId)
         values.put(McContract.Device.COLUMN_DEVICE_NAME, this.DeviceName)

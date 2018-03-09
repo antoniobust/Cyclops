@@ -183,7 +183,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                    ActivityOptionsCompat options = ActivityOptionsCompat.
 //                            makeSceneTransitionAnimation((MainActivity) nameView.getContext(), holder.deviceIconView, holder.deviceIconView.getTransitionName());
-//                    nameView.getContext().startActivity(intent, options.toBundle());
+//                    nameView.getContext().startActivity(intent, options.toContentValues());
 //                } else {
 //                    nameView.getContext().startActivity(intent);
 //                }

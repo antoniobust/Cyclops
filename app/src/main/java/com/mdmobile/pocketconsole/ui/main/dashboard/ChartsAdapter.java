@@ -61,6 +61,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         return super.getItemId(position);
     }
 
+    @NonNull
     @Override
     public ChartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_item, parent, false);
@@ -74,9 +75,8 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
             return;
         }
         //TODO: this will always create a pie chart -> fix this
-        IChartFactory chartFactory = ChartFactory.instantiate(holder.chartContainer.getContext(),
-                holder.getItemViewType());
-        PieChart chart = (PieChart) chartFactory.createChart(holder.chartContainer.getContext());
+        PieChart chart = (PieChart) ChartFactory.instantiate(holder.chartContainer.getContext(),
+                holder.getItemViewType()).createChart(holder.chartContainer.getContext());
         createPieChart(chart, position);
 
         holder.chartContainer.addView(chart);
@@ -115,7 +115,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
 
         pieDataSet = new PieDataSet(pieEntries, null);
-        pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         pieData.addDataSet(pieDataSet);
         pieData.setValueTextSize(0f);
 

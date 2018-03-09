@@ -15,12 +15,12 @@ import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.dataModels.api.Profile;
 import com.mdmobile.pocketconsole.dataModels.api.RuntimeTypeAdapterFactory;
 import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
-import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidForWorkDevice;
-import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidGenericDevice;
-import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidPlusDevice;
+import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidForWork;
+import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidGeneric;
+import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidPlus;
 import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
 import com.mdmobile.pocketconsole.dataModels.api.devices.IosDevice;
-import com.mdmobile.pocketconsole.dataModels.api.devices.SamsungElmDevice;
+import com.mdmobile.pocketconsole.dataModels.api.devices.SamsungElm;
 import com.mdmobile.pocketconsole.dataModels.api.devices.SamsungKnoxDevice;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsCE;
 import com.mdmobile.pocketconsole.dataModels.api.devices.WindowsDesktop;
@@ -202,11 +202,11 @@ public class DbData extends AndroidJUnitRunner {
         final RuntimeTypeAdapterFactory<BasicDevice> typeFactory = RuntimeTypeAdapterFactory
                 .of(BasicDevice.class, "Kind")
                 .registerSubtype(IosDevice.class, DeviceKind.IOS)
-                .registerSubtype(AndroidGenericDevice.class, DeviceKind.ANDROID_GENERIC)
-                .registerSubtype(AndroidForWorkDevice.class, DeviceKind.ANDROID_FOR_WORK)
-                .registerSubtype(AndroidPlusDevice.class, DeviceKind.ANDROID_PLUS)
+                .registerSubtype(AndroidGeneric.class, DeviceKind.ANDROID_GENERIC)
+                .registerSubtype(AndroidForWork.class, DeviceKind.ANDROID_FOR_WORK)
+                .registerSubtype(AndroidPlus.class, DeviceKind.ANDROID_PLUS)
                 .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
-                .registerSubtype(SamsungElmDevice.class, DeviceKind.ANDROID_ELM)
+                .registerSubtype(SamsungElm.class, DeviceKind.ANDROID_ELM)
                 .registerSubtype(WindowsDesktop.class, DeviceKind.WINDOWS_DESKTOP)
                 .registerSubtype(WindowsDesktopLegacy.class, DeviceKind.WINDOWS_DESKTOP_LEGACY)
                 .registerSubtype(WindowsPhone.class, DeviceKind.WINDOWS_PHONE)

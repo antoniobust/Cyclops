@@ -6,12 +6,11 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidForWorkDevice;
-import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidGenericDevice;
-import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidPlusDevice;
+import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidForWork;
+import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidGeneric;
+import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidPlus;
 import com.mdmobile.pocketconsole.dataModels.api.devices.IosDevice;
-import com.mdmobile.pocketconsole.dataModels.api.devices.SamsungElmDevice;
-import com.mdmobile.pocketconsole.dataModels.api.devices.SamsungKnoxDevice;
+import com.mdmobile.pocketconsole.dataModels.api.devices.SamsungElm;
 import com.mdmobile.pocketconsole.dataTypes.DeviceKind;
 
 import java.lang.reflect.Type;
@@ -36,15 +35,15 @@ public class DeviceDeserializer implements JsonDeserializer {
                 case DeviceKind.IOS:
                     return new Gson().fromJson(json.getAsJsonObject(), IosDevice.class);
                 case DeviceKind.ANDROID_PLUS:
-                    return new Gson().fromJson(json.getAsJsonObject(), AndroidPlusDevice.class);
+                    return new Gson().fromJson(json.getAsJsonObject(), AndroidPlus.class);
                 case DeviceKind.ANDROID_FOR_WORK:
-                    return new Gson().fromJson(json.getAsJsonArray(), AndroidForWorkDevice.class);
+                    return new Gson().fromJson(json.getAsJsonArray(), AndroidForWork.class);
                 case DeviceKind.ANDROID_GENERIC:
-                    return new Gson().fromJson(json.getAsJsonArray(), AndroidGenericDevice.class);
+                    return new Gson().fromJson(json.getAsJsonArray(), AndroidGeneric.class);
                 case DeviceKind.ANDROID_ELM:
-                    return new Gson().fromJson(json.getAsJsonArray(), SamsungElmDevice.class);
-                case DeviceKind.ANDROID_KNOX:
-                    return new Gson().fromJson(json.getAsJsonArray(), SamsungKnoxDevice.class);
+                    return new Gson().fromJson(json.getAsJsonArray(), SamsungElm.class);
+//                case DeviceKind.ANDROID_KNOX:
+//                    return new Gson().fromJson(json.getAsJsonArray(), SamsungKnoxDevice.class);
             }
 
         }

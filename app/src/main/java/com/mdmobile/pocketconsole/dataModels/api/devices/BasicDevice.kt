@@ -1,21 +1,38 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.os.Parcelable
+import android.database.Cursor
+import android.os.Bundle
 import android.support.annotation.CallSuper
 import com.google.gson.annotations.SerializedName
-import com.mdmobile.pocketconsole.dataTypes.DeviceAttributes.BasicDevice.*
 import com.mdmobile.pocketconsole.provider.McContract
-import kotlinx.android.parcel.Parcelize
+import com.mdmobile.pocketconsole.utils.DbData
 
-@SuppressLint("ParcelCreator")
-@Parcelize
-open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", val DeviceName: String = "N/A", val EnrollmentTime: String = "N/A",
-                       val Family: String = "N/A", val HostName: String = "N/A", val MACAddress: String = "N/A", val Manufacturer: String = "N/A",
-                       val Mode: String = "N/A", val Model: String = "N/A", val OSVersion: String = "N/A", val Path: String = "N/A",
-                       private val ComplianceStatus: Boolean = false, private val IsAgentOnline: Boolean = false,
-                       private val IsVirtual: Boolean = false, val Platform: String = "N/A") : Parcelable {
+abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", val DeviceName: String = "N/A", val EnrollmentTime: String = "N/A",
+                           val Family: String = "N/A", val HostName: String = "N/A", val MACAddress: String = "N/A", val Manufacturer: String = "N/A",
+                           val Mode: String = "N/A", val Model: String = "N/A", val OSVersion: String = "N/A", val Path: String = "N/A",
+                           val ComplianceStatus: Boolean = false, val IsAgentOnline: Boolean = false,
+                           val IsVirtual: Boolean = false, val Platform: String = "N/A", val ExtraInfo: String = "N/A") {
+
+    constructor(cursor: Cursor) : this(
+            Kind = cursor.getString(1),
+            ComplianceStatus = cursor.getInt(2) == 1,
+            DeviceId = cursor.getString(3),
+            DeviceName = cursor.getString(4),
+            Family = cursor.getString(5),
+            HostName = cursor.getString(6),
+            IsAgentOnline = cursor.getInt(7) == 1,
+            IsVirtual = cursor.getInt(8) == 1,
+            MACAddress = cursor.getString(9),
+            Manufacturer = cursor.getString(10),
+            Mode = cursor.getString(11),
+            Model = cursor.getString(12),
+            OSVersion = cursor.getString(13),
+            Path = cursor.getString(14),
+            Platform = cursor.getString(15),
+            EnrollmentTime = cursor.getString(23),
+            ExtraInfo = cursor.getString(24)
+    )
 
     @SerializedName("Memory")
     var memory: Memory = Memory()
@@ -33,18 +50,17 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
     private val virtual: Int
         get() = if (IsVirtual) 1 else 0
 
-
+    private val extraInfo: Bundle
+        get() = DbData.getDeviceExtraInfo(ExtraInfo)
 
     //Inner class for nested objects
-    @Parcelize
-    class CustomAttributes(val Name: String = "N/A", val Value: String = "N/A", val DataType: Boolean = false) : Parcelable {
+    class CustomAttributes(val Name: String = "N/A", val Value: String = "N/A", val DataType: Boolean = false) {
         val dataType: Int
             get() = if (DataType) 1 else 0
     }
 
     //Inner class for nested objects
-    @Parcelize
-    class ComplianceItems(val ComplianceType: String = "N/A", val ComplianceValue: Boolean = false) : Parcelable {
+    class ComplianceItems(val ComplianceType: String = "N/A", val ComplianceValue: Boolean = false) {
         val complianceValue: Int
             get() = if (ComplianceValue) 1 else 0
 
@@ -52,19 +68,17 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
 
     //Inner class for nested objects
     inner class Memory(val AvailableExternalStorage: Long = 0, val AvailableMemory: Long = 0,
-                       val AvailableSDCardStorage: Long = 0, val AvailableStorage: Long = 0,
-                       val TotalExternalStorage: Long = 0, val TotalMemory: Long = 0, val TotalSDCardStorage: Long = 0,
-                       val TotalStorage: Long = 0)
+                       val AvailableSDCardStorage: Long = 0, val TotalExternalStorage: Long = 0,
+                       val TotalMemory: Long = 0, val TotalSDCardStorage: Long = 0, val TotalStorage: Long = 0)
 
 
-    @Parcelize
-    class ComplianceItem(val ComplianceType: String = "N/A", private val ComplianceValue: Boolean = false) : Parcelable {
+    class ComplianceItem(val ComplianceType: String = "N/A", private val ComplianceValue: Boolean = false) {
         val complianceValue: Int
             get() = if (ComplianceValue) 1 else 0
     }
 
     @CallSuper
-    public open fun toContentValues(): ContentValues {
+    open fun toContentValues(): ContentValues {
         val values = ContentValues()
         values.put(McContract.Device.COLUMN_KIND, this.Kind)
         values.put(McContract.Device.COLUMN_DEVICE_ID, this.DeviceId)
@@ -88,6 +102,9 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
         values.put(McContract.Device.COLUMN_TOTAL_MEMORY, this.Memory().TotalMemory)
         values.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, this.Memory().TotalSDCardStorage)
         values.put(McContract.Device.COLUMN_TOTAL_STORAGE, this.Memory().TotalStorage)
+        values.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, this.Memory().AvailableExternalStorage)
+        values.put(McContract.Device.COLUMN_EXTRA_INFO, "N/A")
+
         return values
     }
 }

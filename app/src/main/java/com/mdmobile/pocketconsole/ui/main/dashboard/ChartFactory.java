@@ -17,7 +17,7 @@ public class ChartFactory {
     public static final int BAR_CHART = 1;
     public static final int HORIZONTAL_BAR_CHART = 2;
 
-    public static IChartFactory instantiate(@NonNull Context context, @NonNull int type) {
+    public static IChartFactory instantiate(@NonNull Context context, int type) {
         return createChart(context, type);
     }
 

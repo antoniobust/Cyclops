@@ -191,6 +191,13 @@ public class McContract {
     public static class Device implements DeviceInfo, BaseColumns {
         //Table Uri
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(DEVICE_TABLE_NAME).build();
+        public static final String[] FULL_DEVICE_PROJECTION = {
+                _ID, COLUMN_KIND, COLUMN_COMPLIANCE_STATUS, COLUMN_DEVICE_ID, COLUMN_DEVICE_NAME, COLUMN_FAMILY, COLUMN_HOST_NAME,
+                COLUMN_AGENT_ONLINE, COLUMN_VIRTUAL, COLUMN_MAC_ADDRESS, COLUMN_MANUFACTURER, COLUMN_MODE, COLUMN_MODEL,
+                COLUMN_OS_VERSION, COLUMN_PATH, COLUMN_PLATFORM, COLUMN_AVAILABLE_EXTERNAL_STORAGE, COLUMN_AVAILABLE_MEMORY,
+                COLUMN_AVAILABLE_SD_CARD_STORAGE, COLUMN_TOTAL_EXTERNAL_STORAGE, COLUMN_TOTAL_MEMORY, COLUMN_TOTAL_SD_CARD_STORAGE,
+                COLUMN_TOTAL_STORAGE, COLUMN_ENROLLMENT_TIME, COLUMN_EXTRA_INFO
+        };
 
         public static Uri buildUriWithDeviceID(@NonNull String deviceID) {
             return CONTENT_URI.buildUpon().appendPath(deviceID).build();
@@ -405,6 +412,7 @@ public class McContract {
         public static String getServerNameFromUri(@NonNull Uri uri) {
             return uri.getLastPathSegment();
         }
+
         public static Uri buildServerInfoUriWithName(@NonNull String serverName) {
             return CONTENT_URI.buildUpon().appendPath(serverName).build();
         }

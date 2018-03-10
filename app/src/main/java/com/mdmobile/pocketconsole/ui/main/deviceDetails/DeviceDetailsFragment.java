@@ -33,11 +33,8 @@ import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
-import com.mdmobile.pocketconsole.dataModels.api.devices.AndroidPlus;
-import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
 import com.mdmobile.pocketconsole.dataModels.api.devices.DeviceFactory;
 import com.mdmobile.pocketconsole.dataModels.api.devices.IDevice;
-import com.mdmobile.pocketconsole.dataTypes.DeviceKind;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.ui.main.MainActivity;
 import com.mdmobile.pocketconsole.utils.GeneralUtility;
@@ -46,6 +43,7 @@ import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.util.ArrayList;
 
+import static com.mdmobile.pocketconsole.provider.McContract.Device.FULL_DEVICE_PROJECTION;
 import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
 import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
 import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY;
@@ -98,7 +96,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         switch (id) {
             case LOAD_INFO:
                 uri = McContract.Device.buildUriWithDeviceID(deviceId);
-                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
+                return new CursorLoader(getContext().getApplicationContext(), uri, FULL_DEVICE_PROJECTION, null, null, null);
             case LOAD_PROFILE:
                 return new CursorLoader(getContext().getApplicationContext(),
                         McContract.Profile.buildUriWithDeviceId(deviceId),
@@ -120,7 +118,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //                BasicDevice dev = new BasicDevice();
 //                Bundle a = new Bundle();
 //                a.putParcelable("S", dev);
-                createDeviceObject();
+                data.moveToFirst();
+                createDeviceObject(data);
                 setHeader(data);
                 setDeviceInfoCard(data);
                 break;
@@ -315,7 +314,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         transaction.replace(R.id.device_details_fragment_container, newFrag).commit();
     }
 
-    private void setHeader(Cursor c ){
+    private void setHeader(Cursor c) {
         if (!c.moveToFirst()) {
             return;
         }
@@ -358,7 +357,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         devInfoRecycler.swapAdapter(new InfoAdapter(infoList, true), true);
     }
 
-    private void setProfilesCard(Cursor data){
+    private void setProfilesCard(Cursor data) {
         if (data == null || data.getCount() == 0) {
             ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
             return;
@@ -382,7 +381,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         profilesCard.setOnClickListener(this);
     }
 
-    private void setAppsCard(Cursor data){
+    private void setAppsCard(Cursor data) {
         if (data != null && data.getCount() == 0) {
             ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
             return;
@@ -416,7 +415,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //        deviceList.requestLayout();
     }
 
-    private void createDeviceObject(){
-       IDevice device =  DeviceFactory.Companion.createDevice(DeviceKind.ANDROID_PLUS);
+    private void createDeviceObject(Cursor c) {
+        IDevice device = DeviceFactory.Companion.createDevice(c);
+        device.getDevice();
     }
 }

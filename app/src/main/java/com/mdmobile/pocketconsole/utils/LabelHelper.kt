@@ -43,6 +43,10 @@ class LabelHelper {
                 it.uiLabel
             }.toTypedArray()
         }
+
+        fun getAllExtraInfo():ArrayList<Property>{
+            return SpecialDeviceProperties.SPECIAL_DEVICE_PROPERTIES
+        }
     }
 
     object BasicDeviceProperties {

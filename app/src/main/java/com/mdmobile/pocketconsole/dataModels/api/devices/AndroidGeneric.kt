@@ -1,23 +1,115 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices
 
+import android.database.Cursor
+
 /**
  * Represent Gson class for android generic device
  */
 
-class AndroidGeneric(Kind: String = "N/A", deviceId: String = "N/A", deviceName: String = "N/A",
-                     enrollmentTime: String = "N/A", family: String = "N/A", hostName: String = "N/A",
-                     MACAddress: String = "N/A", manufacturer: String = "N/A", mode: String = "N/A", model: String = "N/A", OSVersion: String = "N/A",
-                     path: String = "N/A", complianceStatus: Boolean = false, isAgentOnline: Boolean = false, isVirtual: Boolean = false,
-                     Platform: String = "N/A", val agentVersion: String = "N/A", val lastCheckInTime: String = "N/A", val lastAgentConnectTime: String = "N/A",
-                     val lastAgentDisconnectTime: String = "N/A", val lastLoggedOnUser: String = "N/A", val networkBSSID: String = "N/A",
-                     val exchangeStatus: String = "N/A", val imeI_MEID_ESN: String = "N/A", val ipv6: String = "N/A", val cellularCarrier: String = "N/A",
-                     val networkSSID: String = "N/A", val phoneNumber: String = "N/A", val subscriberNumber: String = "N/A", private val AndroidDeviceAdmin: Boolean = false,
-                     private val IsAgentCompatible: Boolean = false, private val IsAgentless: Boolean = false, private val IsEncrypted: Boolean = false, private val IsOSSecure: Boolean = false,
-                     private val CanResetPassword: Boolean = false, private val ExchangeBlocked: Boolean = false, private val InRoaming: Boolean = false, private val PasscodeEnabled: Boolean = false,
-                     val batteryStatus: Short = -1, val cellularSignalStrength: Int = -1, val hardwareEncryptionCaps: Int = -1,
-                     val networkConnectionType: Int = -1, val networkRSSI: Int = -1)
-    : BasicDevice(Kind, deviceId, deviceName, enrollmentTime, family, hostName, MACAddress, manufacturer, mode, model,
-        OSVersion, path, complianceStatus, isAgentOnline, isVirtual, Platform),IDevice<AndroidGeneric> {
+class AndroidGeneric : BasicDevice, IDevice<AndroidGeneric> {
+
+    val lastAgentDisconnectTime: String
+    val lastLoggedOnUser: String
+    val networkBSSID: String
+    val exchangeStatus: String
+    val IMEI_MEID_ESN: String
+    val Ipv6: String
+    val CellularCarrier: String
+    val NetworkSSID: String
+    val PhoneNumber: String
+    val SubscriberNumber: String
+    val AndroidDeviceAdmin: Boolean
+    val IsAgentCompatible: Boolean
+    val IsAgentless: Boolean
+    val IsEncrypted: Boolean
+    val IsOSSecure: Boolean
+    val CanResetPassword: Boolean
+    val ExchangeBlocked: Boolean
+    val InRoaming: Boolean
+    val PasscodeEnabled: Boolean
+    val BatteryStatus: Short
+    val CellularSignalStrength: Int
+    val HardwareEncryptionCaps: Int
+    val NetworkConnectionType: Int
+    val NetworkRSSI: Int
+    val AgentVersion: String
+    val LastCheckInTime: String
+    val LastAgentConnectTime: String
+
+    //Primary constructor
+    constructor(Kind: String = "N/A", DeviceId: String = "N/A", DeviceName: String = "N/A",
+                EnrollmentTime: String = "N/A", Family: String = "N/A", HostName: String = "N/A",
+                MACAddress: String = "N/A", Manufacturer: String = "N/A", Mode: String = "N/A", Model: String = "N/A", OSVersion: String = "N/A",
+                Path: String = "N/A", ComplianceStatus: Boolean = false, IsAgentOnline: Boolean = false, IsVirtual: Boolean = false,
+                Platform: String = "N/A", AgentVersion: String = "N/A", LastCheckInTime: String = "N/A", LastAgentConnectTime: String = "N/A",
+                LastAgentDisconnectTime: String = "N/A", LastLoggedOnUser: String = "N/A", NetworkBSSID: String = "N/A",
+                ExchangeStatus: String = "N/A", IMEI_MEID_ESN: String = "N/A", Ipv6: String = "N/A", CellularCarrier: String = "N/A",
+                NetworkSSID: String = "N/A", PhoneNumber: String = "N/A", SubscriberNumber: String = "N/A", AndroidDeviceAdmin: Boolean = false,
+                IsAgentCompatible: Boolean = false, IsAgentless: Boolean = false, IsEncrypted: Boolean = false, IsOSSecure: Boolean = false,
+                CanResetPassword: Boolean = false, ExchangeBlocked: Boolean = false, InRoaming: Boolean = false, PasscodeEnabled: Boolean = false,
+                BatteryStatus: Short = -1, CellularSignalStrength: Int = -1, HardwareEncryptionCaps: Int = -1,
+                NetworkConnectionType: Int = -1, NetworkRSSI: Int = -1)
+            : super(Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
+            OSVersion, Path, ComplianceStatus, IsAgentOnline, IsVirtual, Platform) {
+        this.lastAgentDisconnectTime = LastAgentDisconnectTime
+        this.lastLoggedOnUser = LastLoggedOnUser
+        this.networkBSSID = NetworkBSSID
+        this.exchangeStatus = ExchangeStatus
+        this.IMEI_MEID_ESN = IMEI_MEID_ESN
+        this.Ipv6 = Ipv6
+        this.CellularCarrier = CellularCarrier
+        this.NetworkSSID = NetworkSSID
+        this.PhoneNumber = PhoneNumber
+        this.SubscriberNumber = SubscriberNumber
+        this.AndroidDeviceAdmin = AndroidDeviceAdmin
+        this.IsAgentCompatible = IsAgentCompatible
+        this.IsAgentless = IsAgentless
+        this.IsEncrypted = IsEncrypted
+        this.IsOSSecure = IsOSSecure
+        this.CanResetPassword = CanResetPassword
+        this.ExchangeBlocked = ExchangeBlocked
+        this.InRoaming = InRoaming
+        this.PasscodeEnabled = PasscodeEnabled
+        this.BatteryStatus = BatteryStatus
+        this.CellularSignalStrength = CellularSignalStrength
+        this.HardwareEncryptionCaps = HardwareEncryptionCaps
+        this.NetworkConnectionType = NetworkConnectionType
+        this.NetworkRSSI = NetworkRSSI
+        this.LastAgentConnectTime = LastAgentConnectTime
+        this.AgentVersion = AgentVersion
+        this.LastCheckInTime = LastCheckInTime
+    }
+
+    //Secondary Constructor
+    constructor(c: Cursor) : super(c) {
+        this.lastAgentDisconnectTime = "N/A"
+        this.lastLoggedOnUser = "N/A"
+        this.networkBSSID = "N/A"
+        this.exchangeStatus = "N/A"
+        this.IMEI_MEID_ESN = "N/A"
+        this.Ipv6 = "N/A"
+        this.CellularCarrier = "N/A"
+        this.NetworkSSID = "N/A"
+        this.PhoneNumber = "N/A"
+        this.SubscriberNumber = "N/A"
+        this.AndroidDeviceAdmin = false
+        this.IsAgentCompatible = false
+        this.IsAgentless = false
+        this.IsEncrypted = false
+        this.IsOSSecure = false
+        this.CanResetPassword = false
+        this.ExchangeBlocked = false
+        this.InRoaming = false
+        this.PasscodeEnabled = false
+        this.BatteryStatus = -1
+        this.CellularSignalStrength = -1
+        this.HardwareEncryptionCaps = -1
+        this.NetworkConnectionType = -1
+        this.NetworkRSSI = -1
+        this.LastAgentConnectTime = "N/A"
+        this.AgentVersion = "N/A"
+        this.LastCheckInTime = "N/A"
+    }
 
     //TODO: support following data
 //    Array	Antivirus;

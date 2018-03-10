@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.adapters.DevicesListAdapter;
+import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
 import com.mdmobile.pocketconsole.provider.McContract;
 import com.mdmobile.pocketconsole.sync.DevicesSyncAdapter;
 import com.mdmobile.pocketconsole.ui.Dialogs.PinFolderDialog;
@@ -111,6 +112,8 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
         //Create an adapter for recycler
         mAdapter = new DevicesListAdapter(getContext(), null, (DevicesListAdapter.DeviceSelected) getActivity());
+
+        ApiRequestManager.getInstance().getDeviceInfo();
 
         return rootView;
     }

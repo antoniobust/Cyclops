@@ -1,5 +1,6 @@
 package com.mdmobile.pocketconsole.ui.main.deviceDetails;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
+import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
 import com.mdmobile.pocketconsole.dataModels.api.devices.DeviceFactory;
 import com.mdmobile.pocketconsole.dataModels.api.devices.IDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
@@ -60,6 +62,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private String nameTransitionName;
     private CardView profilesCard;
     private RecyclerView devInfoRecycler, profilesRecycler, installedAppsRecycler;
+    private IDevice device;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
 
@@ -119,9 +122,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //                Bundle a = new Bundle();
 //                a.putParcelable("S", dev);
                 data.moveToFirst();
-                createDeviceObject(data);
-                setHeader(data);
-                setDeviceInfoCard(data);
+                device = DeviceFactory.Companion.createDevice(data);
+                setHeader();
+                setDeviceInfoCard();
                 break;
             case LOAD_PROFILE: {
                 setProfilesCard(data);
@@ -314,8 +317,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         transaction.replace(R.id.device_details_fragment_container, newFrag).commit();
     }
 
-    private void setHeader(Cursor c) {
-        if (!c.moveToFirst()) {
+    private void setHeader() {
+        if (device == null) {
             return;
         }
 
@@ -328,8 +331,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot);
         }
         devName.setCompoundDrawablePadding(50);
-        Boolean online = c.getInt(c.getColumnIndex(McContract.Device.COLUMN_AGENT_ONLINE)) == 1;
-        if (online) {
+        if ((((BasicDevice) device.getDevice())).getIsAgentOnline()) {
             ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.darkGreen));
         } else {
             ((GradientDrawable) dot).setColor(Color.LTGRAY);
@@ -338,21 +340,23 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     }
 
-    private void setDeviceInfoCard(Cursor c) {
-        ArrayList<String[]> infoList = new ArrayList<>();
-        if (!c.moveToFirst()) {
+    private void setDeviceInfoCard() {
+        if (device == null) {
             return;
         }
+        ArrayList<String[]> infoList = new ArrayList<>();
         //Populates card info
-        String[] columns = c.getColumnNames();
+        ContentValues contentValues = device.toContentValues();
+        String[] keys = new String[contentValues.size()];
+        contentValues.keySet().toArray(keys);
         String label;
         //TODO: need to get EXTRA INFO Properties
-        for (String column : columns) {
-            label = LabelHelper.Companion.getUiLabelFor(column);
+        for (String key : keys) {
+            label = LabelHelper.Companion.getUiLabelFor(key);
             if (label.equals("")) {
                 continue;
             }
-            infoList.add(new String[]{LabelHelper.Companion.getUiLabelFor(column), c.getString(c.getColumnIndex(column))});
+            infoList.add(new String[]{label, contentValues.getAsString(key)});
         }
         devInfoRecycler.swapAdapter(new InfoAdapter(infoList, true), true);
     }
@@ -413,10 +417,5 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //
 //        deviceList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 //        deviceList.requestLayout();
-    }
-
-    private void createDeviceObject(Cursor c) {
-        IDevice device = DeviceFactory.Companion.createDevice(c);
-        device.getDevice();
     }
 }

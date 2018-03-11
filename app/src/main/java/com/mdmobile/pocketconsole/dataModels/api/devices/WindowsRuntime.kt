@@ -1,9 +1,14 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices
 
+import android.content.ContentValues
 import android.database.Cursor
+import com.mdmobile.pocketconsole.provider.McContract
+import kotlin.reflect.KVisibility
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.memberProperties
 
 
-class WindowsRuntime : BasicDevice, IDevice<WindowsRuntime> {
+class WindowsRuntime : BasicDevice, IDevice<BasicDevice> {
 
     constructor(Kind: String = "N/A", DeviceId: String = "N/A", DeviceName: String = "N/A", EnrollmentTime: String = "N/A",
                 Family: String = "N/A", HostName: String = "N/A", MACAddress: String = "N/A", Manufacturer: String = "N/A",
@@ -17,6 +22,20 @@ class WindowsRuntime : BasicDevice, IDevice<WindowsRuntime> {
 
     override fun getDevice(): WindowsRuntime {
         return this
+    }
+
+    override fun toContentValues(): ContentValues {
+        val values = super.toContentValues()
+        val stringBuilder = StringBuilder()
+        this::class.declaredMemberProperties.forEach {
+            if (it.visibility == KVisibility.PUBLIC) {
+                stringBuilder.append(it.name).append("=")
+                        .append(it.getter.call(this).toString())
+                        .append(";")
+            }
+        }
+        values.put(McContract.Device.COLUMN_EXTRA_INFO, stringBuilder.toString())
+        return values
     }
 }
 

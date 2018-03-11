@@ -1,15 +1,17 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices
 
+import android.content.ContentValues
 import android.database.Cursor
 import com.mdmobile.pocketconsole.provider.McContract
-import com.mdmobile.pocketconsole.utils.DbData
-import com.mdmobile.pocketconsole.utils.LabelHelper
+import kotlin.reflect.KVisibility
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.memberProperties
 
 /**
  * Represent Gson class for android Plus Device
  */
 
-open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
+open class AndroidPlus : BasicDevice, IDevice<BasicDevice> {
 
     val AgentVersion: String
     val HardwareSerialNumber: String
@@ -97,41 +99,41 @@ open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
         this.HardwareEncryptionCaps = HardwareEncryptionCaps
     }
 
-//    Secondary constructor
-    constructor(cursor: Cursor) : super(cursor){
-    this.AgentVersion = "N/A"
-    this.HardwareSerialNumber = "N/A"
-    this.HardwareVersion = "N/A"
-    this.IMEI_MEID_ESN = "N/A"
-    this.CellularCarrier = "N/A"
-    this.LastLoggedOnUser = "N/A"
-    this.NetworkBSSID = "N/A"
-    this.Ipv6 = "N/A"
-    this.NetworkSSID = "N/A"
-    this.OEMVersion = "N/A"
-    this.PhoneNumber = "N/A"
-    this.SubscriberNumber = "N/A"
-    this.PasscodeStatus = "N/A"
-    this.SupportedApis = arrayOf("N/A")
-    this.ExchangeStatus = "N/A"
-    this.LastCheckInTime = "N/A"
-    this.LastAgentConnectTime = "N/A"
-    this.LastAgentDisconnectTime = "N/A"
-    this.InRoaming = false
-    this.AndroidDeviceAdmin = false
-    this.CanResetPassword = false
-    this.ExchangeBlocked = false
-    this.IsAgentCompatible = false
-    this.IsAgentless = false
-    this.IsEncrypted = false
-    this.IsOSSecure = false
-    this.PasscodeEnabled = false
-    this.BatteryStatus = -1
-    this.CellularSignalStrength = -1
-    this.NetworkConnectionType = -1
-    this.NetworkRSSI = -1
-    this.HardwareEncryptionCaps = -1
-}
+    //    Secondary constructor
+    constructor(cursor: Cursor) : super(cursor) {
+        this.AgentVersion = "N/A"
+        this.HardwareSerialNumber = "N/A"
+        this.HardwareVersion = "N/A"
+        this.IMEI_MEID_ESN = "N/A"
+        this.CellularCarrier = "N/A"
+        this.LastLoggedOnUser = "N/A"
+        this.NetworkBSSID = "N/A"
+        this.Ipv6 = "N/A"
+        this.NetworkSSID = "N/A"
+        this.OEMVersion = "N/A"
+        this.PhoneNumber = "N/A"
+        this.SubscriberNumber = "N/A"
+        this.PasscodeStatus = "N/A"
+        this.SupportedApis = arrayOf("N/A")
+        this.ExchangeStatus = "N/A"
+        this.LastCheckInTime = "N/A"
+        this.LastAgentConnectTime = "N/A"
+        this.LastAgentDisconnectTime = "N/A"
+        this.InRoaming = false
+        this.AndroidDeviceAdmin = false
+        this.CanResetPassword = false
+        this.ExchangeBlocked = false
+        this.IsAgentCompatible = false
+        this.IsAgentless = false
+        this.IsEncrypted = false
+        this.IsOSSecure = false
+        this.PasscodeEnabled = false
+        this.BatteryStatus = -1
+        this.CellularSignalStrength = -1
+        this.NetworkConnectionType = -1
+        this.NetworkRSSI = -1
+        this.HardwareEncryptionCaps = -1
+    }
 
 
     //TODO: Support following info
@@ -141,31 +143,31 @@ open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
 //    DeviceUser	DeviceUserInfo
 //    DeviceIntegratedApplication[]	IntegratedApplications
 
-    private val isInRoaming: Int
+    val isInRoaming: Int
         get() = if (InRoaming) 1 else 0
 
-    private val isAndroidDeviceAdmin: Int
+    val isAndroidDeviceAdmin: Int
         get() = if (AndroidDeviceAdmin) 1 else 0
 
-    private val isCanResetPassword: Int
+    val isCanResetPassword: Int
         get() = if (CanResetPassword) 1 else 0
 
-    private val isExchangeBlocked: Int
+    val isExchangeBlocked: Int
         get() = if (ExchangeBlocked) 1 else 0
 
-    private val isAgentCompatible: Int
+    val isAgentCompatible: Int
         get() = if (IsAgentCompatible) 1 else 0
 
-    private val isAgentless: Int
+    val isAgentless: Int
         get() = if (IsAgentless) 1 else 0
 
-    private val isEncrypted: Int
+    val isEncrypted: Int
         get() = if (IsEncrypted) 1 else 0
 
-    private val isOSSecure: Int
+    val isOSSecure: Int
         get() = if (IsOSSecure) 1 else 0
 
-    private val isPasscodeEnabled: Int
+    val isPasscodeEnabled: Int
         get() = if (PasscodeEnabled) 1 else 0
 
     val supportedApis: String
@@ -175,6 +177,20 @@ open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
 
     override fun getDevice(): AndroidPlus {
         return this
+    }
+
+    override fun toContentValues(): ContentValues {
+        val values = super.toContentValues()
+        val stringBuilder = StringBuilder()
+        this::class.declaredMemberProperties.forEach {
+            if (it.visibility == KVisibility.PUBLIC) {
+                stringBuilder.append(it.name).append("=")
+                        .append(it.getter.call(this).toString())
+                        .append(";")
+            }
+        }
+        values.put(McContract.Device.COLUMN_EXTRA_INFO, stringBuilder.toString())
+        return values
     }
 }
 

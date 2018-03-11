@@ -113,8 +113,6 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         //Create an adapter for recycler
         mAdapter = new DevicesListAdapter(getContext(), null, (DevicesListAdapter.DeviceSelected) getActivity());
 
-        ApiRequestManager.getInstance().getDeviceInfo();
-
         return rootView;
     }
 

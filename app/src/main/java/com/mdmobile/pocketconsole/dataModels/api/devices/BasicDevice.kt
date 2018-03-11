@@ -12,7 +12,7 @@ abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A
                            val Family: String = "N/A", val HostName: String = "N/A", val MACAddress: String = "N/A", val Manufacturer: String = "N/A",
                            val Mode: String = "N/A", val Model: String = "N/A", val OSVersion: String = "N/A", val Path: String = "N/A",
                            val ComplianceStatus: Boolean = false, val IsAgentOnline: Boolean = false,
-                           val IsVirtual: Boolean = false, val Platform: String = "N/A", val ExtraInfo: String = "N/A") {
+                           val IsVirtual: Boolean = false, val Platform: String = "N/A", val ExtraInfo: String = "N/A") :IDevice <BasicDevice>{
 
     constructor(cursor: Cursor) : this(
             Kind = cursor.getString(1),
@@ -35,11 +35,11 @@ abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A
     )
 
     @SerializedName("Memory")
-    var memory: Memory = Memory()
+    val memory: Memory = Memory()
     @SerializedName("ComplianceItem")
-    var complianceItemList: List<ComplianceItem> = ArrayList()
+    val complianceItemList: List<ComplianceItem> = ArrayList()
     @SerializedName("CustomAttributes")
-    var customAttributesList: List<CustomAttributes> = ArrayList()
+    val customAttributesList: List<CustomAttributes> = ArrayList()
 
     private val complianceStatus: Int
         get() = if (ComplianceStatus) 1 else 0
@@ -78,7 +78,7 @@ abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A
     }
 
     @CallSuper
-    open fun toContentValues(): ContentValues {
+    override fun toContentValues(): ContentValues {
         val values = ContentValues()
         values.put(McContract.Device.COLUMN_KIND, this.Kind)
         values.put(McContract.Device.COLUMN_DEVICE_ID, this.DeviceId)
@@ -97,13 +97,12 @@ abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A
         values.put(McContract.Device.COLUMN_VIRTUAL, this.virtual)
         values.put(McContract.Device.COLUMN_PLATFORM, this.Platform)
         values.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, this.Memory().AvailableSDCardStorage)
-        values.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, this.Memory().AvailableMemory)
-        values.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, this.Memory().TotalExternalStorage)
-        values.put(McContract.Device.COLUMN_TOTAL_MEMORY, this.Memory().TotalMemory)
-        values.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, this.Memory().TotalSDCardStorage)
-        values.put(McContract.Device.COLUMN_TOTAL_STORAGE, this.Memory().TotalStorage)
-        values.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, this.Memory().AvailableExternalStorage)
-        values.put(McContract.Device.COLUMN_EXTRA_INFO, "N/A")
+        values.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, this.memory.AvailableMemory)
+        values.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, this.memory.TotalExternalStorage)
+        values.put(McContract.Device.COLUMN_TOTAL_MEMORY, this.memory.TotalMemory)
+        values.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, this.memory.TotalSDCardStorage)
+        values.put(McContract.Device.COLUMN_TOTAL_STORAGE, this.memory.TotalStorage)
+        values.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, this.memory.AvailableExternalStorage)
 
         return values
     }

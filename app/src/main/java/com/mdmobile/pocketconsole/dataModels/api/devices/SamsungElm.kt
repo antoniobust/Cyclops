@@ -1,5 +1,11 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices
 
+import android.content.ContentValues
+import com.mdmobile.pocketconsole.provider.McContract
+import kotlin.reflect.KVisibility
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.memberProperties
+
 /**
  * Represent a gson specific class for Samsung devices with ELM agent
  */
@@ -26,8 +32,22 @@ open class SamsungElm(Kind: String = "N/A", DeviceId: String = "N/A", DeviceName
         PhoneNumber, SubscriberNumber, PasscodeStatus, SupportedApis, ExchangeStatus, LastCheckInTime, LastAgentConnectTime,
         LastAgentDisconnectTime, InRoaming, AndroidDeviceAdmin, CanResetPassword, ExchangeBlocked, IsAgentCompatible,
         IsAgentless, IsEncrypted, IsOSSecure, PasscodeEnabled, BatteryStatus, CellularSignalStrength, NetworkConnectionType,
-        NetworkRSSI, HardwareEncryptionCaps){
+        NetworkRSSI, HardwareEncryptionCaps), IDevice<BasicDevice>{
     override fun getDevice(): SamsungElm {
         return this
+    }
+
+    override fun toContentValues(): ContentValues {
+        val values = super.toContentValues()
+        val stringBuilder = StringBuilder()
+        this::class.declaredMemberProperties.forEach {
+            if (it.visibility == KVisibility.PUBLIC) {
+                stringBuilder.append(it.name).append("=")
+                        .append(it.getter.call(this).toString())
+                        .append(";")
+            }
+        }
+        values.put(McContract.Device.COLUMN_EXTRA_INFO, stringBuilder.toString())
+        return values
     }
 }

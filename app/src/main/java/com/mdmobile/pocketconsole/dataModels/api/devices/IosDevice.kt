@@ -1,14 +1,19 @@
 package com.mdmobile.pocketconsole.dataModels.api.devices
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.database.Cursor
+import com.mdmobile.pocketconsole.provider.McContract
+import kotlin.reflect.KVisibility
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.memberProperties
 
 /**
  * Represent gson class for iOS device
  */
 
 @SuppressLint("ParcelCreator")
-class IosDevice : BasicDevice, IDevice<IosDevice> {
+class IosDevice : BasicDevice, IDevice<BasicDevice> {
     val AgentVersion: String
     val BluetoothMACAddress: String
     val BuildVersion: String
@@ -232,6 +237,20 @@ class IosDevice : BasicDevice, IDevice<IosDevice> {
 
     override fun getDevice(): IosDevice {
         return this
+    }
+
+    override fun toContentValues(): ContentValues {
+        val values = super.toContentValues()
+        val stringBuilder = StringBuilder()
+        this::class.declaredMemberProperties.forEach {
+            if (it.visibility == KVisibility.PUBLIC) {
+                stringBuilder.append(it.name).append("=")
+                        .append(it.getter.call(this).toString())
+                        .append(";")
+            }
+        }
+        values.put(McContract.Device.COLUMN_EXTRA_INFO, stringBuilder.toString())
+        return values
     }
 
 }

@@ -8,7 +8,7 @@ import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 
 
-class WindowsCE : BasicDevice, IDevice<BasicDevice> {
+class WindowsCE : BasicDevice, IDevice<WindowsCE> {
 
     constructor(Kind: String = "N/A", DeviceId: String = "N/A", DeviceName: String = "N/A", EnrollmentTime: String = "N/A",
                 Family: String = "N/A", HostName: String = "N/A", MACAddress: String = "N/A", Manufacturer: String = "N/A",

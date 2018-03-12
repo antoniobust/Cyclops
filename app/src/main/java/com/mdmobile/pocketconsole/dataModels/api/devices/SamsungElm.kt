@@ -32,7 +32,7 @@ open class SamsungElm(Kind: String = "N/A", DeviceId: String = "N/A", DeviceName
         PhoneNumber, SubscriberNumber, PasscodeStatus, SupportedApis, ExchangeStatus, LastCheckInTime, LastAgentConnectTime,
         LastAgentDisconnectTime, InRoaming, AndroidDeviceAdmin, CanResetPassword, ExchangeBlocked, IsAgentCompatible,
         IsAgentless, IsEncrypted, IsOSSecure, PasscodeEnabled, BatteryStatus, CellularSignalStrength, NetworkConnectionType,
-        NetworkRSSI, HardwareEncryptionCaps), IDevice<BasicDevice>{
+        NetworkRSSI, HardwareEncryptionCaps), IDevice<AndroidPlus>{
     override fun getDevice(): SamsungElm {
         return this
     }

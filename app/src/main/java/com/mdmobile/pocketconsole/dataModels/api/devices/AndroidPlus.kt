@@ -11,7 +11,7 @@ import kotlin.reflect.full.memberProperties
  * Represent Gson class for android Plus Device
  */
 
-open class AndroidPlus : BasicDevice, IDevice<BasicDevice> {
+open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
 
     val AgentVersion: String
     val HardwareSerialNumber: String

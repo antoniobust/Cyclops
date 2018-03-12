@@ -11,7 +11,7 @@ import kotlin.reflect.full.memberProperties
  * Represent Gson class for android generic device
  */
 
-class AndroidGeneric : BasicDevice, IDevice<BasicDevice> {
+class AndroidGeneric : BasicDevice, IDevice<AndroidGeneric> {
 
     val lastAgentDisconnectTime: String
     val lastLoggedOnUser: String

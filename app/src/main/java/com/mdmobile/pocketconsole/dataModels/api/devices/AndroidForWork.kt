@@ -9,7 +9,7 @@ import kotlin.reflect.full.declaredMemberProperties
 /**
  * Represent gson class for android for work devices
  */
-class AndroidForWork : AndroidPlus, IDevice<BasicDevice> {
+class AndroidForWork : AndroidPlus, IDevice<AndroidPlus> {
 
     constructor(Kind: String = "N/A", DeviceId: String = "N/A", DeviceName: String = "N/A", EnrollmentTime: String = "N/A",
                 Family: String = "N/A", HostName: String = "N/A", MACAddress: String = "N/A", Manufacturer: String = "N/A",

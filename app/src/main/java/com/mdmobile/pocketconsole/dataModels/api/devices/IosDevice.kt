@@ -13,7 +13,7 @@ import kotlin.reflect.full.memberProperties
  */
 
 @SuppressLint("ParcelCreator")
-class IosDevice : BasicDevice, IDevice<BasicDevice> {
+class IosDevice : BasicDevice, IDevice<IosDevice> {
     val AgentVersion: String
     val BluetoothMACAddress: String
     val BuildVersion: String
@@ -136,6 +136,7 @@ class IosDevice : BasicDevice, IDevice<BasicDevice> {
 
     //Secondary constructor
     constructor(c: Cursor) : super(c) {
+        val extra = c.getString(24);
         this.AgentVersion = "N/A"
         this.BluetoothMACAddress = "N/A"
         this.BuildVersion = "N/A"

@@ -41,11 +41,11 @@ abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A
     @SerializedName("CustomAttributes")
     val customAttributesList: List<CustomAttributes> = ArrayList()
 
-    private val complianceStatus: Int
-        get() = if (ComplianceStatus) 1 else 0
+    private val complianceStatus: String
+        get() = if (ComplianceStatus) "Compliant" else "Non-Compliant"
 
-    private val agentOnline: Int
-        get() = if (IsAgentOnline) 1 else 0
+    private val agentOnline: String
+        get() = if (IsAgentOnline) "Online" else "Offline"
 
     private val virtual: Int
         get() = if (IsVirtual) 1 else 0
@@ -96,13 +96,15 @@ abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A
         values.put(McContract.Device.COLUMN_AGENT_ONLINE, this.agentOnline)
         values.put(McContract.Device.COLUMN_VIRTUAL, this.virtual)
         values.put(McContract.Device.COLUMN_PLATFORM, this.Platform)
-        values.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, this.Memory().AvailableSDCardStorage)
-        values.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, this.memory.AvailableMemory)
-        values.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, this.memory.TotalExternalStorage)
-        values.put(McContract.Device.COLUMN_TOTAL_MEMORY, this.memory.TotalMemory)
-        values.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, this.memory.TotalSDCardStorage)
-        values.put(McContract.Device.COLUMN_TOTAL_STORAGE, this.memory.TotalStorage)
-        values.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, this.memory.AvailableExternalStorage)
+        if (this.memory != null) {
+            values.put(McContract.Device.COLUMN_AVAILABLE_SD_CARD_STORAGE, this.memory.AvailableSDCardStorage)
+            values.put(McContract.Device.COLUMN_AVAILABLE_MEMORY, this.memory.AvailableMemory)
+            values.put(McContract.Device.COLUMN_TOTAL_EXTERNAL_STORAGE, this.memory.TotalExternalStorage)
+            values.put(McContract.Device.COLUMN_TOTAL_MEMORY, this.Memory().TotalMemory)
+            values.put(McContract.Device.COLUMN_TOTAL_SD_CARD_STORAGE, this.memory.TotalSDCardStorage)
+            values.put(McContract.Device.COLUMN_TOTAL_STORAGE, this.memory.TotalStorage)
+            values.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, this.memory.AvailableExternalStorage)
+        }
         return values
     }
 }

@@ -2,40 +2,41 @@ package com.mdmobile.pocketconsole.ui.main.deviceDetails;
 
 
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.adapters.InstalledAppsAdapter;
-import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.dataModels.api.InstalledApp;
 
+import java.util.ArrayList;
+
+import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_APPLICATIONS_EXTRA_KEY;
 import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
 
-public class InstalledAppsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class InstalledAppsFragment extends Fragment {
     private String deviceId;
-    private GridView gridView;
-    private InstalledAppsAdapter mAdapter;
+    private RecyclerView appsRecycler;
+    private ArrayList<InstalledApp> applications;
 
     public InstalledAppsFragment() {
 
     }
 
-    public static InstalledAppsFragment newInstance(@NonNull String devId) {
+    public static InstalledAppsFragment newInstance(@NonNull String devId, @NonNull ArrayList<InstalledApp> appList) {
         Bundle arg = new Bundle(1);
         arg.putString(DEVICE_ID_EXTRA_KEY, devId);
+        arg.putParcelableArrayList(DEVICE_APPLICATIONS_EXTRA_KEY, appList);
         InstalledAppsFragment frag = new InstalledAppsFragment();
         frag.setArguments(arg);
         return frag;
@@ -44,7 +45,10 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        deviceId = getArguments().getString(DEVICE_ID_EXTRA_KEY, "");
+        if (getArguments() != null) {
+            deviceId = getArguments().getString(DEVICE_ID_EXTRA_KEY, "");
+            applications = getArguments().getParcelableArrayList(DEVICE_APPLICATIONS_EXTRA_KEY);
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -52,7 +56,8 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_installed_apps, container, false);
-        gridView = rootView.findViewById(R.id.installed_apps_gridView);
+        appsRecycler = rootView.findViewById(R.id.installed_apps_recycler);
+        appsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
 
         return rootView;
@@ -60,11 +65,12 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mAdapter = new InstalledAppsAdapter(getActivity(), null, 0);
-        gridView.setAdapter(mAdapter);
-        getLoaderManager().initLoader(100, null, this);
-
-
+        ArrayList<String[]> info = new ArrayList<>();
+        for (InstalledApp app : applications) {
+            info.add(new String[]{app.getName(), app.getApplicationId(), app.getStatus()});
+        }
+        InfoAdapter mAdapter = new InfoAdapter(info, false);
+        appsRecycler.setAdapter(mAdapter);
     }
 
     @Override
@@ -92,32 +98,4 @@ public class InstalledAppsFragment extends Fragment implements LoaderManager.Loa
     public void onDestroy() {
         super.onDestroy();
     }
-
-
-    //********************* LOADERS CALLBACKS ****************************************
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        //Changing projection elements remember to change data access methods in the adapter
-        final String projection[] = {McContract.InstalledApplications._ID, McContract.InstalledApplications.APPLICATION_NAME,
-                McContract.InstalledApplications.APPLICATION_STATUS, McContract.InstalledApplications.APPLICATION_ID,
-                McContract.InstalledApplications.DEVICE_ID};
-        final String selection = McContract.InstalledApplications.DEVICE_ID.concat(" = ?");
-        final String[] selectionArgs = {deviceId};
-        Uri uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
-        return new CursorLoader(getActivity().getApplicationContext(), uri, projection, selection, selectionArgs,
-                McContract.InstalledApplications.APPLICATION_NAME.concat(" ASC "));
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
-    //********************************************************************************
-
 }

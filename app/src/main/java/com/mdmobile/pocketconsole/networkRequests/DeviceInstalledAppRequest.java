@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.dataModels.api.InstalledApp;
 import com.mdmobile.pocketconsole.provider.McContract;
-import com.mdmobile.pocketconsole.utils.DbData;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -47,11 +46,15 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
 
             //Parse devices to extract common properties and put other as extra string
             if (applications.size() == 1) {
-                ContentValues appValues = DbData.prepareInstalledAppValues(applications.get(0));
-                applicationContext.getContentResolver().insert(McContract.InstalledApplications.CONTENT_URI, appValues);
+                applicationContext.getContentResolver().insert(McContract.InstalledApplications.CONTENT_URI, applications.get(0).toContentValues());
             } else if (applications.size() > 1) {
-                ContentValues[] appValues = DbData.prepareInstalledAppValues(applications);
-                applicationContext.getContentResolver().bulkInsert(McContract.InstalledApplications.CONTENT_URI, appValues);
+                ArrayList<ContentValues> values = new ArrayList<>();
+                for (InstalledApp app : applications) {
+                    values.add(app.toContentValues());
+                }
+                ContentValues[] vals = new ContentValues[values.size()];
+                values.toArray(vals);
+                applicationContext.getContentResolver().bulkInsert(McContract.InstalledApplications.CONTENT_URI, vals);
             }
 
             return Response.success(null,

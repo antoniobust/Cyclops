@@ -86,7 +86,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                 holder.deviceIconView.setImageResource(R.drawable.ic_phone_android);
         }
 
-//        //Set transition name for shared element transition
+//        //Set transition Name for shared element transition
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            String devID = data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_ID));
 //            holder.deviceIconView.setTransitionName("icon_" + devID);
@@ -171,7 +171,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
             public void onClick(View view) {
                 data.moveToPosition(getAdapterPosition());
                 Logger.log(LOG_TAG, "Clicked on item:" + getAdapterPosition()
-                        + " device name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)), Log.VERBOSE);
+                        + " device Name = " + data.getString(data.getColumnIndex(McContract.Device.COLUMN_DEVICE_NAME)), Log.VERBOSE);
 
                 //Report back to main activity item selected
                 if (mSelectionCallback != null) {

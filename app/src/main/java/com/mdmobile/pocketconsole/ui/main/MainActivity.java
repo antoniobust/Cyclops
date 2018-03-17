@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        //TODO: create a debug version of menu for extra options
+        //TODO: create a debug Version of menu for extra options
         inflater.inflate(R.menu.main_activity_toolbar, menu);
 
         return true;

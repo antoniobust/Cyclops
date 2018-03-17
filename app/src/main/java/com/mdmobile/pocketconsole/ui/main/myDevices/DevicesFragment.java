@@ -210,7 +210,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         }
 
         if (searchQuery != null && !searchQuery.equals("")) {
-            //TODO: search for devices properties name ecc
+            //TODO: search for devices properties Name ecc
 //            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? " + " OR "
 //                    + McContract.Device.COLUMN_EXTRA_INFO + " LIKE ? ";
 //            String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery + "%"};

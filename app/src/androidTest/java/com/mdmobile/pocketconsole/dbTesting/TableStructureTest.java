@@ -44,7 +44,7 @@ public class TableStructureTest {
         Cursor c = db.rawQuery("SELECT name FROM sqlite_master where type = 'table'", null);
         assertTrue("Cursor is empty", c.moveToFirst());
 
-        //Contains the tables name
+        //Contains the tables Name
         HashSet<String> tableNames = new HashSet<>();
         tableNames.add(McContract.DEVICE_TABLE_NAME);
         tableNames.add(McContract.COMPLIANCE_ITEM_TABLE_NAME);
@@ -57,7 +57,7 @@ public class TableStructureTest {
         tableNames.add(McContract.INSTALLED_APPLICATION_TABLE_NAME);
         tableNames.add(McContract.SCRIPT_TABLE_NAME);
 
-        //Remove from table name set table returned in the cursor
+        //Remove from table Name set table returned in the cursor
         HashSet<String> testTableNames = new HashSet<>(tableNames);
         do {
             testTableNames.remove(c.getString(0));

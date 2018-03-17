@@ -4,14 +4,10 @@ import android.content.ContentValues;
 import android.os.Bundle;
 
 import com.mdmobile.pocketconsole.dataModels.api.InstalledApp;
-import com.mdmobile.pocketconsole.dataModels.api.Profile;
 import com.mdmobile.pocketconsole.dataModels.api.ServerInfo;
 import com.mdmobile.pocketconsole.dataModels.api.User;
-import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
 import com.mdmobile.pocketconsole.provider.McContract;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 /**
@@ -19,56 +15,6 @@ import java.util.ArrayList;
  */
 
 public class DbData {
-
-    private static ContentValues getInstalledAppContentValues(InstalledApp app) {
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(McContract.InstalledApplications.DEVICE_ID, app.getDeviceId());
-        contentValues.put(McContract.InstalledApplications.APPLICATION_ID, app.getApplicationId());
-        contentValues.put(McContract.InstalledApplications.APPLICATION_NAME, app.getName());
-        contentValues.put(McContract.InstalledApplications.APPLICATION_VERSION, app.getShortVersion());
-        contentValues.put(McContract.InstalledApplications.APPLICATION_BUILD_NUMBER, app.getVersion());
-        contentValues.put(McContract.InstalledApplications.APPLICATION_SIZE, app.getSizeInBytes());
-        contentValues.put(McContract.InstalledApplications.APPLICATION_DATA_USED, app.getDataSizeInBytes());
-        contentValues.put(McContract.InstalledApplications.APPLICATION_STATUS, app.getStatus());
-
-        return contentValues;
-    }
-
-    public static ContentValues[] prepareInstalledAppValues(ArrayList<InstalledApp> installedApps) {
-        ArrayList<ContentValues> values = new ArrayList<>(installedApps.size());
-        for (int i = 0; i < installedApps.size(); i++) {
-            values.add(getInstalledAppContentValues(installedApps.get(i)));
-        }
-        ContentValues[] values1 = new ContentValues[values.size()];
-        values.toArray(values1);
-        return values1;
-    }
-
-    public static ContentValues prepareInstalledAppValues(InstalledApp installedApp) {
-        return getInstalledAppContentValues(installedApp);
-    }
-
-    public static ContentValues[] prepareProfilesValue(ArrayList<Profile> profiles) {
-        ArrayList<ContentValues> values = new ArrayList<>(profiles.size());
-        for (int i = 0; i < profiles.size(); i++) {
-            values.add(prepareProfilesValue(profiles.get(i)));
-        }
-        ContentValues[] values1 = new ContentValues[values.size()];
-        values.toArray(values1);
-        return values1;
-    }
-
-    public static ContentValues prepareProfilesValue(Profile profile) {
-        ContentValues values = new ContentValues();
-        values.put(McContract.Profile.REFERENCE_ID, profile.getReferenceId());
-        values.put(McContract.Profile.NAME, profile.getName());
-        values.put(McContract.Profile.STATUS, profile.getStatus());
-        values.put(McContract.Profile.VERSION_NUMBER, profile.getVersionNumber());
-        values.put(McContract.Profile.ASSIGNMENT_DATE, profile.getAssignmentDate());
-        values.put(McContract.Profile.IS_MANDATORY, profile.getMandatory());
-        return values;
-    }
 
     public static ContentValues prepareScriptValues(String name, String description, String script) {
         ContentValues contentValues = new ContentValues();

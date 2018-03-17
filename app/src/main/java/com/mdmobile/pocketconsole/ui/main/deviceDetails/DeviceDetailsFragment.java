@@ -34,6 +34,8 @@ import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
 import com.mdmobile.pocketconsole.apiManager.ApiRequestManager;
+import com.mdmobile.pocketconsole.dataModels.api.InstalledApp;
+import com.mdmobile.pocketconsole.dataModels.api.Profile;
 import com.mdmobile.pocketconsole.dataModels.api.devices.BasicDevice;
 import com.mdmobile.pocketconsole.dataModels.api.devices.DeviceFactory;
 import com.mdmobile.pocketconsole.dataModels.api.devices.IDevice;
@@ -45,7 +47,6 @@ import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.util.ArrayList;
 
-import static com.mdmobile.pocketconsole.provider.McContract.Device.FULL_DEVICE_PROJECTION;
 import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
 import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
 import static com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity.EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY;
@@ -63,6 +64,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private CardView profilesCard;
     private RecyclerView devInfoRecycler, profilesRecycler, installedAppsRecycler;
     private IDevice device;
+    private ArrayList<String[]> appList;
+    private ArrayList<Profile> profiles;
+    private ArrayList<InstalledApp> applications;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
 
@@ -99,14 +103,14 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         switch (id) {
             case LOAD_INFO:
                 uri = McContract.Device.buildUriWithDeviceID(deviceId);
-                return new CursorLoader(getContext().getApplicationContext(), uri, FULL_DEVICE_PROJECTION, null, null, null);
+                return new CursorLoader(getContext().getApplicationContext(), uri, McContract.Device.FULL_PROJECTION, null, null, null);
             case LOAD_PROFILE:
                 return new CursorLoader(getContext().getApplicationContext(),
                         McContract.Profile.buildUriWithDeviceId(deviceId),
-                        null, null, null, McContract.Profile.ASSIGNMENT_DATE + " DESC");
+                        McContract.Profile.FULL_PROJECTION, null, null, McContract.Profile.ASSIGNMENT_DATE + " DESC");
             case LOAD_APPS:
                 uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
-                return new CursorLoader(getContext().getApplicationContext(), uri, null, null, null, null);
+                return new CursorLoader(getContext().getApplicationContext(), uri, McContract.InstalledApplications.FULL_PROJECTIO, null, null, null);
             default:
                 throw new UnsupportedOperationException("Loader id:" + id + " not supported");
         }
@@ -303,10 +307,10 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                 newFrag = FullDeviceInfoFragment.Companion.newInstance(deviceId);
                 break;
             case R.id.device_details_profiles_card:
-                newFrag = ProfilesFragment.newInstance(deviceId);
+                newFrag = ProfilesFragment.newInstance(deviceId, profiles);
                 break;
             case R.id.device_details_apps_card:
-                newFrag = InstalledAppsFragment.newInstance(deviceId);
+                newFrag = InstalledAppsFragment.newInstance(deviceId, applications);
                 break;
             default:
                 Logger.log(LOG_TAG, v.getId() + " view not supported in OnClick", Log.ERROR);
@@ -375,7 +379,11 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             return;
         }
         ArrayList<String[]> profileList = new ArrayList<>();
+        profiles = new ArrayList<>();
         do {
+            profiles.add(new Profile(data.getString(2), data.getString(1), data.getString(5), data.getString(3),
+                    data.getInt(6), data.getInt(4) == 1));
+
             profileList.add(new String[]{data.getString(data.getColumnIndex(McContract.Profile.NAME)),
                     data.getString(data.getColumnIndex(McContract.Profile.STATUS))});
             data.moveToNext();
@@ -393,10 +401,13 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         if (data == null || !data.moveToFirst()) {
             return;
         }
-        ArrayList<String[]> appList = new ArrayList<>();
+        appList = new ArrayList<>();
+        applications = new ArrayList<>();
         do {
-            appList.add(new String[]{data.getString(data.getColumnIndex(McContract.InstalledApplications.APPLICATION_NAME)),
-                    data.getString(data.getColumnIndex(McContract.InstalledApplications.APPLICATION_STATUS))});
+            applications.add(new InstalledApp(data.getString(1), data.getString(4), data.getString(2), data.getString(6),
+                    data.getString(7), data.getString(5), data.getString(8), data.getString(3)));
+
+            appList.add(new String[]{data.getString(2), data.getString(3)});
             data.moveToNext();
         } while (!data.isAfterLast());
         installedAppsRecycler.swapAdapter(new InfoAdapter(appList, true), true);

@@ -25,6 +25,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     public final static String DEVICE_NAME_EXTRA_KEY = "DeviceNameIntentExtraKey";
     public final static String DEVICE_ID_EXTRA_KEY = "DeviceIdIntentExtraKey";
+    public final static String DEVICE_PROFILES_EXTRA_KEY = "DeviceProfilesExtraKey";
+    public final static String DEVICE_APPLICATIONS_EXTRA_KEY = "DeviceApplicationExtraKey";
     public static final String EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY = "DeviceIconTransition";
     public static final String EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY = "DeviceNameTransition";
     private final String LOG_TAG = DeviceDetailsActivity.class.getSimpleName();
@@ -97,7 +99,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
                 iconTransitionName, nameTransitionName);
 //        Bundle args = new Bundle();
 //        args.putString(DEVICE_NAME_EXTRA_KEY, deviceName);
-//        args.putString(DEVICE_ID_EXTRA_KEY, deviceId);
+//        args.putString(DEVICE_ID_EXTRA_KEY, DeviceId);
 //        detailsActivityFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction().replace(R.id.device_details_fragment_container, detailsActivityFragment).commit();
 

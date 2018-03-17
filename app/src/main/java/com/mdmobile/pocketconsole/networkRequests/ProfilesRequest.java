@@ -1,7 +1,6 @@
 package com.mdmobile.pocketconsole.networkRequests;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.NetworkResponse;
@@ -12,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.pocketconsole.dataModels.api.Profile;
 import com.mdmobile.pocketconsole.provider.McContract;
-import com.mdmobile.pocketconsole.utils.DbData;
 import com.mdmobile.pocketconsole.utils.Logger;
 
 import java.io.UnsupportedEncodingException;
@@ -28,9 +26,9 @@ import static com.mdmobile.pocketconsole.ApplicationLoader.applicationContext;
 
 public class ProfilesRequest extends BasicRequest<String> {
 
-    private static final String LOG_TAG =ProfilesRequest.class.getSimpleName() ;
-    private Response.Listener<String> responseListener;
+    private static final String LOG_TAG = ProfilesRequest.class.getSimpleName();
     private final String devId;
+    private Response.Listener<String> responseListener;
 
     public ProfilesRequest(int method, String url, String devId, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
@@ -50,19 +48,22 @@ public class ProfilesRequest extends BasicRequest<String> {
 
             Gson gson = new Gson();
             ArrayList<Profile> profiles = gson.fromJson(jsonResponseString, type);
-            Logger.log(LOG_TAG,  profiles.size() + " profiles received for: " +devId, Log.VERBOSE);
+            Logger.log(LOG_TAG, profiles.size() + " profiles received for: " + devId, Log.VERBOSE);
 
-            if(profiles.size() == 0){
-                profiles.add(new Profile("N/A","N/A","N/A","N/A",0,false));
+            if (profiles.size() == 0) {
+                profiles.add(new Profile("N/A", "N/A", "N/A", "N/A", 0, false));
             }
-
             //Parse Profiles and save in DB
             if (profiles.size() == 1) {
-                ContentValues values = DbData.prepareProfilesValue(profiles.get(0));
-                applicationContext.getContentResolver().insert(McContract.Profile.buildUriWithDeviceId(devId), values);
+                applicationContext.getContentResolver().insert(McContract.Profile.buildUriWithDeviceId(devId), profiles.get(0).toContentValues());
             } else if (profiles.size() > 1) {
-                ContentValues[] appValues = DbData.prepareProfilesValue(profiles);
-                applicationContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceId(devId), appValues);
+                ArrayList<ContentValues> values = new ArrayList<>();
+                for (Profile p : profiles) {
+                    values.add(p.toContentValues());
+                }
+                ContentValues[] vals = new ContentValues[values.size()];
+                values.toArray(vals);
+                applicationContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceId(devId), vals);
             }
 
             return Response.success(null,

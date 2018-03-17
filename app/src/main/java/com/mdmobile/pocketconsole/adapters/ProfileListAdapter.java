@@ -1,6 +1,5 @@
 package com.mdmobile.pocketconsole.adapters;
 
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,17 +7,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mdmobile.pocketconsole.R;
-import com.mdmobile.pocketconsole.provider.McContract;
+import com.mdmobile.pocketconsole.dataModels.api.Profile;
+
+import java.util.ArrayList;
 
 /**
  * Adapter responsible of populating profiles list
  */
 
 public class ProfileListAdapter extends RecyclerView.Adapter<ProfileListAdapter.ViewHolder> {
-    private Cursor cursor;
+    private ArrayList<Profile> profiles;
 
-    public ProfileListAdapter(Cursor c) {
-        cursor = c;
+    public ProfileListAdapter(ArrayList<Profile> profiles) {
+        this.profiles = profiles;
     }
 
     @Override
@@ -29,29 +30,29 @@ public class ProfileListAdapter extends RecyclerView.Adapter<ProfileListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (cursor == null) {
+        if (profiles == null) {
             //TODO:show empty view
             return;
         }
-        cursor.moveToPosition(position);
-        String profileName = cursor.getString(cursor.getColumnIndex(McContract.Profile.NAME));
-        String profileStatus = cursor.getString(cursor.getColumnIndex(McContract.Profile.STATUS));
+        Profile p = profiles.get(position);
+        String profileName = p.getName();
+        String profileStatus = p.getStatus();
         holder.profileNameView.setText(profileName);
         holder.profileStatusView.setText(profileStatus);
     }
 
     @Override
     public int getItemCount() {
-        return cursor == null ? 0 : cursor.getCount();
+        return profiles == null ? 0 : profiles.size();
     }
 
-    public Cursor swapCursor(Cursor c) {
-        Cursor oldCursor = cursor;
-        cursor = c;
-        if (cursor != null) {
+    public ArrayList<Profile> swapData(ArrayList<Profile> profiles) {
+        ArrayList<Profile> oldData = this.profiles;
+        this.profiles = profiles;
+        if (this.profiles != null) {
             this.notifyDataSetChanged();
         }
-        return oldCursor;
+        return oldData;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Parse the xml file provided from user to import client id secret and address automatically
  * Format expected
- * <server name="serverName">
+ * <server Name="serverName">
  *     <secret>XXXX</secret>
  *     <clientId>XXXX</clientId>
  *     <address>http://xxx</address>
@@ -102,9 +102,9 @@ public class ServerXmlConfigParser {
     }
 
     private String readServerName(XmlPullParser parser) throws XmlPullParserException, IOException {
-        parser.require(XmlPullParser.START_TAG, nameSpace, "name");
+        parser.require(XmlPullParser.START_TAG, nameSpace, "Name");
         String summary = readValue(parser);
-        parser.require(XmlPullParser.END_TAG, nameSpace, "name");
+        parser.require(XmlPullParser.END_TAG, nameSpace, "Name");
         return summary;
     }
 

@@ -39,13 +39,13 @@ public class ServerInfo implements Parcelable {
     }
 
     public String getProductVersion() {
-        //If product version is not populated is because in v13 APIs there wasn't such info.
+        //If product Version is not populated is because in v13 APIs there wasn't such info.
         //Assuming we are using a v13.3
         return ProductVersion == null ? "13.3" : ProductVersion;
     }
 
     public String getProductVersionBuild() {
-        //If product version is not populated is because in v13 APIs there wasn't such info.
+        //If product Version is not populated is because in v13 APIs there wasn't such info.
         //Assuming we are using build 3766
         return ProductVersionBuild == null ? "3766" : ProductVersionBuild;
     }

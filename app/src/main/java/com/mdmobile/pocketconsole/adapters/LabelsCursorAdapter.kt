@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.mdmobile.pocketconsole.utils.LabelHelper
 
 /**
- * Custom adapter used to populate 2 columns lists -> in a row the first cell is the property name provided from a String[],
+ * Custom adapter used to populate 2 columns lists -> in a row the first cell is the property Name provided from a String[],
  * the corresponding second cell is the property value provided from Cursors
  */
 

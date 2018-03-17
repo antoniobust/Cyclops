@@ -45,7 +45,7 @@ public class ServerInfoRequest extends BasicRequest<String> {
             ArrayList<ServerInfo.ManagementServer> managementServers = new ArrayList<>(servers.getManagementServers());
             ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(servers.getDeploymentServers());
 
-            //Update server info -> version could have changed since last sync
+            //Update server info -> Version could have changed since last sync
             applicationContext.getContentResolver().update(
                     McContract.ServerInfo.buildServerInfoUriWithName(serverSynced),
                     DbData.prepareServerInfoValues(servers), null, null);

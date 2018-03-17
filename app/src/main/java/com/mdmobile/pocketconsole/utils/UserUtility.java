@@ -34,7 +34,7 @@ public class UserUtility {
             if (account.name.equals(userName)) {
                 Logger.log(
                         LOG_TAG,
-                        "User Found\nUser name:" + account.name + " Account type: " + account.type,
+                        "User Found\nUser Name:" + account.name + " Account type: " + account.type,
                         Log.INFO);
                 return account;
             }

@@ -55,7 +55,7 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ServerXmlCon
             return;
         }
 
-        Logger.log(LOG_TAG, "ServerSetup.xml file parsed: name = " + info.getServerName() + "\naddress = "
+        Logger.log(LOG_TAG, "ServerSetup.xml file parsed: Name = " + info.getServerName() + "\naddress = "
                 + info.getServerAddress() + "\nAPI Secret = " + info.getApiSecret() + "\nclient ID = "
                 + info.getClientId(), Log.VERBOSE);
         parseCompleteCallback.xmlParseComplete();

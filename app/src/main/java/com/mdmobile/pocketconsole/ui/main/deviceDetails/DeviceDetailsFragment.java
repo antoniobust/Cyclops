@@ -1,6 +1,7 @@
 package com.mdmobile.pocketconsole.ui.main.deviceDetails;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -11,11 +12,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
@@ -67,6 +66,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private ArrayList<String[]> appList;
     private ArrayList<Profile> profiles;
     private ArrayList<InstalledApp> applications;
+    private OnCardClick mCallback;
+    private View rootView;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
 
@@ -141,6 +142,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             default:
                 throw new UnsupportedOperationException("Unsupported id: " + loader.getId());
         }
+        rootView.invalidate();
     }
 
     @Override
@@ -162,32 +164,38 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (OnCardClick) getActivity();
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
+        rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
 
-
-        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
-        if (GeneralUtility.isTabletMode(getContext())) {
-            toolbar.setVisibility(View.GONE);
+        if (getActivity() != null) {
+            Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+            if (GeneralUtility.isTabletMode(getContext())) {
+                toolbar.setVisibility(View.GONE);
+            }
+            ActionBar actionBar;
+            ((DeviceDetailsActivity) getActivity()).setSupportActionBar(toolbar);
+            actionBar = ((DeviceDetailsActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(deviceName);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
         }
 
-        ActionBar actionBar;
-        ((DeviceDetailsActivity) getActivity()).setSupportActionBar(toolbar);
-        actionBar = ((DeviceDetailsActivity) getActivity()).getSupportActionBar();
+//        swipeLayout = rootView.findViewById(R.id.device_info_swipe_to_refresh);
+//        swipeLayout.setOnRefreshListener(this);
 
-        if (actionBar != null) {
-            actionBar.setTitle(deviceName);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-
-        swipeLayout = rootView.findViewById(R.id.device_info_swipe_to_refresh);
-        swipeLayout.setOnRefreshListener(this);
-
-        ImageView titleIconView = rootView.findViewById(R.id.device_detail_icon);
-        TextView titleView = rootView.findViewById(R.id.device_detail_title_view);
-        TextView subtitleView = rootView.findViewById(R.id.device_detail_subtitle_view);
+        View header = getActivity().getFragmentManager().findFragmentById(R.id.details_header).getView();
+        ImageView titleIconView = header.findViewById(R.id.device_detail_icon);
+        TextView titleView = header.findViewById(R.id.device_detail_title_view);
+        TextView subtitleView = header.findViewById(R.id.device_detail_subtitle_view);
         CardView infoCard = rootView.findViewById(R.id.device_details_info_card);
         CardView appsCard = rootView.findViewById(R.id.device_details_apps_card);
         profilesCard = rootView.findViewById(R.id.device_details_profiles_card);
@@ -299,9 +307,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onClick(View v) {
-        FragmentTransaction transaction = (getActivity()).getSupportFragmentManager().beginTransaction();
         Fragment newFrag;
-
         switch (v.getId()) {
             case R.id.device_details_info_card:
                 newFrag = FullDeviceInfoFragment.Companion.newInstance(deviceId);
@@ -316,9 +322,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                 Logger.log(LOG_TAG, v.getId() + " view not supported in OnClick", Log.ERROR);
                 return;
         }
-        transaction.addSharedElement(v, ViewCompat.getTransitionName(v));
-        transaction.addToBackStack(DeviceDetailsFragment.class.getSimpleName());
-        transaction.replace(R.id.device_details_fragment_container, newFrag).commit();
+        mCallback.expandCard(newFrag);
+
     }
 
     private void setHeader() {
@@ -428,5 +433,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //
 //        deviceList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 //        deviceList.requestLayout();
+    }
+
+    public interface OnCardClick {
+        void expandCard(Fragment f);
     }
 }

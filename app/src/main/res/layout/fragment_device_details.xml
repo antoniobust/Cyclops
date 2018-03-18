@@ -5,19 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/max_content_size"
     android:layout_height="wrap_content"
-    android:layout_gravity="center|top"
-    android:orientation="vertical">
-
-    <include layout="@layout/actionbar"/>
-
+    android:layout_gravity="top|center_horizontal"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_device_details">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/device_info_swipe_to_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+        android:layout_marginStart="@dimen/activity_horizontal_margin">
 
         <ScrollView
             android:id="@+id/device_details_fragment_container"
@@ -25,15 +22,7 @@
             android:layout_height="match_parent"
             tools:context="com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsFragment">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <include layout="@layout/fragment_device_detail_headers"/>
-
-                <include layout="@layout/fragment_device_detail_body_preview"/>
-            </LinearLayout>
+            <include layout="@layout/fragment_device_detail_body_preview"/>
         </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

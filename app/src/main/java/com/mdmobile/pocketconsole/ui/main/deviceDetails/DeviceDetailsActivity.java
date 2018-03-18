@@ -2,6 +2,8 @@ package com.mdmobile.pocketconsole.ui.main.deviceDetails;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +23,7 @@ import com.mdmobile.pocketconsole.ui.Dialogs.ScriptDialog;
 
 import static android.support.v4.view.ViewCompat.animate;
 
-public class DeviceDetailsActivity extends AppCompatActivity {
+public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDetailsFragment.OnCardClick {
 
     public final static String DEVICE_NAME_EXTRA_KEY = "DeviceNameIntentExtraKey";
     public final static String DEVICE_ID_EXTRA_KEY = "DeviceIdIntentExtraKey";
@@ -43,6 +45,15 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     String deviceId;
     private String nameTransitionName;
     private String iconTransitionName;
+
+    // -- Interface methods
+    @Override
+    public void expandCard(Fragment f) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ft.addSharedElement(v, ViewCompat.getTransitionName(v));
+        ft.addToBackStack(DeviceDetailsFragment.class.getSimpleName());
+        ft.replace(R.id.device_details_fragment_container, f).commit();
+    }
 
 
     // -- Lifecycle methods

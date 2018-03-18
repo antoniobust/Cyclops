@@ -92,8 +92,8 @@ abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A
         values.put(McContract.Device.COLUMN_MODEL, this.Model)
         values.put(McContract.Device.COLUMN_OS_VERSION, this.OSVersion)
         values.put(McContract.Device.COLUMN_PATH, this.Path)
-        values.put(McContract.Device.COLUMN_COMPLIANCE_STATUS, this.complianceStatus)
-        values.put(McContract.Device.COLUMN_AGENT_ONLINE, this.agentOnline)
+        values.put(McContract.Device.COLUMN_COMPLIANCE_STATUS, this.ComplianceStatus)
+        values.put(McContract.Device.COLUMN_AGENT_ONLINE, this.IsAgentOnline)
         values.put(McContract.Device.COLUMN_VIRTUAL, this.virtual)
         values.put(McContract.Device.COLUMN_PLATFORM, this.Platform)
         if (this.memory != null) {

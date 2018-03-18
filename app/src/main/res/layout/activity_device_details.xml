@@ -6,15 +6,40 @@
     android:id="@+id/device_details_activity_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsActivity">
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="@dimen/match_parent"
+        android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/device_details_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_device_details"/>
+        <include
+            android:id="@+id/include"
+            layout="@layout/actionbar"/>
 
+        <fragment
+            android:id="@+id/details_header"
+            android:name="com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsHeaderFragment"
+            android:layout_width="@dimen/match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include"/>
+
+        <FrameLayout
+            android:id="@+id/device_details_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_header"
+            tools:layout="@layout/fragment_device_details"/>
+
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/details_fabs_container"

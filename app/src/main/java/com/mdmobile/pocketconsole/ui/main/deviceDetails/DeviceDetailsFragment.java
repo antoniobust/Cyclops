@@ -142,7 +142,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             default:
                 throw new UnsupportedOperationException("Unsupported id: " + loader.getId());
         }
-        rootView.invalidate();
     }
 
     @Override

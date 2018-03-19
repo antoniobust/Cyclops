@@ -12,7 +12,7 @@ class DeviceFactory {
             return selectDevice(kind)
         }
 
-        fun createDevice(cursor: Cursor): IDevice<*> {
+        fun createDevice(cursor: Cursor): IDevice<BasicDevice> {
             if (!cursor.moveToFirst()) {
                 throw UnsupportedOperationException("Empty cursor passed into DeviceFactory c: ${cursor.count}")
             }
@@ -20,7 +20,7 @@ class DeviceFactory {
             return selectDevice(kind, cursor)
         }
 
-        private fun selectDevice(@DeviceKind kind: String, cursor: Cursor): IDevice<*> {
+        private fun selectDevice(@DeviceKind kind: String, cursor: Cursor): IDevice<BasicDevice> {
             when (kind) {
                 DeviceKind.ANDROID_GENERIC -> return AndroidGeneric(cursor)
                 DeviceKind.ANDROID_PLUS -> return AndroidPlus(cursor)

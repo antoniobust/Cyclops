@@ -25,10 +25,11 @@ import static android.support.v4.view.ViewCompat.animate;
 
 public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDetailsFragment.OnCardClick {
 
-    public final static String DEVICE_NAME_EXTRA_KEY = "DeviceNameIntentExtraKey";
-    public final static String DEVICE_ID_EXTRA_KEY = "DeviceIdIntentExtraKey";
+    public final static String DEVICE_NAME_EXTRA_KEY = "DeviceNameExtraKey";
+    public final static String DEVICE_ID_EXTRA_KEY = "DeviceIdExtraKey";
     public final static String DEVICE_PROFILES_EXTRA_KEY = "DeviceProfilesExtraKey";
     public final static String DEVICE_APPLICATIONS_EXTRA_KEY = "DeviceApplicationExtraKey";
+    public final static String DEVICE_EXTRA_KEY = "DeviceExtraKey";
     public static final String EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY = "DeviceIconTransition";
     public static final String EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY = "DeviceNameTransition";
     private final String LOG_TAG = DeviceDetailsActivity.class.getSimpleName();

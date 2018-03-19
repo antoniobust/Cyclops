@@ -62,7 +62,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private String nameTransitionName;
     private CardView profilesCard;
     private RecyclerView devInfoRecycler, profilesRecycler, installedAppsRecycler;
-    private IDevice device;
+    private IDevice<BasicDevice> device;
     private ArrayList<String[]> appList;
     private ArrayList<Profile> profiles;
     private ArrayList<InstalledApp> applications;
@@ -309,7 +309,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         Fragment newFrag;
         switch (v.getId()) {
             case R.id.device_details_info_card:
-                newFrag = FullDeviceInfoFragment.Companion.newInstance(deviceId);
+                newFrag = FullDeviceInfoFragment.Companion.newInstance(deviceId,device.getDevice());
                 break;
             case R.id.device_details_profiles_card:
                 newFrag = ProfilesFragment.newInstance(deviceId, profiles);

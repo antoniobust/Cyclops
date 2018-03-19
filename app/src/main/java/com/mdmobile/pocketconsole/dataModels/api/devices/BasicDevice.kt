@@ -3,16 +3,19 @@ package com.mdmobile.pocketconsole.dataModels.api.devices
 import android.content.ContentValues
 import android.database.Cursor
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.annotation.CallSuper
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.pocketconsole.provider.McContract
 import com.mdmobile.pocketconsole.utils.DbData
+import kotlinx.android.parcel.Parcelize
 
-abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", val DeviceName: String = "N/A", val EnrollmentTime: String = "N/A",
+@Parcelize
+open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", val DeviceName: String = "N/A", val EnrollmentTime: String = "N/A",
                            val Family: String = "N/A", val HostName: String = "N/A", val MACAddress: String = "N/A", val Manufacturer: String = "N/A",
                            val Mode: String = "N/A", val Model: String = "N/A", val OSVersion: String = "N/A", val Path: String = "N/A",
                            val ComplianceStatus: Boolean = false, val IsAgentOnline: Boolean = false,
-                           val IsVirtual: Boolean = false, val Platform: String = "N/A", val ExtraInfo: String = "N/A") {
+                           val IsVirtual: Boolean = false, val Platform: String = "N/A", val ExtraInfo: String = "N/A"):Parcelable {
 
     constructor(cursor: Cursor) : this(
             Kind = nullSafe(cursor.getString(1)),

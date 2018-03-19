@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<!--<android.support.v4.widget.SwipeRefreshLayout-->
+<!--&gt;-->
+
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/device_info_swipe_to_refresh"
+    android:id="@+id/device_details_fragment_container"
     android:layout_width="@dimen/max_content_size"
     android:layout_height="match_parent"
     android:layout_gravity="top|center_horizontal"
-    android:layout_margin="@dimen/activity_horizontal_margin">
-
-    <ScrollView
-        android:id="@+id/device_details_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsFragment">
-
-        <include layout="@layout/fragment_device_detail_body_preview"/>
-    </ScrollView>
-</android.support.v4.widget.SwipeRefreshLayout>
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    tools:context="com.mdmobile.pocketconsole.ui.main.deviceDetails.DeviceDetailsFragment">
+    <include layout="@layout/fragment_device_detail_body_preview"/>
+</ScrollView>
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 

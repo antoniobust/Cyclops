@@ -15,24 +15,30 @@ abstract class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A
                            val IsVirtual: Boolean = false, val Platform: String = "N/A", val ExtraInfo: String = "N/A") {
 
     constructor(cursor: Cursor) : this(
-            Kind = cursor.getString(1),
+            Kind = nullSafe(cursor.getString(1)),
             ComplianceStatus = cursor.getInt(2) == 1,
-            DeviceId = cursor.getString(3),
-            DeviceName = cursor.getString(4),
-            Family = cursor.getString(5),
-            HostName = cursor.getString(6),
+            DeviceId = nullSafe(cursor.getString(3)),
+            DeviceName = nullSafe(cursor.getString(4)),
+            Family = nullSafe(cursor.getString(5)),
+            HostName = nullSafe(cursor.getString(6)),
             IsAgentOnline = cursor.getInt(7) == 1,
             IsVirtual = cursor.getInt(8) == 1,
-            MACAddress = cursor.getString(9),
-            Manufacturer = cursor.getString(10),
-            Mode = cursor.getString(11),
-            Model = cursor.getString(12),
-            OSVersion = cursor.getString(13),
-            Path = cursor.getString(14),
-            Platform = cursor.getString(15),
-            EnrollmentTime = cursor.getString(23),
-            ExtraInfo = cursor.getString(24)
+            MACAddress = nullSafe(cursor.getString(9)),
+            Manufacturer = nullSafe(cursor.getString(10)),
+            Mode = nullSafe(cursor.getString(11)),
+            Model = nullSafe(cursor.getString(12)),
+            OSVersion = nullSafe(cursor.getString(13)),
+            Path = nullSafe(cursor.getString(14)),
+            Platform = nullSafe(cursor.getString(15)),
+            EnrollmentTime = nullSafe(cursor.getString(23)),
+            ExtraInfo = nullSafe(cursor.getString(24))
     )
+
+    companion object {
+        private fun nullSafe(obj: Any?): String {
+            return if (obj == null) "N/A" else obj as String
+        }
+    }
 
     @SerializedName("Memory")
     val memory: Memory = Memory()

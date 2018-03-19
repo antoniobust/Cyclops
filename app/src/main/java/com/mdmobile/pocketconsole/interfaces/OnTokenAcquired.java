@@ -68,7 +68,7 @@ public class OnTokenAcquired implements AccountManagerCallback<Bundle> {
                     if (accounts[0].name.equals(accountName)) {
                         accountManager.setAuthToken(accounts[0], authTokenType, authToken);
                         Logger.log(LOG_TAG, "Account " + accountName + " new token saved: " + authToken, Log.VERBOSE);
-                        if (request != null) {
+                        if (request != null && request.get() != null) {
                             Logger.log(LOG_TAG, "Resending request ", Log.VERBOSE);
                             Volley.newRequestQueue(ApplicationLoader.applicationContext).add(request.get());
                         }

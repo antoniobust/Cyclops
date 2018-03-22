@@ -73,14 +73,14 @@ public class ServerInfoRequest extends BasicRequest<String> {
             int status;
 
             for (ServerInfo.ManagementServer server : managementServers) {
-                status = ServerUtility.isServerOnline(server);
+                status = ServerUtility.serverStatus(server);
                 if (status != ServerUtility.SERVER_STARTED) {
                     ServerUtility.notifyServerStatus(server.getName(), status);
                 }
             }
 
             for (ServerInfo.DeploymentServer server : deploymentServers) {
-                status = ServerUtility.isServerOnline(server);
+                status = ServerUtility.serverStatus(server);
                 if (status != ServerUtility.SERVER_STARTED) {
                     ServerUtility.notifyServerStatus(server.getName(), status);
                 }

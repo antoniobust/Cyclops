@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.mdmobile.pocketconsole.utils.RecyclerEmptyView
+        <com.mdmobile.cyclopes.utils.RecyclerEmptyView
             android:id="@+id/devices_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

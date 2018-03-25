@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.mdmobile.pocketconsole">
+          package="com.mdmobile.cyclopes">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -57,13 +57,13 @@
             android:theme="@style/AppTheme.DetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mdmobile.pocketconsole.ui.main.MainActivity"/>
+                android:value=".ui.main.MainActivity"/>
         </activity>
 
         <!-- Data provider -->
         <provider
             android:name=".provider.McProvider"
-            android:authorities="com.mdmobile.pocketconsole"
+            android:authorities="com.mdmobile.cyclopes"
             android:exported="false"/>
 
         <!-- Device Sync Adapter -->
@@ -98,7 +98,7 @@
             android:theme="@style/AppTheme.DetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mdmobile.pocketconsole.ui.main.MainActivity"/>
+                android:value=".ui.main.MainActivity"/>
         </activity>
     </application>
 

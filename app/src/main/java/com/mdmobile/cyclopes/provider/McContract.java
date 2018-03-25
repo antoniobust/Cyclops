@@ -6,10 +6,12 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 
+import com.mdmobile.cyclopes.R;
+
 public class McContract {
 
     //Defines the schema
-    public static final String CONTENT_AUTHORITY = "com.mdmobile.pocketconsole";
+    public static final String CONTENT_AUTHORITY = "com.mdmobile.cyclopes";
     //DB tables
     //TODO: create user info table
     public static final String DEVICE_TABLE_NAME = "DeviceInfo";

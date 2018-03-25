@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 
-
-
 android {
     compileSdkVersion 27
     buildToolsVersion '26.0.2'
@@ -71,8 +69,6 @@ dependencies {
     androidTestImplementation 'com.android.support:support-annotations:27.1.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.1'
-
-
 }
 
 

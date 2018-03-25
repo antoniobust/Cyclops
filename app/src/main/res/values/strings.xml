@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">Pocket Console</string>
+    <string name="app_name">Cyclopes</string>
     <string name="info_text">i</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_server">Servers</string>
@@ -16,7 +16,7 @@
     <string name="logIn_label">LogIn</string>
     <string name="test_connection_label">Test connection</string>
     <string name="account_type">MobiControlAccount</string>
-    <string name="download_devices_action">com.mdmobile.pocketconsole.DOWNLOAD_DEVICES</string>
+    <string name="download_devices_action">com.mdmobile.cyclopes.DOWNLOAD_DEVICES</string>
     <string name="search_label">Search..</string>
     <string name="search_view_hint">device name, id or group</string>
     <string name="title_activity_device_details">DeviceDetailsActivity</string>
@@ -44,7 +44,7 @@
     <string name="device_count_chart_description">Devices enrolled</string>
     <string name="no_data_found_chart">No Data available!!</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="content_authority">com.mdmobile.pocketconsole</string>
+    <string name="content_authority">com.mdmobile.cyclopes</string>
     <string name="show_more_info_menu_label">Show more info</string>
     <string name="uninstall_app_dialog_title">Uninstall application</string>
     <string name="uninstall_app_dialog_description">Are you sure you want to uninstall \"%1$s\" ?</string>
@@ -122,8 +122,8 @@
     <string name="last_sync_unknown">Unknown</string>
 
     <!--Shared preferences strings-->
-    <string name="general_shared_preference">PocketConsoleGeneralPref</string>
-    <string name="server_shared_preference">PocketConsoleServerPref</string>
+    <string name="general_shared_preference">CyclopesGeneralPref</string>
+    <string name="server_shared_preference">CyclopesServerPref</string>
     <string name="server_name_preference">server_name_preference</string>
     <string name="server_address_preference">server_address_preference</string>
     <string name="client_id_preference">client_id_preference</string>

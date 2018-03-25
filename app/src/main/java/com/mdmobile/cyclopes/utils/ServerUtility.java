@@ -67,7 +67,7 @@ public class ServerUtility {
         }
     }
 
-    public static int isServerOnline(ServerInfo.DeploymentServer server) {
+    public static int serverStatus(ServerInfo.DeploymentServer server) {
 
         if (!server.getConnected()) {
             return SERVER_STARTED_BUT_NOT_CONNECTED;
@@ -81,7 +81,7 @@ public class ServerUtility {
             case "Disabled":
                 return SERVER_DISABLED;
             case "Unlicensed":
-                return 3;
+                return SERVER_UNLICENSED;
             case "Deleted":
                 return SERVER_DELETED;
             case "StartedButNotRegistered":
@@ -95,7 +95,7 @@ public class ServerUtility {
         }
     }
 
-    public static int isServerOnline(ServerInfo.ManagementServer server) {
+    public static int serverStatus(ServerInfo.ManagementServer server) {
         switch (server.getStatus()) {
             case "Stopped":
                 return SERVER_STOPPED;
@@ -104,7 +104,7 @@ public class ServerUtility {
             case "Disabled":
                 return SERVER_DISABLED;
             case "Unlicensed":
-                return 3;
+                return SERVER_UNLICENSED;
             case "Deleted":
                 return SERVER_DELETED;
             case "StartedButNotRegistered":

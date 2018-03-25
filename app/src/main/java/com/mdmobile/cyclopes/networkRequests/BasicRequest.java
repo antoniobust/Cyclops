@@ -3,6 +3,7 @@ package com.mdmobile.cyclopes.networkRequests;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -110,7 +111,14 @@ abstract public class BasicRequest<T> extends Request<T> {
                         null, false, new OnTokenAcquired(new WeakReference<BasicRequest>(this)), null);
             }
         } else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
-            ServerUtility.notifyServerStatus(getUrl(), ServerUtility.SERVER_OFFLINE);
+            Bundle server = ServerUtility.getServer();
+            String serverName;
+            if (server != null) {
+                serverName = server.getString(McContract.ServerInfo.NAME);
+            } else {
+                serverName = getUrl();
+            }
+            ServerUtility.notifyServerStatus(serverName, ServerUtility.SERVER_OFFLINE);
         } else if (errorCode == 422) {
             //TODO: show error message in toast
         } else if (errorCode == HttpsURLConnection.HTTP_INTERNAL_ERROR) {

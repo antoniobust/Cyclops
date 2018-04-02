@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.mdmobile.cyclopes">
+          package="com.mdmobile.cyclops">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -20,17 +20,17 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".ApplicationLoader"
+        android:name="com.mdmobile.cyclops.ApplicationLoader"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.BaseActivity"/>
+        <activity android:name="com.mdmobile.cyclops.ui.BaseActivity"/>
 
         <activity
-            android:name=".ui.logIn.LoginActivity"
+            android:name="com.mdmobile.cyclops.ui.logIn.LoginActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <!-- Searches intent -->
@@ -45,30 +45,30 @@
                 android:resource="@xml/device_searchable"/>
         </activity>
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="com.mdmobile.cyclops.ui.main.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme"/>
 
         <activity
-            android:name=".ui.main.deviceDetails.DeviceDetailsActivity"
+            android:name="com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity"
             android:label="@string/title_activity_device_details"
-            android:parentActivityName=".ui.main.MainActivity"
+            android:parentActivityName="com.mdmobile.cyclops.ui.main.MainActivity"
             android:theme="@style/AppTheme.DetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.MainActivity"/>
+                android:value="com.mdmobile.cyclops.ui.main.MainActivity"/>
         </activity>
 
         <!-- Data provider -->
         <provider
-            android:name=".provider.McProvider"
-            android:authorities="com.mdmobile.cyclopes"
+            android:name="com.mdmobile.cyclops.provider.McProvider"
+            android:authorities="com.mdmobile.cyclops"
             android:exported="false"/>
 
         <!-- Device Sync Adapter -->
         <service
-            android:name=".sync.RefreshDataBinder"
+            android:name="com.mdmobile.cyclops.sync.RefreshDataBinder"
             android:exported="true"
             android:process=":sync">
             <intent-filter>
@@ -81,7 +81,7 @@
         </service>
 
         <!-- Account authenticator service -->
-        <service android:name=".services.AuthenticationService">
+        <service android:name="com.mdmobile.cyclops.services.AuthenticationService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
@@ -92,13 +92,13 @@
         </service>
 
         <activity
-            android:name=".ui.main.server.ServerDetailsActivity"
+            android:name="com.mdmobile.cyclops.ui.main.server.ServerDetailsActivity"
             android:label="@string/title_activity_service_details"
-            android:parentActivityName=".ui.main.MainActivity"
+            android:parentActivityName="com.mdmobile.cyclops.ui.main.MainActivity"
             android:theme="@style/AppTheme.DetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.MainActivity"/>
+                android:value="com.mdmobile.cyclops.ui.main.MainActivity"/>
         </activity>
     </application>
 

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.mdmobile.cyclopes.ui.main.deviceDetails.DeviceDetailsActivity">
+    tools:context="com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity">
 
     <LinearLayout
         android:layout_width="@dimen/match_parent"
@@ -20,7 +20,7 @@
 
         <fragment
             android:id="@+id/details_header"
-            android:name="com.mdmobile.cyclopes.ui.main.deviceDetails.DeviceDetailsHeaderFragment"
+            android:name="com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsHeaderFragment"
             android:layout_width="@dimen/match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"

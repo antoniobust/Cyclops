@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:529394527666:android:6091b6a98e5adb7c",
+        "mobilesdk_app_id": "1:529394527666:android:b44247f7713b2097",
         "android_client_info": {
-          "package_name": "com.mdmobile.cyclopes"
+          "package_name": "com.mdmobile.cyclops"
         }
       },
       "oauth_client": [

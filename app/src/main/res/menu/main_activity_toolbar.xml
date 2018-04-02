@@ -3,20 +3,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/debug_sync_devices_now"
-        android:orderInCategory="1"
-        android:title="@string/sync_now"/>
-    <item
-        android:id="@+id/debug_invalidate_token"
-        android:orderInCategory="2"
-        android:title="@string/invalidate_token"/>
-
-    <item
-        android:id="@+id/debug_refresh_token"
-        android:orderInCategory="3"
-        android:title="@string/refresh_token"/>
-
-    <item android:id="@+id/logout_action"
+        android:id="@+id/logout_action"
         android:orderInCategory="99"
         android:title="@string/logout_label"/>
 

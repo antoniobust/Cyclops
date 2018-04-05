@@ -37,25 +37,30 @@ android {
 
 
     buildTypes {
-        alpha{
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationIdSuffix ".alpha"
             versionNameSuffix "-Alpha"
+            debuggable true
+            jniDebuggable true
         }
 
-        beta{
+        debugBeta {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationIdSuffix ".beta"
             versionNameSuffix "-Beta"
+            signingConfig signingConfigs.release
         }
-        production {
+
+        release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
     }
+
     compileOptions {
         targetCompatibility 1.7
         sourceCompatibility 1.7

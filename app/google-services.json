@@ -36,6 +36,68 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529394527666:android:fc615b461671249d",
+        "android_client_info": {
+          "package_name": "com.mdmobile.cyclops.alpha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529394527666-1jk9636esm5q18oec1fp3b41v1mcrgec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXXPIQTz4F70vrmoDNNPWNMb0X2vbiO84"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529394527666:android:9075f876366d2b8a",
+        "android_client_info": {
+          "package_name": "com.mdmobile.cyclops.beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529394527666-1jk9636esm5q18oec1fp3b41v1mcrgec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXXPIQTz4F70vrmoDNNPWNMb0X2vbiO84"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

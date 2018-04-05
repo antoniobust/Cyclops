@@ -37,11 +37,20 @@ android {
 
 
     buildTypes {
-        debug {
+        alpha{
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationIdSuffix ".alpha"
+            versionNameSuffix "-Alpha"
         }
-        release {
+
+        beta{
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationIdSuffix ".beta"
+            versionNameSuffix "-Beta"
+        }
+        production {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release

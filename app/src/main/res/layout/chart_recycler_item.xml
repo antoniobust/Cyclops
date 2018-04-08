@@ -20,15 +20,23 @@
         android:textColor="@color/colorPrimaryDark"
         android:visibility="visible"/>
 
+    <ProgressBar
+        android:id="@+id/chart_progress_bar"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
     <ImageView
         android:id="@+id/chart_option_button"
         android:layout_width="wrap_content"
         android:layout_height="?listPreferredItemHeightSmall"
         android:layout_gravity="end|top"
         android:background="?selectableItemBackgroundBorderless"
+        android:scaleType="center"
         android:tint="@color/colorPrimary"
-        app:srcCompat="@drawable/ic_option_24dp"
-        android:scaleType="center"/>
+        app:srcCompat="@drawable/ic_option_24dp"/>
 
     <FrameLayout
         android:id="@+id/chart_container"

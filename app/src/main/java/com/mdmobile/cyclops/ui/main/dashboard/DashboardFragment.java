@@ -1,5 +1,6 @@
 package com.mdmobile.cyclops.ui.main.dashboard;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,11 +21,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.dataModels.api.sharedPref.ChartSharedPref;
+import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.CounterStat;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.Statistic;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatisticFactory;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
+import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -93,6 +96,7 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
         } else {
             chartsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         }
+
         recyclerAdapter = new ChartsAdapter(null, null);
         chartsRecycler.setAdapter(recyclerAdapter);
         chartsRecycler.setEmptyView(rootView.findViewById(R.id.dashboard_recycler_empty_view));
@@ -137,24 +141,24 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     }
 
     private void createCharts() {
-
         String jsonPref = preferences.getString(getString(R.string.charts_preference), "");
         Gson gson = new Gson();
         Type listType = new TypeToken<ArrayList<ChartSharedPref>>() {
         }.getType();
 
         ArrayList<ChartSharedPref> chartList = gson.fromJson(jsonPref, listType);
-        if (chartList != null) {
-            ArrayList<String> properties = new ArrayList<>(chartList.size());
-            for (ChartSharedPref chart : chartList) {
-                properties.add(chart.property1);
-            }
-            //TODO this only creates counter stat type implement other stat type
-            counterStat = (CounterStat)
-                    StatisticFactory.createStatistic(getContext(), 1, properties);
-            counterStat.registerListener(this);
-            counterStat.initPoll();
+
+        ArrayList<String> properties = new ArrayList<>(chartList.size());
+        for (ChartSharedPref chart : chartList) {
+            properties.add(chart.property1);
         }
+
+
+        //TODO this only creates counter stat type implement other stat type
+        counterStat = (CounterStat)
+                StatisticFactory.createStatistic(getContext(), 1, properties);
+        counterStat.registerListener(this);
+        counterStat.initPoll();
     }
 
 }

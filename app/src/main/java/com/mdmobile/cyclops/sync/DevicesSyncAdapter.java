@@ -11,8 +11,8 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
@@ -40,7 +40,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     private static void onNewAccountCreated(Context c, Account account) {
 
         //Without calling setSyncAutomatically, periodic sync will not be enabled.
-        ContentResolver.setSyncAutomatically(account, c.getString(R.string.content_authority), true);
+        ContentResolver.setSyncAutomatically(account, McContract.CONTENT_AUTHORITY, true);
 
         DevicesSyncAdapter.configurePeriodicSync(c.getApplicationContext(), account);
 
@@ -50,7 +50,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     //Helper method to set up a period sync interval
     private static void configurePeriodicSync(Context context, Account account) {
-        String authority = context.getString(R.string.content_authority);
+        String authority = McContract.CONTENT_AUTHORITY;
         Logger.log(LOG_TAG, "Configuring periodic sync: " + UPDATE_SCHEDULE, Log.VERBOSE);
 
         // we can enable inexact timers in our periodic sync
@@ -63,14 +63,20 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     public static void syncImmediately(Context context, Account account) {
+        Logger.log(LOG_TAG, "Immediate Sync requested", Log.VERBOSE);
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 
-        Logger.log(LOG_TAG, "Immediate Sync requested", Log.VERBOSE);
-        if (!ContentResolver.isSyncActive(account, context.getString(R.string.content_authority))) {
-            ContentResolver.requestSync(account, context.getString(R.string.content_authority), bundle);
+//        ContentResolver
+//                .setSyncAutomatically(account, McContract.CONTENT_AUTHORITY, true);
+//        ContentResolver.setIsSyncable(account, McContract.CONTENT_AUTHORITY, 1);
+
+        if (ContentResolver.isSyncActive(account, McContract.CONTENT_AUTHORITY)) {
+            Logger.log(LOG_TAG, "Sync already active for: " + account.name + " cancelling and requesting new", Log.VERBOSE);
+            ContentResolver.cancelSync(account, McContract.CONTENT_AUTHORITY);
         }
+        ContentResolver.requestSync(account, McContract.CONTENT_AUTHORITY, bundle);
     }
 
     @Override
@@ -82,14 +88,8 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
             Logger.log(LOG_TAG, "No Server Found...\nSkipping Sync", Log.ERROR);
             return;
         }
-
         ApiRequestManager.getInstance().getDeviceInfo();
         ApiRequestManager.getInstance().getUsers();
         ApiRequestManager.getInstance().getServerInfo();
-    }
-
-    @Override
-    public void onSyncCanceled() {
-        super.onSyncCanceled();
     }
 }

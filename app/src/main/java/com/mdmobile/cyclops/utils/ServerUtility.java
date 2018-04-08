@@ -31,16 +31,6 @@ public class ServerUtility {
 
     public static final String SERVER_ADDRESS_KEY = "ServerAddressKey";
 
-    public static void saveServerInfo(String serverName, String apiSecret, String clientId, String serverAddress) {
-        SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(applicationContext.getString(R.string.server_name_preference), serverName);
-        editor.putString(applicationContext.getString(R.string.api_secret_preference), apiSecret);
-        editor.putString(applicationContext.getString(R.string.client_id_preference), clientId);
-        editor.putString(applicationContext.getString(R.string.server_address_preference), serverAddress);
-
-        editor.apply();
-    }
 
     public static boolean anyActiveServer() {
         SharedPreferences preferences = applicationContext

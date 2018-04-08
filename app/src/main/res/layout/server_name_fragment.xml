@@ -1,12 +1,22 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/server_address_fragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:background="@android:color/black">
 
     <include layout="@layout/info_button"/>
+
+    <EditText
+        android:id="@+id/server_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/server_name_hint"
+        android:textColorHint="@android:color/white"
+        android:inputType="textCapWords"/>
 
     <EditText
         android:id="@+id/server_address_text_view"

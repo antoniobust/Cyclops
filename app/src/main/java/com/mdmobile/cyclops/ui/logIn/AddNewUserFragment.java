@@ -51,7 +51,7 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
         Bundle serverInfo = ServerUtility.getServer();
 
         if (serverInfo == null) {
-            Toast.makeText(getContext(), "Add server", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Add a server configuration to login", Toast.LENGTH_SHORT).show();
             return;
         }
 

@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/match_parent"
-    android:layout_height="200dp"
-    android:layout_gravity="center"
-    android:orientation="vertical"
-    android:animateLayoutChanges="true">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="@dimen/match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center|center_vertical"
+              android:animateLayoutChanges="true"
+              android:orientation="vertical">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/login_add_server_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="180dp"
         android:layout_gravity="center"
         android:layout_marginTop="12dp"
-        android:layout_weight="1"
         android:clipToPadding="false"
         android:isScrollContainer="false"
         android:paddingBottom="2dp"
         android:paddingEnd="54dp"
         android:paddingStart="54dp"
-        android:paddingTop="2dp" />
+        android:paddingTop="2dp"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/login_view_pager_dots_indicator"
@@ -30,7 +29,15 @@
         app:tabBackground="@drawable/login_drawer_selector"
         app:tabGravity="center"
         app:tabIndicatorHeight="0dp"
-        app:tabMode="fixed" />
+        app:tabMode="fixed"/>
+
+    <Button
+        android:id="@+id/add_server_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/add_server_label"
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/server_conf_read_label"
@@ -39,7 +46,7 @@
         android:layout_gravity="center_horizontal"
         android:drawableStart="@drawable/ic_ok"
         android:gravity="center"
-        android:visibility="gone"
         android:text="@string/xml_file_read"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:visibility="gone"/>
 </LinearLayout>

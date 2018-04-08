@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.mdmobile.cyclops.dataModels.api.Server;
 import com.mdmobile.cyclops.ui.logIn.AddServerFragment;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ServerXmlConfigParser.ServerInfo> {
+public class ConfigureServerAsyncTask extends AsyncTask<File, Void, Server> {
     private static final String LOG_TAG = ConfigureServerAsyncTask.class.getSimpleName();
     private final WeakReference<AddServerFragment> hostingFragment;
     private Throwable throwable;
@@ -28,14 +29,14 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ServerXmlCon
     }
 
     @Override
-    protected ServerXmlConfigParser.ServerInfo doInBackground(File... serverSetupFile) {
+    protected Server doInBackground(File... serverSetupFile) {
         try {
             FileInputStream fileInputStream = new FileInputStream(serverSetupFile[0]);
             ServerXmlConfigParser fileParser = new ServerXmlConfigParser();
-            ArrayList<ServerXmlConfigParser.ServerInfo> serverInfo = fileParser.parseXml(fileInputStream);
+            ArrayList<Server> servers = fileParser.parseXml(fileInputStream);
             //TODO:support multiple servers
-            ServerXmlConfigParser.ServerInfo info = serverInfo.get(0);
-            ServerUtility.saveServerInfo(info.getServerName(), info.getApiSecret(), info.getClientId(), info.getServerAddress());
+            Server info = servers.get(0);
+            info.saveServer();
             return info;
         } catch (IOException | XmlPullParserException e) {
             throwable = e;
@@ -44,7 +45,7 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ServerXmlCon
     }
 
     @Override
-    protected void onPostExecute(ServerXmlConfigParser.ServerInfo info) {
+    protected void onPostExecute(Server info) {
         if (info == null) {
             if (throwable instanceof FileNotFoundException) {
                 Logger.log(LOG_TAG, "No ServerSetup.xml file found", Log.INFO);
@@ -54,11 +55,9 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ServerXmlCon
             }
             return;
         }
-
         Logger.log(LOG_TAG, "ServerSetup.xml file parsed: Name = " + info.getServerName() + "\naddress = "
                 + info.getServerAddress() + "\nAPI Secret = " + info.getApiSecret() + "\nclient ID = "
                 + info.getClientId(), Log.VERBOSE);
-        parseCompleteCallback.xmlParseComplete();
-
+        parseCompleteCallback.xmlParseComplete(info);
     }
 }

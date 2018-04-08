@@ -14,9 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.LogInViewPagerAdapter;
+import com.mdmobile.cyclops.dataModels.api.Server;
 import com.mdmobile.cyclops.utils.ConfigureServerAsyncTask;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.Logger;
@@ -29,7 +33,7 @@ import java.io.File;
  */
 
 public class AddServerFragment extends Fragment implements ServerXmlConfigParser.ServerXmlParse,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+        ActivityCompat.OnRequestPermissionsResultCallback, View.OnClickListener {
 
     private final static String LOG_TAG = AddServerFragment.class.getSimpleName();
     private int permissionReqID = 100;
@@ -37,6 +41,8 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     private TabLayout dotsIndicator;
     private LogInViewPagerAdapter viewPagerAdapter;
     private View rootView;
+    private Button addServerButton;
+    private EditText serverNameEditText, apiSecretEditText, clientIdEditText, serverAddressEditText;
 
     public AddServerFragment() {
         //Empty constructor
@@ -49,9 +55,30 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
 
     //Interface methods
     @Override
-    public void xmlParseComplete() {
+    public void xmlParseComplete(Server serverInfo) {
         //TODO: update UI file parsed
         rootView.findViewById(R.id.server_conf_read_label).setVisibility(View.VISIBLE);
+        ((TextView) rootView.findViewById(R.id.server_name_text_view)).setText(serverInfo.getServerName());
+        ((TextView) rootView.findViewById(R.id.api_secret_text_view)).setText(serverInfo.getApiSecret());
+        ((TextView) rootView.findViewById(R.id.client_id_text_view)).setText(serverInfo.getClientId());
+        ((TextView) rootView.findViewById(R.id.server_address_text_view)).setText(serverInfo.getServerAddress());
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        String serverName = ((TextView) rootView.findViewById(R.id.server_name_text_view)).getText().toString();
+        String secret = ((TextView) rootView.findViewById(R.id.api_secret_text_view)).getText().toString();
+        String clientId = ((TextView) rootView.findViewById(R.id.client_id_text_view)).getText().toString();
+        String address = ((TextView) rootView.findViewById(R.id.server_address_text_view)).getText().toString();
+
+        if (!address.startsWith("https://")) {
+            address = "https://" + address;
+        }
+
+        Server server = new Server(serverName,secret,clientId,address);
+        server.saveServer();
+        (getActivity().findViewById(R.id.add_user_button)).performClick();
     }
 
     @Override
@@ -72,6 +99,14 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         //Instantiate views
         viewPager = rootView.findViewById(R.id.login_add_server_view_pager);
         dotsIndicator = rootView.findViewById(R.id.login_view_pager_dots_indicator);
+        addServerButton = rootView.findViewById(R.id.add_server_button);
+        serverNameEditText = viewPager.findViewById(R.id.server_name_text_view);
+        apiSecretEditText = viewPager.findViewById(R.id.api_secret_text_view);
+        clientIdEditText = viewPager.findViewById(R.id.client_id_text_view);
+        serverAddressEditText = rootView.findViewById(R.id.server_address_text_view);
+
+        addServerButton.setOnClickListener(this);
+
 
         setViewPager();
         return rootView;
@@ -84,7 +119,10 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         getActivity().findViewById(R.id.add_user_button).setVisibility(View.VISIBLE);
 
         if (checkConfigurationFile()) {
+            addServerButton.setVisibility(View.GONE);
             parseServerConfFile();
+        } else {
+            addServerButton.setVisibility(View.VISIBLE);
         }
     }
 

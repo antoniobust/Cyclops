@@ -44,7 +44,6 @@
     <string name="device_count_chart_description">Devices enrolled</string>
     <string name="no_data_found_chart">No Data available!!</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="content_authority">com.mdmobile.cyclops</string>
     <string name="show_more_info_menu_label">Show more info</string>
     <string name="uninstall_app_dialog_title">Uninstall application</string>
     <string name="uninstall_app_dialog_description">Are you sure you want to uninstall \"%1$s\" ?</string>
@@ -144,6 +143,7 @@
     <string name="property_2_label">Second property</string>
     <string name="property_1_label">First property</string>
     <string name="dashboard_recycler_empty_view_label">Click the + button to create new charts</string>
+    <string name="server_name_hint">Server name</string>
 
 
 </resources>

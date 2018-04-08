@@ -3,6 +3,9 @@ package com.mdmobile.cyclops.utils;
 import android.support.annotation.WorkerThread;
 import android.util.Xml;
 
+import com.mdmobile.cyclops.dataModels.api.Server;
+import com.mdmobile.cyclops.dataModels.api.ServerInfo;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -25,10 +28,10 @@ public class ServerXmlConfigParser {
 
     private final String nameSpace = null;
     public interface ServerXmlParse {
-        void xmlParseComplete();
+        void xmlParseComplete(Server serverInfo);
     }
 
-    public ArrayList<ServerInfo> parseXml(InputStream inputStream) throws XmlPullParserException, IOException {
+    public ArrayList<Server> parseXml(InputStream inputStream) throws XmlPullParserException, IOException {
 
             XmlPullParser xmlPullParser = Xml.newPullParser();
             xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -38,8 +41,8 @@ public class ServerXmlConfigParser {
 
     }
 
-    private ArrayList<ServerInfo> readServer(XmlPullParser xmlParser) throws XmlPullParserException, IOException {
-        ArrayList<ServerInfo> serverInfo = new ArrayList<>();
+    private ArrayList<Server> readServer(XmlPullParser xmlParser) throws XmlPullParserException, IOException {
+        ArrayList<Server> serverInfo = new ArrayList<>();
         xmlParser.require(XmlPullParser.START_TAG, nameSpace, "server");
         String serverName = xmlParser.getAttributeValue(0);
 
@@ -54,7 +57,7 @@ public class ServerXmlConfigParser {
         return serverInfo;
     }
 
-    private ServerInfo readServerProperties(String name,XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
+    private Server readServerProperties(String name, XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
         String secret = "",clientId="",address="";
 
         while (xmlPullParser.getEventType() != XmlPullParser.END_TAG) {
@@ -77,7 +80,7 @@ public class ServerXmlConfigParser {
                     break;
             }
         }
-        return new ServerInfo(name,secret,clientId,address);
+        return new Server(name,secret,clientId,address);
     }
 
     private String readSecret(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -115,32 +118,5 @@ public class ServerXmlConfigParser {
             parser.nextTag();
         }
         return value;
-    }
-
-    public static class ServerInfo {
-        private String apiSecret, clientId, serverAddress, serverName;
-
-        public ServerInfo(String name, String apiSecret, String clientId, String serverAddress) {
-            this.apiSecret = apiSecret;
-            this.clientId = clientId;
-            this.serverAddress = serverAddress;
-            this.serverName = name;
-        }
-
-        public String getApiSecret() {
-            return apiSecret;
-        }
-
-        public String getClientId() {
-            return clientId;
-        }
-
-        public String getServerAddress() {
-            return serverAddress;
-        }
-
-        public String getServerName() {
-            return serverName;
-        }
     }
 }

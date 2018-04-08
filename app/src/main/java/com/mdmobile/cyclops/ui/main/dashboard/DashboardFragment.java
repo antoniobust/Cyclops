@@ -148,6 +148,10 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
 
         ArrayList<ChartSharedPref> chartList = gson.fromJson(jsonPref, listType);
 
+        if(chartList == null){
+            return;
+        }
+
         ArrayList<String> properties = new ArrayList<>(chartList.size());
         for (ChartSharedPref chart : chartList) {
             properties.add(chart.property1);

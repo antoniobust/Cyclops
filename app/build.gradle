@@ -55,11 +55,9 @@ android {
     productFlavors {
         alpha {
             dimension "default"
-            applicationIdSuffix ".alpha"
         }
         beta {
             dimension "default"
-            applicationIdSuffix ".beta"
         }
         relase {
             dimension "default"

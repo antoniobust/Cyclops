@@ -1,6 +1,5 @@
 package com.mdmobile.cyclops.ui.main.dashboard;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Pair;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,16 +21,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.dataModels.api.sharedPref.ChartSharedPref;
-import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.CounterStat;
+import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatValue;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.Statistic;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatisticFactory;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
-import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Set;
 
 
 public class DashboardFragment extends Fragment implements Statistic.IStatisticReady,
@@ -67,8 +67,18 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     @Override
     public void getData(int statId, Bundle values) {
         //Poll finished update charts list
-        recyclerAdapter.addNewStat(values);
-        chartsRecycler.swapAdapter(recyclerAdapter, true);
+        Set<String> keySet = values.keySet();
+        ArrayList<StatValue> valueList;
+        ArrayList<Pair<String, StatValue[]>> chartsDataList = new ArrayList<>();
+        StatValue[] chartValues = new StatValue[]{};
+
+        for (String key : keySet) {
+            valueList = values.getParcelableArrayList(key);
+            chartsDataList.add(new Pair<>(key, valueList.toArray(chartValues)));
+        }
+
+        recyclerAdapter = new ChartsAdapter(chartsDataList);
+        chartsRecycler.setAdapter(recyclerAdapter);
     }
 
 
@@ -97,10 +107,9 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
             chartsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
-        recyclerAdapter = new ChartsAdapter(null, null);
-        chartsRecycler.setAdapter(recyclerAdapter);
+        recyclerAdapter = new ChartsAdapter(null);
         chartsRecycler.setEmptyView(rootView.findViewById(R.id.dashboard_recycler_empty_view));
-
+        chartsRecycler.setAdapter(recyclerAdapter);
 
         return rootView;
     }
@@ -148,7 +157,7 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
 
         ArrayList<ChartSharedPref> chartList = gson.fromJson(jsonPref, listType);
 
-        if(chartList == null){
+        if (chartList == null) {
             return;
         }
 
@@ -156,7 +165,6 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
         for (ChartSharedPref chart : chartList) {
             properties.add(chart.property1);
         }
-
 
         //TODO this only creates counter stat type implement other stat type
         counterStat = (CounterStat)

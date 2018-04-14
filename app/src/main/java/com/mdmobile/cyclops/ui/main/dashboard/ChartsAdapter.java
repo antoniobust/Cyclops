@@ -1,10 +1,9 @@
 package com.mdmobile.cyclops.ui.main.dashboard;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,9 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatValue;
 import com.mdmobile.cyclops.utils.LabelHelper;
-import com.mdmobile.cyclops.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Chart recycler nameView adapter
@@ -35,16 +32,23 @@ import java.util.Set;
 public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewHolder> {
 
     private final String LOG_TAG = ChartsAdapter.class.getSimpleName();
-    private ArrayList<ArrayList<StatValue>> chartValues;
-    private ArrayList<String> chartsProperties;
+    //    private ArrayList<ArrayList<StatValue>> chartValues;
+//    private ArrayList<String> chartsProperties;
+    private ArrayList<Pair<String, StatValue[]>> chartsDataList;
 
-    public ChartsAdapter(@Nullable ArrayList<StatValue> data, @Nullable List<String> chartsProperties) {
-        if (data != null && chartsProperties != null) {
-            chartValues.add(data);
-            this.chartsProperties.addAll(chartsProperties);
+    public ChartsAdapter(@Nullable ArrayList<Pair<String, StatValue[]>> chartsDataList) {
+        if (chartsDataList != null) {
+            this.chartsDataList = chartsDataList;
         }
-        setHasStableIds(true);
     }
+
+//    public ChartsAdapter(@Nullable ArrayList<StatValue> data, @Nullable List<String> chartsProperties) {
+//        if (data != null && chartsProperties != null) {
+//            chartValues.add(data);
+//            this.chartsProperties.addAll(chartsProperties);
+//        }
+//        setHasStableIds(true);
+//    }
 
     @Override
     public int getItemViewType(int position) {
@@ -52,9 +56,8 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
     }
 
     public int getItemCount() {
-        return chartValues == null || chartValues.isEmpty() ? 0 : chartValues.size();
+        return chartsDataList == null || chartsDataList.isEmpty() ? 0 : chartsDataList.size();
     }
-
 
     @Override
     public long getItemId(int position) {
@@ -83,36 +86,35 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
     }
 
 
-    public void resetCharts() {
-        Logger.log(LOG_TAG, "Scrapping old chartValues, replacing with new ones", Log.VERBOSE);
-        this.chartsProperties = new ArrayList<>();
-        this.chartValues = new ArrayList<>();
-        notifyDataSetChanged();
-    }
+//    public void resetCharts() {
+//        Logger.log(LOG_TAG, "Scrapping old chartValues, replacing with new ones", Log.VERBOSE);
+//        this.chartsProperties = new ArrayList<>();
+//        this.chartValues = new ArrayList<>();
+//        notifyDataSetChanged();
+//    }
 
-    public void addNewStat(@NonNull Bundle val) {
-        Set<String> keySet = val.keySet();
-        ArrayList<StatValue> valueList;
-        resetCharts();
-        for (String key : keySet) {
-            Logger.log(LOG_TAG, "Current chartValues size: " + getItemCount() + " adding: " + key + " chart to adapter", Log.VERBOSE);
-            valueList = val.getParcelableArrayList(key);
-            chartValues.add(valueList);
-            chartsProperties.add(key);
-        }
-        notifyDataSetChanged();
-    }
+//    public void addNewStat(@NonNull Bundle val) {
+//        Set<String> keySet = val.keySet();
+//        ArrayList<StatValue> valueList;
+//        resetCharts();
+//        for (String key : keySet) {
+//            Logger.log(LOG_TAG, "Current chartValues size: " + getItemCount() + " adding: " + key + " chart to adapter", Log.VERBOSE);
+//            valueList = val.getParcelableArrayList(key);
+//            chartValues.add(valueList);
+//            chartsProperties.add(key);
+//        }
+//        notifyDataSetChanged();
+//    }
 
     private void createPieChart(PieChart pieChart, int position) {
         List<PieEntry> pieEntries = new ArrayList<>();
         PieDataSet pieDataSet;
         PieData pieData = new PieData();
-        ArrayList<StatValue> statValues = chartValues.get(position);
+        Pair<String, StatValue[]> chartData = chartsDataList.get(position);
 
-        for (StatValue value : statValues) {
-            pieEntries.add(new PieEntry(value.getValue(), value.getLabel()));
+        for (int i = 0; i < chartData.second.length; i++) {
+            pieEntries.add(new PieEntry(chartData.second[i].getValue(), chartData.second[i].getLabel()));
         }
-
 
         pieDataSet = new PieDataSet(pieEntries, null);
         pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
@@ -130,7 +132,7 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         legend.setMaxSizePercent(0.1f);
 
-        String chartProperty = chartsProperties.get(position);
+        String chartProperty = chartsDataList.get(position).first;
         chartProperty = LabelHelper.Companion.getUiLabelFor(chartProperty);
         Description descriptionLabel = new Description();
         descriptionLabel.setEnabled(true);

@@ -83,7 +83,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(final Account account, Bundle bundle, String authority,
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
-        Bundle serverInfo = ServerUtility.getServer();
+        Bundle serverInfo = ServerUtility.getActiveServer();
         if (serverInfo == null) {
             Logger.log(LOG_TAG, "No Server Found...\nSkipping Sync", Log.ERROR);
             return;

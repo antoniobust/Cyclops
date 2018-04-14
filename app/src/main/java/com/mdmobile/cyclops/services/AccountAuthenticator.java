@@ -65,7 +65,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         final AccountManager accountManager = AccountManager.get(mContext);
         final Bundle userInfo = UserUtility.getUserInfo(account);
-        final Bundle serverInfo = ServerUtility.getServer();
+        final Bundle serverInfo = ServerUtility.getActiveServer();
 
         final String password = accountManager.getPassword(account);
         final String clientID = serverInfo.getString(McContract.ServerInfo.CLIENT_ID);

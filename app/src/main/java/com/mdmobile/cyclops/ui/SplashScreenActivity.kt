@@ -28,13 +28,13 @@ class SplashScreenActivity : AppCompatActivity() {
         val splashScreenDuration = 1500L
         Handler().postDelayed(
                 {
-                    val intent: Intent = Intent(Intent.ACTION_VIEW)
+                    val intent = Intent(Intent.ACTION_VIEW)
 
-                    if (UserUtility.checkAnyUserLoggedIn() && ServerUtility.getServer() != null) {
-                        Logger.log(LOG_TAG,"No user/server found, redirecting to login", Log.VERBOSE)
+                    if (UserUtility.checkAnyUserLogged() && ServerUtility.anyActiveServer()) {
+                        Logger.log(LOG_TAG,"User logged, redirecting to main activity", Log.VERBOSE)
                         intent.setClass(this, MainActivity::class.java)
                     } else {
-                        Logger.log(LOG_TAG,"User logged, redirecting to main activity", Log.VERBOSE)
+                        Logger.log(LOG_TAG,"No user/server found, redirecting to login", Log.VERBOSE)
                         intent.setClass(this, LoginActivity::class.java)
                     }
                     startActivity(intent)

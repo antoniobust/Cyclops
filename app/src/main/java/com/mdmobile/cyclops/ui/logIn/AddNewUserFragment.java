@@ -48,7 +48,7 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
         if (!(userName.length() > 0 && password.length() > 0)) {
             return;
         }
-        Bundle serverInfo = ServerUtility.getServer();
+        Bundle serverInfo = ServerUtility.getActiveServer();
 
         if (serverInfo == null) {
             Toast.makeText(getContext(), "Add a server configuration to login", Toast.LENGTH_SHORT).show();

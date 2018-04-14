@@ -105,9 +105,13 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         //If activity was launched from authenticator get the intent with the auth response
         authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (authenticatorResponse == null) {
-            if (UserUtility.checkAnyUserLoggedIn()) {
+            if (UserUtility.checkAnyUserLogged() && ServerUtility.anyActiveServer()) {
                 startMainActivity();
             }
         }
@@ -119,16 +123,16 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         outState.putString(ATTACHED_FRAGMENT_KEY, getAttachedFragmentTag());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (authenticatorResponse == null) {
-            if (UserUtility.checkAnyUserLoggedIn()) {
-                startMainActivity();
-            }
-        }
-
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (authenticatorResponse == null) {
+//            if (UserUtility.checkAnyUserLogged()) {
+//                startMainActivity();
+//            }
+//        }
+//
+//    }
 
     // Actions OnClick method -> change between server and user fragment
     public void changeSection(View v) {

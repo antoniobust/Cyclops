@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 
 import com.mdmobile.cyclops.ui.logIn.LoginActivity
+import com.mdmobile.cyclops.utils.ServerUtility
 import com.mdmobile.cyclops.utils.UserUtility
 
 /**
@@ -24,22 +25,19 @@ open class BaseActivity : AppCompatActivity() {
         return lazy(LazyThreadSafetyMode.NONE) { findViewById<T>(id) }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-        if (!checkActiveUser()) {
-            redirectToLoginPage()
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        if (!checkActiveUser()) {
+        if (!checkActiveUser() || !checkActveServer()) {
             redirectToLoginPage()
         }
     }
 
     private fun checkActiveUser(): Boolean {
-        return UserUtility.checkAnyUserLoggedIn()
+        return UserUtility.checkAnyUserLogged()
+    }
+
+    private fun checkActveServer(): Boolean {
+        return ServerUtility.anyActiveServer()
     }
 
     private fun redirectToLoginPage() {

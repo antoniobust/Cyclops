@@ -112,7 +112,7 @@ abstract public class BasicRequest<T> extends Request<T> {
                         null, false, new OnTokenAcquired(new WeakReference<BasicRequest>(this)), null);
             }
         } else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
-            Bundle server = ServerUtility.getServer();
+            Bundle server = ServerUtility.getActiveServer();
             String serverName;
             if (server != null) {
                 serverName = server.getString(McContract.ServerInfo.NAME);

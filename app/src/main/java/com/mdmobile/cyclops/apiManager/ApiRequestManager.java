@@ -129,7 +129,7 @@ public class ApiRequestManager {
     }
 
     public void getDeviceInfo(@NonNull final String devId) {
-        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getActiveServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.SelectDevice.Builder(apiAuthority, devId).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api,
@@ -149,7 +149,7 @@ public class ApiRequestManager {
     }
 
     public void getDeviceInfo() {
-        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getActiveServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api,
@@ -184,7 +184,7 @@ public class ApiRequestManager {
     }
 
     public void getDeviceProfiles(@NonNull final String deviceID) {
-        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getActiveServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).getProfiles().build();
 
         ProfilesRequest request = new ProfilesRequest(Request.Method.GET, api, deviceID, new Response.Listener<String>() {
@@ -203,7 +203,7 @@ public class ApiRequestManager {
     }
 
     public void getDeviceInstalledApps(@NonNull final String devID) {
-        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getActiveServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
         DeviceInstalledAppRequest installedAppRequest = new DeviceInstalledAppRequest(Request.Method.GET,
@@ -229,7 +229,7 @@ public class ApiRequestManager {
 
     public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
-        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getActiveServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 
         String jsonPayload = new Gson().toJson(new Action(action, message, phoneNumber));
@@ -253,11 +253,11 @@ public class ApiRequestManager {
     }
 
     public void getServerInfo() {
-        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getActiveServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.ServerApi.Builder(apiAuthority).getServerInfo().build();
 
         ServerInfoRequest request = new ServerInfoRequest(api,
-                ServerUtility.getServer().getString(McContract.ServerInfo.NAME),
+                ServerUtility.getActiveServer().getString(McContract.ServerInfo.NAME),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -278,7 +278,7 @@ public class ApiRequestManager {
     }
 
     public void getUsers() {
-        String apiAuthority = ServerUtility.getServer().getString(SERVER_ADDRESS_KEY);
+        String apiAuthority = ServerUtility.getActiveServer().getString(SERVER_ADDRESS_KEY);
         String api = ApiModel.UserSecurityApi.Builder(apiAuthority).getAllUsers(false, null, null).build();
         UserRequest userRequest = new UserRequest(api,
                 new Response.Listener<String>() {

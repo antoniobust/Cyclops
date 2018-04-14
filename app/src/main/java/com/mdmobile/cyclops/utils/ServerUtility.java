@@ -38,7 +38,7 @@ public class ServerUtility {
         return preferences.contains(applicationContext.getString(R.string.server_name_preference));
     }
 
-    public static Bundle getServer() {
+    public static Bundle getActiveServer() {
         SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
         String serverName = preferences.getString(applicationContext.getString(R.string.server_name_preference), null);
         String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);

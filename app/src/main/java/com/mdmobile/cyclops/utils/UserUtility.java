@@ -49,7 +49,7 @@ public class UserUtility {
                 .getAccountsByType(applicationContext.getString(R.string.account_type))[0];
     }
 
-    public static Boolean checkAnyUserLoggedIn() {
+    public static Boolean checkAnyUserLogged() {
         Logger.log(LOG_TAG, "Checking any users Logged", Log.VERBOSE);
 
         Account[] accounts =

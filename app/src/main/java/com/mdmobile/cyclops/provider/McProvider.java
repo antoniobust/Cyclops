@@ -128,6 +128,10 @@ public class McProvider extends ContentProvider {
 
                 break;
 
+            case SERVER:
+                mQueryBuilder.setTables(McContract.SERVER_INFO_TABLE_NAME);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }
@@ -264,7 +268,7 @@ public class McProvider extends ContentProvider {
 
         McEnumUri mcEnumUri = matcher.matchUri(uri);
         long newRowID =
-                database.insertWithOnConflict(mcEnumUri.tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+                database.insert(mcEnumUri.tableName, null, contentValues);
 
         switch (mcEnumUri) {
             case DEVICES:
@@ -274,10 +278,13 @@ public class McProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return McContract.Device.buildUriWithID(newRowID);
+
             case CUSTOM_ATTRIBUTE:
                 return null;
+
             case CUSTOM_DATA:
                 return null;
+
             case INSTALLED_APPLICATION_ID:
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert application in DB", Log.ERROR);
@@ -325,6 +332,13 @@ public class McProvider extends ContentProvider {
                         + McContract.ProfileDevice.PROFILE_ID + " , " + McContract.ProfileDevice.DEVICE_ID + ") VALUES ('"
                         + newRowID + "','" + McContract.Device.getDeviceIdFromUri(uri) + "');");
                 return McContract.Profile.buildUriWithID(String.valueOf(newRowID));
+
+            case SERVER:
+                if (newRowID < 1) {
+                    Logger.log(LOG_TAG, "Impossible to insert ServerInfo in DB", Log.ERROR);
+                    return null;
+                }
+                return McContract.ServerInfo.buildUriWithId(newRowID);
             default:
                 throw new UnsupportedOperationException("Unsupported uri: " + uri.toString());
         }

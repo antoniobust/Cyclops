@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.ServerDetailsAdapter;
-import com.mdmobile.cyclops.dataModels.api.ServerInfo;
+import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 
 /**
  * A placeholder fragment containing a simple view.

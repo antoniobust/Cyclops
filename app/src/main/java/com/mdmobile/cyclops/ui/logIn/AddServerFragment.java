@@ -1,6 +1,7 @@
 package com.mdmobile.cyclops.ui.logIn;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,7 +21,8 @@ import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.LogInViewPagerAdapter;
-import com.mdmobile.cyclops.dataModels.api.Server;
+import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.ConfigureServerAsyncTask;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.Logger;
@@ -77,7 +79,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         }
 
         Server server = new Server(serverName,secret,clientId,address);
-        server.saveServer();
+        saveServer(server);
         (getActivity().findViewById(R.id.add_user_button)).performClick();
     }
 
@@ -171,5 +173,11 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
             ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
             configureServerAsyncTask.execute(serverSetupFile);
         }
+    }
+
+    private void saveServer(Server server){
+        server.setActive();
+        ContentValues values = server.toContentValues();
+        getContext().getContentResolver().insert(McContract.ServerInfo.CONTENT_URI,values);
     }
 }

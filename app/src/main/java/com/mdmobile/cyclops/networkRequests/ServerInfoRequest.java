@@ -5,7 +5,7 @@ import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
-import com.mdmobile.cyclops.dataModels.api.ServerInfo;
+import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.DbData;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -44,11 +44,6 @@ public class ServerInfoRequest extends BasicRequest<String> {
 
             ArrayList<ServerInfo.ManagementServer> managementServers = new ArrayList<>(servers.getManagementServers());
             ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(servers.getDeploymentServers());
-
-            //Update server info -> Version could have changed since last sync
-            applicationContext.getContentResolver().update(
-                    McContract.ServerInfo.buildServerInfoUriWithName(serverSynced),
-                    DbData.prepareServerInfoValues(servers), null, null);
 
             //Delete any existing data in DB
             applicationContext.getContentResolver().delete(McContract.MsInfo.CONTENT_URI, null, null);

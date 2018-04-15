@@ -1,11 +1,13 @@
 package com.mdmobile.cyclops.utils;
 
 
+import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.mdmobile.cyclops.dataModels.api.Server;
+import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.logIn.AddServerFragment;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -35,9 +37,7 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, Server> {
             ServerXmlConfigParser fileParser = new ServerXmlConfigParser();
             ArrayList<Server> servers = fileParser.parseXml(fileInputStream);
             //TODO:support multiple servers
-            Server info = servers.get(0);
-            info.saveServer();
-            return info;
+            return servers.get(0);
         } catch (IOException | XmlPullParserException e) {
             throwable = e;
             return null;
@@ -55,6 +55,10 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, Server> {
             }
             return;
         }
+        info.setActive();
+        ContentValues values = info.toContentValues();
+        hostingFragment.get().getContext().getContentResolver().insert(McContract.ServerInfo.CONTENT_URI, values);
+
         Logger.log(LOG_TAG, "ServerSetup.xml file parsed: Name = " + info.getServerName() + "\naddress = "
                 + info.getServerAddress() + "\nAPI Secret = " + info.getApiSecret() + "\nclient ID = "
                 + info.getClientId(), Log.VERBOSE);

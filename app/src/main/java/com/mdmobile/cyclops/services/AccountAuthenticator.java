@@ -14,15 +14,13 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
-import com.mdmobile.cyclops.dataModels.api.Token;
+import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
-import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
-
-import static com.mdmobile.cyclops.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
@@ -65,16 +63,20 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         final AccountManager accountManager = AccountManager.get(mContext);
         final Bundle userInfo = UserUtility.getUserInfo(account);
-        final Bundle serverInfo = ServerUtility.getActiveServer();
+        final Server serverInfo = ServerUtility.getActiveServer();
+
+        if (serverInfo == null || userInfo == null) {
+            return promptLoginActivity(authenticatorResponse, account.type, authTokenType, null);
+        }
 
         final String password = accountManager.getPassword(account);
-        final String clientID = serverInfo.getString(McContract.ServerInfo.CLIENT_ID);
-        final String apiSecret = serverInfo.getString(McContract.ServerInfo.CLIENT_SECRET);
-        final String serverUrl = serverInfo.getString(SERVER_ADDRESS_KEY);
+        final String clientID = serverInfo.getClientId();
+        final String apiSecret = serverInfo.getApiSecret();
+        final String serverUrl = serverInfo.getServerAddress();
 
 
         //If we have all necessary details let's attempt a token request
-        if (password != null && clientID != null && apiSecret != null && serverUrl != null) {
+        if (password != null) {
             Logger.log(LOG_TAG, "Requesting new token...", Log.VERBOSE);
             ApiRequestManager.getInstance()
                     .getToken(serverUrl, clientID, apiSecret, account.name, password,

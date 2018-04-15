@@ -16,10 +16,9 @@ import static com.mdmobile.cyclops.dataTypes.ApiActions.WIPE;
 /**
  * Constants to define possible api actions
  */
-
+@SuppressWarnings("unused")
 @StringDef({CHECKIN, WIPE, LOCK, UNENROL, SEND_MESSAGE, LOCATE, SEND_SCRIPT})
 @Retention(RetentionPolicy.SOURCE)
-
 public @interface ApiActions {
     String CHECKIN = "Checkin";
     String WIPE = "Wipe";
@@ -40,10 +39,10 @@ public @interface ApiActions {
     String CLEAR_RESTRICTION = "ClearRestrictions";
     String CLEAR_SOTI_SURF_CACHE = "ClearSotiSurfCache";
     String DISABLE_AGENT_UPGRADE = "DisableAgentUpgrade";
-    String DIASBLE_LOST_MODE = "DisableLostMode";
+    String DISABLE_LOST_MODE = "DisableLostMode";
     String DISABLE_PASSLOCK_CODE = "DisablePasscodeLock";
     String ENABLE_AGENT_UPGRADE = "EnableAgentUpgrade";
-    String ENALABLE_LOST_MODE = "EnableLostMode";
+    String ENABLE_LOST_MODE = "EnableLostMode";
     String FACTORY_RESET = "FactoryReset";
     String MIMiGRATE_TO_ELM_AGENT = "grateToELMAgent";
     String RESET_PASSCODE = "ResetPasscode";
@@ -57,7 +56,7 @@ public @interface ApiActions {
     String UPDATE_VIRUS_DEFINITION = "UpdateVirusDefinition";
     String UPGRADE_AGENT_NOW = "UpgradeAgentNow";
     String ENROLL_IN_EFOTA = "EnrollInEFOTA";
-    String UPGRADE_FIRAMWARE = "UpgradeFirmware";
+    String UPGRADE_FIRMWARE = "UpgradeFirmware";
 
 }
 

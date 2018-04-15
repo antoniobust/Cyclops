@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.dataModels.api.sharedPref.ChartSharedPref;
+import com.mdmobile.cyclops.dataModel.chart.Chart;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.CounterStat;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatValue;
@@ -40,7 +40,7 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     private ChartsAdapter recyclerAdapter;
     private SharedPreferences preferences;
     private RecyclerEmptyView chartsRecycler;
-//    private ArrayList<ChartSharedPref> currentCharts;
+//    private ArrayList<Chart> currentCharts;
 
 
     public DashboardFragment() {
@@ -152,17 +152,17 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
     private void createCharts() {
         String jsonPref = preferences.getString(getString(R.string.charts_preference), "");
         Gson gson = new Gson();
-        Type listType = new TypeToken<ArrayList<ChartSharedPref>>() {
+        Type listType = new TypeToken<ArrayList<Chart>>() {
         }.getType();
 
-        ArrayList<ChartSharedPref> chartList = gson.fromJson(jsonPref, listType);
+        ArrayList<Chart> chartList = gson.fromJson(jsonPref, listType);
 
         if (chartList == null) {
             return;
         }
 
         ArrayList<String> properties = new ArrayList<>(chartList.size());
-        for (ChartSharedPref chart : chartList) {
+        for (Chart chart : chartList) {
             properties.add(chart.property1);
         }
 

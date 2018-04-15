@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.dataModels.api.ServerInfo;
+import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
 
 /**

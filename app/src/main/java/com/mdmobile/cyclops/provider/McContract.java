@@ -53,6 +53,7 @@ public class McContract {
     // ************ Table's columns interfaces **********************
     interface DeviceInfo {
         //Columns
+        String COLUMN_SERVER_ID = "ServerID";
         String COLUMN_KIND = "Kind";
         String COLUMN_COMPLIANCE_STATUS = "ComplianceStatus";
         String COLUMN_DEVICE_ID = "DeviceId";
@@ -180,8 +181,7 @@ public class McContract {
         String NAME = "Name";
         String CLIENT_ID = "ClientId";
         String CLIENT_SECRET = "ClientSecret";
-        String PRODUCT_VERSION = "ProductVersion";
-        String PRODUCT_BUILD_NUMBER = "ProductBuildNumber";
+        String SERVER_ADDRESS = "Address";
     }
 
     interface ProfileColumns {

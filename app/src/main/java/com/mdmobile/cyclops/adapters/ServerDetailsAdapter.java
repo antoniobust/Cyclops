@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.dataModels.api.ServerInfo;
+import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 
 /**
  * Adapter responsible to populate a server

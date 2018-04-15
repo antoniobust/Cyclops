@@ -8,7 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mdmobile.cyclops.dataModels.api.InstalledApp;
+import com.mdmobile.cyclops.dataModel.api.InstalledApp;
 import com.mdmobile.cyclops.provider.McContract;
 
 import java.io.UnsupportedEncodingException;

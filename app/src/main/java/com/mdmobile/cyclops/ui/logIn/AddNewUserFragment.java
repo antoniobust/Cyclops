@@ -14,12 +14,10 @@ import android.widget.Toast;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
-import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
-
-import static com.mdmobile.cyclops.utils.ServerUtility.SERVER_ADDRESS_KEY;
 
 
 public class AddNewUserFragment extends Fragment implements View.OnClickListener {
@@ -48,7 +46,7 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
         if (!(userName.length() > 0 && password.length() > 0)) {
             return;
         }
-        Bundle serverInfo = ServerUtility.getActiveServer();
+        Server serverInfo = ServerUtility.getActiveServer();
 
         if (serverInfo == null) {
             Toast.makeText(getContext(), "Add a server configuration to login", Toast.LENGTH_SHORT).show();
@@ -57,9 +55,9 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
 
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
         ApiRequestManager.getInstance().getToken(
-                serverInfo.getString(SERVER_ADDRESS_KEY),
-                serverInfo.getString(McContract.ServerInfo.CLIENT_ID),
-                serverInfo.getString(McContract.ServerInfo.CLIENT_SECRET),
+                serverInfo.getServerAddress(),
+                serverInfo.getClientId(),
+                serverInfo.getApiSecret(),
                 userName, password, (NetworkCallBack) getActivity());
     }
 

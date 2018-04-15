@@ -8,7 +8,8 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.dataModels.api.ServerInfo;
+import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -38,7 +39,7 @@ public class ServerUtility {
         return preferences.contains(applicationContext.getString(R.string.server_name_preference));
     }
 
-    public static Bundle getActiveServer() {
+    public static Server getActiveServer() {
         SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
         String serverName = preferences.getString(applicationContext.getString(R.string.server_name_preference), null);
         String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);
@@ -46,12 +47,8 @@ public class ServerUtility {
         String address = preferences.getString(applicationContext.getString(R.string.server_address_preference), null);
 
         if (serverName != null && apiSecret != null && clientId != null && address != null) {
-            Bundle bundle = new Bundle(4);
-            bundle.putString(McContract.ServerInfo.NAME, serverName);
-            bundle.putString(SERVER_ADDRESS_KEY, address);
-            bundle.putString(McContract.ServerInfo.CLIENT_ID, clientId);
-            bundle.putString(McContract.ServerInfo.CLIENT_SECRET, apiSecret);
-            return bundle;
+
+            return new Server(serverName,apiSecret,clientId,address);
         } else {
             return null;
         }

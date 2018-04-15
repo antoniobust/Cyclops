@@ -33,11 +33,11 @@ import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
-import com.mdmobile.cyclops.dataModels.api.InstalledApp;
-import com.mdmobile.cyclops.dataModels.api.Profile;
-import com.mdmobile.cyclops.dataModels.api.devices.BasicDevice;
-import com.mdmobile.cyclops.dataModels.api.devices.DeviceFactory;
-import com.mdmobile.cyclops.dataModels.api.devices.IDevice;
+import com.mdmobile.cyclops.dataModel.api.InstalledApp;
+import com.mdmobile.cyclops.dataModel.api.Profile;
+import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice;
+import com.mdmobile.cyclops.dataModel.api.devices.DeviceFactory;
+import com.mdmobile.cyclops.dataModel.api.devices.IDevice;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;

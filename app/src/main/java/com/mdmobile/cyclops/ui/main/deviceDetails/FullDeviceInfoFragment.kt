@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mdmobile.cyclops.R
-import com.mdmobile.cyclops.dataModels.api.devices.BasicDevice
+import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_EXTRA_KEY
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY
 import com.mdmobile.cyclops.utils.LabelHelper

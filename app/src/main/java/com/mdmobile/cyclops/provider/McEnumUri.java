@@ -49,7 +49,7 @@ public enum McEnumUri {
 
     PROFILE_ID(520, McContract.PROFILE_TABLE_NAME + "/*", true, McContract.PROFILE_TABLE_NAME),
 
-    SERVER(521, McContract.SERVER_INFO_TABLE_NAME + "/*", true, McContract.SERVER_INFO_TABLE_NAME);
+    SERVER(521, McContract.SERVER_INFO_TABLE_NAME, true, McContract.SERVER_INFO_TABLE_NAME);
 
 
     public String path, contentType, tableName;

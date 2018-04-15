@@ -6,7 +6,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mdmobile.cyclops.dataModels.api.User;
+import com.mdmobile.cyclops.dataModel.api.User;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.DbData;
 

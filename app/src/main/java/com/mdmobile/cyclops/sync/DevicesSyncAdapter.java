@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -83,7 +84,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(final Account account, Bundle bundle, String authority,
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
-        Bundle serverInfo = ServerUtility.getActiveServer();
+        Server serverInfo = ServerUtility.getActiveServer();
         if (serverInfo == null) {
             Logger.log(LOG_TAG, "No Server Found...\nSkipping Sync", Log.ERROR);
             return;

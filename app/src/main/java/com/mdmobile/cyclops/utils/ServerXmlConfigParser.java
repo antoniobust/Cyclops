@@ -3,8 +3,7 @@ package com.mdmobile.cyclops.utils;
 import android.support.annotation.WorkerThread;
 import android.util.Xml;
 
-import com.mdmobile.cyclops.dataModels.api.Server;
-import com.mdmobile.cyclops.dataModels.api.ServerInfo;
+import com.mdmobile.cyclops.dataModel.Server;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

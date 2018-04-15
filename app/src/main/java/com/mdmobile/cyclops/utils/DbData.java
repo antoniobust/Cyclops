@@ -3,8 +3,8 @@ package com.mdmobile.cyclops.utils;
 import android.content.ContentValues;
 import android.os.Bundle;
 
-import com.mdmobile.cyclops.dataModels.api.ServerInfo;
-import com.mdmobile.cyclops.dataModels.api.User;
+import com.mdmobile.cyclops.dataModel.api.ServerInfo;
+import com.mdmobile.cyclops.dataModel.api.User;
 import com.mdmobile.cyclops.provider.McContract;
 
 import java.util.ArrayList;
@@ -125,12 +125,5 @@ public class DbData {
             extraBundle.putString(temp[0], temp[1]);
         }
         return extraBundle;
-    }
-
-    public static ContentValues prepareServerInfoValues(ServerInfo serverInfo) {
-        ContentValues serverValues = new ContentValues();
-        serverValues.put(McContract.ServerInfo.PRODUCT_VERSION, serverInfo.getProductVersion());
-        serverValues.put(McContract.ServerInfo.PRODUCT_BUILD_NUMBER, serverInfo.getProductVersionBuild());
-        return serverValues;
     }
 }

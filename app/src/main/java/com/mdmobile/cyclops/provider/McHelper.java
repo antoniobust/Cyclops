@@ -33,7 +33,7 @@ import static com.mdmobile.cyclops.provider.McContract.USER_TABLE_NAME;
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 32;
+    private static final int DB_VERSION = 33;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -48,6 +48,7 @@ public class McHelper extends SQLiteOpenHelper {
         db.execSQL(" CREATE TABLE " + McContract.DEVICE_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + McContract.Device.COLUMN_DEVICE_ID + " TEXT NOT NULL,"
+                + McContract.Device.COLUMN_SERVER_ID + " INTEGER NOT NULL,"
                 + McContract.Device.COLUMN_KIND + " TEXT,"
                 + McContract.Device.COLUMN_DEVICE_NAME + " TEXT,"
                 + McContract.Device.COLUMN_AGENT_ONLINE + " INTEGER,"
@@ -71,8 +72,9 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.Device.COLUMN_PATH + " TEXT,"
                 + McContract.Device.COLUMN_PLATFORM + " INTEGER,"
                 + McContract.Device.COLUMN_EXTRA_INFO + " TEXT,"
-                + "UNIQUE(" + McContract.Device.COLUMN_DEVICE_ID + ") ON CONFLICT REPLACE );");
-
+                + "UNIQUE(" + McContract.Device.COLUMN_DEVICE_ID + ") ON CONFLICT REPLACE, "
+                + "FOREIGN KEY(" + McContract.Device.COLUMN_SERVER_ID + ") REFERENCES "
+                + McContract.SERVER_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
 
         //Create MsInfo table
         db.execSQL(" CREATE TABLE " + MANAGEMENT_SERVER_TABLE_NAME
@@ -196,8 +198,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.ServerInfo.CLIENT_ID + " TEXT NOT NULL, "
                 + McContract.ServerInfo.CLIENT_SECRET + " TEXT NOT NULL, "
                 + McContract.ServerInfo.NAME + " TEXT NOT NULL,"
-                + McContract.ServerInfo.PRODUCT_VERSION + " TEXT,"
-                + McContract.ServerInfo.PRODUCT_BUILD_NUMBER + " TEXT,"
+                + McContract.ServerInfo.SERVER_ADDRESS + " TEXT,"
                 + "UNIQUE(" + McContract.ServerInfo.NAME + ") ON CONFLICT ABORT );");
 
         //Create profile table
@@ -230,7 +231,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + " WHERE " + McContract.INSTALLED_APPLICATION_TABLE_NAME + "." + McContract.InstalledApplications.DEVICE_ID
                 + "= OLD." + McContract.Device.COLUMN_DEVICE_ID + ";"
                 + "END;");
-        //Whenever we delete we delete reference to this device in PROFILE-DEVICE lookup table
+        //Whenever we delete a device we delete references in PROFILE-DEVICE lookup table
         db.execSQL("CREATE TRIGGER RemoveDeviceProfiles BEFORE DELETE ON " + McContract.DEVICE_TABLE_NAME
                 + " BEGIN "
                 + "DELETE FROM " + McContract.PROFILE_DEVICE_TABLE_NAME
@@ -238,17 +239,16 @@ public class McHelper extends SQLiteOpenHelper {
                 + "= OLD." + McContract.Device.COLUMN_DEVICE_ID + ";"
                 + "END;");
 
+        //Whenever we delete a server we delete all devices belonging to the server
+        db.execSQL("CREATE TRIGGER RemoveDevices BEFORE DELETE ON " + McContract.SERVER_INFO_TABLE_NAME
+                + " BEGIN "
+                + " DELETE FROM " + McContract.DEVICE_TABLE_NAME
+                + " WHERE " + McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_SERVER_ID
+                + "=OLD." + McContract.ServerInfo._ID + ";"
+                + "END;");
 
-        //Insert standard script in Script table
-        Resources res = mContext.getResources();
-        String[] titles = res.getStringArray(R.array.default_script_titles);
-        String[] descriptions = res.getStringArray(R.array.default_script_descriptions);
-        String[] scripts = res.getStringArray(R.array.default_script);
-        ContentValues scriptValues;
-        for (int i = 0; i < titles.length; i++) {
-            scriptValues = DbData.prepareScriptValues(titles[i], descriptions[i], scripts[i]);
-            db.insert(McContract.SCRIPT_TABLE_NAME, null, scriptValues);
-        }
+
+        insertStandardScript(db);
     }
 
     @Override
@@ -271,6 +271,18 @@ public class McHelper extends SQLiteOpenHelper {
 
 
         onCreate(sqLiteDatabase);
+    }
+
+    private void insertStandardScript(SQLiteDatabase db) {
+        Resources res = mContext.getResources();
+        String[] titles = res.getStringArray(R.array.default_script_titles);
+        String[] descriptions = res.getStringArray(R.array.default_script_descriptions);
+        String[] scripts = res.getStringArray(R.array.default_script);
+        ContentValues scriptValues;
+        for (int i = 0; i < titles.length; i++) {
+            scriptValues = DbData.prepareScriptValues(titles[i], descriptions[i], scripts[i]);
+            db.insert(McContract.SCRIPT_TABLE_NAME, null, scriptValues);
+        }
     }
 
 }

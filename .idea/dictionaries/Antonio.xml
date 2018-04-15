@@ -4,6 +4,7 @@
       <w>agentless</w>
       <w>checkin</w>
       <w>devicegroups</w>
+      <w>efota</w>
       <w>gson</w>
       <w>imei</w>
       <w>logins</w>
@@ -11,10 +12,12 @@
       <w>meid</w>
       <w>mobi</w>
       <w>passcode</w>
+      <w>passlock</w>
       <w>pocketconsole</w>
       <w>reppresentation</w>
       <w>rssi</w>
       <w>smartphone</w>
+      <w>soti</w>
       <w>ssid</w>
       <w>statisticable</w>
       <w>unenrol</w>

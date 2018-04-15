@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.dataModels.api.Profile;
+import com.mdmobile.cyclops.dataModel.api.Profile;
 
 import java.util.ArrayList;
 

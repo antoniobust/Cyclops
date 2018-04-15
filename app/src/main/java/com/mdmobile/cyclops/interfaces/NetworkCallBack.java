@@ -3,7 +3,7 @@ package com.mdmobile.cyclops.interfaces;
 import android.os.Bundle;
 
 import com.android.volley.VolleyError;
-import com.mdmobile.cyclops.dataModels.api.Token;
+import com.mdmobile.cyclops.dataModel.api.Token;
 
 public interface NetworkCallBack {
 

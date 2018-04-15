@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.dataModels.api.Token;
+import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
 import com.mdmobile.cyclops.ui.main.MainActivity;

@@ -2,6 +2,7 @@ package com.mdmobile.cyclops.networkRequests;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -10,18 +11,19 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.mdmobile.cyclops.dataModels.api.RuntimeTypeAdapterFactory;
-import com.mdmobile.cyclops.dataModels.api.devices.AndroidForWork;
-import com.mdmobile.cyclops.dataModels.api.devices.AndroidGeneric;
-import com.mdmobile.cyclops.dataModels.api.devices.AndroidPlus;
-import com.mdmobile.cyclops.dataModels.api.devices.BasicDevice;
-import com.mdmobile.cyclops.dataModels.api.devices.IosDevice;
-import com.mdmobile.cyclops.dataModels.api.devices.SamsungElm;
-import com.mdmobile.cyclops.dataModels.api.devices.WindowsCE;
-import com.mdmobile.cyclops.dataModels.api.devices.WindowsDesktop;
-import com.mdmobile.cyclops.dataModels.api.devices.WindowsDesktopLegacy;
-import com.mdmobile.cyclops.dataModels.api.devices.WindowsPhone;
-import com.mdmobile.cyclops.dataModels.api.devices.WindowsRuntime;
+import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.api.RuntimeTypeAdapterFactory;
+import com.mdmobile.cyclops.dataModel.api.devices.AndroidForWork;
+import com.mdmobile.cyclops.dataModel.api.devices.AndroidGeneric;
+import com.mdmobile.cyclops.dataModel.api.devices.AndroidPlus;
+import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice;
+import com.mdmobile.cyclops.dataModel.api.devices.IosDevice;
+import com.mdmobile.cyclops.dataModel.api.devices.SamsungElm;
+import com.mdmobile.cyclops.dataModel.api.devices.WindowsCE;
+import com.mdmobile.cyclops.dataModel.api.devices.WindowsDesktop;
+import com.mdmobile.cyclops.dataModel.api.devices.WindowsDesktopLegacy;
+import com.mdmobile.cyclops.dataModel.api.devices.WindowsPhone;
+import com.mdmobile.cyclops.dataModel.api.devices.WindowsRuntime;
 import com.mdmobile.cyclops.dataTypes.DeviceKind;
 import com.mdmobile.cyclops.provider.McContract;
 
@@ -41,14 +43,16 @@ public class DeviceRequest<T> extends BasicRequest<T> {
     private Response.Listener<T> listener;
     private Context mContext;
     private int insertInfoMethod;
+    private Server server;
 
-    public DeviceRequest(Context context, int method, String url, Response.Listener<T> listener,
+    public DeviceRequest(Context context, int method, String url, Server server, Response.Listener<T> listener,
                          Response.ErrorListener errorListener, int insertDataMethod) {
         super(method, url, errorListener);
 
         this.mContext = context.getApplicationContext();
         this.listener = listener;
         insertInfoMethod = insertDataMethod;
+        this.server = server;
     }
 
     @Override
@@ -84,26 +88,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             ArrayList<? extends BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
             mContext.getContentResolver().delete(McContract.Device.CONTENT_URI, null, null);
 
-            //Parse devices to extract common properties and put other as extra string
-            if (devices.size() == 1) {
-                ContentValues device = devices.get(0).toContentValues();
-                if (insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
-                    mContext.getContentResolver().insert(McContract.Device.CONTENT_URI, device);
-                } else if (insertInfoMethod == UPDATE_EXISTING_DEVICE_INFO) {
-                    String devId = devices.get(0).getDeviceId();
-                    mContext.getContentResolver()
-                            .update(McContract.Device.buildUriWithDeviceID(devId), device, null, null);
-                }
-            } else if (devices.size() > 1 && insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
-                ArrayList<ContentValues> devicesValues = new ArrayList<>(devices.size());
-                for (Object device : devices) {
-                    if (device instanceof BasicDevice) {
-                        devicesValues.add(((BasicDevice) device).toContentValues());
-                    }
-                }
-                ContentValues[] array = new ContentValues[]{};
-                mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues.toArray(array));
-            }
+            saveDevicesToDB(devices);
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));
@@ -116,5 +101,38 @@ public class DeviceRequest<T> extends BasicRequest<T> {
     @Override
     protected void deliverResponse(T response) {
         listener.onResponse(response);
+    }
+
+    private void saveDevicesToDB(ArrayList<? extends BasicDevice> devices) {
+        Cursor c = mContext.getContentResolver().query(McContract.ServerInfo.CONTENT_URI,
+                new String[]{McContract.ServerInfo._ID},
+                McContract.ServerInfo.NAME + "=?", new String[]{server.getServerName()}, null);
+
+        if (c == null || !c.moveToFirst()) {
+            return;
+        }
+
+        Integer serverId = c.getInt(0);
+
+        //Parse devices to extract common properties and put other as extra string
+        if (devices.size() == 1) {
+            ContentValues device = devices.get(0).toContentValues(serverId);
+            if (insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
+                mContext.getContentResolver().insert(McContract.Device.CONTENT_URI, device);
+            } else if (insertInfoMethod == UPDATE_EXISTING_DEVICE_INFO) {
+                String devId = devices.get(0).getDeviceId();
+                mContext.getContentResolver()
+                        .update(McContract.Device.buildUriWithDeviceID(devId), device, null, null);
+            }
+        } else if (devices.size() > 1 && insertInfoMethod == ERASE_OLD_DEVICE_INFO) {
+            ArrayList<ContentValues> devicesValues = new ArrayList<>(devices.size());
+            for (Object device : devices) {
+                if (device instanceof BasicDevice) {
+                    devicesValues.add(((BasicDevice) device).toContentValues(serverId));
+                }
+            }
+            ContentValues[] array = new ContentValues[]{};
+            mContext.getContentResolver().bulkInsert(McContract.Device.CONTENT_URI, devicesValues.toArray(array));
+        }
     }
 }

@@ -20,7 +20,7 @@ import android.widget.Spinner
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mdmobile.cyclops.R
-import com.mdmobile.cyclops.dataModels.api.sharedPref.ChartSharedPref
+import com.mdmobile.cyclops.dataModel.chart.Chart
 import com.mdmobile.cyclops.utils.GeneralUtility
 import com.mdmobile.cyclops.utils.LabelHelper
 import com.mdmobile.cyclops.utils.Logger
@@ -65,9 +65,9 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         } else if (which == Dialog.BUTTON_POSITIVE) {
             val prefCurrentValue: String = context!!.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
                     .getString(getString(R.string.charts_preference), String())
-            val listType = object : TypeToken<List<ChartSharedPref>>() {}.type
+            val listType = object : TypeToken<List<Chart>>() {}.type
             val gson = Gson()
-            var chartList: ArrayList<ChartSharedPref> = ArrayList()
+            var chartList: ArrayList<Chart> = ArrayList()
             if (prefCurrentValue.isNotEmpty()) {
                 chartList = gson.fromJson(prefCurrentValue, listType)
             }
@@ -163,12 +163,12 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         outState.putBoolean(APPLY_LABEL_VISIBILITY_KEY, dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled);
     }
 
-    private fun getCurrentValues(): ChartSharedPref {
+    private fun getCurrentValues(): Chart {
         val firstProperty = LabelHelper.getInternalLabelFor(property1TextView.text.toString())
         if (property2TextView.visibility == View.GONE) {
-            return ChartSharedPref(chartTypeSpinner.selectedItemPosition, firstProperty)
+            return Chart(chartTypeSpinner.selectedItemPosition, firstProperty)
         }
-        return ChartSharedPref(chartTypeSpinner.selectedItemPosition, firstProperty,
+        return Chart(chartTypeSpinner.selectedItemPosition, firstProperty,
                 LabelHelper.getInternalLabelFor(property2TextView.text.toString()))
     }
 }

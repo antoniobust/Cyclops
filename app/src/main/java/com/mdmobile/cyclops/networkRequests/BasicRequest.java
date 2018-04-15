@@ -13,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.cyclops.R;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.interfaces.OnTokenAcquired;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.Logger;
@@ -112,10 +113,10 @@ abstract public class BasicRequest<T> extends Request<T> {
                         null, false, new OnTokenAcquired(new WeakReference<BasicRequest>(this)), null);
             }
         } else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
-            Bundle server = ServerUtility.getActiveServer();
+            Server server = ServerUtility.getActiveServer();
             String serverName;
             if (server != null) {
-                serverName = server.getString(McContract.ServerInfo.NAME);
+                serverName = server.getServerName();
             } else {
                 serverName = getUrl();
             }

@@ -98,13 +98,4 @@ public class UserUtility {
             manager.setUserData(account, AUTH_TOKEN_TYPE_KEY, userInfo.getString(AUTH_TOKEN_TYPE_KEY));
         }
     }
-
-    public static void logOutUser() {
-        Account account = getUser();
-        if (Build.VERSION.SDK_INT >= 22) {
-            AccountManager.get(applicationContext).removeAccountExplicitly(account);
-        } else {
-            AccountManager.get(applicationContext).removeAccount(account, null, null);
-        }
-    }
 }

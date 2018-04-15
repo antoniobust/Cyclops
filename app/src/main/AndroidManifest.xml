@@ -35,7 +35,6 @@
                 <!-- Searches intent -->
                 <action android:name="android.intent.action.SEARCH"/>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
@@ -53,7 +52,7 @@
             android:theme="@style/AppTheme.DetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mdmobile.cyclops.ui.main.MainActivity"/>
+                android:value=".ui.main.MainActivity"/>
         </activity>
 
         <activity

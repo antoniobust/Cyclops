@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -37,6 +38,8 @@ import com.mdmobile.cyclops.ui.main.server.ServerFragment;
 import com.mdmobile.cyclops.ui.main.users.UsersFragment;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
+import com.mdmobile.cyclops.utils.ServerUtility;
+import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.util.Calendar;
 
@@ -194,6 +197,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                 item.expandActionView();
                 return true;
             case R.id.logout_action:
+                logout();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -345,5 +349,24 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
     }
 
+    private void logout() {
+        // TODO: optimize
+        String serverName = ServerUtility.getActiveServer().getServerName();
+        Cursor c = getContentResolver().query(McContract.ServerInfo.CONTENT_URI, new String[]{McContract.ServerInfo._ID},
+                McContract.ServerInfo.NAME + "=?", new String[]{serverName}, null);
+        if (c == null || !c.moveToFirst()) {
+            return;
+        }
+        int serverId = c.getInt(0);
+        c.close();
+        ServerUtility.deleteServer(serverId);
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
 
 }

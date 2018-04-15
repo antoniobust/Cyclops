@@ -260,8 +260,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    private void setLevelBars(Cursor data) {
+    
+    //    private void setLevelBars(Cursor data) {
 //        data.moveToFirst();
 //        Bundle extraInfo = DbData.getDeviceExtraInfo(
 //                data.getString(data.getColumnIndex(McContract.Device.COLUMN_EXTRA_INFO)));

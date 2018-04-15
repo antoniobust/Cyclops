@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.mdmobile.cyclops.R;
@@ -20,6 +19,7 @@ import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
  */
 
 public class ServerUtility {
+    public static final String SERVER_ADDRESS_KEY = "ServerAddressKey";
     public static int SERVER_STOPPED = 0;
     public static int SERVER_STARTED = 1;
     public static int SERVER_DISABLED = 2;
@@ -29,9 +29,6 @@ public class ServerUtility {
     public static int SERVER_OFFLINE = 6;
     public static int SERVER_STATUS_UNKNOWN = 7;
     public static int SERVER_STARTED_BUT_NOT_CONNECTED = 5;
-
-    public static final String SERVER_ADDRESS_KEY = "ServerAddressKey";
-
 
     public static boolean anyActiveServer() {
         SharedPreferences preferences = applicationContext
@@ -48,10 +45,21 @@ public class ServerUtility {
 
         if (serverName != null && apiSecret != null && clientId != null && address != null) {
 
-            return new Server(serverName,apiSecret,clientId,address);
+            return new Server(serverName, apiSecret, clientId, address);
         } else {
             return null;
         }
+    }
+
+    public static void deactivateServer() {
+        SharedPreferences.Editor editor =
+                applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE).edit();
+        editor.remove(applicationContext.getString(R.string.server_name_preference));
+        editor.remove(applicationContext.getString(R.string.api_secret_preference));
+        editor.remove(applicationContext.getString(R.string.client_id_preference));
+        editor.remove(applicationContext.getString(R.string.server_address_preference));
+        editor.apply();
+
     }
 
     public static int serverStatus(ServerInfo.DeploymentServer server) {
@@ -120,5 +128,11 @@ public class ServerUtility {
         NotificationManager notificationManager = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notificationBuilder.build());
 
+    }
+
+    public static void deleteServer(int serverId) {
+        deactivateServer();
+        applicationContext.getContentResolver().delete(McContract.ServerInfo.CONTENT_URI,
+                McContract.ServerInfo._ID + "=?", new String[]{String.valueOf(serverId)});
     }
 }

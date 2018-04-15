@@ -14,9 +14,11 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,7 +41,6 @@ import com.mdmobile.cyclops.ui.main.users.UsersFragment;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
-import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.util.Calendar;
 
@@ -71,6 +72,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             }
         }
     };
+    private DrawerLayout drawerLayout;
     // -- Interface methods
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -146,6 +148,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
         filtersToolbar = findViewById(R.id.filters_toolbar);
         lastSyncTimeView = filtersToolbar.findViewById(R.id.last_sync_view);
+        drawerLayout = findViewById(R.id.main_activity_drawer_layout);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(TOOLBAR_FILTER_STATUS)) {
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
@@ -166,6 +169,8 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setTitle(R.string.app_name);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.menu);
         }
 
         //Set account manager to be used in this activity
@@ -193,6 +198,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 //            case R.id.debug_invalidate_token:
 //                invalidateToken();
 //                return true;
+            case android.R.id.home:
+                drawerLayout.openDrawer(Gravity.START, true);
+                return true;
             case R.id.main_activity_search_button:
                 item.expandActionView();
                 return true;

@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Example" />
-    <item android:title="Example2" />
-    <item android:title="Example3" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+    <group android:orderInCategory="1">
+        <item
+            android:id="@+id/drawer_server_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/server_settings_label"/>
+    </group>
+    <group android:orderInCategory="100">
+        <item
+            android:id="@+id/drawer_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logout_label"/>
+        <item
+            android:id="@+id/drawer_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/action_settings"/>
+    </group>
 </menu>

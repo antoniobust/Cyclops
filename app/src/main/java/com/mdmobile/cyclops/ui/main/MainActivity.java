@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -50,7 +51,7 @@ import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.D
 
 
 public class MainActivity extends BaseActivity implements DevicesListAdapter.DeviceSelected,
-        ServerListAdapter.onClick {
+        ServerListAdapter.onClick, NavigationView.OnNavigationItemSelectedListener {
     public static final String DEV_SYNC_BROADCAST_ACTION = "com.mdmobile.pocketconsole.DEVICE_SYNC_DONE";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
@@ -72,7 +73,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             }
         }
     };
-    private DrawerLayout drawerLayout;
+    private AccountManager accountManager;
+    private NavigationView drawerNavigationView;
+    private DrawerLayout navigationDrawer;
     // -- Interface methods
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -122,7 +125,24 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         }
 
     };
-    private AccountManager accountManager;
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.drawer_logout:
+                logout();
+                navigationDrawer.closeDrawer(Gravity.START, true);
+                return true;
+            case R.id.drawer_server_settings:
+                navigationDrawer.closeDrawer(Gravity.START, true);
+                return true;
+            case R.id.drawer_settings:
+                navigationDrawer.closeDrawer(Gravity.START, true);
+                return true;
+
+        }
+        return false;
+    }
 
     @Override
     public void itemCLicked(Parcelable serverParcel) {
@@ -148,7 +168,11 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
         filtersToolbar = findViewById(R.id.filters_toolbar);
         lastSyncTimeView = filtersToolbar.findViewById(R.id.last_sync_view);
-        drawerLayout = findViewById(R.id.main_activity_drawer_layout);
+
+        navigationDrawer = findViewById(R.id.main_activity_drawer_layout);
+        drawerNavigationView = findViewById(R.id.drawer_nav_view);
+
+        drawerNavigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(TOOLBAR_FILTER_STATUS)) {
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
@@ -199,13 +223,10 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 //                invalidateToken();
 //                return true;
             case android.R.id.home:
-                drawerLayout.openDrawer(Gravity.START, true);
+                navigationDrawer.openDrawer(Gravity.START, true);
                 return true;
             case R.id.main_activity_search_button:
                 item.expandActionView();
-                return true;
-            case R.id.logout_action:
-                logout();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -376,5 +397,4 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         startActivity(intent);
         finish();
     }
-
 }

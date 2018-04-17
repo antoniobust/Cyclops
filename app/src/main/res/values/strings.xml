@@ -145,6 +145,7 @@
     <string name="dashboard_recycler_empty_view_label">Click the + button to create new charts</string>
     <string name="server_name_hint">Server name</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="server_settings_label">Server settings</string>
 
 
 </resources>

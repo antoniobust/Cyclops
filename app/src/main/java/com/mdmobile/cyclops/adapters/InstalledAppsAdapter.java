@@ -12,7 +12,7 @@ import android.widget.PopupMenu;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
-import com.mdmobile.cyclops.ui.Dialogs.ConfirmActionDialog;
+import com.mdmobile.cyclops.ui.dialogs.ConfirmActionDialog;
 import com.mdmobile.cyclops.ui.ViewHolder.InstalledAppViewHolder;
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;

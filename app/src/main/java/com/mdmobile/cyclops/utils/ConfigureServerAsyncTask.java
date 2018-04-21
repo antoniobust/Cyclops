@@ -1,13 +1,11 @@
 package com.mdmobile.cyclops.utils;
 
 
-import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.mdmobile.cyclops.dataModel.Server;
-import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.logIn.AddServerFragment;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -19,7 +17,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class ConfigureServerAsyncTask extends AsyncTask<File, Void, Server> {
+public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ArrayList<Server>> {
     private static final String LOG_TAG = ConfigureServerAsyncTask.class.getSimpleName();
     private final WeakReference<AddServerFragment> hostingFragment;
     private Throwable throwable;
@@ -31,13 +29,11 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, Server> {
     }
 
     @Override
-    protected Server doInBackground(File... serverSetupFile) {
+    protected ArrayList<Server> doInBackground(File... serverSetupFile) {
         try {
             FileInputStream fileInputStream = new FileInputStream(serverSetupFile[0]);
             ServerXmlConfigParser fileParser = new ServerXmlConfigParser();
-            ArrayList<Server> servers = fileParser.parseXml(fileInputStream);
-            //TODO:support multiple servers
-            return servers.get(0);
+            return fileParser.parseXml(fileInputStream);
         } catch (IOException | XmlPullParserException e) {
             throwable = e;
             return null;
@@ -45,7 +41,7 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, Server> {
     }
 
     @Override
-    protected void onPostExecute(Server info) {
+    protected void onPostExecute(ArrayList<Server> info) {
         if (info == null) {
             if (throwable instanceof FileNotFoundException) {
                 Logger.log(LOG_TAG, "No ServerSetup.xml file found", Log.INFO);
@@ -55,13 +51,8 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, Server> {
             }
             return;
         }
-        info.setActive();
-        ContentValues values = info.toContentValues();
-        hostingFragment.get().getContext().getContentResolver().insert(McContract.ServerInfo.CONTENT_URI, values);
 
-        Logger.log(LOG_TAG, "ServerSetup.xml file parsed: Name = " + info.getServerName() + "\naddress = "
-                + info.getServerAddress() + "\nAPI Secret = " + info.getApiSecret() + "\nclient ID = "
-                + info.getClientId(), Log.VERBOSE);
+        Logger.log(LOG_TAG, "ServerSetup.xml file parsed, servers found: " + info.size(), Log.VERBOSE);
         parseCompleteCallback.xmlParseComplete(info);
     }
 }

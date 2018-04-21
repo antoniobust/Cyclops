@@ -20,6 +20,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         lintOptions.abortOnError false
+        vectorDrawables.useSupportLibrary = true
     }
     dexOptions {
         javaMaxHeapSize "4g" //specify the heap size for the dex process
@@ -68,6 +69,7 @@ android {
         targetCompatibility 1.7
         sourceCompatibility 1.7
     }
+
 
 }
 

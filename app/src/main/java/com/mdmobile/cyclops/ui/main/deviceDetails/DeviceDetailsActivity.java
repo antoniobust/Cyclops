@@ -18,8 +18,8 @@ import android.widget.TextView;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
-import com.mdmobile.cyclops.ui.Dialogs.MessageDialog;
-import com.mdmobile.cyclops.ui.Dialogs.ScriptDialog;
+import com.mdmobile.cyclops.ui.dialogs.MessageDialog;
+import com.mdmobile.cyclops.ui.dialogs.ScriptDialog;
 
 import static android.support.v4.view.ViewCompat.animate;
 

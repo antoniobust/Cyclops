@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.ui.Dialogs;
+package com.mdmobile.cyclops.ui.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

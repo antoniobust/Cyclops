@@ -35,6 +35,7 @@
                 <!-- Searches intent -->
                 <action android:name="android.intent.action.SEARCH"/>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
@@ -42,9 +43,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/device_searchable"/>
         </activity>
-
         <activity android:name=".ui.BaseActivity"/>
-
         <activity
             android:name=".ui.main.server.ServerDetailsActivity"
             android:label="@string/title_activity_service_details"
@@ -54,11 +53,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity"/>
         </activity>
-
         <activity
             android:name=".ui.logIn.LoginActivity"
             android:launchMode="singleTop"/>
-
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"
@@ -104,6 +101,11 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator"/>
         </service>
+
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:label="@string/title_activity_settings">
+        </activity>
     </application>
 
 </manifest>

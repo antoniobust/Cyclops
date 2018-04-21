@@ -3,6 +3,7 @@ package com.mdmobile.cyclops.utils;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -97,5 +98,13 @@ public class UserUtility {
         if (userInfo.containsKey(AUTH_TOKEN_TYPE_KEY)) {
             manager.setUserData(account, AUTH_TOKEN_TYPE_KEY, userInfo.getString(AUTH_TOKEN_TYPE_KEY));
         }
+    }
+
+    public static void clearUserPreferences(String userName){
+        String preferenceKey = applicationContext.getString(R.string.user_shared_preference,userName);
+        SharedPreferences.Editor editor =
+                applicationContext.getSharedPreferences(preferenceKey,Context.MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
     }
 }

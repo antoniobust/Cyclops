@@ -16,9 +16,9 @@ import java.util.ArrayList;
  * Parse the xml file provided from user to import client id secret and address automatically
  * Format expected
  * <server Name="serverName">
- *     <secret>XXXX</secret>
- *     <clientId>XXXX</clientId>
- *     <address>http://xxx</address>
+ * <secret>XXXX</secret>
+ * <clientId>XXXX</clientId>
+ * <address>http://xxx</address>
  * </server>
  */
 
@@ -26,38 +26,42 @@ import java.util.ArrayList;
 public class ServerXmlConfigParser {
 
     private final String nameSpace = null;
-    public interface ServerXmlParse {
-        void xmlParseComplete(Server serverInfo);
-    }
 
     public ArrayList<Server> parseXml(InputStream inputStream) throws XmlPullParserException, IOException {
 
-            XmlPullParser xmlPullParser = Xml.newPullParser();
-            xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            xmlPullParser.setInput(inputStream, null);
-            xmlPullParser.nextTag();
-            return readServer(xmlPullParser);
-
+        ArrayList<Server> serverList = new ArrayList<>();
+        XmlPullParser xmlPullParser = Xml.newPullParser();
+        xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+        xmlPullParser.setInput(inputStream, null);
+        xmlPullParser.nextTag();
+        if(!xmlPullParser.getName().equals("McServer")){
+            throw new XmlPullParserException("Wrong root tag name: " +xmlPullParser.getName());
+        }
+        while (xmlPullParser.nextTag() != XmlPullParser.END_TAG) {
+            serverList.add(readServer(xmlPullParser));
+        }
+        return serverList;
     }
 
-    private ArrayList<Server> readServer(XmlPullParser xmlParser) throws XmlPullParserException, IOException {
-        ArrayList<Server> serverInfo = new ArrayList<>();
-        xmlParser.require(XmlPullParser.START_TAG, nameSpace, "server");
+    private Server readServer(XmlPullParser xmlParser) throws XmlPullParserException, IOException {
+//        xmlParser.require(XmlPullParser.START_TAG, nameSpace, "server");
         String serverName = xmlParser.getAttributeValue(0);
+        Server server;
 
-        while (xmlParser.next() != XmlPullParser.END_DOCUMENT) {
-            if (xmlParser.getEventType() == XmlPullParser.START_DOCUMENT || xmlParser.getEventType() == XmlPullParser.END_TAG ) {
+        while (xmlParser.next() != XmlPullParser.END_TAG) {
+            if (xmlParser.getEventType() == XmlPullParser.START_DOCUMENT || xmlParser.getEventType() == XmlPullParser.END_TAG) {
                 continue;
             }
-            if(xmlParser.getEventType() == XmlPullParser.START_TAG) {
-                    serverInfo.add(readServerProperties(serverName,xmlParser));
+            if (xmlParser.getEventType() == XmlPullParser.START_TAG) {
+                server = readServerProperties(serverName, xmlParser);
+                return server;
             }
         }
-        return serverInfo;
+        throw new XmlPullParserException("No server found, error reading serverInfo file");
     }
 
     private Server readServerProperties(String name, XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
-        String secret = "",clientId="",address="";
+        String secret = "", clientId = "", address = "";
 
         while (xmlPullParser.getEventType() != XmlPullParser.END_TAG) {
             if (xmlPullParser.getEventType() != XmlPullParser.START_TAG) {
@@ -79,7 +83,7 @@ public class ServerXmlConfigParser {
                     break;
             }
         }
-        return new Server(name,secret,clientId,address);
+        return new Server(name, secret, clientId, address);
     }
 
     private String readSecret(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -112,10 +116,14 @@ public class ServerXmlConfigParser {
 
     private String readValue(XmlPullParser parser) throws XmlPullParserException, IOException {
         String value = "";
-        if (parser.next()== XmlPullParser.TEXT) {
+        if (parser.next() == XmlPullParser.TEXT) {
             value = parser.getText();
             parser.nextTag();
         }
         return value;
+    }
+
+    public interface ServerXmlParse {
+        void xmlParseComplete(ArrayList<Server> serverInfo);
     }
 }

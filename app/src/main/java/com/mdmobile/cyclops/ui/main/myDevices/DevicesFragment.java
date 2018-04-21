@@ -30,8 +30,8 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
-import com.mdmobile.cyclops.ui.Dialogs.PinFolderDialog;
-import com.mdmobile.cyclops.ui.Dialogs.SortingDeviceDialog;
+import com.mdmobile.cyclops.ui.dialogs.PinFolderDialog;
+import com.mdmobile.cyclops.ui.dialogs.SortingDeviceDialog;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 

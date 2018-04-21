@@ -51,6 +51,17 @@ public class ServerUtility {
         }
     }
 
+    public static void setActiveServer(Server server) {
+        SharedPreferences.Editor editor = applicationContext
+                .getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE).edit();
+        editor.putString(applicationContext.getString(R.string.server_name_preference), server.getServerName());
+        editor.putString(applicationContext.getString(R.string.api_secret_preference), server.getApiSecret());
+        editor.putString(applicationContext.getString(R.string.client_id_preference), server.getClientId());
+        editor.putString(applicationContext.getString(R.string.server_address_preference), server.getServerAddress());
+
+        editor.apply();
+    }
+
     public static void deactivateServer() {
         SharedPreferences.Editor editor =
                 applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE).edit();

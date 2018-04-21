@@ -29,6 +29,7 @@ import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerXmlConfigParser;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Fragment displayed to add a new server
@@ -44,6 +45,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     private LogInViewPagerAdapter viewPagerAdapter;
     private View rootView;
     private Button addServerButton;
+    private ArrayList<Server> servers = new ArrayList<>();
     private EditText serverNameEditText, apiSecretEditText, clientIdEditText, serverAddressEditText;
 
     public AddServerFragment() {
@@ -57,18 +59,22 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
 
     //Interface methods
     @Override
-    public void xmlParseComplete(Server serverInfo) {
-        //TODO: update UI file parsed
+    public void xmlParseComplete(ArrayList<Server> allServerInfo) {
         rootView.findViewById(R.id.server_conf_read_label).setVisibility(View.VISIBLE);
+        servers.addAll(allServerInfo);
+        Server serverInfo = allServerInfo.get(0);
+
         ((TextView) rootView.findViewById(R.id.server_name_text_view)).setText(serverInfo.getServerName());
         ((TextView) rootView.findViewById(R.id.api_secret_text_view)).setText(serverInfo.getApiSecret());
         ((TextView) rootView.findViewById(R.id.client_id_text_view)).setText(serverInfo.getClientId());
         ((TextView) rootView.findViewById(R.id.server_address_text_view)).setText(serverInfo.getServerAddress());
+
+        saveServer(allServerInfo);
     }
 
+    //"Save server" Onclick listener
     @Override
     public void onClick(View view) {
-
         String serverName = ((TextView) rootView.findViewById(R.id.server_name_text_view)).getText().toString();
         String secret = ((TextView) rootView.findViewById(R.id.api_secret_text_view)).getText().toString();
         String clientId = ((TextView) rootView.findViewById(R.id.client_id_text_view)).getText().toString();
@@ -77,9 +83,9 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         if (!address.startsWith("https://")) {
             address = "https://" + address;
         }
+        servers.add(new Server(serverName, secret, clientId, address));
 
-        Server server = new Server(serverName,secret,clientId,address);
-        saveServer(server);
+        saveServer(servers);
         (getActivity().findViewById(R.id.add_user_button)).performClick();
     }
 
@@ -175,9 +181,13 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         }
     }
 
-    private void saveServer(Server server){
-        server.setActive();
-        ContentValues values = server.toContentValues();
-        getContext().getContentResolver().insert(McContract.ServerInfo.CONTENT_URI,values);
+    private void saveServer(ArrayList<Server> servers) {
+        ArrayList<ContentValues> values = new ArrayList<>(servers.size());
+        for (Server s : servers) {
+            values.add(s.toContentValues());
+        }
+        servers.get(0).setActive();
+        ContentValues[] vals =  values.toArray(new ContentValues[servers.size()]);
+        getContext().getContentResolver().bulkInsert(McContract.ServerInfo.CONTENT_URI, vals);
     }
 }

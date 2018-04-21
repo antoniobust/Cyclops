@@ -184,6 +184,20 @@ public class McProvider extends ContentProvider {
                 }
                 return dataInserted;
 
+            case SERVER:
+                for (ContentValues c : values) {
+                    if (database.insert(McContract.SERVER_INFO_TABLE_NAME, null, c) > 0) {
+                        dataInserted++;
+                    }
+                }
+                if (dataInserted == values.length) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    Logger.log(LOG_TAG, "Bulk inserted " + dataInserted + " servers in DB", Log.VERBOSE);
+                } else {
+                    Logger.log(LOG_TAG, "Server Bulk insert didn't insert info correctly", Log.ERROR);
+                }
+                return dataInserted;
+
             case MANAGEMENT_SERVERS:
                 for (ContentValues contentValues : values) {
                     if (database.insert(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, contentValues) > 0) {

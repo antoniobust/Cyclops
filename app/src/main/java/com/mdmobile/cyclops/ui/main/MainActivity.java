@@ -39,9 +39,11 @@ import com.mdmobile.cyclops.ui.main.myDevices.DevicesFragment;
 import com.mdmobile.cyclops.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.cyclops.ui.main.server.ServerFragment;
 import com.mdmobile.cyclops.ui.main.users.UsersFragment;
+import com.mdmobile.cyclops.ui.settings.SettingsActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
+import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.util.Calendar;
 
@@ -52,7 +54,7 @@ import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.D
 
 public class MainActivity extends BaseActivity implements DevicesListAdapter.DeviceSelected,
         ServerListAdapter.onClick, NavigationView.OnNavigationItemSelectedListener {
-    public static final String DEV_SYNC_BROADCAST_ACTION = "com.mdmobile.pocketconsole.DEVICE_SYNC_DONE";
+    public static final String DEV_SYNC_BROADCAST_ACTION = "com.mdmobile.cyclops.DEVICE_SYNC_DONE";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
     //Define a flag if we are in tablet layout or not
@@ -73,7 +75,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             }
         }
     };
-    private AccountManager accountManager;
     private NavigationView drawerNavigationView;
     private DrawerLayout navigationDrawer;
     // -- Interface methods
@@ -133,10 +134,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                 logout();
                 navigationDrawer.closeDrawer(Gravity.START, true);
                 return true;
-            case R.id.drawer_server_settings:
-                navigationDrawer.closeDrawer(Gravity.START, true);
-                return true;
             case R.id.drawer_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 navigationDrawer.closeDrawer(Gravity.START, true);
                 return true;
 
@@ -167,26 +167,22 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         setContentView(R.layout.activity_main);
 
         filtersToolbar = findViewById(R.id.filters_toolbar);
-        lastSyncTimeView = filtersToolbar.findViewById(R.id.last_sync_view);
-
-        navigationDrawer = findViewById(R.id.main_activity_drawer_layout);
-        drawerNavigationView = findViewById(R.id.drawer_nav_view);
-
-        drawerNavigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(TOOLBAR_FILTER_STATUS)) {
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
 
+        setNavigationDrawer();
         setFiltersView();
         setLastSyncTimeView();
+        setBottomNavigationView(savedInstanceState);
+        setActionBar();
 
-        BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
-        bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        if (savedInstanceState == null) {
-            bottomNavigation.setSelectedItemId(R.id.navigation_dashboard);
-        }
+        //Set account manager to be used in this activity
 
+    }
+
+    private void setActionBar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -196,9 +192,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.menu);
         }
-
-        //Set account manager to be used in this activity
-        accountManager = AccountManager.get(getApplicationContext());
     }
 
     @Override
@@ -256,22 +249,24 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
     private void syncDevicesNow() {
         Logger.log(LOG_TAG, "Immediate device syc manually requested... ", Log.VERBOSE);
-        Account account = accountManager.getAccountsByType(getString(R.string.account_type))[0];
+        Account account = UserUtility.getUser();
         DevicesSyncAdapter.syncImmediately(getApplicationContext(), account);
     }
 
     private void refreshToken() {
-        Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
-        String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
+        AccountManager accountManager = AccountManager.get(getApplicationContext());
+        Account account = UserUtility.getUser();
+        String token = accountManager.peekAuthToken(account, accountManager.getUserData(account, AUTH_TOKEN_TYPE_KEY));
         accountManager.invalidateAuthToken(getString(R.string.account_type), token);
-        accountManager.getAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY),
+        accountManager.getAuthToken(account, accountManager.getUserData(account, AUTH_TOKEN_TYPE_KEY),
                 null, new LoginActivity(), null, null);
         Logger.log(LOG_TAG, "Token refresh manually forced", Log.VERBOSE);
     }
 
     private void invalidateToken() {
-        Account[] account = accountManager.getAccountsByType(getString(R.string.account_type));
-        String token = accountManager.peekAuthToken(account[0], accountManager.getUserData(account[0], AUTH_TOKEN_TYPE_KEY));
+        AccountManager accountManager = AccountManager.get(getApplicationContext());
+        Account account = UserUtility.getUser();
+        String token = accountManager.peekAuthToken(account, accountManager.getUserData(account, AUTH_TOKEN_TYPE_KEY));
         accountManager.invalidateAuthToken(getString(R.string.account_type), token);
         Logger.log(LOG_TAG, "Token manually invalidated", Log.VERBOSE);
 
@@ -327,12 +322,29 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         }
     }
 
+    private void setNavigationDrawer() {
+        navigationDrawer = findViewById(R.id.main_activity_drawer_layout);
+        drawerNavigationView = navigationDrawer.findViewById(R.id.drawer_nav_view);
+        ((TextView) drawerNavigationView.getHeaderView(0).findViewById(R.id.nav_user_name_text_view))
+                .setText(UserUtility.getUser().name);
+        drawerNavigationView.setNavigationItemSelectedListener(this);
+    }
+
     private void setLastSyncTimeView() {
+        lastSyncTimeView = filtersToolbar.findViewById(R.id.last_sync_view);
         SharedPreferences preferences = getApplicationContext()
                 .getSharedPreferences(getString(R.string.general_shared_preference), MODE_MULTI_PROCESS);
 
         long lastSync = preferences.getLong(getString(R.string.last_dev_sync_pref), 0);
         updateSyncTimeView(lastSync);
+    }
+
+    private void setBottomNavigationView(Bundle savedInstanceState) {
+        BottomNavigationView bottomNavigation = findViewById(R.id.navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        if (savedInstanceState == null) {
+            bottomNavigation.setSelectedItemId(R.id.navigation_dashboard);
+        }
     }
 
     private void updateSyncTimeView(long syncTime) {
@@ -379,8 +391,13 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     }
 
     private void logout() {
+        // To log out we need to clear
+        // 1. The server currently active and all related devices
+        // 2. Current user preferences
+        // 3. Go back to login activity
         // TODO: optimize
         String serverName = ServerUtility.getActiveServer().getServerName();
+
         Cursor c = getContentResolver().query(McContract.ServerInfo.CONTENT_URI, new String[]{McContract.ServerInfo._ID},
                 McContract.ServerInfo.NAME + "=?", new String[]{serverName}, null);
         if (c == null || !c.moveToFirst()) {
@@ -389,6 +406,8 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         int serverId = c.getInt(0);
         c.close();
         ServerUtility.deleteServer(serverId);
+
+        UserUtility.clearUserPreferences(UserUtility.getUser().name);
 
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

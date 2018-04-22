@@ -27,6 +27,7 @@ class DeviceFactory {
                 DeviceKind.ANDROID_ELM -> return AndroidPlus(cursor)
                 DeviceKind.ANDROID_FOR_WORK -> return AndroidForWork(cursor)
                 DeviceKind.ANDROID_KNOX -> return AndroidPlus(cursor)
+                DeviceKind.IOS_V14 -> return IosDeviceV14(cursor)
                 DeviceKind.IOS -> return IosDevice(cursor)
 //                DeviceKind.MAC -> return newMac(cursor)
                 DeviceKind.WINDOWS_CE -> return WindowsCE(cursor)
@@ -35,6 +36,8 @@ class DeviceFactory {
                 DeviceKind.WINDOWS_PHONE -> return WindowsPhone(cursor)
                 DeviceKind.WINDOWS_RUNTIME -> return WindowsRuntime(cursor)
 //                DeviceKind.ZEBRA_PRINTER -> return newZebraPrinter(cursor)
+                DeviceKind.LINUX -> return NotYetSupportedDevice(cursor)
+                DeviceKind.WINDOWS_HOLO_LENS -> return NotYetSupportedDevice(cursor)
                 else -> {
                     throw UnsupportedOperationException("Non Supported device type: $kind")
                 }
@@ -48,7 +51,7 @@ class DeviceFactory {
                 DeviceKind.ANDROID_ELM -> return AndroidPlus()
                 DeviceKind.ANDROID_FOR_WORK -> return AndroidForWork()
                 DeviceKind.ANDROID_KNOX -> return AndroidPlus()
-                DeviceKind.IOS -> return IosDevice()
+                DeviceKind.IOS_V14 -> return IosDevice()
 //                DeviceKind.MAC -> return newMac()
                 DeviceKind.WINDOWS_CE -> return WindowsCE()
                 DeviceKind.WINDOWS_DESKTOP -> return WindowsDesktop()

@@ -201,7 +201,7 @@ public class DbData extends AndroidJUnitRunner {
 
         final RuntimeTypeAdapterFactory<BasicDevice> typeFactory = RuntimeTypeAdapterFactory
                 .of(BasicDevice.class, "Kind")
-                .registerSubtype(IosDevice.class, DeviceKind.IOS)
+                .registerSubtype(IosDevice.class, DeviceKind.IOS_V14)
                 .registerSubtype(AndroidGeneric.class, DeviceKind.ANDROID_GENERIC)
                 .registerSubtype(AndroidForWork.class, DeviceKind.ANDROID_FOR_WORK)
                 .registerSubtype(AndroidPlus.class, DeviceKind.ANDROID_PLUS)

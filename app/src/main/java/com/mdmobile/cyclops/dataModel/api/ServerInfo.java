@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ServerInfo implements Parcelable {
@@ -38,16 +39,29 @@ public class ServerInfo implements Parcelable {
 
     }
 
-    public String getProductVersion() {
+    public Integer getProductVersion() {
         //If product Version is not populated is because in v13 APIs there wasn't such info.
         //Assuming we are using a v13.3
-        return ProductVersion == null ? "13.3" : ProductVersion;
+        StringBuilder builder = new StringBuilder();
+        String[] array = ProductVersion.split("\\.");
+        for (String value : array) {
+            builder.append(value);
+        }
+        Integer v = Integer.valueOf(builder.toString());
+
+        return v == 0 ? 1330 : v;
     }
 
-    public String getProductVersionBuild() {
+    public Integer getProductVersionBuild() {
         //If product Version is not populated is because in v13 APIs there wasn't such info.
         //Assuming we are using build 3766
-        return ProductVersionBuild == null ? "3766" : ProductVersionBuild;
+        StringBuilder builder = new StringBuilder();
+        String[] array = ProductVersionBuild.split("\\.");
+        for (String value : array) {
+            builder.append(value);
+        }
+        Integer b = Integer.valueOf(builder.toString());
+        return b == 0 ? 3766 : b;
     }
 
     public List<DeploymentServer> getDeploymentServers() {

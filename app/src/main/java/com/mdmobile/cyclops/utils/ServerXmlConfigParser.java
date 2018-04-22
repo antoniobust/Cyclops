@@ -34,8 +34,8 @@ public class ServerXmlConfigParser {
         xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         xmlPullParser.setInput(inputStream, null);
         xmlPullParser.nextTag();
-        if(!xmlPullParser.getName().equals("McServer")){
-            throw new XmlPullParserException("Wrong root tag name: " +xmlPullParser.getName());
+        if (!xmlPullParser.getName().equals("McServer")) {
+            throw new XmlPullParserException("Wrong root tag name: " + xmlPullParser.getName());
         }
         while (xmlPullParser.nextTag() != XmlPullParser.END_TAG) {
             serverList.add(readServer(xmlPullParser));
@@ -83,7 +83,7 @@ public class ServerXmlConfigParser {
                     break;
             }
         }
-        return new Server(name, secret, clientId, address);
+        return new Server(name, secret, clientId, address, -1, -1);
     }
 
     private String readSecret(XmlPullParser parser) throws XmlPullParserException, IOException {

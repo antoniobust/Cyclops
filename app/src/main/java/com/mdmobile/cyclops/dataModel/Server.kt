@@ -4,7 +4,8 @@ import android.content.ContentValues
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.utils.ServerUtility
 
-data class Server(val serverName: String = "", val apiSecret: String = "", val clientId: String = "", val serverAddress: String = "") {
+data class Server(val serverName: String = "", val apiSecret: String = "", val clientId: String = "", val serverAddress: String = "",
+                  val serverMajorVersion: Int = -1, val buildNumber: Int = -1) {
 
     fun setActive() {
         ServerUtility.setActiveServer(this)
@@ -16,6 +17,8 @@ data class Server(val serverName: String = "", val apiSecret: String = "", val c
         values.put(McContract.ServerInfo.CLIENT_SECRET, apiSecret)
         values.put(McContract.ServerInfo.CLIENT_ID, clientId)
         values.put(McContract.ServerInfo.SERVER_ADDRESS, serverAddress)
+        values.put(McContract.ServerInfo.SERVER_MAJOR_VERSION, serverMajorVersion)
+        values.put(McContract.ServerInfo.SERVER_BUILD_NUMBER, buildNumber)
 
         return values
     }

@@ -42,12 +42,13 @@ public class ServerUtility {
         String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);
         String clientId = preferences.getString(applicationContext.getString(R.string.client_id_preference), null);
         String address = preferences.getString(applicationContext.getString(R.string.server_address_preference), null);
+        int version = preferences.getInt(applicationContext.getString(R.string.server_version_preference), -1);
+        int build = preferences.getInt(applicationContext.getString(R.string.server_build_preference), -1);
 
         if (serverName != null && apiSecret != null && clientId != null && address != null) {
-
-            return new Server(serverName, apiSecret, clientId, address);
+            return new Server(serverName, apiSecret, clientId, address, version, build);
         } else {
-            return null;
+            throw new UnsupportedOperationException("Active server not found");
         }
     }
 
@@ -58,6 +59,8 @@ public class ServerUtility {
         editor.putString(applicationContext.getString(R.string.api_secret_preference), server.getApiSecret());
         editor.putString(applicationContext.getString(R.string.client_id_preference), server.getClientId());
         editor.putString(applicationContext.getString(R.string.server_address_preference), server.getServerAddress());
+        editor.putInt(applicationContext.getString(R.string.server_version_preference),server.getServerMajorVersion());
+        editor.putInt(applicationContext.getString(R.string.server_build_preference),server.getBuildNumber());
 
         editor.apply();
     }

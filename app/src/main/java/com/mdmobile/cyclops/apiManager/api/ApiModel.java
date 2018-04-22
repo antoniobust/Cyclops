@@ -24,15 +24,19 @@ public class ApiModel {
             return new SelectDevice(authority.concat("/" + MobiControl), deviceID);
         }
 
-        public static ListDevices Builder(@NonNull String authority) {
-            return new ListDevices(authority.concat("/" + MobiControl));
+        public static ListDevices Builder(@NonNull String authority, int mcVersion) {
+            return new ListDevices(authority.concat("/" + MobiControl),mcVersion);
         }
 
         public static class ListDevices extends ApiStandard {
 
-            public ListDevices(@NonNull String authority) {
+            public ListDevices(@NonNull String authority, int mcMajorVersion) {
                 super(authority);
-                super.currentApi = Uri.parse(authority).buildUpon().appendPath(ApiTypes.devicesApi);
+                if (mcMajorVersion >= 140) {
+                    super.currentApi = Uri.parse(authority).buildUpon().appendEncodedPath(ApiTypes.deviceSearch);
+                } else {
+                    super.currentApi = Uri.parse(authority).buildUpon().appendPath(ApiTypes.devicesApi);
+                }
 
             }
 

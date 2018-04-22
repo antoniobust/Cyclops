@@ -25,7 +25,7 @@ class AndroidForWork : AndroidPlus, IDevice<AndroidPlus> {
                 CanResetPassword: Boolean = false, ExchangeBlocked: Boolean = false,
                 IsAgentCompatible: Boolean = false, IsAgentless: Boolean = false,
                 IsEncrypted: Boolean = false, IsOSSecure: Boolean = false, PasscodeEnabled: Boolean = false,
-                BatteryStatus: Short = -1, CellularSignalStrength: Int = -1, NetworkConnectionType: Int = -1,
+                BatteryStatus: Short = -1, CellularSignalStrength: Int = -1, NetworkConnectionType: String = "N/A",
                 NetworkRSSI: Int = -1, HardwareEncryptionCaps: Int = -1)
             : super(Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer,
             Mode, Model, OSVersion, Path, ComplianceStatus, IsAgentOnline, IsVirtual, Platform,

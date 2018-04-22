@@ -33,7 +33,7 @@ import static com.mdmobile.cyclops.provider.McContract.USER_TABLE_NAME;
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 33;
+    private static final int DB_VERSION = 34;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -199,6 +199,8 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.ServerInfo.CLIENT_SECRET + " TEXT NOT NULL, "
                 + McContract.ServerInfo.NAME + " TEXT NOT NULL,"
                 + McContract.ServerInfo.SERVER_ADDRESS + " TEXT,"
+                + McContract.ServerInfo.SERVER_MAJOR_VERSION + " INTEGER NOT NULL, "
+                + McContract.ServerInfo.SERVER_BUILD_NUMBER + " INTEGER NOT NULL, "
                 + "UNIQUE(" + McContract.ServerInfo.NAME + ") ON CONFLICT ABORT );");
 
         //Create profile table

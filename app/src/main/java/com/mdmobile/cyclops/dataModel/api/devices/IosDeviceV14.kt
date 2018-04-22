@@ -12,7 +12,7 @@ import kotlin.reflect.full.declaredMemberProperties
  */
 
 @SuppressLint("ParcelCreator")
-class IosDevice : BasicDevice, IDevice<IosDevice> {
+class IosDeviceV14 : BasicDevice, IDevice<IosDeviceV14> {
     val AgentVersion: String
     val BluetoothMACAddress: String
     val BuildVersion: String
@@ -235,7 +235,7 @@ class IosDevice : BasicDevice, IDevice<IosDevice> {
     private val isExchangeBlocked: Int
         get() = if (ExchangeBlocked) 1 else 0
 
-    override fun getDevice(): IosDevice {
+    override fun getDevice(): IosDeviceV14 {
         return this
     }
 

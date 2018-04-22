@@ -157,7 +157,7 @@ public class ApiRequestManager {
             return;
         }
         String apiAuthority = server.getServerAddress();
-        String api = ApiModel.DevicesApi.Builder(apiAuthority).build();
+        String api = ApiModel.DevicesApi.Builder(apiAuthority,server.getServerMajorVersion()).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, server,
                 new Response.Listener<JSONArray>() {
@@ -273,9 +273,7 @@ public class ApiRequestManager {
 
     public void getServerInfo() {
         Server server = getActiveServer();
-        if (server == null) {
-            return;
-        }
+
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.ServerApi.Builder(apiAuthority).getServerInfo().build();
 
@@ -302,9 +300,7 @@ public class ApiRequestManager {
 
     public void getUsers() {
         Server server = getActiveServer();
-        if (server == null) {
-            return;
-        }
+
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.UserSecurityApi.Builder(apiAuthority).getAllUsers(false, null, null).build();
         UserRequest userRequest = new UserRequest(api,

@@ -1,10 +1,13 @@
 package com.mdmobile.cyclops.networkRequests;
 
+import android.content.ContentValues;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.DbData;
@@ -40,12 +43,21 @@ public class ServerInfoRequest extends BasicRequest<String> {
             String jsonResponseString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
 
-            ServerInfo servers = new Gson().fromJson(jsonResponseString, ServerInfo.class);
+            ServerInfo serverInfo = new Gson().fromJson(jsonResponseString, ServerInfo.class);
 
-            ArrayList<ServerInfo.ManagementServer> managementServers = new ArrayList<>(servers.getManagementServers());
-            ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(servers.getDeploymentServers());
+            ArrayList<ServerInfo.ManagementServer> managementServers = new ArrayList<>(serverInfo.getManagementServers());
+            ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(serverInfo.getDeploymentServers());
 
-            //Delete any existing data in DB
+
+            //Update serverInfo table with version -> it could have changed since last sync
+            Server genericServer = ServerUtility.getActiveServer();
+            Server newGenericServer = new Server(genericServer.getServerName(),genericServer.getApiSecret(),genericServer.getClientId(),
+                    genericServer.getServerAddress(),serverInfo.getProductVersion(),serverInfo.getProductVersionBuild());
+
+            applicationContext.getContentResolver().update(McContract.ServerInfo.buildServerInfoUriWithName(genericServer.getServerName()),
+                    newGenericServer.toContentValues(),null,null);
+
+            //Delete any existing MS,DS in DB
             applicationContext.getContentResolver().delete(McContract.MsInfo.CONTENT_URI, null, null);
             applicationContext.getContentResolver().delete(McContract.DsInfo.CONTENT_URI, null, null);
 

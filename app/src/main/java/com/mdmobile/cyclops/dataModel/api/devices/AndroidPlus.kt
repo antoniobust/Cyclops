@@ -41,7 +41,7 @@ open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
     val PasscodeEnabled: Boolean
     val BatteryStatus: Short
     val CellularSignalStrength: Int
-    val NetworkConnectionType: Int
+    val NetworkConnectionType: String
     val NetworkRSSI: Int
     val HardwareEncryptionCaps: Int
 
@@ -60,7 +60,7 @@ open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
                 CanResetPassword: Boolean = false, ExchangeBlocked: Boolean = false,
                 IsAgentCompatible: Boolean = false, IsAgentless: Boolean = false,
                 IsEncrypted: Boolean = false, IsOSSecure: Boolean = false, PasscodeEnabled: Boolean = false,
-                BatteryStatus: Short = -1, CellularSignalStrength: Int = -1, NetworkConnectionType: Int = -1,
+                BatteryStatus: Short = -1, CellularSignalStrength: Int = -1, NetworkConnectionType: String = "N/A",
                 NetworkRSSI: Int = -1, HardwareEncryptionCaps: Int = -1)
             : super(Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
             OSVersion, Path, ComplianceStatus, IsAgentOnline, IsVirtual, Platform) {
@@ -129,7 +129,7 @@ open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
         this.PasscodeEnabled = false
         this.BatteryStatus = -1
         this.CellularSignalStrength = -1
-        this.NetworkConnectionType = -1
+        this.NetworkConnectionType = "N/A"
         this.NetworkRSSI = -1
         this.HardwareEncryptionCaps = -1
     }

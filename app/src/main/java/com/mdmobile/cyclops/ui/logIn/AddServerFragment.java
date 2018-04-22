@@ -83,7 +83,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         if (!address.startsWith("https://")) {
             address = "https://" + address;
         }
-        servers.add(new Server(serverName, secret, clientId, address));
+        servers.add(new Server(serverName, secret, clientId, address,-1,-1));
 
         saveServer(servers);
         (getActivity().findViewById(R.id.add_user_button)).performClick();

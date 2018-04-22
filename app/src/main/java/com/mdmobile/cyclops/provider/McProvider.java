@@ -465,7 +465,7 @@ public class McProvider extends ContentProvider {
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
                 break;
-            case SERVER:
+            case SERVER_WITH_NAME:
                 String serverName = McContract.ServerInfo.getServerNameFromUri(uri);
                 updated = database.update(McContract.SERVER_INFO_TABLE_NAME, values, McContract.ServerInfo.NAME + "=?", new String[]{serverName});
                 Logger.log(LOG_TAG, " Server(" + serverName + ") updated", Log.VERBOSE);

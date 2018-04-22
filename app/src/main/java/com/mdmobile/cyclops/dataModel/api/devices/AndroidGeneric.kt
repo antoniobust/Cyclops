@@ -34,7 +34,7 @@ class AndroidGeneric : BasicDevice, IDevice<AndroidGeneric> {
     val BatteryStatus: Short
     val CellularSignalStrength: Int
     val HardwareEncryptionCaps: Int
-    val NetworkConnectionType: Int
+    val NetworkConnectionType: String
     val NetworkRSSI: Int
     val AgentVersion: String
     val LastCheckInTime: String
@@ -52,7 +52,7 @@ class AndroidGeneric : BasicDevice, IDevice<AndroidGeneric> {
                 IsAgentCompatible: Boolean = false, IsAgentless: Boolean = false, IsEncrypted: Boolean = false, IsOSSecure: Boolean = false,
                 CanResetPassword: Boolean = false, ExchangeBlocked: Boolean = false, InRoaming: Boolean = false, PasscodeEnabled: Boolean = false,
                 BatteryStatus: Short = -1, CellularSignalStrength: Int = -1, HardwareEncryptionCaps: Int = -1,
-                NetworkConnectionType: Int = -1, NetworkRSSI: Int = -1)
+                NetworkConnectionType: String = "N/A", NetworkRSSI: Int = -1)
             : super(Kind, DeviceId, DeviceName, EnrollmentTime, Family, HostName, MACAddress, Manufacturer, Mode, Model,
             OSVersion, Path, ComplianceStatus, IsAgentOnline, IsVirtual, Platform) {
         this.lastAgentDisconnectTime = LastAgentDisconnectTime
@@ -108,7 +108,7 @@ class AndroidGeneric : BasicDevice, IDevice<AndroidGeneric> {
         this.BatteryStatus = -1
         this.CellularSignalStrength = -1
         this.HardwareEncryptionCaps = -1
-        this.NetworkConnectionType = -1
+        this.NetworkConnectionType = "N/A"
         this.NetworkRSSI = -1
         this.LastAgentConnectTime = "N/A"
         this.AgentVersion = "N/A"

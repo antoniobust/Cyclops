@@ -182,6 +182,8 @@ public class McContract {
         String CLIENT_ID = "ClientId";
         String CLIENT_SECRET = "ClientSecret";
         String SERVER_ADDRESS = "Address";
+        String SERVER_MAJOR_VERSION = "MajorVersion";
+        String SERVER_BUILD_NUMBER = "BuildNumber";
     }
 
     interface ProfileColumns {

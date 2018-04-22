@@ -18,6 +18,8 @@ import com.mdmobile.cyclops.dataModel.api.devices.AndroidGeneric;
 import com.mdmobile.cyclops.dataModel.api.devices.AndroidPlus;
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice;
 import com.mdmobile.cyclops.dataModel.api.devices.IosDevice;
+import com.mdmobile.cyclops.dataModel.api.devices.IosDeviceV14;
+import com.mdmobile.cyclops.dataModel.api.devices.NotYetSupportedDevice;
 import com.mdmobile.cyclops.dataModel.api.devices.SamsungElm;
 import com.mdmobile.cyclops.dataModel.api.devices.WindowsCE;
 import com.mdmobile.cyclops.dataModel.api.devices.WindowsDesktop;
@@ -65,6 +67,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             final RuntimeTypeAdapterFactory<BasicDevice> typeFactory = RuntimeTypeAdapterFactory
                     .of(BasicDevice.class, "Kind")
                     .registerSubtype(IosDevice.class, DeviceKind.IOS)
+                    .registerSubtype(IosDeviceV14.class, DeviceKind.IOS_V14)
                     .registerSubtype(AndroidGeneric.class, DeviceKind.ANDROID_GENERIC)
                     .registerSubtype(AndroidForWork.class, DeviceKind.ANDROID_FOR_WORK)
                     .registerSubtype(AndroidPlus.class, DeviceKind.ANDROID_PLUS)
@@ -73,7 +76,8 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                     .registerSubtype(WindowsDesktopLegacy.class, DeviceKind.WINDOWS_DESKTOP_LEGACY)
                     .registerSubtype(WindowsPhone.class, DeviceKind.WINDOWS_PHONE)
                     .registerSubtype(WindowsRuntime.class, DeviceKind.WINDOWS_RUNTIME)
-                    .registerSubtype(WindowsCE.class, DeviceKind.WINDOWS_CE);
+                    .registerSubtype(WindowsCE.class, DeviceKind.WINDOWS_CE)
+                    .registerSubtype(NotYetSupportedDevice.class,DeviceKind.LINUX);
 //            .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
 
 

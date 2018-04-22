@@ -3,7 +3,6 @@ package com.mdmobile.cyclops.networkRequests;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -13,9 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.interfaces.OnTokenAcquired;
-import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
@@ -113,13 +110,7 @@ abstract public class BasicRequest<T> extends Request<T> {
                         null, false, new OnTokenAcquired(new WeakReference<BasicRequest>(this)), null);
             }
         } else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
-            Server server = ServerUtility.getActiveServer();
-            String serverName;
-            if (server != null) {
-                serverName = server.getServerName();
-            } else {
-                serverName = getUrl();
-            }
+            String serverName = ServerUtility.getActiveServer().getServerName();
             ServerUtility.notifyServerStatus(serverName, ServerUtility.SERVER_OFFLINE);
         } else if (errorCode == 422) {
             //TODO: show error message in toast

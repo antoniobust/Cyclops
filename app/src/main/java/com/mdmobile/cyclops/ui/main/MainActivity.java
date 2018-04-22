@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.util.Calendar;
 
+import static android.view.View.GONE;
 import static com.mdmobile.cyclops.R.id.main_activity_fragment_container;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
@@ -109,7 +111,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                     if (getSupportFragmentManager().findFragmentByTag("ServerFragment") != null) {
                         break;
                     }
-                    hideFiltersToolbar(View.GONE);
+                    hideFiltersToolbar(GONE);
                     ft.replace(main_activity_fragment_container, ServerFragment.newInstance(), "ServerFragment");
                     ft.commit();
                     return true;
@@ -118,7 +120,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                     if (getSupportFragmentManager().findFragmentByTag("UserFragment") != null) {
                         break;
                     }
-                    hideFiltersToolbar(View.GONE);
+                    hideFiltersToolbar(GONE);
                     ft.replace(main_activity_fragment_container, UsersFragment.newInstance(), "UserFragment");
                     ft.commit();
                     return true;
@@ -143,6 +145,11 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
         }
         return false;
+    }
+
+    // OnClick avatar click
+    public void setUserLogo(View v) {
+        //TODO: diaplay dialog to chenge user logo
     }
 
     @Override
@@ -305,8 +312,8 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    if (setVisibility == View.GONE) {
-                        filtersToolbar.setVisibility(View.GONE);
+                    if (setVisibility == GONE) {
+                        filtersToolbar.setVisibility(GONE);
                     }
                 }
 
@@ -326,12 +333,33 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     private void setNavigationDrawer() {
         navigationDrawer = findViewById(R.id.main_activity_drawer_layout);
         drawerNavigationView = navigationDrawer.findViewById(R.id.drawer_nav_view);
-        ((TextView) drawerNavigationView.getHeaderView(0).findViewById(R.id.nav_user_name_text_view))
+        drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, false);
+
+        View headerView = drawerNavigationView.getHeaderView(0);
+        ((TextView) headerView.findViewById(R.id.nav_user_name_text_view))
                 .setText(UserUtility.getUser().name);
-        ((ImageView) drawerNavigationView.getHeaderView(0).findViewById(R.id.nav_user_icon))
+        ((TextView) headerView.findViewById(R.id.nav_server_text_view))
+                .setText(ServerUtility.getActiveServer().getServerName());
+        ((ImageView) headerView.findViewById(R.id.nav_user_icon))
                 .setImageDrawable(UserUtility.getUserLogo());
+
         drawerNavigationView.setNavigationItemSelectedListener(this);
     }
+
+    // Navigation Drawer -> on server text view click toggle menu
+    public void toggleMenu(View view) {
+        View arrowIcon = drawerNavigationView.findViewById(R.id.nav_server_selector_icon);
+        if (drawerNavigationView.getMenu().findItem(R.id.drawer_logout).isVisible()) {
+            arrowIcon.animate().rotationBy(180).setDuration(300L).setInterpolator(new DecelerateInterpolator()).start();
+            drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, false);
+            drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, true);
+        } else {
+            arrowIcon.animate().rotationBy(180).setDuration(300L).setInterpolator(new DecelerateInterpolator()).start();
+            drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, true);
+            drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, false);
+        }
+    }
+
 
     private void setLastSyncTimeView() {
         lastSyncTimeView = filtersToolbar.findViewById(R.id.last_sync_view);

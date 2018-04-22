@@ -145,12 +145,6 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         }
     }
 
-    // Actions OnClick method -> change user logo
-    public void setUserLogo(View v) {
-        //TODO: diaplay dialog to chenge user logo
-    }
-
-
     private String getAttachedFragmentTag() {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         for (Fragment fragment : fragments) {

@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -106,5 +107,11 @@ public class UserUtility {
                 applicationContext.getSharedPreferences(preferenceKey,Context.MODE_PRIVATE).edit();
         editor.clear();
         editor.apply();
+    }
+
+    public static Drawable getUserLogo() {
+        SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.user_shared_preference),Context.MODE_PRIVATE);
+        int drawableId = preferences.getInt(applicationContext.getString(R.string.user_logo_preference),R.drawable.ic_android);
+        return applicationContext.getResources().getDrawable(drawableId);
     }
 }

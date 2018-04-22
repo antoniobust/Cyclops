@@ -7,39 +7,42 @@
     android:layout_height="?listPreferredItemHeight"
     android:layout_margin="4dp"
     android:background="@android:color/white"
-    android:orientation="horizontal"
-    tools:targetApi="lollipop"
-    android:weightSum="5"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:orientation="horizontal"
+    android:weightSum="5"
+    tools:targetApi="lollipop">
 
     <View
         android:id="@+id/server_list_item_colored_marker"
         android:layout_width="6dp"
         android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false"
         tools:background="@color/darkGreen"/>
 
     <TextView
-        android:paddingStart="16dp"
-        android:paddingEnd="0dp"
         android:id="@+id/server_list_item_server_name"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4"
+        android:clickable="false"
+        android:focusable="false"
         android:gravity="center_vertical"
+        android:paddingEnd="0dp"
+        android:paddingStart="16dp"
+        android:textAllCaps="true"
         android:textStyle="bold"
-        tools:text="UK-MS"
-        android:textAllCaps="true"/>
+        tools:text="UK-MS"/>
 
     <ImageView
         android:id="@+id/list_item_arrow_icon"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="?selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:focusable="true"
+        android:clickable="false"
+        android:focusable="false"
         android:padding="8dp"
         android:scaleType="centerInside"
         android:tint="@color/colorPrimaryDark"

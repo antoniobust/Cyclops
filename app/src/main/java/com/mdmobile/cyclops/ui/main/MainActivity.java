@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
@@ -327,6 +328,8 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         drawerNavigationView = navigationDrawer.findViewById(R.id.drawer_nav_view);
         ((TextView) drawerNavigationView.getHeaderView(0).findViewById(R.id.nav_user_name_text_view))
                 .setText(UserUtility.getUser().name);
+        ((ImageView) drawerNavigationView.getHeaderView(0).findViewById(R.id.nav_user_icon))
+                .setImageDrawable(UserUtility.getUserLogo());
         drawerNavigationView.setNavigationItemSelectedListener(this);
     }
 

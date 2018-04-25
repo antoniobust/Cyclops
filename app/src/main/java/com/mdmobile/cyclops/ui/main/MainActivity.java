@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
 import com.mdmobile.cyclops.ui.BaseActivity;
@@ -333,7 +334,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     private void setNavigationDrawer() {
         navigationDrawer = findViewById(R.id.main_activity_drawer_layout);
         drawerNavigationView = navigationDrawer.findViewById(R.id.drawer_nav_view);
-        drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, false);
 
         View headerView = drawerNavigationView.getHeaderView(0);
         ((TextView) headerView.findViewById(R.id.nav_user_name_text_view))
@@ -351,12 +351,21 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         View arrowIcon = drawerNavigationView.findViewById(R.id.nav_server_selector_icon);
         if (drawerNavigationView.getMenu().findItem(R.id.drawer_logout).isVisible()) {
             arrowIcon.animate().rotationBy(180).setDuration(300L).setInterpolator(new DecelerateInterpolator()).start();
-            drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, false);
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, true);
+            drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, false);
+
+            Server[] servers = ServerUtility.getAllServers();
+
+            Menu menu = drawerNavigationView.getMenu();
+            MenuItem item;
+            for (Server s : servers) {
+                item = menu.add(R.id.nav_drawer_server_list_group, 1, Menu.NONE, s.getServerName());
+                item.setIcon(R.drawable.ic_server_black_24dp);
+            }
         } else {
             arrowIcon.animate().rotationBy(180).setDuration(300L).setInterpolator(new DecelerateInterpolator()).start();
-            drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, true);
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, false);
+            drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, true);
         }
     }
 

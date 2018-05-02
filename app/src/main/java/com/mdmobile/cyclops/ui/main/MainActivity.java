@@ -42,7 +42,7 @@ import com.mdmobile.cyclops.ui.main.myDevices.DevicesFragment;
 import com.mdmobile.cyclops.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.cyclops.ui.main.server.ServerFragment;
 import com.mdmobile.cyclops.ui.main.users.UsersFragment;
-import com.mdmobile.cyclops.ui.settings.SettingsActivity;
+import com.mdmobile.cyclops.ui.settings.AppCompatPreferenceActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                 navigationDrawer.closeDrawer(Gravity.START, true);
                 return true;
             case R.id.drawer_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
+                Intent intent = new Intent(this, AppCompatPreferenceActivity.class);
                 startActivity(intent);
                 navigationDrawer.closeDrawer(Gravity.START, true);
                 return true;

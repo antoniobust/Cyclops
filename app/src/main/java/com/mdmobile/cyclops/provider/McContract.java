@@ -116,6 +116,7 @@ public class McContract {
 
     interface MsInfoColumns {
         //Columns
+        String SERVER_ID = "ServerId";
         String FULLY_QUALIFIED_NAME = "Fqdn";
         String PORT_NUMBER = "PortNumber";
         String DESCRIPTION = "Description";
@@ -140,6 +141,7 @@ public class McContract {
 
     interface DsInfoColumns {
         //Columns
+        String SERVER_ID = "ServerId";
         String NAME = "Name";
         String STATUS = "Status";
         String CONNECTED = "Connected";
@@ -175,6 +177,7 @@ public class McContract {
         String EULA_ACCEPTANCE_DATE = "EulaAcceptanceDate";
         String IS_LOCKED = "IsLocked";
         String NUMBER_OF_FAILED_LOGIN = "NumberOfFailedLogin";
+        String SERVER_ID = "ServerId";
     }
 
     interface ServerInfoColumns {

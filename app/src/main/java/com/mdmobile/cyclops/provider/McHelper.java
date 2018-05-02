@@ -33,7 +33,7 @@ import static com.mdmobile.cyclops.provider.McContract.USER_TABLE_NAME;
 public class McHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PocketConsole.db";
-    private static final int DB_VERSION = 34;
+    private static final int DB_VERSION = 35;
     private Context mContext;
 
     public McHelper(Context context) {
@@ -79,6 +79,7 @@ public class McHelper extends SQLiteOpenHelper {
         //Create MsInfo table
         db.execSQL(" CREATE TABLE " + MANAGEMENT_SERVER_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + McContract.MsInfo.SERVER_ID + " TEXT NOT NULL,"
                 + McContract.MsInfo.FULLY_QUALIFIED_NAME + " TEXT, "
                 + McContract.MsInfo.PORT_NUMBER + " INTEGER, "
                 + McContract.MsInfo.DESCRIPTION + " TEXT, "
@@ -86,12 +87,14 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.MsInfo.MAC_ADDRESS + " TEXT, "
                 + McContract.MsInfo.TOTAL_USER_COUNT + " INTEGER, "
                 + McContract.MsInfo.NAME + " TEXT, "
-                + McContract.MsInfo.STATUS + " TEXT "
-                + ");");
+                + McContract.MsInfo.STATUS + " TEXT, "
+                + "FOREIGN KEY(" + McContract.MsInfo.SERVER_ID + ") REFERENCES "
+                + McContract.SERVER_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
 
         //Create DsInfo table
         db.execSQL(" CREATE TABLE " + DEPLOYMENT_SERVER_TABLE_NAME
                 + "(" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                + McContract.DsInfo.SERVER_ID + " TEXT NOT NULL,"
                 + McContract.DsInfo.NAME + " TEXT, "
                 + McContract.DsInfo.STATUS + " TEXT, "
                 + McContract.DsInfo.CONNECTED + " TEXT, "
@@ -110,8 +113,9 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.DsInfo.PULSE_WAIT_INTERVAL + " INTEGER, "
                 + McContract.DsInfo.DEVICES_CONNECTED + " INTEGER, "
                 + McContract.DsInfo.MANAGERS_CONNECTED + " INTEGER, "
-                + McContract.DsInfo.QUEUE_LENGTH + " INTEGER "
-                + ");");
+                + McContract.DsInfo.QUEUE_LENGTH + " INTEGER, "
+                + "FOREIGN KEY(" + McContract.DsInfo.SERVER_ID + ") REFERENCES "
+                + McContract.SERVER_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
 
         //Create CustomData tables
         db.execSQL(" CREATE TABLE " + CUSTOM_DATA_TABLE_NAME
@@ -184,13 +188,16 @@ public class McHelper extends SQLiteOpenHelper {
         //Create user table
         db.execSQL("CREATE TABLE " + McContract.USER_TABLE_NAME + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + McContract.UserInfo.SERVER_ID + " TEXT NOT NULL,"
                 + McContract.UserInfo.NAME + " TEXT NOT NULL, "
                 + McContract.UserInfo.DISPLAYED_NAME + " TEXT, "
                 + McContract.UserInfo.KIND + " TEXT, "
                 + McContract.UserInfo.IS_LOCKED + " INTEGER, "
                 + McContract.UserInfo.IS_EULA_ACCEPTED + " INTEGER, "
                 + McContract.UserInfo.EULA_ACCEPTANCE_DATE + " TEXT, "
-                + McContract.UserInfo.NUMBER_OF_FAILED_LOGIN + " INTEGER );");
+                + McContract.UserInfo.NUMBER_OF_FAILED_LOGIN + " INTEGER,"
+                + "FOREIGN KEY(" + McContract.UserInfo.SERVER_ID + ") REFERENCES "
+                + McContract.SERVER_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
 
         //Create server info table
         db.execSQL("CREATE TABLE " + McContract.SERVER_INFO_TABLE_NAME + " ("
@@ -233,6 +240,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + " WHERE " + McContract.INSTALLED_APPLICATION_TABLE_NAME + "." + McContract.InstalledApplications.DEVICE_ID
                 + "= OLD." + McContract.Device.COLUMN_DEVICE_ID + ";"
                 + "END;");
+
         //Whenever we delete a device we delete references in PROFILE-DEVICE lookup table
         db.execSQL("CREATE TRIGGER RemoveDeviceProfiles BEFORE DELETE ON " + McContract.DEVICE_TABLE_NAME
                 + " BEGIN "
@@ -241,11 +249,20 @@ public class McHelper extends SQLiteOpenHelper {
                 + "= OLD." + McContract.Device.COLUMN_DEVICE_ID + ";"
                 + "END;");
 
-        //Whenever we delete a server we delete all devices belonging to the server
+        //Whenever we delete a server we delete all info (Devices, MS&DS, Users) related to the server
         db.execSQL("CREATE TRIGGER RemoveDevices BEFORE DELETE ON " + McContract.SERVER_INFO_TABLE_NAME
                 + " BEGIN "
                 + " DELETE FROM " + McContract.DEVICE_TABLE_NAME
                 + " WHERE " + McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_SERVER_ID
+                + "=OLD." + McContract.ServerInfo._ID + ";"
+                + " DELETE FROM " + McContract.MANAGEMENT_SERVER_TABLE_NAME
+                + " WHERE " + McContract.MANAGEMENT_SERVER_TABLE_NAME + "." + McContract.MsInfo.SERVER_ID
+                + "=OLD." + McContract.ServerInfo._ID + ";"
+                + " DELETE FROM " + McContract.DEPLOYMENT_SERVER_TABLE_NAME
+                + " WHERE " + McContract.DEPLOYMENT_SERVER_TABLE_NAME + "." + McContract.DsInfo.SERVER_ID
+                + "=OLD." + McContract.ServerInfo._ID + ";"
+                + " DELETE FROM " + McContract.USER_TABLE_NAME
+                + " WHERE " + McContract.USER_TABLE_NAME + "." + McContract.DsInfo.SERVER_ID
                 + "=OLD." + McContract.ServerInfo._ID + ";"
                 + "END;");
 

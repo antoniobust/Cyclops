@@ -50,7 +50,6 @@ public class McProvider extends ContentProvider {
 
         String groupBy = "";
 
-        //Get DB is an expensive operation check if we already have opened it
         if (database == null) {
             database = mcHelper.getWritableDatabase();
         }
@@ -61,58 +60,69 @@ public class McProvider extends ContentProvider {
         String devId;
 
         switch (mcEnumUri) {
-            case DEVICES:
+            case DEVICES: {
                 mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
                 break;
-
-            case DEVICES_ID:
+            }
+            case DEVICES_ID: {
                 devId = McContract.Device.getDeviceIdFromUri(uri);
                 mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
                 mQueryBuilder.appendWhere(McContract.Device.COLUMN_DEVICE_ID + "='" + devId + "'");
-
                 break;
+            }
 
-            case DEVICES_GROUP_BY:
-                mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
-                groupBy = McContract.Device.getGroupByFromUri(uri);
-
+            case DEVICES_BY_SERVER: {
+                String serverName = McContract.Device.getServerNameFromUri(uri);
+                String join = McContract.DEVICE_TABLE_NAME + " INNER JOIN " + McContract.SERVER_INFO_TABLE_NAME + " ON "
+                        + McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo._ID + " = "
+                        + McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_SERVER_ID;
+                mQueryBuilder.setTables(join);
+                mQueryBuilder.appendWhere(McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
                 break;
+            }
 
-            case INSTALLED_APPLICATIONS_ON_DEVICE:
+            case APPLICATIONS_ON_DEVICE: {
                 devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
                 mQueryBuilder.setTables(McContract.INSTALLED_APPLICATION_TABLE_NAME);
                 mQueryBuilder.appendWhere(McContract.InstalledApplications.DEVICE_ID + "='" + devId + "'");
                 break;
+            }
 
-            case INSTALLED_APPLICATION_PKG_NAME:
+            case APPLICATION_PKG_NAME: {
                 String packageName = McContract.InstalledApplications.getAppPackageNameFromUri(uri);
                 mQueryBuilder.setTables(McContract.INSTALLED_APPLICATION_TABLE_NAME);
                 mQueryBuilder.appendWhere(McContract.InstalledApplications.APPLICATION_ID + "=" + packageName);
                 break;
+            }
 
-            case SCRIPTS:
+            case SCRIPTS: {
                 mQueryBuilder.setTables(McContract.SCRIPT_TABLE_NAME);
                 break;
-
-            case SCRIPT_ID:
+            }
+            case SCRIPT_ID: {
                 String scriptId = McContract.Script.getScriptIdFromUri(uri);
                 mQueryBuilder.setTables(McContract.SCRIPT_TABLE_NAME);
                 mQueryBuilder.appendWhere(McContract.Script._ID + "=" + scriptId);
                 break;
-
-            case MANAGEMENT_SERVERS:
+            }
+            case MS_LIST: {
                 mQueryBuilder.setTables(McContract.MANAGEMENT_SERVER_TABLE_NAME);
                 break;
-
-            case DEPLOYMENT_SERVERS:
+            }
+            case MS_BY_SERVER: {
+//                mQueryBuilder.setTables(McContract.MANAGEMENT_SERVER_TABLE_NAME);
+//                mQueryBuilder.appendWhere(McContract.MANAGEMENT_SERVER_TABLE_NAME);
+                break;
+            }
+            case DS_LIST: {
                 mQueryBuilder.setTables(McContract.DEPLOYMENT_SERVER_TABLE_NAME);
                 break;
-
-            case USERS:
+            }
+            case USERS: {
                 mQueryBuilder.setTables(McContract.USER_TABLE_NAME);
                 break;
-
-            case PROFILE_DEVICE_ID:
+            }
+            case PROFILE_DEVICE_ID: {
                 devId = McContract.Profile.getUriId(uri);
                 String join = McContract.PROFILE_TABLE_NAME + " INNER JOIN "
                         + McContract.PROFILE_DEVICE_TABLE_NAME + " ON " + McContract.PROFILE_TABLE_NAME + "." + McContract.Profile._ID
@@ -125,19 +135,22 @@ public class McProvider extends ContentProvider {
                 map.put(McContract.Profile.NAME, McContract.Profile.NAME);
                 mQueryBuilder.setProjectionMap(null);
                 mQueryBuilder.appendWhere(McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_DEVICE_ID + " = '" + devId + "'");
-
                 break;
-
-            case SERVER:
+            }
+            case SERVERS: {
                 mQueryBuilder.setTables(McContract.SERVER_INFO_TABLE_NAME);
                 break;
-
+            }
+            case SERVER_BY_NAME: {
+                mQueryBuilder.setTables(McContract.SERVER_INFO_TABLE_NAME);
+                mQueryBuilder.appendWhere(McContract.ServerInfo.NAME + "='" + McContract.ServerInfo.getServerNameFromUri(uri) + "'");
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }
         //Execute built query
         c = mQueryBuilder.query(database, projection, selection, selectionArgs, groupBy, null, sortOrder);
-
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
@@ -170,7 +183,7 @@ public class McProvider extends ContentProvider {
                 }
                 return dataInserted;
 
-            case INSTALLED_APPLICATION_PKG_NAME:
+            case APPLICATION_PKG_NAME:
                 for (ContentValues contentValues : values) {
                     if (database.insert(McContract.INSTALLED_APPLICATION_TABLE_NAME, null, contentValues) > 0) {
                         dataInserted++;
@@ -184,7 +197,7 @@ public class McProvider extends ContentProvider {
                 }
                 return dataInserted;
 
-            case SERVER:
+            case SERVERS:
                 for (ContentValues c : values) {
                     if (database.insert(McContract.SERVER_INFO_TABLE_NAME, null, c) > 0) {
                         dataInserted++;
@@ -198,7 +211,7 @@ public class McProvider extends ContentProvider {
                 }
                 return dataInserted;
 
-            case MANAGEMENT_SERVERS:
+            case MS_LIST:
                 for (ContentValues contentValues : values) {
                     if (database.insert(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, contentValues) > 0) {
                         dataInserted++;
@@ -212,7 +225,7 @@ public class McProvider extends ContentProvider {
                 }
                 return dataInserted;
 
-            case DEPLOYMENT_SERVERS:
+            case DS_LIST:
                 for (ContentValues contentValues : values) {
                     if (database.insert(McContract.DEPLOYMENT_SERVER_TABLE_NAME, null, contentValues) > 0) {
                         dataInserted++;
@@ -285,21 +298,15 @@ public class McProvider extends ContentProvider {
                 database.insert(mcEnumUri.tableName, null, contentValues);
 
         switch (mcEnumUri) {
-            case DEVICES:
+            case DEVICES_BY_SERVER:
                 if (newRowID < 1) {
-                    Logger.log(LOG_TAG, "Impossible to insert device in DB", Log.ERROR);
+                    Logger.log(LOG_TAG, "Impossible to insert device in DB, server: " + McContract.Device.getServerNameFromUri(uri), Log.ERROR);
                     return null;
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return McContract.Device.buildUriWithID(newRowID);
 
-            case CUSTOM_ATTRIBUTE:
-                return null;
-
-            case CUSTOM_DATA:
-                return null;
-
-            case INSTALLED_APPLICATION_ID:
+            case APPLICATION_ID:
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert application in DB", Log.ERROR);
                     return null;
@@ -314,7 +321,7 @@ public class McProvider extends ContentProvider {
                 }
                 return McContract.Script.buildUriWithId(newRowID);
 
-            case MANAGEMENT_SERVERS:
+            case MS_LIST:
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert MS in DB", Log.ERROR);
                     return null;
@@ -322,7 +329,7 @@ public class McProvider extends ContentProvider {
                 getContext().getContentResolver().notifyChange(uri, null);
                 return McContract.MsInfo.buildUriWithMsId(newRowID);
 
-            case DEPLOYMENT_SERVERS:
+            case DS_LIST:
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert DS in DB", Log.ERROR);
                     return null;
@@ -347,7 +354,7 @@ public class McProvider extends ContentProvider {
                         + newRowID + "','" + McContract.Device.getDeviceIdFromUri(uri) + "');");
                 return McContract.Profile.buildUriWithID(String.valueOf(newRowID));
 
-            case SERVER:
+            case SERVERS:
                 if (newRowID < 1) {
                     Logger.log(LOG_TAG, "Impossible to insert ServerInfo in DB", Log.ERROR);
                     return null;
@@ -373,6 +380,22 @@ public class McProvider extends ContentProvider {
                 Logger.log(LOG_TAG, "Devices deleted:" + deleted, Log.VERBOSE);
                 break;
             }
+
+            case DEVICES_BY_SERVER: {
+                String serverName = McContract.Device.getServerNameFromUri(uri);
+                String where = McContract.Device.COLUMN_SERVER_ID + " = ?";
+                String whereValue = "( SELECT " + McContract.ServerInfo.NAME + " FROM " + McContract.SERVER_INFO_TABLE_NAME
+                        + " WHERE " + McContract.ServerInfo.NAME + " = " + serverName + ")";
+                String[] parameters = {whereValue};
+                deleted = database.delete(McContract.DEVICE_TABLE_NAME, where, parameters);
+                if (deleted > 0) {
+                    Logger.log(LOG_TAG, "Server(" + serverName + ") devices  deleted", Log.VERBOSE);
+                } else {
+                    Logger.log(LOG_TAG, "Server(" + serverName + ") devices NOT deleted", Log.VERBOSE);
+                }
+                break;
+            }
+
             case DEVICES_ID: {
                 String devId = McContract.Device.getDeviceIdFromUri(uri);
                 String where = McContract.Device.COLUMN_DEVICE_ID + " = ?";
@@ -386,19 +409,19 @@ public class McProvider extends ContentProvider {
                 break;
             }
 
-            case INSTALLED_APPLICATIONS_ON_DEVICE: {
+            case APPLICATIONS_ON_DEVICE: {
                 String devId = McContract.InstalledApplications.getDeviceIdFromUri(uri);
                 deleted = database.delete(McContract.DEVICE_TABLE_NAME, McContract.InstalledApplications.DEVICE_ID + " =?",
                         new String[]{devId});
                 Logger.log(LOG_TAG, "InstalledApps deleted:" + deleted, Log.VERBOSE);
                 break;
             }
-            case MANAGEMENT_SERVERS: {
+            case MS_LIST: {
                 deleted = database.delete(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, null);
                 Logger.log(LOG_TAG, "MS deleted:" + deleted, Log.VERBOSE);
                 break;
             }
-            case DEPLOYMENT_SERVERS: {
+            case DS_LIST: {
                 deleted = database.delete(McContract.DEPLOYMENT_SERVER_TABLE_NAME, null, null);
                 Logger.log(LOG_TAG, "DS deleted:" + deleted, Log.VERBOSE);
                 break;
@@ -431,7 +454,7 @@ public class McProvider extends ContentProvider {
                 break;
             }
 
-            case SERVER: {
+            case SERVERS: {
                 deleted = database.delete(McContract.SERVER_INFO_TABLE_NAME, selection, selectionArgs);
                 Logger.log(LOG_TAG, "Server deleted:" + deleted, Log.VERBOSE);
                 break;
@@ -465,7 +488,7 @@ public class McProvider extends ContentProvider {
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
                 break;
-            case SERVER_WITH_NAME:
+            case SERVER_BY_NAME:
                 String serverName = McContract.ServerInfo.getServerNameFromUri(uri);
                 updated = database.update(McContract.SERVER_INFO_TABLE_NAME, values, McContract.ServerInfo.NAME + "=?", new String[]{serverName});
                 Logger.log(LOG_TAG, " Server(" + serverName + ") updated", Log.VERBOSE);

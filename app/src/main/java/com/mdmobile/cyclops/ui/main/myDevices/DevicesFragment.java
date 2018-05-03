@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -28,19 +29,24 @@ import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
 import com.mdmobile.cyclops.ui.dialogs.PinFolderDialog;
 import com.mdmobile.cyclops.ui.dialogs.SortingDeviceDialog;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
+import com.mdmobile.cyclops.utils.ServerUtility;
+
+import java.util.Observable;
+import java.util.Observer;
 
 import static android.content.Context.SEARCH_SERVICE;
 
 
 public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener, SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, Observer {
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
     private final static String SEARCH_QUERY_KEY = "searchQueryKey";
@@ -61,6 +67,46 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
     public static DevicesFragment newInstance() {
         return new DevicesFragment();
+    }
+
+    // -- Interface methods
+    //********************* SearchView Interface methods **********************************************************
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        //On text changed send an intent to devices list fragment so it refreshes the listView with results
+        Bundle args = new Bundle(1);
+        args.putString(SEARCH_QUERY_KEY, query);
+
+        if (isAdded()) {
+            getLoaderManager().restartLoader(1, args, this);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newQuery) {
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem menuItem) {
+        return true;
+    }
+    //************************************************************************************************************
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+        Bundle args = new Bundle();
+        args.putInt(sortingOptionKey, currentSortingOption);
+        args.putString(pinnedFolderOptionKey, currentPinnedPath);
+        getLoaderManager().restartLoader(1, args, this);
+        return true;
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        initializeLoader();
     }
 
     @Override
@@ -121,10 +167,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
         //Set the adapter to the recycler
         recyclerView.setAdapter(mAdapter);
-        Bundle args = new Bundle();
-        args.putInt(sortingOptionKey, currentSortingOption);
-        args.putString(pinnedFolderOptionKey, currentPinnedPath);
-        getLoaderManager().initLoader(1, args, this);
+        initializeLoader();
     }
 
     @Override
@@ -177,10 +220,13 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 //        filtersView.setVisibility(View.GONE);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //Get sorting option from arguments and create query
         String sortingParameter, pathSelection = "", searchQuery = "";
+
+        Server server = ServerUtility.getActiveServer();
 
         if (args.containsKey(SEARCH_QUERY_KEY)) {
             searchQuery = args.getString(SEARCH_QUERY_KEY);
@@ -219,7 +265,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
             String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery, "%" + searchQuery + "%"};
 
-            return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, null,
+            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), null,
                     selection, arguments, sortingParameter);
 
         } else {
@@ -232,11 +278,11 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
                 if (!pathSelection.equals("")) {
                     selection = McContract.Device.COLUMN_PATH + " = ?";
                     String[] arguments = {pathSelection};
-                    return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, projection, selection, arguments, sortingParameter);
+//                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, selection, arguments, sortingParameter);
+                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, selection, arguments, sortingParameter);
                 }
             }
-
-            return new CursorLoader(getContext(), McContract.Device.CONTENT_URI, projection, null, null, sortingParameter);
+            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, null, null, sortingParameter);
         }
     }
 
@@ -276,38 +322,10 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 
     }
 
-    //********************* SearchView Interface methods ****************************************************************
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        //On text changed send an intent to devices list fragment so it refreshes the listView with results
-        Bundle args = new Bundle(1);
-        args.putString(SEARCH_QUERY_KEY, query);
-
-        if (isAdded()) {
-            getLoaderManager().restartLoader(1, args, this);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newQuery) {
-        return false;
-    }
-
-    @Override
-    public boolean onMenuItemActionExpand(MenuItem menuItem) {
-        return true;
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+    private void initializeLoader() {
         Bundle args = new Bundle();
         args.putInt(sortingOptionKey, currentSortingOption);
         args.putString(pinnedFolderOptionKey, currentPinnedPath);
-        getLoaderManager().restartLoader(1, args, this);
-        return true;
+        getLoaderManager().initLoader(1, args, this);
     }
-
-    //************************************************************************************************************
 }

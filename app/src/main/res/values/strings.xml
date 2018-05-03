@@ -223,6 +223,7 @@
     <string name="server_version_preference">server_version_preference</string>
     <string name="server_build_preference">server_build_preference</string>
     <string name="user_logo_preference">user_logo_preference</string>
+    <string name="add_new_server_label">Add a new server</string>
 
 
 </resources>

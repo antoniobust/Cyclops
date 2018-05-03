@@ -108,16 +108,6 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (authenticatorResponse == null) {
-            if (UserUtility.checkAnyUserLogged() && ServerUtility.anyActiveServer()) {
-                startMainActivity();
-            }
-        }
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(ATTACHED_FRAGMENT_KEY, getAttachedFragmentTag());

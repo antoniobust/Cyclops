@@ -129,9 +129,6 @@ public class ApiRequestManager {
 
     public void getDeviceInfo(@NonNull final String devId) {
         Server server = getActiveServer();
-        if (server == null) {
-            return;
-        }
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.SelectDevice.Builder(apiAuthority, devId).build();
 
@@ -153,9 +150,6 @@ public class ApiRequestManager {
 
     public void getDeviceInfo() {
         Server server = getActiveServer();
-        if (server == null) {
-            return;
-        }
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority,server.getServerMajorVersion()).build();
 
@@ -192,9 +186,6 @@ public class ApiRequestManager {
 
     public void getDeviceProfiles(@NonNull final String deviceID) {
         Server server = getActiveServer();
-        if (server == null) {
-            return;
-        }
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).getProfiles().build();
 
@@ -215,9 +206,6 @@ public class ApiRequestManager {
 
     public void getDeviceInstalledApps(@NonNull final String devID) {
         Server server = getActiveServer();
-        if (server == null) {
-            return;
-        }
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
@@ -245,9 +233,6 @@ public class ApiRequestManager {
     public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
         Server server = getActiveServer();
-        if (server == null) {
-            return;
-        }
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 

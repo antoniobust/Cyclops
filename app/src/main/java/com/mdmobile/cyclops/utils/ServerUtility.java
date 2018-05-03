@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.dataModel.Server;
@@ -23,6 +24,7 @@ import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 
 public class ServerUtility {
     public static final String SERVER_ADDRESS_KEY = "ServerAddressKey";
+    private final static String LOG_TAG = ServerUtility.class.getSimpleName();
     public static int SERVER_STOPPED = 0;
     public static int SERVER_STARTED = 1;
     public static int SERVER_DISABLED = 2;
@@ -64,8 +66,14 @@ public class ServerUtility {
         editor.putString(applicationContext.getString(R.string.server_address_preference), server.getServerAddress());
         editor.putInt(applicationContext.getString(R.string.server_version_preference), server.getServerMajorVersion());
         editor.putInt(applicationContext.getString(R.string.server_build_preference), server.getBuildNumber());
-
         editor.apply();
+
+        Logger.log(LOG_TAG, server.getServerName() + " set as active", Log.VERBOSE);
+
+    }
+
+    public static void setActiveServer(String serverName) {
+        setActiveServer(getServer(serverName));
     }
 
     public static void deactivateServer() {
@@ -76,6 +84,8 @@ public class ServerUtility {
         editor.remove(applicationContext.getString(R.string.client_id_preference));
         editor.remove(applicationContext.getString(R.string.server_address_preference));
         editor.apply();
+        Logger.log(LOG_TAG, " active server deactivated", Log.VERBOSE);
+
 
     }
 
@@ -151,6 +161,19 @@ public class ServerUtility {
         deactivateServer();
         applicationContext.getContentResolver().delete(McContract.ServerInfo.CONTENT_URI,
                 McContract.ServerInfo._ID + "=?", new String[]{String.valueOf(serverId)});
+    }
+
+    public static Server getServer(String serverName) {
+        String[] projection = {McContract.ServerInfo.NAME, McContract.ServerInfo.SERVER_ADDRESS, McContract.ServerInfo.SERVER_MAJOR_VERSION,
+                McContract.ServerInfo.SERVER_BUILD_NUMBER, McContract.ServerInfo.CLIENT_ID, McContract.ServerInfo.CLIENT_SECRET};
+        Cursor c = applicationContext.getContentResolver()
+                .query(McContract.ServerInfo.buildServerInfoUriWithName(serverName), projection, null, null, null);
+        if (c == null || !c.moveToFirst()) {
+            throw new UnsupportedOperationException("No server found");
+        }
+        Server s = new Server(c.getString(0), c.getString(5), c.getString(4), c.getString(1), c.getInt(2), c.getInt(3));
+        c.close();
+        return s;
     }
 
     public static Server[] getAllServers() {

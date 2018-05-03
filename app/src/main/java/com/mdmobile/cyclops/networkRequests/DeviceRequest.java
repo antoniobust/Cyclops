@@ -28,10 +28,13 @@ import com.mdmobile.cyclops.dataModel.api.devices.WindowsPhone;
 import com.mdmobile.cyclops.dataModel.api.devices.WindowsRuntime;
 import com.mdmobile.cyclops.dataTypes.DeviceKind;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 
 /**
  * Request devices
@@ -108,6 +111,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
     }
 
     private void saveDevicesToDB(ArrayList<? extends BasicDevice> devices) {
+
         Cursor c = mContext.getContentResolver().query(McContract.ServerInfo.CONTENT_URI,
                 new String[]{McContract.ServerInfo._ID},
                 McContract.ServerInfo.NAME + "=?", new String[]{server.getServerName()}, null);
@@ -117,6 +121,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
         }
 
         Integer serverId = c.getInt(0);
+        c.close();
 
         //Parse devices to extract common properties and put other as extra string
         if (devices.size() == 1) {

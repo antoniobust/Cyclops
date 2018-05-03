@@ -14,6 +14,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -35,6 +36,7 @@ import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
 import com.mdmobile.cyclops.ui.BaseActivity;
+import com.mdmobile.cyclops.ui.FragmentObserver;
 import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.ui.main.dashboard.DashboardFragment;
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity;
@@ -49,6 +51,9 @@ import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import static android.view.View.GONE;
 import static com.mdmobile.cyclops.R.id.main_activity_fragment_container;
@@ -57,7 +62,7 @@ import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.D
 
 
 public class MainActivity extends BaseActivity implements DevicesListAdapter.DeviceSelected,
-        ServerListAdapter.onClick, NavigationView.OnNavigationItemSelectedListener {
+        ServerListAdapter.onClick, NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String DEV_SYNC_BROADCAST_ACTION = "com.mdmobile.cyclops.DEVICE_SYNC_DONE";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
@@ -81,7 +86,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     };
     private NavigationView drawerNavigationView;
     private DrawerLayout navigationDrawer;
-    // -- Interface methods
+    private Observable mObservers = new Observable();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -95,8 +100,10 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                         break;
                     }
                     hideFiltersToolbar(View.VISIBLE);
-                    ft.replace(main_activity_fragment_container, DevicesFragment.newInstance(), "DevicesFragment");
+                    DevicesFragment devicesFragment = DevicesFragment.newInstance();
+                    ft.replace(main_activity_fragment_container, devicesFragment, "DevicesFragment");
                     ft.commit();
+                    setFragmentObserver(devicesFragment);
                     return true;
 
                 case R.id.navigation_dashboard:
@@ -104,8 +111,10 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                         break;
                     }
                     hideFiltersToolbar(View.VISIBLE);
-                    ft.replace(main_activity_fragment_container, DashboardFragment.newInstance(), "DashboardFragment");
+                    DashboardFragment dashboardFragment = DashboardFragment.newInstance();
+                    ft.replace(main_activity_fragment_container, dashboardFragment, "DashboardFragment");
                     ft.commit();
+//                    setFragmentObserver(dashboardFragment);
                     return true;
 
                 case R.id.navigation_server:
@@ -113,8 +122,10 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                         break;
                     }
                     hideFiltersToolbar(GONE);
-                    ft.replace(main_activity_fragment_container, ServerFragment.newInstance(), "ServerFragment");
+                    ServerFragment serverFragment = ServerFragment.newInstance();
+                    ft.replace(main_activity_fragment_container, serverFragment, "ServerFragment");
                     ft.commit();
+//                    setFragmentObserver(serverFragment);
                     return true;
 
                 case R.id.navigation_users:
@@ -122,14 +133,30 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                         break;
                     }
                     hideFiltersToolbar(GONE);
-                    ft.replace(main_activity_fragment_container, UsersFragment.newInstance(), "UserFragment");
+                    UsersFragment usersFragment = UsersFragment.newInstance();
+                    ft.replace(main_activity_fragment_container, usersFragment, "UserFragment");
                     ft.commit();
+//                    setFragmentObserver(UsersFragment.newInstance());
                     return true;
             }
             return false;
         }
 
     };
+
+    // -- Interface methods
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.server_name_preference))) {
+            Logger.log(LOG_TAG, "Active server changed..Reloading attached fragments", Log.VERBOSE);
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            for (Fragment f : fragments) {
+                if (f instanceof DevicesFragment) {
+                    mObservers.notifyObservers();
+                }
+            }
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -143,6 +170,14 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                 startActivity(intent);
                 navigationDrawer.closeDrawer(Gravity.START, true);
                 return true;
+            case R.id.nav_drawer_add_server:
+                launchLoginActivity();
+                return true;
+            case 1000:
+                ServerUtility.setActiveServer(item.getTitle().toString());
+                setNavigationDrawer();
+                navigationDrawer.closeDrawer(Gravity.START, true);
+                return true;
 
         }
         return false;
@@ -150,7 +185,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
     // OnClick avatar click
     public void setUserLogo(View v) {
-        //TODO: diaplay dialog to chenge user logo
+        //TODO: display dialog to change user logo
     }
 
     @Override
@@ -164,7 +199,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     public void onDeviceSelected(String devId, String devName) {
         this.devId = devId;
         this.devName = devName;
-
         startDetailsActivity(devId, devName);
     }
 
@@ -186,9 +220,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         setLastSyncTimeView();
         setBottomNavigationView(savedInstanceState);
         setActionBar();
-
-        //Set account manager to be used in this activity
-
     }
 
     private void setActionBar() {
@@ -238,12 +269,17 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     protected void onResume() {
         super.onResume();
         this.registerReceiver(devSyncReceiver, new IntentFilter(DEV_SYNC_BROADCAST_ACTION));
+        getSharedPreferences(getString(R.string.server_shared_preference), MODE_PRIVATE)
+                .registerOnSharedPreferenceChangeListener(this);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         this.unregisterReceiver(devSyncReceiver);
+        getSharedPreferences(getString(R.string.server_shared_preference), MODE_PRIVATE)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -349,8 +385,11 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     // Navigation Drawer -> on server text view click toggle menu
     public void toggleMenu(View view) {
         View arrowIcon = drawerNavigationView.findViewById(R.id.nav_server_selector_icon);
+        drawerNavigationView.getHeaderCount();
         if (drawerNavigationView.getMenu().findItem(R.id.drawer_logout).isVisible()) {
             arrowIcon.animate().rotationBy(180).setDuration(300L).setInterpolator(new DecelerateInterpolator()).start();
+            drawerNavigationView.getMenu().clear();
+            drawerNavigationView.inflateMenu(R.menu.drawer_settings);
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, true);
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, false);
 
@@ -359,11 +398,13 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             Menu menu = drawerNavigationView.getMenu();
             MenuItem item;
             for (Server s : servers) {
-                item = menu.add(R.id.nav_drawer_server_list_group, 1, Menu.NONE, s.getServerName());
+                item = menu.add(R.id.nav_drawer_server_list_group, 1000, Menu.NONE, s.getServerName());
                 item.setIcon(R.drawable.ic_server_black_24dp);
             }
         } else {
             arrowIcon.animate().rotationBy(180).setDuration(300L).setInterpolator(new DecelerateInterpolator()).start();
+            drawerNavigationView.getMenu().clear();
+            drawerNavigationView.inflateMenu(R.menu.drawer_settings);
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, false);
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, true);
         }
@@ -449,11 +490,17 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
         UserUtility.clearUserPreferences(UserUtility.getUser().name);
 
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        launchLoginActivity();
         finish();
+    }
+
+    private void launchLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    private void setFragmentObserver(Observer observer) {
+        mObservers.deleteObservers();
+        mObservers.addObserver(observer);
     }
 }

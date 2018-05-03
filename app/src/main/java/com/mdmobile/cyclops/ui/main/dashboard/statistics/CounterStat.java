@@ -2,7 +2,9 @@ package com.mdmobile.cyclops.ui.main.dashboard.statistics;
 
 import android.content.ContentResolver;
 
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 import java.util.List;
 
@@ -20,12 +22,14 @@ public class CounterStat extends Statistic {
     @Override
     public void initPoll() {
         final String count = "COUNT(" + McContract.Device._ID + ")";
-        final String orderBy = "COUNT(?) DESC";
+        final String orderBy = "GROUP BY ?";
+
+        Server s = ServerUtility.getActiveServer();
 
         for (int i = 0; i < mProperties.size(); i++) {
             startQuery(i,
                     mProperties.get(i),
-                    McContract.Device.buildUriWithGroup(mProperties.get(i)),
+                    McContract.Device.buildUriWithServerName(s.getServerName()),
                     new String[]{count, mProperties.get(i)},
                     null,
                     null,

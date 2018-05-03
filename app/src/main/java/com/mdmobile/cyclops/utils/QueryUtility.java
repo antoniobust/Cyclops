@@ -10,10 +10,9 @@ public class QueryUtility {
                 + "=" + tableName + ".ServerID";
     }
 
-    public static String buildServerNameWhereSubQuery(String tableName, String serverName){
-        return  tableName + "." + McContract.UserInfo.SERVER_ID
-                + " = (SELECT " + McContract.UserInfo._ID + " from "+ McContract.SERVER_INFO_TABLE_NAME + " WHERE "
+    public static String buildServerNameWhereSubQuery(String tableName, String serverName) {
+        return tableName + "." + McContract.UserInfo.SERVER_ID
+                + " = (SELECT " + McContract.UserInfo._ID + " from " + McContract.SERVER_INFO_TABLE_NAME + " WHERE "
                 + McContract.ServerInfo.NAME + " = \"" + serverName + "\")";
     }
-
 }

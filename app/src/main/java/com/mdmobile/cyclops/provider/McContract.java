@@ -58,8 +58,12 @@ public class McContract {
         return uri.getLastPathSegment();
     }
 
-    public static Uri buildUriWithServerName(Uri contentUri, String serverName){
+    public static Uri buildUriWithServerName(Uri contentUri, String serverName) {
         return contentUri.buildUpon().appendPath("server").appendPath(serverName).build();
+    }
+
+    public static String getServerIdFromUri(Uri uri) {
+        return uri.getLastPathSegment();
     }
 
     // ************ Table's columns interfaces **********************
@@ -119,12 +123,12 @@ public class McContract {
 
     }
 
+
     interface CustomDataDeviceColumns {
         //Columns
         String DEVICE_ID = "DeviceID";
         String CUSTOM_DATA_ID = "CustomDataID";
     }
-
 
     interface MsInfoColumns {
         //Columns
@@ -180,6 +184,9 @@ public class McContract {
         String SCRIPT = "Script";
     }
 
+    //***************************************************************
+
+
     interface UserInfoColumns {
         String NAME = "Name";
         String DISPLAYED_NAME = "DisplayedName";
@@ -191,9 +198,6 @@ public class McContract {
         String SERVER_ID = "ServerId";
     }
 
-    //***************************************************************
-
-
     interface ServerInfoColumns {
         String NAME = "Name";
         String CLIENT_ID = "ClientId";
@@ -202,6 +206,7 @@ public class McContract {
         String SERVER_MAJOR_VERSION = "MajorVersion";
         String SERVER_BUILD_NUMBER = "BuildNumber";
     }
+
 
     interface ProfileColumns {
         String REFERENCE_ID = "ReferenceId";

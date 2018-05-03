@@ -51,7 +51,6 @@ public enum McEnumUri {
 
     SERVER_BY_NAME(520, McContract.SERVER_INFO_TABLE_NAME + "/*", true, McContract.SERVER_INFO_TABLE_NAME);
 
-
     public String path, contentType, tableName;
     public int matcherCode;
 

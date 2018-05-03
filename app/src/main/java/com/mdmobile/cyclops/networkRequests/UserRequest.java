@@ -1,14 +1,19 @@
 package com.mdmobile.cyclops.networkRequests;
 
+import android.database.Cursor;
+import android.net.Uri;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.User;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.DbData;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -35,9 +40,20 @@ public class UserRequest extends BasicRequest<String> {
             }.getType();
 
             ArrayList<User> user = new Gson().fromJson(jsonResponseString, deviceCollectionType);
-            applicationContext.getContentResolver().delete(McContract.UserInfo.CONTENT_URI,null,null);
+            Server server = ServerUtility.getActiveServer();
+            Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, server.getServerName());
+            Cursor c = applicationContext.getContentResolver().query(McContract.ServerInfo.buildServerInfoUriWithName(server.getServerName()),
+                    new String[]{McContract.ServerInfo._ID}, null, null, null);
+
+            if (c == null || !c.moveToFirst()) {
+                throw new UnsupportedOperationException("No server found in DB: " + server.getServerName());
+            }
+            String serverId = c.getString(0);
+            c.close();
+
+            applicationContext.getContentResolver().delete(uri, null, null);
             applicationContext.getContentResolver().bulkInsert(McContract.UserInfo.CONTENT_URI,
-                    DbData.prepareUserValues(user));
+                    DbData.prepareUserValues(user, serverId));
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));

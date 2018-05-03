@@ -42,6 +42,9 @@ public class ServerInfo implements Parcelable {
     public Integer getProductVersion() {
         //If product Version is not populated is because in v13 APIs there wasn't such info.
         //Assuming we are using a v13.3
+        if(ProductVersion == null){
+            return 1330;
+        }
         StringBuilder builder = new StringBuilder();
         String[] array = ProductVersion.split("\\.");
         for (String value : array) {
@@ -55,6 +58,9 @@ public class ServerInfo implements Parcelable {
     public Integer getProductVersionBuild() {
         //If product Version is not populated is because in v13 APIs there wasn't such info.
         //Assuming we are using build 3766
+        if(ProductVersionBuild == null){
+            return 3766;
+        }
         StringBuilder builder = new StringBuilder();
         String[] array = ProductVersionBuild.split("\\.");
         for (String value : array) {

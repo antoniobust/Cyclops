@@ -1,6 +1,7 @@
 package com.mdmobile.cyclops.networkRequests;
 
-import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -23,8 +24,8 @@ import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
  */
 
 public class ServerInfoRequest extends BasicRequest<String> {
-    private Response.Listener<String> responseListener;
     private final String serverSynced;
+    private Response.Listener<String> responseListener;
 
     public ServerInfoRequest(String url, String serverName, Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
         super(Method.GET, url, errorListener);
@@ -43,38 +44,51 @@ public class ServerInfoRequest extends BasicRequest<String> {
             String jsonResponseString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
 
-            ServerInfo serverInfo = new Gson().fromJson(jsonResponseString, ServerInfo.class);
+            ServerInfo serverComponents = new Gson().fromJson(jsonResponseString, ServerInfo.class);
 
-            ArrayList<ServerInfo.ManagementServer> managementServers = new ArrayList<>(serverInfo.getManagementServers());
-            ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(serverInfo.getDeploymentServers());
+            ArrayList<ServerInfo.ManagementServer> managementServers = new ArrayList<>(serverComponents.getManagementServers());
+            ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(serverComponents.getDeploymentServers());
 
 
             //Update serverInfo table with version -> it could have changed since last sync
-            Server genericServer = ServerUtility.getActiveServer();
-            Server newGenericServer = new Server(genericServer.getServerName(),genericServer.getApiSecret(),genericServer.getClientId(),
-                    genericServer.getServerAddress(),serverInfo.getProductVersion(),serverInfo.getProductVersionBuild());
+            Server serverInfo = ServerUtility.getActiveServer();
+            Server newServerInfo = new Server(serverInfo.getServerName(), serverInfo.getApiSecret(), serverInfo.getClientId(),
+                    serverInfo.getServerAddress(), serverComponents.getProductVersion(), serverComponents.getProductVersionBuild());
 
-            applicationContext.getContentResolver().update(McContract.ServerInfo.buildServerInfoUriWithName(genericServer.getServerName()),
-                    newGenericServer.toContentValues(),null,null);
+            applicationContext.getContentResolver().update(McContract.ServerInfo.buildServerInfoUriWithName(serverInfo.getServerName()),
+                    newServerInfo.toContentValues(), null, null);
+
+            Cursor c = applicationContext.getContentResolver()
+                    .query(McContract.ServerInfo.buildServerInfoUriWithName(serverInfo.getServerName()),
+                            new String[]{McContract.ServerInfo._ID}, null, null, null);
+
+            if (c == null || !c.moveToFirst()) {
+                throw new UnsupportedOperationException("No server found in DB:" + serverInfo.getServerName());
+            }
+
+            String serverId = c.getString(0);
+            c.close();
 
             //Delete any existing MS,DS in DB
-            applicationContext.getContentResolver().delete(McContract.MsInfo.CONTENT_URI, null, null);
-            applicationContext.getContentResolver().delete(McContract.DsInfo.CONTENT_URI, null, null);
+            Uri uri = McContract.buildUriWithServerName(McContract.MsInfo.CONTENT_URI, serverInfo.getServerName());
+            applicationContext.getContentResolver().delete(uri, null, null);
+            uri = McContract.buildUriWithServerName(McContract.DsInfo.CONTENT_URI, serverInfo.getServerName());
+            applicationContext.getContentResolver().delete(uri, null, null);
 
             if (managementServers.size() > 1) {
                 applicationContext.getContentResolver().bulkInsert(McContract.MsInfo.CONTENT_URI,
-                        DbData.prepareMsValues(managementServers));
+                        DbData.prepareMsValues(managementServers, serverId));
             } else {
                 applicationContext.getContentResolver().insert(McContract.MsInfo.CONTENT_URI,
-                        DbData.prepareMsValues(managementServers.get(0)));
+                        DbData.prepareMsValues(managementServers.get(0), serverId));
             }
 
             if (deploymentServers.size() > 1) {
                 applicationContext.getContentResolver().bulkInsert(McContract.DsInfo.CONTENT_URI,
-                        DbData.prepareDsValues(deploymentServers));
+                        DbData.prepareDsValues(deploymentServers, serverId));
             } else {
                 applicationContext.getContentResolver().insert(McContract.DsInfo.CONTENT_URI,
-                        DbData.prepareDsValues(deploymentServers.get(0)));
+                        DbData.prepareDsValues(deploymentServers.get(0), serverId));
             }
 
             int status;

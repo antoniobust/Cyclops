@@ -2,6 +2,7 @@ package com.mdmobile.cyclops.ui.main.server;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -18,6 +19,7 @@ import com.mdmobile.cyclops.adapters.DsInfoAdapter;
 import com.mdmobile.cyclops.adapters.MsInfoAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 
 public class ServerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -69,11 +71,11 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id == 50) {
-            return new CursorLoader(getContext(), McContract.DsInfo.CONTENT_URI,
-                    null, null, null, null);
+            Uri uri = McContract.buildUriWithServerName(McContract.DsInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
+            return new CursorLoader(getContext(), uri, null, null, null, null);
         } else if (id == 51) {
-            return new CursorLoader(getContext(), McContract.MsInfo.CONTENT_URI,
-                    null, null, null, null);
+            Uri uri = McContract.buildUriWithServerName(McContract.MsInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
+            return new CursorLoader(getContext(), uri, null, null, null, null);
         }
         return null;
     }

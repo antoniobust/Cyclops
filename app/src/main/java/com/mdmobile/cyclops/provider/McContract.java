@@ -54,8 +54,12 @@ public class McContract {
         return baseUri.buildUpon().appendPath("server").appendPath(serverName).build();
     }
 
-    public static String getServerIdFromUri(Uri uri) {
+    public static String getServerNameFromUri(Uri uri) {
         return uri.getLastPathSegment();
+    }
+
+    public static Uri buildUriWithServerName(Uri contentUri, String serverName){
+        return contentUri.buildUpon().appendPath("server").appendPath(serverName).build();
     }
 
     // ************ Table's columns interfaces **********************

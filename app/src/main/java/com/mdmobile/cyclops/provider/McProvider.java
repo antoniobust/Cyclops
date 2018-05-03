@@ -73,11 +73,8 @@ public class McProvider extends ContentProvider {
             }
 
             case DEVICES_BY_SERVER: {
-                String serverName = McContract.Device.getServerNameFromUri(uri);
-                String join = McContract.DEVICE_TABLE_NAME + " INNER JOIN " + McContract.SERVER_INFO_TABLE_NAME + " ON "
-                        + McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo._ID + " = "
-                        + McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_SERVER_ID;
-                mQueryBuilder.setTables(join);
+                String serverName = McContract.getServerNameFromUri(uri);
+                mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.DEVICE_TABLE_NAME));
                 mQueryBuilder.appendWhere(McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
                 break;
             }
@@ -114,9 +111,9 @@ public class McProvider extends ContentProvider {
             }
 
             case MS_BY_SERVER: {
-                String serverID = McContract.getServerIdFromUri(uri);
+                String serverName = McContract.getServerNameFromUri(uri);
                 mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.MANAGEMENT_SERVER_TABLE_NAME));
-                mQueryBuilder.appendWhere(McContract.MANAGEMENT_SERVER_TABLE_NAME + "." + McContract.MsInfo.SERVER_ID + "='" + serverID + "'");
+                mQueryBuilder.appendWhere(McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
                 break;
             }
             case DS_LIST:
@@ -124,16 +121,16 @@ public class McProvider extends ContentProvider {
                 break;
 
             case DS_BY_SERVER: {
-                String serverID = McContract.getServerIdFromUri(uri);
+                String serverName = McContract.getServerNameFromUri(uri);
                 mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.DEPLOYMENT_SERVER_TABLE_NAME));
-                mQueryBuilder.appendWhere(McContract.DEPLOYMENT_SERVER_TABLE_NAME + "." + McContract.DsInfo.SERVER_ID + "='" + serverID + "'");
+                mQueryBuilder.appendWhere(McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
                 break;
             }
 
             case USERS_BY_SERVER: {
-                String serverID = McContract.getServerIdFromUri(uri);
+                String serverName = McContract.getServerNameFromUri(uri);
                 mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.USER_TABLE_NAME));
-                mQueryBuilder.appendWhere(McContract.USER_TABLE_NAME + "." + McContract.UserInfo.SERVER_ID + "='" + serverID + "'");
+                mQueryBuilder.appendWhere(McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
                 break;
             }
 
@@ -314,13 +311,6 @@ public class McProvider extends ContentProvider {
                 database.insert(mcEnumUri.tableName, null, contentValues);
 
         switch (mcEnumUri) {
-            case DEVICES_BY_SERVER:
-                if (newRowID < 1) {
-                    Logger.log(LOG_TAG, "Impossible to insert device in DB, server: " + McContract.Device.getServerNameFromUri(uri), Log.ERROR);
-                    return null;
-                }
-                getContext().getContentResolver().notifyChange(uri, null);
-                return McContract.Device.buildUriWithID(newRowID);
 
             case APPLICATION_ID:
                 if (newRowID < 1) {
@@ -398,14 +388,12 @@ public class McProvider extends ContentProvider {
             }
 
             case DEVICES_BY_SERVER: {
-                String serverName = McContract.Device.getServerNameFromUri(uri);
-                String where = McContract.Device.COLUMN_SERVER_ID + " = ?";
-                String whereValue = "( SELECT " + McContract.ServerInfo.NAME + " FROM " + McContract.SERVER_INFO_TABLE_NAME
-                        + " WHERE " + McContract.ServerInfo.NAME + " = " + serverName + ")";
-                String[] parameters = {whereValue};
-                deleted = database.delete(McContract.DEVICE_TABLE_NAME, where, parameters);
+                String serverName = McContract.getServerNameFromUri(uri);
+                String where = QueryUtility.buildServerNameWhereSubQuery(McContract.DEVICE_TABLE_NAME, serverName);
+
+                deleted = database.delete(McContract.DEVICE_TABLE_NAME, where, null);
                 if (deleted > 0) {
-                    Logger.log(LOG_TAG, "Server(" + serverName + ") devices  deleted", Log.VERBOSE);
+                    Logger.log(LOG_TAG, "Server(" + serverName + ") devices  deleted:" + deleted, Log.VERBOSE);
                 } else {
                     Logger.log(LOG_TAG, "Server(" + serverName + ") devices NOT deleted", Log.VERBOSE);
                 }
@@ -418,7 +406,7 @@ public class McProvider extends ContentProvider {
                 String[] parameters = {devId};
                 deleted = database.delete(McContract.DEVICE_TABLE_NAME, where, parameters);
                 if (deleted > 0) {
-                    Logger.log(LOG_TAG, "Device (" + devId + ") deleted", Log.VERBOSE);
+                    Logger.log(LOG_TAG, "Device (" + devId + ") deleted:" + deleted, Log.VERBOSE);
                 } else {
                     Logger.log(LOG_TAG, "Device (" + devId + ") not deleted", Log.VERBOSE);
                 }
@@ -432,25 +420,50 @@ public class McProvider extends ContentProvider {
                 Logger.log(LOG_TAG, "InstalledApps deleted:" + deleted, Log.VERBOSE);
                 break;
             }
-            case MS_LIST: {
-                deleted = database.delete(McContract.MANAGEMENT_SERVER_TABLE_NAME, null, null);
-                Logger.log(LOG_TAG, "MS deleted:" + deleted, Log.VERBOSE);
+
+            case MS_BY_SERVER: {
+                String serverName = McContract.getServerNameFromUri(uri);
+                String where = QueryUtility.buildServerNameWhereSubQuery(McContract.MANAGEMENT_SERVER_TABLE_NAME, serverName);
+
+                deleted = database.delete(McContract.MANAGEMENT_SERVER_TABLE_NAME, where, null);
+                if (deleted > 0) {
+                    Logger.log(LOG_TAG, "Server(" + serverName + ") MS deleted:" + deleted, Log.VERBOSE);
+                } else {
+                    Logger.log(LOG_TAG, "Server(" + serverName + ") MS not deleted", Log.VERBOSE);
+                }
                 break;
             }
-            case DS_LIST: {
-                deleted = database.delete(McContract.DEPLOYMENT_SERVER_TABLE_NAME, null, null);
-                Logger.log(LOG_TAG, "DS deleted:" + deleted, Log.VERBOSE);
+
+            case DS_BY_SERVER: {
+                String serverName = McContract.getServerNameFromUri(uri);
+                String where = QueryUtility.buildServerNameWhereSubQuery(McContract.DEPLOYMENT_SERVER_TABLE_NAME, serverName);
+
+                deleted = database.delete(McContract.DEPLOYMENT_SERVER_TABLE_NAME, where, null);
+                if (deleted > 0) {
+                    Logger.log(LOG_TAG, "Server(" + serverName + ") DS deleted:" + deleted, Log.VERBOSE);
+                } else {
+                    Logger.log(LOG_TAG, "Server(" + serverName + ") DS not deleted", Log.VERBOSE);
+                }
                 break;
             }
+
             case USER_ID: {
                 String id = McContract.UserInfo.getUserIdFromUri(uri);
                 deleted = database.delete(McContract.USER_TABLE_NAME, McContract.UserInfo._ID, new String[]{id});
                 Logger.log(LOG_TAG, "User deleted (" + id + "): " + deleted, Log.VERBOSE);
                 break;
             }
-            case USERS: {
-                deleted = database.delete(McContract.USER_TABLE_NAME, null, null);
-                Logger.log(LOG_TAG, "User deleted: " + deleted, Log.VERBOSE);
+
+            case USERS_BY_SERVER: {
+                String serverName = McContract.getServerNameFromUri(uri);
+                String where = QueryUtility.buildServerNameWhereSubQuery(McContract.USER_TABLE_NAME, serverName);
+
+                deleted = database.delete(McContract.USER_TABLE_NAME, where, null);
+                if (deleted > 0) {
+                    Logger.log(LOG_TAG, "Server(" + serverName + ") users deleted:" + deleted, Log.VERBOSE);
+                } else {
+                    Logger.log(LOG_TAG, "Server(" + serverName + ") users not deleted", Log.VERBOSE);
+                }
                 break;
             }
 

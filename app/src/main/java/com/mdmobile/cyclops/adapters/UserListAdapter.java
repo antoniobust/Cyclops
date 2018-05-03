@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.provider.McContract;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
 
@@ -31,9 +30,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
             return;
         }
 
-        String serverName = mCursor.getString(mCursor.getColumnIndex(McContract.ServerInfo.NAME));
+        String serverName = mCursor.getString(0);
         holder.nameView.setText(serverName);
-        if (mCursor.getInt(mCursor.getColumnIndex(McContract.UserInfo.IS_LOCKED)) == 1) {
+        if (mCursor.getInt(1) == 1) {
             holder.nameView.setCompoundDrawablesWithIntrinsicBounds(null,
                     null, holder.nameView.getContext().getResources().getDrawable(R.drawable.ic_lock), null);
         }

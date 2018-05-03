@@ -3,6 +3,7 @@ package com.mdmobile.cyclops.networkRequests;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -93,7 +94,8 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             Type deviceCollectionType = new TypeToken<ArrayList<? extends BasicDevice>>() {
             }.getType();
             ArrayList<? extends BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
-            mContext.getContentResolver().delete(McContract.Device.CONTENT_URI, null, null);
+            Uri uri = McContract.buildUriWithServerName(McContract.Device.CONTENT_URI,ServerUtility.getActiveServer().getServerName());
+            mContext.getContentResolver().delete(uri, null, null);
 
             saveDevicesToDB(devices);
 

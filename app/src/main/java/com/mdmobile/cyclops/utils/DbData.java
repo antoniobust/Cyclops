@@ -24,7 +24,7 @@ public class DbData {
     }
 
 
-    private static ContentValues getMsContentValues(ServerInfo.ManagementServer server) {
+    private static ContentValues getMsContentValues(ServerInfo.ManagementServer server, String serverId) {
         ContentValues msValues = new ContentValues();
         msValues.put(McContract.MsInfo.NAME, server.getName());
         msValues.put(McContract.MsInfo.FULLY_QUALIFIED_NAME, server.getFqdn());
@@ -34,23 +34,24 @@ public class DbData {
         msValues.put(McContract.MsInfo.STATUS_TIME, server.getStatusTime());
         msValues.put(McContract.MsInfo.STATUS, server.getStatus());
         msValues.put(McContract.MsInfo.TOTAL_USER_COUNT, server.getTotalConsoleUsers());
+        msValues.put(McContract.MsInfo.SERVER_ID, serverId);
         return msValues;
     }
 
-    public static ContentValues prepareMsValues(ServerInfo.ManagementServer server) {
-        return getMsContentValues(server);
+    public static ContentValues prepareMsValues(ServerInfo.ManagementServer server, String serverId) {
+        return getMsContentValues(server, serverId);
     }
 
-    public static ContentValues[] prepareMsValues(ArrayList<ServerInfo.ManagementServer> servers) {
+    public static ContentValues[] prepareMsValues(ArrayList<ServerInfo.ManagementServer> servers, String serverId) {
         ContentValues[] msValuesArray = new ContentValues[servers.size()];
         for (int i = 0; i < servers.size(); i++) {
-            msValuesArray[i] = getMsContentValues(servers.get(i));
+            msValuesArray[i] = getMsContentValues(servers.get(i), serverId);
         }
         return msValuesArray;
     }
 
 
-    private static ContentValues getDsContentValues(ServerInfo.DeploymentServer server) {
+    private static ContentValues getDsContentValues(ServerInfo.DeploymentServer server, String serverId) {
         ContentValues values = new ContentValues();
         values.put(McContract.DsInfo.NAME, server.getName());
         values.put(McContract.DsInfo.STATUS, server.getStatus());
@@ -70,23 +71,24 @@ public class DbData {
         values.put(McContract.DsInfo.QUEUE_LENGTH, server.getMsgQueueLength());
         values.put(McContract.DsInfo.CURRENT_THREAD_COUNT, server.getMsgQueueLength());
         values.put(McContract.DsInfo.PULSE_WAIT_INTERVAL, server.getPulseWaitInterval());
+        values.put(McContract.DsInfo.SERVER_ID, serverId);
 
         return values;
     }
 
-    public static ContentValues prepareDsValues(ServerInfo.DeploymentServer server) {
-        return getDsContentValues(server);
+    public static ContentValues prepareDsValues(ServerInfo.DeploymentServer server, String serverId) {
+        return getDsContentValues(server, serverId);
     }
 
-    public static ContentValues[] prepareDsValues(ArrayList<ServerInfo.DeploymentServer> servers) {
+    public static ContentValues[] prepareDsValues(ArrayList<ServerInfo.DeploymentServer> servers, String serverId) {
         ContentValues[] dsValuesArray = new ContentValues[servers.size()];
         for (int i = 0; i < servers.size(); i++) {
-            dsValuesArray[i] = getDsContentValues(servers.get(i));
+            dsValuesArray[i] = getDsContentValues(servers.get(i), serverId);
         }
         return dsValuesArray;
     }
 
-    private static ContentValues getUserContentValues(User user) {
+    private static ContentValues getUserContentValues(User user, String serverId) {
         ContentValues values = new ContentValues();
         values.put(McContract.UserInfo.NAME, user.getName());
         values.put(McContract.UserInfo.DISPLAYED_NAME, user.getDisplayName());
@@ -95,18 +97,16 @@ public class DbData {
         values.put(McContract.UserInfo.EULA_ACCEPTANCE_DATE, user.getEulaAcceptanceDate());
         values.put(McContract.UserInfo.IS_LOCKED, user.getAccountLocked());
         values.put(McContract.UserInfo.NUMBER_OF_FAILED_LOGIN, user.getNumberOfFailedLogins());
+        values.put(McContract.UserInfo.SERVER_ID, serverId);
+
 
         return values;
     }
 
-    public static ContentValues prepareUserValues(User user) {
-        return getUserContentValues(user);
-    }
-
-    public static ContentValues[] prepareUserValues(ArrayList<User> users) {
+    public static ContentValues[] prepareUserValues(ArrayList<User> users, String serverId) {
         ContentValues[] userValues = new ContentValues[users.size()];
         for (int i = 0; i < users.size(); i++) {
-            userValues[i] = getUserContentValues(users.get(i));
+            userValues[i] = getUserContentValues(users.get(i), serverId);
         }
         return userValues;
     }

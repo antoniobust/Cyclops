@@ -2,7 +2,9 @@ package com.mdmobile.cyclops.ui.main.users;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.UserListAdapter;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 
 public class UsersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -57,9 +60,13 @@ public class UsersFragment extends Fragment implements LoaderManager.LoaderCallb
         return rootView;
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), McContract.UserInfo.CONTENT_URI, null, null, null, McContract.UserInfo.DISPLAYED_NAME + " asc");
+        Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
+        return new CursorLoader(getContext(), uri,
+                new String[]{McContract.USER_TABLE_NAME + "." + McContract.UserInfo.DISPLAYED_NAME, McContract.UserInfo.IS_LOCKED},
+                null, null, McContract.UserInfo.DISPLAYED_NAME + " asc");
     }
 
     @Override

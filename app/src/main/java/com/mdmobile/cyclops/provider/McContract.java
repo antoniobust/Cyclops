@@ -200,6 +200,9 @@ public class McContract {
 
     //***************************************************************
 
+    public static String getServerIdFromUri(Uri uri){
+        return uri.getLastPathSegment();
+    }
 
     //Represent Device table
     public static class Device implements DeviceInfo, BaseColumns {

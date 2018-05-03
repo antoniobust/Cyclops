@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mdmobile.cyclops.utils.Logger;
+import com.mdmobile.cyclops.utils.QueryUtility;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -104,13 +105,29 @@ public class McProvider extends ContentProvider {
                 mQueryBuilder.setTables(McContract.MANAGEMENT_SERVER_TABLE_NAME);
                 break;
 
+            case MANAGEMENT_SERVERS_BY_SERVER: {
+                String serverID = McContract.getServerIdFromUri(uri);
+                mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.MANAGEMENT_SERVER_TABLE_NAME));
+                mQueryBuilder.appendWhere(McContract.MANAGEMENT_SERVER_TABLE_NAME + "." + McContract.MsInfo.SERVER_ID + "='" + serverID + "'");
+                break;
+            }
             case DEPLOYMENT_SERVERS:
                 mQueryBuilder.setTables(McContract.DEPLOYMENT_SERVER_TABLE_NAME);
                 break;
 
-            case USERS:
-                mQueryBuilder.setTables(McContract.USER_TABLE_NAME);
+            case DEPLOYMENT_SERVERS_BY_SERVER: {
+                String serverID = McContract.getServerIdFromUri(uri);
+                mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.DEPLOYMENT_SERVER_TABLE_NAME));
+                mQueryBuilder.appendWhere(McContract.DEPLOYMENT_SERVER_TABLE_NAME + "." + McContract.DsInfo.SERVER_ID + "='" + serverID + "'");
                 break;
+            }
+
+            case USERS_BY_SERVER: {
+                String serverID = McContract.getServerIdFromUri(uri);
+                mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.USER_TABLE_NAME));
+                mQueryBuilder.appendWhere(McContract.USER_TABLE_NAME + "." + McContract.UserInfo.SERVER_ID + "='" + serverID + "'");
+                break;
+            }
 
             case PROFILE_DEVICE_ID:
                 devId = McContract.Profile.getUriId(uri);

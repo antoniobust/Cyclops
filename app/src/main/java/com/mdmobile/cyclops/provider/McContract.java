@@ -54,6 +54,9 @@ public class McContract {
         return baseUri.buildUpon().appendPath("server").appendPath(serverName).build();
     }
 
+    public static String getServerIdFromUri(Uri uri) {
+        return uri.getLastPathSegment();
+    }
 
     // ************ Table's columns interfaces **********************
     interface DeviceInfo {
@@ -118,8 +121,10 @@ public class McContract {
         String CUSTOM_DATA_ID = "CustomDataID";
     }
 
+
     interface MsInfoColumns {
         //Columns
+        String SERVER_ID = "ServerId";
         String FULLY_QUALIFIED_NAME = "Fqdn";
         String PORT_NUMBER = "PortNumber";
         String DESCRIPTION = "Description";
@@ -129,7 +134,6 @@ public class McContract {
         String NAME = "Name";
         String STATUS = "Status";
     }
-
 
     interface InstalledAppsColumns {
         String DEVICE_ID = "DeviceID";
@@ -144,6 +148,7 @@ public class McContract {
 
     interface DsInfoColumns {
         //Columns
+        String SERVER_ID = "ServerId";
         String NAME = "Name";
         String STATUS = "Status";
         String CONNECTED = "Connected";
@@ -179,7 +184,11 @@ public class McContract {
         String EULA_ACCEPTANCE_DATE = "EulaAcceptanceDate";
         String IS_LOCKED = "IsLocked";
         String NUMBER_OF_FAILED_LOGIN = "NumberOfFailedLogin";
+        String SERVER_ID = "ServerId";
     }
+
+    //***************************************************************
+
 
     interface ServerInfoColumns {
         String NAME = "Name";
@@ -189,9 +198,6 @@ public class McContract {
         String SERVER_MAJOR_VERSION = "MajorVersion";
         String SERVER_BUILD_NUMBER = "BuildNumber";
     }
-
-    //***************************************************************
-
 
     interface ProfileColumns {
         String REFERENCE_ID = "ReferenceId";
@@ -228,10 +234,6 @@ public class McContract {
 
         public static Uri buildUriWithServerName(@NonNull String serverName) {
             return appendServerUriPath(CONTENT_URI, serverName);
-        }
-
-        public static String getServerNameFromUri(@NonNull Uri uri) {
-            return uri.getLastPathSegment();
         }
     }
 

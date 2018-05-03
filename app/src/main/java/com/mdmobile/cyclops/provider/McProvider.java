@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mdmobile.cyclops.utils.Logger;
+import com.mdmobile.cyclops.utils.QueryUtility;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -99,29 +100,43 @@ public class McProvider extends ContentProvider {
                 mQueryBuilder.setTables(McContract.SCRIPT_TABLE_NAME);
                 break;
             }
+
             case SCRIPT_ID: {
                 String scriptId = McContract.Script.getScriptIdFromUri(uri);
                 mQueryBuilder.setTables(McContract.SCRIPT_TABLE_NAME);
                 mQueryBuilder.appendWhere(McContract.Script._ID + "=" + scriptId);
                 break;
             }
+
             case MS_LIST: {
                 mQueryBuilder.setTables(McContract.MANAGEMENT_SERVER_TABLE_NAME);
                 break;
             }
+
             case MS_BY_SERVER: {
-//                mQueryBuilder.setTables(McContract.MANAGEMENT_SERVER_TABLE_NAME);
-//                mQueryBuilder.appendWhere(McContract.MANAGEMENT_SERVER_TABLE_NAME);
+                String serverID = McContract.getServerIdFromUri(uri);
+                mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.MANAGEMENT_SERVER_TABLE_NAME));
+                mQueryBuilder.appendWhere(McContract.MANAGEMENT_SERVER_TABLE_NAME + "." + McContract.MsInfo.SERVER_ID + "='" + serverID + "'");
                 break;
             }
-            case DS_LIST: {
+            case DS_LIST:
                 mQueryBuilder.setTables(McContract.DEPLOYMENT_SERVER_TABLE_NAME);
                 break;
-            }
-            case USERS: {
-                mQueryBuilder.setTables(McContract.USER_TABLE_NAME);
+
+            case DS_BY_SERVER: {
+                String serverID = McContract.getServerIdFromUri(uri);
+                mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.DEPLOYMENT_SERVER_TABLE_NAME));
+                mQueryBuilder.appendWhere(McContract.DEPLOYMENT_SERVER_TABLE_NAME + "." + McContract.DsInfo.SERVER_ID + "='" + serverID + "'");
                 break;
             }
+
+            case USERS_BY_SERVER: {
+                String serverID = McContract.getServerIdFromUri(uri);
+                mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.USER_TABLE_NAME));
+                mQueryBuilder.appendWhere(McContract.USER_TABLE_NAME + "." + McContract.UserInfo.SERVER_ID + "='" + serverID + "'");
+                break;
+            }
+
             case PROFILE_DEVICE_ID: {
                 devId = McContract.Profile.getUriId(uri);
                 String join = McContract.PROFILE_TABLE_NAME + " INNER JOIN "
@@ -146,6 +161,7 @@ public class McProvider extends ContentProvider {
                 mQueryBuilder.appendWhere(McContract.ServerInfo.NAME + "='" + McContract.ServerInfo.getServerNameFromUri(uri) + "'");
                 break;
             }
+
             default:
                 throw new UnsupportedOperationException("Unsupported URI: " + uri.toString());
         }

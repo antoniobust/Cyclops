@@ -72,12 +72,12 @@ public class ApiRequestManager {
     /**
      * Get a new token for the provided user and server
      */
-    public void getToken(String serverUrl, String clientID, String clientSecret,
+    public void getToken(Server server,
                          String userName, String password, final NetworkCallBack callBack) {
 
-        serverUrl = serverUrl.concat("/MobiControl/api/token");
+        String serverUrl = server.getServerAddress().concat("/MobiControl/api/token");
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
-        final String header = clientID.concat(":").concat(clientSecret);
+        final String header = server.getClientId().concat(":").concat(server.getApiSecret());
         final Bundle userInput = new Bundle();
         userInput.putString(UserUtility.USER_NAME_KEY, userName);
         userInput.putString(UserUtility.PASSWORD_KEY, password);
@@ -127,8 +127,7 @@ public class ApiRequestManager {
 
     }
 
-    public void getDeviceInfo(@NonNull final String devId) {
-        Server server = getActiveServer();
+    public void getDeviceInfo(@NonNull Server server, @NonNull final String devId) {
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.SelectDevice.Builder(apiAuthority, devId).build();
 
@@ -148,10 +147,9 @@ public class ApiRequestManager {
         requestsQueue.add(deviceRequest);
     }
 
-    public void getDeviceInfo() {
-        Server server = getActiveServer();
+    public void getDeviceInfo(Server server) {
         String apiAuthority = server.getServerAddress();
-        String api = ApiModel.DevicesApi.Builder(apiAuthority,server.getServerMajorVersion()).build();
+        String api = ApiModel.DevicesApi.Builder(apiAuthority, server.getServerMajorVersion()).build();
 
         DeviceRequest deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, server,
                 new Response.Listener<JSONArray>() {
@@ -184,8 +182,12 @@ public class ApiRequestManager {
         requestsQueue.add(deviceRequest);
     }
 
-    public void getDeviceProfiles(@NonNull final String deviceID) {
-        Server server = getActiveServer();
+    public String remoteControlDevice(Server server, String deviceId) {
+        String apiAuthority = server.getServerAddress();
+        return ApiModel.DevicesApi.BuildRC(apiAuthority,deviceId).toString();
+    }
+
+    public void getDeviceProfiles(@NonNull Server server, @NonNull final String deviceID) {
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).getProfiles().build();
 
@@ -204,8 +206,7 @@ public class ApiRequestManager {
         requestsQueue.add(request);
     }
 
-    public void getDeviceInstalledApps(@NonNull final String devID) {
-        Server server = getActiveServer();
+    public void getDeviceInstalledApps(@NonNull Server server, @NonNull final String devID) {
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
@@ -225,14 +226,13 @@ public class ApiRequestManager {
         requestsQueue.add(installedAppRequest);
     }
 
-    public void uninstallApplication(@NonNull String devID, @NonNull String packageName) {
+    public void uninstallApplication(@NonNull Server server, @NonNull String devID, @NonNull String packageName) {
         String script = "uninstall \"".concat(packageName).concat("\"");
-        requestAction(devID, ApiActions.SEND_SCRIPT, script, null);
+        requestAction(server, devID, ApiActions.SEND_SCRIPT, script, null);
     }
 
-    public void requestAction(@NonNull final String deviceID, @NonNull @ApiActions final String action,
+    public void requestAction(@NonNull Server server, @NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
-        Server server = getActiveServer();
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 
@@ -256,8 +256,7 @@ public class ApiRequestManager {
         Toast.makeText(applicationContext, action + " request sent", Toast.LENGTH_SHORT).show();
     }
 
-    public void getServerInfo() {
-        Server server = getActiveServer();
+    public void getServicesInfo(Server server) {
 
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.ServerApi.Builder(apiAuthority).getServerInfo().build();
@@ -283,9 +282,7 @@ public class ApiRequestManager {
         requestsQueue.add(request);
     }
 
-    public void getUsers() {
-        Server server = getActiveServer();
-
+    public void getUsers(Server server) {
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.UserSecurityApi.Builder(apiAuthority).getAllUsers(false, null, null).build();
         UserRequest userRequest = new UserRequest(api,
@@ -308,6 +305,7 @@ public class ApiRequestManager {
 
         requestsQueue.add(userRequest);
     }
+
 
 
 }

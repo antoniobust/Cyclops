@@ -33,16 +33,19 @@ import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.InstalledApp;
 import com.mdmobile.cyclops.dataModel.api.Profile;
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice;
 import com.mdmobile.cyclops.dataModel.api.devices.DeviceFactory;
 import com.mdmobile.cyclops.dataModel.api.devices.IDevice;
+import com.mdmobile.cyclops.dataTypes.DeviceKind;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.LabelHelper;
 import com.mdmobile.cyclops.utils.Logger;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 import java.util.ArrayList;
 
@@ -70,6 +73,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private View rootView;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
+    private Server activeServer;
 
     public DeviceDetailsFragment() {
     }
@@ -93,7 +97,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onRefresh() {
         Logger.log(LOG_TAG, "Device " + deviceId + " info update requested", Log.VERBOSE);
-        ApiRequestManager.getInstance().getDeviceInfo(deviceId);
+        ApiRequestManager.getInstance().getDeviceInfo(ServerUtility.getActiveServer(),deviceId);
         swipeLayout.setRefreshing(false);
     }
 
@@ -159,7 +163,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         deviceName = getArguments().getString(DEVICE_NAME_EXTRA_KEY);
         nameTransitionName = getArguments().getString(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY, null);
         iconTransitionName = getArguments().getString(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY, null);
-
+        activeServer = ServerUtility.getActiveServer();
     }
 
     @Override
@@ -339,9 +343,16 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             dot = getContext().getResources().getDrawable(R.drawable.connectivity_status_dot);
         }
         devName.setCompoundDrawablePadding(50);
+        ImageView rcButton = getActivity().findViewById(R.id.device_detail_remote_control_view);
         if ((((BasicDevice) device.getDevice())).getIsAgentOnline()) {
             ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.darkGreen));
+            if(rcButton != null) {
+                rcButton.setEnabled(true);
+            }
         } else {
+            if(rcButton != null) {
+                rcButton.setEnabled(false);
+            }
             ((GradientDrawable) dot).setColor(Color.LTGRAY);
         }
         devName.setCompoundDrawablesWithIntrinsicBounds(null, null, dot, null);
@@ -371,7 +382,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     private void setProfilesCard(Cursor data) {
         if (data == null || data.getCount() == 0) {
-            ApiRequestManager.getInstance().getDeviceProfiles(deviceId);
+            ApiRequestManager.getInstance().getDeviceProfiles(activeServer,deviceId);
             return;
         }
         if (data.getCount() == 1 && data.moveToFirst() &&
@@ -399,7 +410,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     private void setAppsCard(Cursor data) {
         if (data != null && data.getCount() == 0) {
-            ApiRequestManager.getInstance().getDeviceInstalledApps(deviceId);
+            ApiRequestManager.getInstance().getDeviceInstalledApps(activeServer,deviceId);
             return;
         }
         if (data == null || !data.moveToFirst()) {

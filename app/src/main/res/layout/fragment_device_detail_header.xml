@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:maxHeight="86dp"
     android:orientation="vertical">
 
@@ -45,6 +46,16 @@
             android:maxLines="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
             tools:text="Samsung SM-T500"/>
+
+        <ImageView
+            android:id="@+id/device_detail_remote_control_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:tint="@color/state_tint_list"
+            app:srcCompat="@drawable/ic_cast"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

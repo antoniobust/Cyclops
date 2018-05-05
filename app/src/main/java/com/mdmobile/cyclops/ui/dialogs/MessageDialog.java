@@ -18,6 +18,7 @@ import android.widget.EditText;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
 
@@ -82,7 +83,7 @@ public class MessageDialog extends android.support.v4.app.DialogFragment
     public void onClick(DialogInterface dialogInterface, int i) {
         if (i == DialogInterface.BUTTON_POSITIVE) {
             String message = editText.getText().toString();
-            ApiRequestManager.getInstance().requestAction(deviceID, ApiActions.SEND_MESSAGE, message, null);
+            ApiRequestManager.getInstance().requestAction(ServerUtility.getActiveServer(),deviceID, ApiActions.SEND_MESSAGE, message, null);
         } else {
             dialogInterface.dismiss();
         }

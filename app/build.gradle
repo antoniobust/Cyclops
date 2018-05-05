@@ -3,11 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 
 // Load keystore
-if(project.hasProperty("Cyclops.singningProperties") && new File(project.property("Cyclops.signingProperties").exists())) {
+if (project.hasProperty("Cyclops.singningProperties") && new File(project.property("Cyclops.signingProperties").exists())) {
     def keystorePropertiesFile = rootProject.file("keystore.properties")
     def keystoreProperties = new Properties()
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    android{
+    android {
         signingConfigs {
             release {
                 keyAlias keystoreProperties['KEY_ALIAS']
@@ -16,7 +16,7 @@ if(project.hasProperty("Cyclops.singningProperties") && new File(project.propert
                 storePassword keystoreProperties['STORE_PASSWORD']
             }
         }
-        buildTypes{
+        buildTypes {
             release {
                 minifyEnabled false
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

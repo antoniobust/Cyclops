@@ -27,6 +27,7 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
 
@@ -109,7 +110,7 @@ public class ScriptDialog extends android.support.v4.app.DialogFragment implemen
                 final String comment = script.substring(0, finalIndex + 5);
                 script = script.substring(comment.length(), script.length());
             }
-            ApiRequestManager.getInstance().requestAction(deviceID, ApiActions.SEND_SCRIPT, script, null);
+            ApiRequestManager.getInstance().requestAction(ServerUtility.getActiveServer(),deviceID, ApiActions.SEND_SCRIPT, script, null);
         } else {
             dialogInterface.dismiss();
         }

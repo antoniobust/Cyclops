@@ -55,9 +55,7 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
 
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
         ApiRequestManager.getInstance().getToken(
-                serverInfo.getServerAddress(),
-                serverInfo.getClientId(),
-                serverInfo.getApiSecret(),
+                ServerUtility.getActiveServer(),
                 userName, password, (NetworkCallBack) getActivity());
     }
 

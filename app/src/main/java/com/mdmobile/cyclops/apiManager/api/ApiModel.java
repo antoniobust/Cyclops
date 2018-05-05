@@ -17,6 +17,7 @@ import java.util.Arrays;
 public class ApiModel {
 
     private static final String MobiControl = "MobiControl";
+    private static final String SotiAssist = "sotiassist";
 
     public static class DevicesApi {
 
@@ -25,7 +26,11 @@ public class ApiModel {
         }
 
         public static ListDevices Builder(@NonNull String authority, int mcVersion) {
-            return new ListDevices(authority.concat("/" + MobiControl),mcVersion);
+            return new ListDevices(authority.concat("/" + MobiControl), mcVersion);
+        }
+
+        public static RemoteControl BuildRC(@NonNull String authority, @NonNull String deviceID) {
+            return new RemoteControl(authority.concat("/" + SotiAssist), deviceID);
         }
 
         public static class ListDevices extends ApiStandard {
@@ -68,7 +73,6 @@ public class ApiModel {
             private static Uri.Builder currentApi;
 
             private SelectDevice(String authority, String deviceID) {
-
                 currentApi = Uri.parse(authority).buildUpon().appendPath(ApiTypes.devicesApi).appendPath(deviceID);
             }
 
@@ -145,7 +149,19 @@ public class ApiModel {
             public String build() {
                 return Uri.decode(currentApi.build().toString());
             }
+        }
 
+        public static class RemoteControl {
+            private static Uri.Builder currentAPI;
+
+            RemoteControl(String apiAuthority, String deviceId) {
+                currentAPI = Uri.parse(apiAuthority).buildUpon().appendPath(ApiTypes.remoteControl).appendPath(deviceId);
+            }
+
+            @Override
+            public String toString() {
+                return Uri.decode(currentAPI.build().toString());
+            }
         }
     }
 

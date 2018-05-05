@@ -12,8 +12,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.Logger;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
 
@@ -81,10 +83,10 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(final Account account, Bundle bundle, String authority,
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
-
-        ApiRequestManager.getInstance().getServerInfo();
-        ApiRequestManager.getInstance().getDeviceInfo();
-        ApiRequestManager.getInstance().getUsers();
+        Server activeServer = ServerUtility.getActiveServer();
+        ApiRequestManager.getInstance().getServicesInfo(activeServer);
+        ApiRequestManager.getInstance().getDeviceInfo(activeServer);
+        ApiRequestManager.getInstance().getUsers(activeServer);
 
     }
 }

@@ -1,5 +1,7 @@
 package com.mdmobile.cyclops.ui.main.deviceDetails;
 
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -13,13 +15,17 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
+import com.mdmobile.cyclops.RemoteControl;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.ui.dialogs.MessageDialog;
 import com.mdmobile.cyclops.ui.dialogs.ScriptDialog;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 import static android.support.v4.view.ViewCompat.animate;
 
@@ -46,6 +52,8 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
     String deviceId;
     private String nameTransitionName;
     private String iconTransitionName;
+    public Server activeServer;
+    ImageView remoteControlButton;
 
     // -- Interface methods
     @Override
@@ -73,6 +81,9 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
 
         setContentView(R.layout.activity_device_details);
 
+        activeServer = ServerUtility.getActiveServer();
+
+        remoteControlButton = findViewById(R.id.device_detail_remote_control_view);
         mainFab = findViewById(R.id.details_main_fab);
         subFab1 = findViewById(R.id.sub_fab1);
         subFab2 = findViewById(R.id.sub_fab2);
@@ -82,6 +93,18 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
         label2 = findViewById(R.id.fab_label2);
         label3 = findViewById(R.id.fab_label3);
         label4 = findViewById(R.id.fab_label4);
+
+        if(activeServer.getServerMajorVersion() >= 1400){
+            remoteControlButton.setVisibility(View.VISIBLE);
+            remoteControlButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RemoteControl rcFragment = RemoteControl.newInstance(deviceId);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.device_details_activity_main_container,rcFragment)
+                            .commit();
+                }
+            });
+        }
 
         //Set up main fab onClick action
         mainFab.setOnClickListener(new View.OnClickListener() {
@@ -180,10 +203,11 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
     }
 
     public void executeAction(View view) {
+        Server server = ServerUtility.getActiveServer();
         switch (view.getId()) {
             case R.id.sub_fab1:
                 //Check in action
-                ApiRequestManager.getInstance().requestAction(deviceId, ApiActions.CHECKIN, null, null);
+                ApiRequestManager.getInstance().requestAction(server,deviceId, ApiActions.CHECKIN, null, null);
                 break;
             case R.id.sub_fab2:
                 //Script action
@@ -191,7 +215,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
                 break;
             case R.id.sub_fab3:
                 //Localize action
-                ApiRequestManager.getInstance().requestAction(deviceId, ApiActions.LOCATE, null, null);
+                ApiRequestManager.getInstance().requestAction(server,deviceId, ApiActions.LOCATE, null, null);
                 break;
             case R.id.sub_fab4:
                 //send message action

@@ -78,8 +78,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         //If we have all necessary details let's attempt a token request
         if (password != null) {
             Logger.log(LOG_TAG, "Requesting new token...", Log.VERBOSE);
+
             ApiRequestManager.getInstance()
-                    .getToken(serverUrl, clientID, apiSecret, account.name, password,
+                    .getToken(ServerUtility.getActiveServer(), account.name, password,
                             new NetworkCallBack() {
                                 @Override
                                 public void tokenReceived(Bundle userInfo, Token JsonToken) {

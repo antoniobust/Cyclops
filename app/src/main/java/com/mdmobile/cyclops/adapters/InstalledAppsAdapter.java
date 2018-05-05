@@ -16,6 +16,7 @@ import com.mdmobile.cyclops.ui.dialogs.ConfirmActionDialog;
 import com.mdmobile.cyclops.ui.ViewHolder.InstalledAppViewHolder;
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
+import com.mdmobile.cyclops.utils.ServerUtility;
 
 
 public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnMenuItemClickListener, ConfirmActionDialog.ConfirmAction {
@@ -86,7 +87,7 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
     //Confirmation dialog callback
     @Override
     public void actionConfirmed(boolean doNotShowAgain) {
-        ApiRequestManager.getInstance().uninstallApplication(devId, packageName);
+        ApiRequestManager.getInstance().uninstallApplication(ServerUtility.getActiveServer(),devId, packageName);
         //Set show dialog preference
         if (doNotShowAgain) {
             String prefKey = mContext.getString(R.string.uninstall_app_confirm_disabled_pref);

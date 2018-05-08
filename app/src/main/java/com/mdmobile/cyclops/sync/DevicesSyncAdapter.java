@@ -84,6 +84,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(final Account account, Bundle bundle, String authority,
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
         Server activeServer = ServerUtility.getActiveServer();
+        Logger.log(LOG_TAG,"Syncing " + activeServer.getServerName(),Log.VERBOSE);
         ApiRequestManager.getInstance().getServicesInfo(activeServer);
         ApiRequestManager.getInstance().getDeviceInfo(activeServer);
         ApiRequestManager.getInstance().getUsers(activeServer);

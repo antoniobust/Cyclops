@@ -15,7 +15,9 @@ import com.mdmobile.cyclops.provider.McContract;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_MULTI_PROCESS;
 import static android.content.Context.MODE_PRIVATE;
+import static android.content.Context.MODE_WORLD_READABLE;
 import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 
 /**
@@ -37,12 +39,12 @@ public class ServerUtility {
 
     public static boolean anyActiveServer() {
         SharedPreferences preferences = applicationContext
-                .getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
+                .getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_MULTI_PROCESS);
         return preferences.contains(applicationContext.getString(R.string.server_name_preference));
     }
 
     public static Server getActiveServer() {
-        SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE);
+        SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_MULTI_PROCESS);
         String serverName = preferences.getString(applicationContext.getString(R.string.server_name_preference), null);
         String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);
         String clientId = preferences.getString(applicationContext.getString(R.string.client_id_preference), null);
@@ -78,7 +80,7 @@ public class ServerUtility {
 
     public static void deactivateServer() {
         SharedPreferences.Editor editor =
-                applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE).edit();
+                applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_MULTI_PROCESS).edit();
         editor.remove(applicationContext.getString(R.string.server_name_preference));
         editor.remove(applicationContext.getString(R.string.api_secret_preference));
         editor.remove(applicationContext.getString(R.string.client_id_preference));

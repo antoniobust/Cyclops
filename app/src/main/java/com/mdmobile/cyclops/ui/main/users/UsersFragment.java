@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -18,10 +17,11 @@ import android.view.ViewGroup;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.UserListAdapter;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
 
-public class UsersFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class UsersFragment extends BasicFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     UserListAdapter adapter;
 
@@ -32,6 +32,31 @@ public class UsersFragment extends Fragment implements LoaderManager.LoaderCallb
     public static UsersFragment newInstance() {
 
         return new UsersFragment();
+    }
+
+    // -- Interface methods
+    @Override
+    public void changeServerContent() {
+        initializeLoader();
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
+        return new CursorLoader(getContext(), uri,
+                new String[]{McContract.USER_TABLE_NAME + "." + McContract.UserInfo.DISPLAYED_NAME, McContract.UserInfo.IS_LOCKED},
+                null, null, McContract.UserInfo.DISPLAYED_NAME + " asc");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
     }
 
     @Override
@@ -55,27 +80,16 @@ public class UsersFragment extends Fragment implements LoaderManager.LoaderCallb
         adapter = new UserListAdapter(null);
         recycler.setAdapter(adapter);
 
-        getLoaderManager().initLoader(100, null, this);
-
+        initializeLoader();
         return rootView;
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
-        return new CursorLoader(getContext(), uri,
-                new String[]{McContract.USER_TABLE_NAME + "." + McContract.UserInfo.DISPLAYED_NAME, McContract.UserInfo.IS_LOCKED},
-                null, null, McContract.UserInfo.DISPLAYED_NAME + " asc");
-    }
+    private void initializeLoader() {
+        if (getLoaderManager().getLoader(100) == null) {
+            getLoaderManager().initLoader(100, null, this);
+        } else {
+            getLoaderManager().restartLoader(100, null, this);
+        }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
     }
 }

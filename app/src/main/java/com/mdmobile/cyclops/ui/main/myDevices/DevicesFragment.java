@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -32,21 +31,19 @@ import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
+import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.dialogs.PinFolderDialog;
 import com.mdmobile.cyclops.ui.dialogs.SortingDeviceDialog;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import static android.content.Context.SEARCH_SERVICE;
 
 
-public class DevicesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+public class DevicesFragment extends BasicFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener, SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener,
-        SwipeRefreshLayout.OnRefreshListener, Observer {
+        SwipeRefreshLayout.OnRefreshListener {
 
     private final static String LOG_TAG = DevicesFragment.class.getSimpleName();
     private final static String SEARCH_QUERY_KEY = "searchQueryKey";
@@ -105,7 +102,7 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     @Override
-    public void update(Observable observable, Object o) {
+    public void changeServerContent() {
         initializeLoader();
     }
 
@@ -117,6 +114,109 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
         mSwipeToRefresh.setRefreshing(false);
 
     }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        //Check if preference changed is sorting one
+
+        if (isAdded()) {
+            if (key.equals(getString(R.string.sorting_shared_preference))) {
+                currentSortingOption = sharedPreferences.getInt(key, 0);
+                Bundle args = new Bundle();
+                args.putInt(sortingOptionKey, currentSortingOption);
+                args.putString(pinnedFolderOptionKey, currentPinnedPath);
+                //restart loader with new sorting option
+                getLoaderManager().restartLoader(1, args, this);
+
+            } else if (key.equals(getString(R.string.folder_preference))) {
+                currentPinnedPath = sharedPreferences.getString(key, "");
+                Bundle args = new Bundle();
+                args.putInt(sortingOptionKey, currentSortingOption);
+                args.putString(pinnedFolderOptionKey, currentPinnedPath);
+                //restart loader with new sorting option
+                getLoaderManager().restartLoader(1, args, this);
+            }
+        }
+
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        //Get sorting option from arguments and create query
+        String sortingParameter, pathSelection = "", searchQuery = "";
+
+        Server server = ServerUtility.getActiveServer();
+
+        if (args.containsKey(SEARCH_QUERY_KEY)) {
+            searchQuery = args.getString(SEARCH_QUERY_KEY);
+        }
+
+        switch (args.getInt(sortingOptionKey)) {
+            case SortingDeviceDialog.DEVICE_NAME:
+                sortingParameter = McContract.Device.COLUMN_DEVICE_NAME + " ASC";
+                break;
+            case SortingDeviceDialog.DEVICE_NAME_INVERTED:
+                sortingParameter = McContract.Device.COLUMN_DEVICE_NAME + " DESC";
+                break;
+            case SortingDeviceDialog.DEVICE_ONLINE:
+                sortingParameter = McContract.Device.COLUMN_AGENT_ONLINE + " DESC";
+                break;
+            case SortingDeviceDialog.DEVICE_OFFLINE:
+                sortingParameter = McContract.Device.COLUMN_AGENT_ONLINE + " ASC";
+                break;
+            default:
+                sortingParameter = null;
+        }
+
+        //Get Pinned folder if set
+        if (args.containsKey(pinnedFolderOptionKey)) {
+            pathSelection = args.getString(pinnedFolderOptionKey);
+        }
+
+        if (searchQuery != null && !searchQuery.equals("")) {
+            //TODO: search for devices properties Name ecc
+//            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? " + " OR "
+//                    + McContract.Device.COLUMN_EXTRA_INFO + " LIKE ? ";
+//            String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery + "%"};
+
+            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? OR " + McContract.Device.COLUMN_PATH
+                    + " LIKE ? OR " + McContract.Device.COLUMN_DEVICE_ID + " LIKE ?";
+
+            String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery, "%" + searchQuery + "%"};
+
+            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), null,
+                    selection, arguments, sortingParameter);
+
+        } else {
+            String selection;
+
+            String[] projection = {McContract.Device.COLUMN_DEVICE_ID, McContract.Device.COLUMN_DEVICE_NAME,
+                    McContract.Device.COLUMN_PLATFORM, McContract.Device.COLUMN_AGENT_ONLINE, McContract.Device.COLUMN_PATH};
+
+            if (pathSelection != null && !pathSelection.equals("")) {
+                if (!pathSelection.equals("")) {
+                    selection = McContract.Device.COLUMN_PATH + " = ?";
+                    String[] arguments = {pathSelection};
+//                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, selection, arguments, sortingParameter);
+                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, selection, arguments, sortingParameter);
+                }
+            }
+            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, null, null, sortingParameter);
+        }
+    }
+
+    @Override
+    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+//        getActivity().supportStartPostponedEnterTransition();
+    }
+
+    @Override
+    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -220,112 +320,14 @@ public class DevicesFragment extends Fragment implements LoaderManager.LoaderCal
 //        filtersView.setVisibility(View.GONE);
     }
 
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        //Get sorting option from arguments and create query
-        String sortingParameter, pathSelection = "", searchQuery = "";
-
-        Server server = ServerUtility.getActiveServer();
-
-        if (args.containsKey(SEARCH_QUERY_KEY)) {
-            searchQuery = args.getString(SEARCH_QUERY_KEY);
-        }
-
-        switch (args.getInt(sortingOptionKey)) {
-            case SortingDeviceDialog.DEVICE_NAME:
-                sortingParameter = McContract.Device.COLUMN_DEVICE_NAME + " ASC";
-                break;
-            case SortingDeviceDialog.DEVICE_NAME_INVERTED:
-                sortingParameter = McContract.Device.COLUMN_DEVICE_NAME + " DESC";
-                break;
-            case SortingDeviceDialog.DEVICE_ONLINE:
-                sortingParameter = McContract.Device.COLUMN_AGENT_ONLINE + " DESC";
-                break;
-            case SortingDeviceDialog.DEVICE_OFFLINE:
-                sortingParameter = McContract.Device.COLUMN_AGENT_ONLINE + " ASC";
-                break;
-            default:
-                sortingParameter = null;
-        }
-
-        //Get Pinned folder if set
-        if (args.containsKey(pinnedFolderOptionKey)) {
-            pathSelection = args.getString(pinnedFolderOptionKey);
-        }
-
-        if (searchQuery != null && !searchQuery.equals("")) {
-            //TODO: search for devices properties Name ecc
-//            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? " + " OR "
-//                    + McContract.Device.COLUMN_EXTRA_INFO + " LIKE ? ";
-//            String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery + "%"};
-
-            String selection = McContract.Device.COLUMN_DEVICE_NAME + " LIKE ? OR " + McContract.Device.COLUMN_PATH
-                    + " LIKE ? OR " + McContract.Device.COLUMN_DEVICE_ID + " LIKE ?";
-
-            String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery, "%" + searchQuery + "%"};
-
-            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), null,
-                    selection, arguments, sortingParameter);
-
-        } else {
-            String selection;
-
-            String[] projection = {McContract.Device.COLUMN_DEVICE_ID, McContract.Device.COLUMN_DEVICE_NAME,
-                    McContract.Device.COLUMN_PLATFORM, McContract.Device.COLUMN_AGENT_ONLINE, McContract.Device.COLUMN_PATH};
-
-            if (pathSelection != null && !pathSelection.equals("")) {
-                if (!pathSelection.equals("")) {
-                    selection = McContract.Device.COLUMN_PATH + " = ?";
-                    String[] arguments = {pathSelection};
-//                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, selection, arguments, sortingParameter);
-                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, selection, arguments, sortingParameter);
-                }
-            }
-            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, null, null, sortingParameter);
-        }
-    }
-
-    @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
-//        getActivity().supportStartPostponedEnterTransition();
-    }
-
-    @Override
-    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        //Check if preference changed is sorting one
-
-        if (isAdded()) {
-            if (key.equals(getString(R.string.sorting_shared_preference))) {
-                currentSortingOption = sharedPreferences.getInt(key, 0);
-                Bundle args = new Bundle();
-                args.putInt(sortingOptionKey, currentSortingOption);
-                args.putString(pinnedFolderOptionKey, currentPinnedPath);
-                //restart loader with new sorting option
-                getLoaderManager().restartLoader(1, args, this);
-
-            } else if (key.equals(getString(R.string.folder_preference))) {
-                currentPinnedPath = sharedPreferences.getString(key, "");
-                Bundle args = new Bundle();
-                args.putInt(sortingOptionKey, currentSortingOption);
-                args.putString(pinnedFolderOptionKey, currentPinnedPath);
-                //restart loader with new sorting option
-                getLoaderManager().restartLoader(1, args, this);
-            }
-        }
-
-    }
-
-    private void initializeLoader() {
+    public void initializeLoader() {
         Bundle args = new Bundle();
         args.putInt(sortingOptionKey, currentSortingOption);
         args.putString(pinnedFolderOptionKey, currentPinnedPath);
-        getLoaderManager().initLoader(1, args, this);
+        if (getLoaderManager().getLoader(1) == null) {
+            getLoaderManager().initLoader(1, args, this);
+        } else {
+            getLoaderManager().restartLoader(1, args, this);
+        }
     }
 }

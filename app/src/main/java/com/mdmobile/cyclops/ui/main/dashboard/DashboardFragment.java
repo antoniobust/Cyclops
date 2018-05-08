@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Pair;
@@ -21,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.dataModel.chart.Chart;
+import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.CounterStat;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatValue;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 
-public class DashboardFragment extends Fragment implements Statistic.IStatisticReady,
+public class DashboardFragment extends BasicFragment implements Statistic.IStatisticReady,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private CounterStat counterStat;
@@ -79,6 +79,11 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
 
         recyclerAdapter = new ChartsAdapter(chartsDataList);
         chartsRecycler.setAdapter(recyclerAdapter);
+    }
+
+    @Override
+    public void changeServerContent() {
+        createCharts();
     }
 
 
@@ -172,5 +177,4 @@ public class DashboardFragment extends Fragment implements Statistic.IStatisticR
         counterStat.registerListener(this);
         counterStat.initPoll();
     }
-
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -19,10 +18,11 @@ import com.mdmobile.cyclops.adapters.DsInfoAdapter;
 import com.mdmobile.cyclops.adapters.MsInfoAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
 
-public class ServerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ServerFragment extends BasicFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     DsInfoAdapter dsInfoAdapter;
     MsInfoAdapter msInfoAdapter;
@@ -32,9 +32,13 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
         // Required empty public constructor
     }
 
-
     public static ServerFragment newInstance() {
         return new ServerFragment();
+    }
+
+    @Override
+    public void changeServerContent() {
+        initializeLoader();
     }
 
     @Override
@@ -55,8 +59,7 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
         dsInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         msInfoRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        getLoaderManager().initLoader(50, null, this);
-        getLoaderManager().initLoader(51, null, this);
+        initializeLoader();
 
         dsInfoAdapter = new DsInfoAdapter(getContext(), null, (ServerListAdapter.onClick) getActivity());
         msInfoAdapter = new MsInfoAdapter(getContext(), null, (ServerListAdapter.onClick) getActivity());
@@ -95,6 +98,16 @@ public class ServerFragment extends Fragment implements LoaderManager.LoaderCall
             dsInfoAdapter.swapCursor(null);
         } else {
             msInfoAdapter.swapCursor(null);
+        }
+    }
+
+    private void initializeLoader() {
+        if (getLoaderManager().getLoader(50) == null && getLoaderManager().getLoader(51) == null) {
+            getLoaderManager().initLoader(50, null, this);
+            getLoaderManager().initLoader(51, null, this);
+        } else {
+            getLoaderManager().restartLoader(50, null, this);
+            getLoaderManager().restartLoader(51, null, this);
         }
     }
 }

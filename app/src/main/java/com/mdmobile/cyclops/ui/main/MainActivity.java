@@ -16,6 +16,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -36,7 +37,7 @@ import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
 import com.mdmobile.cyclops.ui.BaseActivity;
-import com.mdmobile.cyclops.ui.FragmentObserver;
+import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.ui.main.dashboard.DashboardFragment;
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity;
@@ -103,7 +104,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                     DevicesFragment devicesFragment = DevicesFragment.newInstance();
                     ft.replace(main_activity_fragment_container, devicesFragment, "DevicesFragment");
                     ft.commit();
-                    setFragmentObserver(devicesFragment);
                     return true;
 
                 case R.id.navigation_dashboard:
@@ -151,8 +151,8 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             Logger.log(LOG_TAG, "Active server changed..Reloading attached fragments", Log.VERBOSE);
             List<Fragment> fragments = getSupportFragmentManager().getFragments();
             for (Fragment f : fragments) {
-                if (f instanceof DevicesFragment) {
-                    mObservers.notifyObservers();
+                if (f instanceof BasicFragment) {
+                    ((BasicFragment) f).changeServerContent();
                 }
             }
         }
@@ -497,10 +497,5 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     private void launchLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-    }
-
-    private void setFragmentObserver(Observer observer) {
-        mObservers.deleteObservers();
-        mObservers.addObserver(observer);
     }
 }

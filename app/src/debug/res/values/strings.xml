@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="refresh_token">Refresh Token</string>
-    <string name="invalidate_token">invalidate token</string>
-    <string name="sync_now">Sync now …</string>
-</resources>

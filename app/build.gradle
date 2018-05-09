@@ -32,10 +32,10 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.mdmobile.cyclops"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 27
-        versionCode 3
-        versionName "0.0.3"
+        versionCode 4
+        versionName "0.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         lintOptions.abortOnError false

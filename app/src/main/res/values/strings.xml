@@ -35,6 +35,10 @@
     <string name="sort_device_online_first">Devices online first</string>
     <string name="sort_device_offline_first">Devices offline first</string>
 
+    <string name="refresh_token">Refresh Token</string>
+    <string name="invalidate_token">invalidate token</string>
+    <string name="sync_now">Sync now …</string>
+
     <string name="dialog_cancel_label">Cancel</string>
     <string name="dialog_apply_label">Apply</string>
     <string name="last_synced">1 min ago</string>

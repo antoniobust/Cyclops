@@ -241,8 +241,16 @@ public class McContract {
             return uri.getLastPathSegment();
         }
 
+        public static Uri buildUriWithGroup(@NonNull String column) {
+            return CONTENT_URI.buildUpon().appendPath("GROUP_BY").appendPath(column).build();
+        }
+
         public static Uri buildUriWithServerName(@NonNull String serverName) {
             return appendServerUriPath(CONTENT_URI, serverName);
+        }
+
+        public static String getGroupByFromUri(@NonNull Uri uri) {
+            return uri.getLastPathSegment();
         }
     }
 

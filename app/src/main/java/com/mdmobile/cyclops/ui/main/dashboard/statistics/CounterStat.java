@@ -21,18 +21,17 @@ public class CounterStat extends Statistic {
 
     @Override
     public void initPoll() {
-        final String count = "COUNT(" + McContract.Device._ID + ")";
-        final String orderBy = "GROUP BY ?";
+        final String count = "COUNT(" + McContract.DEVICE_TABLE_NAME+"."+McContract.Device._ID + ")";
+        final String orderBy = "COUNT(?) DESC";
 
         Server s = ServerUtility.getActiveServer();
-
         for (int i = 0; i < mProperties.size(); i++) {
             startQuery(i,
                     mProperties.get(i),
-                    McContract.Device.buildUriWithServerName(s.getServerName()),
+                    McContract.Device.buildUriWithGroup(mProperties.get(i)),
                     new String[]{count, mProperties.get(i)},
-                    null,
-                    null,
+                    McContract.SERVER_INFO_TABLE_NAME+"."+McContract.ServerInfo.NAME + " = ? ",
+                    new String[]{s.getServerName()},
                     orderBy.replace("?", mProperties.get(i)));
         }
     }

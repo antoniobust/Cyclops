@@ -49,7 +49,7 @@ public class McProvider extends ContentProvider {
         Logger.log(LOG_TAG, "Query( uri:" + uri.toString() + ", data selected: " + Arrays.toString(projection)
                 + " selection parameters: " + selection + " values:" + Arrays.toString(selectionArgs), Log.VERBOSE);
 
-        String groupBy = "";
+        String groupBy = null;
 
         if (database == null) {
             database = mcHelper.getWritableDatabase();
@@ -65,12 +65,19 @@ public class McProvider extends ContentProvider {
                 mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
                 break;
             }
+
             case DEVICES_ID: {
                 devId = McContract.Device.getDeviceIdFromUri(uri);
                 mQueryBuilder.setTables(McContract.DEVICE_TABLE_NAME);
                 mQueryBuilder.appendWhere(McContract.Device.COLUMN_DEVICE_ID + "='" + devId + "'");
                 break;
             }
+
+            case DEVICES_GROUP_BY:
+                mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.DEVICE_TABLE_NAME));
+                groupBy = McContract.Device.getGroupByFromUri(uri);
+
+                break;
 
             case DEVICES_BY_SERVER: {
                 String serverName = McContract.getServerNameFromUri(uri);

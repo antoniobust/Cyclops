@@ -34,7 +34,7 @@ public class ApplicationLoader extends Application {
         if (firstLoad) {
             ArrayList<Chart> defaultChart = new ArrayList<>(3);
             defaultChart.add(0, new Chart(ChartFactory.PIE_CHART, McContract.Device.COLUMN_AGENT_ONLINE, "N/A"));
-            defaultChart.add(1, new Chart(ChartFactory.PIE_CHART, McContract.Device.COLUMN_MANUFACTURER, "N/A"));
+            defaultChart.add(1, new Chart(ChartFactory.PIE_CHART, McContract.Device.COLUMN_MODE, "N/A"));
             defaultChart.add(2, new Chart(ChartFactory.PIE_CHART, McContract.Device.COLUMN_COMPLIANCE_STATUS, "N/A"));
 
             Type deviceCollectionType = new TypeToken<ArrayList<Chart>>() {

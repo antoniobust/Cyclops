@@ -23,7 +23,7 @@ import com.mdmobile.cyclops.dataModel.chart.Chart;
 import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.CounterStat;
-import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatValue;
+import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatDataEntry;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.Statistic;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatisticFactory;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
@@ -68,9 +68,9 @@ public class DashboardFragment extends BasicFragment implements Statistic.IStati
     public void getData(int statId, Bundle values) {
         //Poll finished update charts list
         Set<String> keySet = values.keySet();
-        ArrayList<StatValue> valueList;
-        ArrayList<Pair<String, StatValue[]>> chartsDataList = new ArrayList<>();
-        StatValue[] chartValues = new StatValue[]{};
+        ArrayList<StatDataEntry> valueList;
+        ArrayList<Pair<String, StatDataEntry[]>> chartsDataList = new ArrayList<>();
+        StatDataEntry[] chartValues = new StatDataEntry[]{};
 
         for (String key : keySet) {
             valueList = values.getParcelableArrayList(key);

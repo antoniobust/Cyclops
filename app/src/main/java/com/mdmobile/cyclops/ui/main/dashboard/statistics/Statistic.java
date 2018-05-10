@@ -35,14 +35,14 @@ public abstract class Statistic extends AsyncQueryHandler {
         if (cursor == null || !cursor.moveToFirst()) {
             return;
         }
-        ArrayList<StatValue> entries = statValuesFromCursor(cursor);
+        ArrayList<StatDataEntry> entries = statValuesFromCursor(cursor);
         cursor.close();
 
         //If collection is bigger than 6 different values we will just show "others" with the sum of other entries
         if (entries != null && entries.size() > MAX_POPULATION) {
-            StatValue other = new StatValue("Other", 0);
+            StatDataEntry other = new StatDataEntry("Other", 0);
             for (int i = entries.size(); i > 5; i--) {
-                other.setValue(other.getValue() + entries.get(i - 1).getValue());
+                other.value = (other.value + entries.get(i - 1).value);
                 entries.remove(i - 1);
             }
             entries.add(other);
@@ -64,15 +64,15 @@ public abstract class Statistic extends AsyncQueryHandler {
         this.listener = null;
     }
 
-    private ArrayList<StatValue> statValuesFromCursor(Cursor c) {
-        ArrayList<StatValue> statValues = new ArrayList<>(c.getCount());
+    private ArrayList<StatDataEntry> statValuesFromCursor(Cursor c) {
+        ArrayList<StatDataEntry> statDataEntries = new ArrayList<>(c.getCount());
         if (!c.moveToFirst()) {
             return null;
         }
         do {
-            statValues.add(new StatValue(c.getString(1), c.getInt(0)));
+            statDataEntries.add(new StatDataEntry(c.getString(1), c.getInt(0)));
         } while (c.moveToNext());
-        return statValues;
+        return statDataEntries;
     }
 
     public interface IStatisticReady {

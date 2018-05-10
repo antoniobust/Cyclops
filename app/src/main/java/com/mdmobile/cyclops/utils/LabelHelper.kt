@@ -61,7 +61,7 @@ class LabelHelper {
             BASIC_DEVICE_PROPERTIES.add(Property("EnrollmentTime", "Enrollment Time", true))
             BASIC_DEVICE_PROPERTIES.add(Property("Family", statisticable = true))
             BASIC_DEVICE_PROPERTIES.add(Property("HostName", "Host Name"))
-            BASIC_DEVICE_PROPERTIES.add(Property("IsAgentOnline", "Online", true))
+            BASIC_DEVICE_PROPERTIES.add(Property("IsAgentOnline", "Is online", true))
             BASIC_DEVICE_PROPERTIES.add(Property("IsVirtual", "Is virtual"))
             BASIC_DEVICE_PROPERTIES.add(Property("CustomAttributes", "Custom attributes"))
             BASIC_DEVICE_PROPERTIES.add(Property("MACAddress", "MAC Address"))

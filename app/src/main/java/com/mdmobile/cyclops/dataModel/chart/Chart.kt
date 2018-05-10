@@ -3,7 +3,7 @@ package com.mdmobile.cyclops.dataModel.chart
 import com.google.gson.annotations.SerializedName
 
 /**
- * POJO class for GSON in order to save the list of charts in SharedPref
+ * Chat values class
  */
 
 class Chart(chartType: Int, property1: String, property2: String = "N/A") {

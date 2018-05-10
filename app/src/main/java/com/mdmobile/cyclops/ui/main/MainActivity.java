@@ -325,9 +325,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     }
 
     private void setFiltersView() {
-        filtersRecycler = filtersToolbar.findViewById(R.id.filters_recycler);
-        View emptyView = filtersToolbar.findViewById(R.id.filters_recycler_empty_view);
-        filtersRecycler.setEmptyView(emptyView);
+//        filtersRecycler = filtersToolbar.findViewById(R.id.filters_recycler);
+//        View emptyView = filtersToolbar.findViewById(R.id.filters_recycler_empty_view);
+//        filtersRecycler.setEmptyView(emptyView);
     }
 
 

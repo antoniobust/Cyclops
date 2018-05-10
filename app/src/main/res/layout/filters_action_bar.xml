@@ -22,20 +22,20 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <com.mdmobile.cyclops.utils.RecyclerEmptyView
-                android:id="@+id/filters_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+            <!--<com.mdmobile.cyclops.utils.RecyclerEmptyView-->
+                <!--android:id="@+id/filters_recycler"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"/>-->
 
-            <TextView
-                android:id="@+id/filters_recycler_empty_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:drawablePadding="4dp"
-                android:drawableStart="@drawable/ic_add_circle"
-                android:text="@string/add_filter_label"
-                android:visibility="visible"/>
+            <!--<TextView-->
+                <!--android:id="@+id/filters_recycler_empty_view"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="start|center_vertical"-->
+                <!--android:drawablePadding="4dp"-->
+                <!--android:drawableStart="@drawable/ic_add_circle"-->
+                <!--android:text="@string/add_filter_label"-->
+                <!--android:visibility="visible"/>-->
         </FrameLayout>
 
         <TextView

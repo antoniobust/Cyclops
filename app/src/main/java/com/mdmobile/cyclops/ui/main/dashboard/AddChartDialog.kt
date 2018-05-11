@@ -90,7 +90,7 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         val enabled: Boolean = !LabelHelper.getInternalLabelFor(property1TextView.text.toString()).isEmpty()
 
         if (property2TextView.visibility == View.GONE) {
-            dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = enabled;
+            dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = enabled
         } else if (property2TextView.visibility == View.VISIBLE) {
             dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled =
                     enabled && LabelHelper.getInternalLabelFor(property2TextView.text.toString()).isEmpty()

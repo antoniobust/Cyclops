@@ -1,5 +1,6 @@
 package com.mdmobile.cyclops.ui.main.dashboard;
 
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -14,9 +15,12 @@ import android.widget.TextView;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatDataEntry;
@@ -58,26 +62,28 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
     @NonNull
     @Override
-    public ChartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ChartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_item, parent, false);
         return new ChartViewHolder(item);
     }
 
 
     @Override
-    public void onBindViewHolder(ChartViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ChartViewHolder holder, int position) {
         if (getItemCount() == 0) {
             return;
         }
         //TODO: this will always create a pie chart -> fix this
         PieChart chart = (PieChart) ChartFactory.instantiate(holder.chartContainer.getContext(),
                 holder.getItemViewType()).createChart(holder.chartContainer.getContext());
-        createPieChart(chart, position);
-
+        createPieChart(holder, chart, position);
+        chart.setOnChartValueSelectedListener(holder);
+        chart.setId(R.id.chart);
         holder.chartContainer.addView(chart);
+
     }
 
-    private void createPieChart(PieChart pieChart, int position) {
+    private void createPieChart(ChartViewHolder holder, PieChart pieChart, int position) {
         List<PieEntry> pieEntries = new ArrayList<>();
         PieDataSet pieDataSet;
         PieData pieData = new PieData();
@@ -108,8 +114,20 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
         Description descriptionLabel = new Description();
         descriptionLabel.setEnabled(true);
         descriptionLabel.setText(chartProperty);
-
+        descriptionLabel.setTypeface(Typeface.create("roboto_bold", Typeface.BOLD));
+        descriptionLabel.setTextSize(12f);
+        descriptionLabel.setTextColor(R.color.colorPrimaryDark);
         pieChart.setDescription(descriptionLabel);
+
+        pieChart.setCenterTextTypeface(Typeface.create("roboto_bold", Typeface.BOLD));
+        pieChart.setCenterTextColor(R.color.colorPrimaryDark);
+        pieChart.setCenterTextSize(32f);
+        pieChart.setHoleRadius(50f);
+        pieChart.setTransparentCircleRadius(60f);
+        pieChart.setTransparentCircleAlpha(70);
+        pieChart.setOnChartValueSelectedListener(holder);
+
+        pieChart.setNoDataText(holder.chartContainer.getContext().getString(R.string.no_data_found_chart));
     }
 
     public void addNewChart() {
@@ -120,22 +138,38 @@ public class ChartsAdapter extends RecyclerView.Adapter<ChartsAdapter.ChartViewH
 
     }
 
-    static class ChartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class ChartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, OnChartValueSelectedListener {
         ImageView refreshButton;
         FrameLayout chartContainer;
-        TextView emptyView;
+        TextView emptyView, quantityLabelView;
+
 
         ChartViewHolder(View itemView) {
             super(itemView);
             chartContainer = itemView.findViewById(R.id.chart_container);
             refreshButton = itemView.findViewById(R.id.chart_option_button);
-            emptyView = itemView.findViewById(R.id.empty_view);
             refreshButton.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
 
+        }
+
+        @Override
+        public void onValueSelected(Entry e, Highlight h) {
+            String value = String.valueOf((int) h.getY());
+
+            ((PieChart) chartContainer.findViewById(R.id.chart)).setCenterText(value);
+
+        }
+
+        @Override
+        public void onNothingSelected() {
+            PieChart chart = chartContainer.findViewById(R.id.chart);
+            if (chart != null) {
+                chart.setCenterText("");
+            }
         }
     }
 }

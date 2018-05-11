@@ -3,6 +3,8 @@ package com.mdmobile.cyclops.dataModel.api.devices
 import android.content.ContentValues
 import android.database.Cursor
 import com.mdmobile.cyclops.provider.McContract
+import com.mdmobile.cyclops.utils.LabelHelper
+import com.mdmobile.cyclops.utils.Property
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.declaredMemberProperties
 
@@ -54,6 +56,7 @@ class AndroidForWork : AndroidPlus, IDevice<AndroidPlus> {
         values.put(McContract.Device.COLUMN_EXTRA_INFO, stringBuilder.toString())
         return values
     }
+
 }
 //    TODO:Support this info
 //    DeviceUserIdentity[]	UserIdentities

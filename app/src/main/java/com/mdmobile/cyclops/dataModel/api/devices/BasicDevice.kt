@@ -8,7 +8,11 @@ import android.support.annotation.CallSuper
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.utils.DbData
+import com.mdmobile.cyclops.utils.LabelHelper
+import com.mdmobile.cyclops.utils.Property
 import kotlinx.android.parcel.Parcelize
+import kotlin.reflect.KVisibility
+import kotlin.reflect.full.declaredMemberProperties
 
 @Parcelize
 open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", val DeviceName: String = "N/A", val EnrollmentTime: String = "N/A",
@@ -122,4 +126,19 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
         values.put(McContract.Device.COLUMN_SERVER_ID, serverId)
         return values
     }
+
+    fun getExtraAttributes(): ArrayList<Property> {
+        val list = ArrayList<Property>()
+        this::class.declaredMemberProperties.forEach {
+            if(it.visibility == KVisibility.PUBLIC){
+                list.add(Property(it.name, LabelHelper.getUiLabelFor(it.name),true))
+            }
+        }
+        return list
+    }
+//    open fun getExtraAttributes():ArrayList<Property>{
+//        val list = ArrayList<Property>()
+//        list.add(Property("BasicDeviceHasNoExtraProperty"))
+//        return list
+//    }
 }

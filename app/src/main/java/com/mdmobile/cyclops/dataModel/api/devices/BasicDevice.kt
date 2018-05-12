@@ -136,9 +136,4 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
         }
         return list
     }
-//    open fun getExtraAttributes():ArrayList<Property>{
-//        val list = ArrayList<Property>()
-//        list.add(Property("BasicDeviceHasNoExtraProperty"))
-//        return list
-//    }
 }

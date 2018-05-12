@@ -46,7 +46,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
         DevicesSyncAdapter.configurePeriodicSync(c.getApplicationContext(), account);
 
         //As the account was just created we should launch the first sync
-        syncImmediately(c, account);
+        syncImmediately(account);
     }
 
     //Helper method to set up a period sync interval
@@ -63,7 +63,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
         ContentResolver.requestSync(request);
     }
 
-    public static void syncImmediately(Context context, Account account) {
+    public static void syncImmediately(Account account) {
         Logger.log(LOG_TAG, "Immediate Sync requested", Log.VERBOSE);
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);

@@ -37,7 +37,7 @@ public class ApiModel {
 
             public ListDevices(@NonNull String authority, int mcMajorVersion) {
                 super(authority);
-                if (mcMajorVersion >= 140) {
+                if (mcMajorVersion >= 1400) {
                     super.currentApi = Uri.parse(authority).buildUpon().appendEncodedPath(ApiTypes.deviceSearch);
                 } else {
                     super.currentApi = Uri.parse(authority).buildUpon().appendPath(ApiTypes.devicesApi);

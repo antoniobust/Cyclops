@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -30,14 +29,11 @@ import com.mdmobile.cyclops.dataModel.api.devices.WindowsPhone;
 import com.mdmobile.cyclops.dataModel.api.devices.WindowsRuntime;
 import com.mdmobile.cyclops.dataTypes.DeviceKind;
 import com.mdmobile.cyclops.provider.McContract;
-import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 
 /**
  * Request devices
@@ -83,7 +79,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                     .registerSubtype(WindowsPhone.class, DeviceKind.WINDOWS_PHONE)
                     .registerSubtype(WindowsRuntime.class, DeviceKind.WINDOWS_RUNTIME)
                     .registerSubtype(WindowsCE.class, DeviceKind.WINDOWS_CE)
-                    .registerSubtype(NotYetSupportedDevice.class,DeviceKind.LINUX);
+                    .registerSubtype(NotYetSupportedDevice.class, DeviceKind.LINUX);
 //            .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
 
 
@@ -96,10 +92,9 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             Type deviceCollectionType = new TypeToken<ArrayList<? extends BasicDevice>>() {
             }.getType();
             ArrayList<? extends BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
-            Uri uri = McContract.buildUriWithServerName(McContract.Device.CONTENT_URI,ServerUtility.getActiveServer().getServerName());
+            Uri uri = McContract.buildUriWithServerName(McContract.Device.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
             mContext.getContentResolver().delete(uri, null, null);
 
-            Logger.log("TEST", devices.get(1).getExtraAttributes().toString(), Log.VERBOSE);
             saveDevicesToDB(devices);
 
             return Response.success(null,

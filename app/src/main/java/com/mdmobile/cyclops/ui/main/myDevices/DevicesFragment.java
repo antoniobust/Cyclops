@@ -110,7 +110,7 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
     public void onRefresh() {
         Logger.log(LOG_TAG, "Devices refresh manually requested... ", Log.VERBOSE);
         Account account = AccountManager.get(getContext()).getAccountsByType(getString(R.string.account_type))[0];
-        DevicesSyncAdapter.syncImmediately(getContext(), account);
+        DevicesSyncAdapter.syncImmediately(account);
         mSwipeToRefresh.setRefreshing(false);
 
     }

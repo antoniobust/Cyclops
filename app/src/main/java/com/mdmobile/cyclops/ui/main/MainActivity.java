@@ -295,7 +295,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     private void syncDevicesNow() {
         Logger.log(LOG_TAG, "Immediate device syc manually requested... ", Log.VERBOSE);
         Account account = UserUtility.getUser();
-        DevicesSyncAdapter.syncImmediately(getApplicationContext(), account);
+        DevicesSyncAdapter.syncImmediately(account);
     }
 
     private void refreshToken() {

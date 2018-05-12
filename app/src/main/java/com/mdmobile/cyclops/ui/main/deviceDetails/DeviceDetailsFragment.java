@@ -131,7 +131,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //                Bundle a = new Bundle();
 //                a.putParcelable("S", dev);
                 data.moveToFirst();
-                device = DeviceFactory.Companion.createDevice(data);
+                device = DeviceFactory.Companion.createDevice(data).get(0);
                 setHeader();
                 setDeviceInfoCard();
                 break;

@@ -7,7 +7,6 @@ import android.os.Parcelable
 import android.support.annotation.CallSuper
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
-import com.mdmobile.cyclops.utils.DbData
 import com.mdmobile.cyclops.utils.LabelHelper
 import com.mdmobile.cyclops.utils.Property
 import kotlinx.android.parcel.Parcelize
@@ -64,7 +63,7 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
         get() = if (IsVirtual) 1 else 0
 
     private val extraInfo: Bundle
-        get() = DbData.getDeviceExtraInfo(ExtraInfo)
+        get() = extraInfoStringToBundle(ExtraInfo)
 
     //Inner class for nested objects
     class CustomAttributes(val Name: String = "N/A", val Value: String = "N/A", val DataType: Boolean = false) {
@@ -118,22 +117,51 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
             values.put(McContract.Device.COLUMN_TOTAL_STORAGE, this.memory.TotalStorage)
             values.put(McContract.Device.COLUMN_AVAILABLE_EXTERNAL_STORAGE, this.memory.AvailableExternalStorage)
         }
+        values.put(McContract.Device.COLUMN_EXTRA_INFO, formatExtraInfo())
         return values
     }
 
-    fun toContentValues(serverId: Int):ContentValues {
+    fun toContentValues(serverId: Int): ContentValues {
         val values = toContentValues()
         values.put(McContract.Device.COLUMN_SERVER_ID, serverId)
         return values
     }
 
-    fun getExtraAttributes(): ArrayList<Property> {
+    fun getExtraAttributesList(): ArrayList<Property> {
         val list = ArrayList<Property>()
         this::class.declaredMemberProperties.forEach {
-            if(it.visibility == KVisibility.PUBLIC){
-                list.add(Property(it.name, LabelHelper.getUiLabelFor(it.name),true))
+            if (it.visibility == KVisibility.PUBLIC) {
+                list.add(Property(it.name, LabelHelper.getUiLabelFor(it.name), true))
             }
         }
         return list
+    }
+
+    protected fun extraInfoStringToBundle(extraInfo: String): Bundle {
+        val extras = extraInfo.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        var temp: Array<String>
+        val extraBundle = Bundle()
+        for (extra in extras) {
+            temp = extra.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            if (temp.size == 1) {
+                extraBundle.putString(temp[0], "N/A")
+                continue
+            }
+            temp[0] = temp[0].substring(1, temp[0].length)
+            extraBundle.putString(temp[0], temp[1])
+        }
+        return extraBundle
+    }
+
+    private fun formatExtraInfo(): String {
+        val stringBuilder = StringBuilder()
+        this::class.declaredMemberProperties.forEach {
+            if (it.visibility == KVisibility.PUBLIC) {
+                stringBuilder.append(it.name).append("=")
+                        .append(it.getter.call(this).toString())
+                        .append(";")
+            }
+        }
+        return stringBuilder.toString()
     }
 }

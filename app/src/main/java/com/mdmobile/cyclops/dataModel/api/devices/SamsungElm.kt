@@ -36,17 +36,17 @@ open class SamsungElm(Kind: String = "N/A", DeviceId: String = "N/A", DeviceName
         return this
     }
 
-    override fun toContentValues(): ContentValues {
-        val values = super.toContentValues()
-        val stringBuilder = StringBuilder()
-        this::class.declaredMemberProperties.forEach {
-            if (it.visibility == KVisibility.PUBLIC) {
-                stringBuilder.append(it.name).append("=")
-                        .append(it.getter.call(this).toString())
-                        .append(";")
-            }
-        }
-        values.put(McContract.Device.COLUMN_EXTRA_INFO, stringBuilder.toString())
-        return values
-    }
+//    override fun toContentValues(): ContentValues {
+//        val values = super.toContentValues()
+//        val stringBuilder = StringBuilder()
+//        this::class.declaredMemberProperties.forEach {
+//            if (it.visibility == KVisibility.PUBLIC) {
+//                stringBuilder.append(it.name).append("=")
+//                        .append(it.getter.call(this).toString())
+//                        .append(";")
+//            }
+//        }
+//        values.put(McContract.Device.COLUMN_EXTRA_INFO, stringBuilder.toString())
+//        return values
+//    }
 }

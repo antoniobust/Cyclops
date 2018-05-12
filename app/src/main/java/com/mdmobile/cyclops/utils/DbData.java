@@ -110,20 +110,4 @@ public class DbData {
         }
         return userValues;
     }
-
-    public static Bundle getDeviceExtraInfo(String extraInfo) {
-        String[] extras = extraInfo.split(";");
-        String[] temp;
-        Bundle extraBundle = new Bundle();
-        for (String extra : extras) {
-            temp = extra.split("=");
-            if (temp.length == 1) {
-                extraBundle.putString(temp[0], "N/A");
-                continue;
-            }
-            temp[0] = temp[0].substring(1, temp[0].length());
-            extraBundle.putString(temp[0], temp[1]);
-        }
-        return extraBundle;
-    }
 }

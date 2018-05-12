@@ -43,19 +43,19 @@ class AndroidForWork : AndroidPlus, IDevice<AndroidPlus> {
         return this
     }
 
-    override fun toContentValues(): ContentValues {
-        val values = super.toContentValues()
-        val stringBuilder = StringBuilder()
-        this::class.declaredMemberProperties.forEach {
-            if (it.visibility == KVisibility.PUBLIC) {
-                stringBuilder.append(it.name).append("=")
-                        .append(it.getter.call(this).toString())
-                        .append(";")
-            }
-        }
-        values.put(McContract.Device.COLUMN_EXTRA_INFO, stringBuilder.toString())
-        return values
-    }
+//    override fun toContentValues(): ContentValues {
+//        val values = super.toContentValues()
+//        val stringBuilder = StringBuilder()
+//        this::class.declaredMemberProperties.forEach {
+//            if (it.visibility == KVisibility.PUBLIC) {
+//                stringBuilder.append(it.name).append("=")
+//                        .append(it.getter.call(this).toString())
+//                        .append(";")
+//            }
+//        }
+//        values.put(McContract.Device.COLUMN_EXTRA_INFO, stringBuilder.toString())
+//        return values
+//    }
 
 }
 //    TODO:Support this info

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -29,6 +30,7 @@ import com.mdmobile.cyclops.dataModel.api.devices.WindowsPhone;
 import com.mdmobile.cyclops.dataModel.api.devices.WindowsRuntime;
 import com.mdmobile.cyclops.dataTypes.DeviceKind;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
 import java.io.UnsupportedEncodingException;
@@ -94,6 +96,9 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             ArrayList<? extends BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
             Uri uri = McContract.buildUriWithServerName(McContract.Device.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
             mContext.getContentResolver().delete(uri, null, null);
+
+            Logger.log("TEST","Extrainfo: "+devices.get(0).getExtraInfo()+"\n", Log.VERBOSE);
+            Logger.log("TEST","ExtraAttributes: "+devices.get(0).getExtraAttributesList().toString(), Log.VERBOSE);
 
             saveDevicesToDB(devices);
 

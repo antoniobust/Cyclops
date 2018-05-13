@@ -377,7 +377,7 @@ public class McContract {
         public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(INSTALLED_APPLICATION_TABLE_NAME).build();
 
         //Projection
-        public static final String[] FULL_PROJECTIO = {McContract.INSTALLED_APPLICATION_TABLE_NAME + "." + _ID,
+        public static final String[] FULL_PROJECTION = {McContract.INSTALLED_APPLICATION_TABLE_NAME + "." + _ID,
                 InstalledApplications.DEVICE_ID, InstalledApplications.APPLICATION_NAME, InstalledApplications.APPLICATION_STATUS,
                 InstalledApplications.APPLICATION_ID, InstalledApplications.APPLICATION_SIZE, InstalledApplications.APPLICATION_VERSION,
                 InstalledApplications.APPLICATION_BUILD_NUMBER, InstalledApplications.APPLICATION_DATA_USED};

@@ -39,7 +39,6 @@ import com.mdmobile.cyclops.dataModel.api.Profile;
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice;
 import com.mdmobile.cyclops.dataModel.api.devices.DeviceFactory;
 import com.mdmobile.cyclops.dataModel.api.devices.IDevice;
-import com.mdmobile.cyclops.dataTypes.DeviceKind;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
@@ -108,14 +107,16 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         switch (id) {
             case LOAD_INFO:
                 uri = McContract.Device.buildUriWithDeviceID(deviceId);
-                return new CursorLoader(getContext().getApplicationContext(), uri, McContract.Device.FULL_PROJECTION, null, null, null);
+                return new CursorLoader(getContext().getApplicationContext(), uri, McContract.Device.FULL_PROJECTION,
+                        null, null, null);
             case LOAD_PROFILE:
                 return new CursorLoader(getContext().getApplicationContext(),
                         McContract.Profile.buildUriWithDeviceId(deviceId),
                         McContract.Profile.FULL_PROJECTION, null, null, McContract.Profile.ASSIGNMENT_DATE + " DESC");
             case LOAD_APPS:
                 uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
-                return new CursorLoader(getContext().getApplicationContext(), uri, McContract.InstalledApplications.FULL_PROJECTIO, null, null, null);
+                return new CursorLoader(getContext().getApplicationContext(), uri, McContract.InstalledApplications.FULL_PROJECTION,
+                        null, null, McContract.InstalledApplications.APPLICATION_NAME +" ASC");
             default:
                 throw new UnsupportedOperationException("Loader id:" + id + " not supported");
         }

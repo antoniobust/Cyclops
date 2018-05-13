@@ -1,7 +1,9 @@
 package com.mdmobile.cyclops.ui.logIn;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,9 +29,11 @@ import com.mdmobile.cyclops.utils.ConfigureServerAsyncTask;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerXmlConfigParser;
+import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Fragment displayed to add a new server
@@ -62,12 +66,11 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     public void xmlParseComplete(ArrayList<Server> allServerInfo) {
         rootView.findViewById(R.id.server_conf_read_label).setVisibility(View.VISIBLE);
         servers.addAll(allServerInfo);
-        Server serverInfo = allServerInfo.get(0);
 
-        ((TextView) rootView.findViewById(R.id.server_name_text_view)).setText(serverInfo.getServerName());
-        ((TextView) rootView.findViewById(R.id.api_secret_text_view)).setText(serverInfo.getApiSecret());
-        ((TextView) rootView.findViewById(R.id.client_id_text_view)).setText(serverInfo.getClientId());
-        ((TextView) rootView.findViewById(R.id.server_address_text_view)).setText(serverInfo.getServerAddress());
+//        ((TextView) rootView.findViewById(R.id.server_name_text_view)).setText(serverInfo.getServerName());
+//        ((TextView) rootView.findViewById(R.id.api_secret_text_view)).setText(serverInfo.getApiSecret());
+//        ((TextView) rootView.findViewById(R.id.client_id_text_view)).setText(serverInfo.getClientId());
+//        ((TextView) rootView.findViewById(R.id.server_address_text_view)).setText(serverInfo.getServerAddress());
 
         saveServer(allServerInfo);
     }
@@ -83,10 +86,14 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         if (!address.startsWith("https://")) {
             address = "https://" + address;
         }
-        servers.add(new Server(serverName, secret, clientId, address,-1,-1));
+        servers.add(new Server(serverName, secret, clientId, address, -1, -1));
 
         saveServer(servers);
-        (getActivity().findViewById(R.id.add_user_button)).performClick();
+        if(((LoginActivity) Objects.requireNonNull(getActivity())).activityForResult){
+            Intent returnIntent = new Intent();
+            getActivity().setResult(Activity.RESULT_OK,returnIntent);
+            getActivity().finish();
+        }
     }
 
     @Override
@@ -101,7 +108,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_server, container, false);
 
         //Instantiate views
@@ -121,16 +128,13 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().findViewById(R.id.add_server_button).setVisibility(View.INVISIBLE);
-        getActivity().findViewById(R.id.add_user_button).setVisibility(View.VISIBLE);
-
+        if (!UserUtility.checkAnyUserLogged()) {
+            getActivity().findViewById(R.id.add_user_button).setVisibility(View.VISIBLE);
+        }
         if (checkConfigurationFile()) {
-            addServerButton.setVisibility(View.GONE);
             parseServerConfFile();
-        } else {
-            addServerButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -187,7 +191,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
             values.add(s.toContentValues());
         }
         servers.get(0).setActive();
-        ContentValues[] vals =  values.toArray(new ContentValues[servers.size()]);
+        ContentValues[] vals = values.toArray(new ContentValues[servers.size()]);
         getContext().getContentResolver().bulkInsert(McContract.ServerInfo.CONTENT_URI, vals);
     }
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -33,6 +34,7 @@ import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE
 import static com.mdmobile.cyclops.services.AccountAuthenticator.REFRESH_AUTH_TOKEN_KEY;
 import static com.mdmobile.cyclops.utils.UserUtility.PASSWORD_KEY;
 import static com.mdmobile.cyclops.utils.UserUtility.USER_NAME_KEY;
+import static com.mdmobile.cyclops.utils.UserUtility.checkAnyUserLogged;
 
 public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticatorActivity
         implements NetworkCallBack {
@@ -42,7 +44,9 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
     private final String SERVER_FRAG_TAG = "SERVER_FRAG_TAG";
     private final String USER_FRAG_TAG = "USER_FRAG_TAG";
+    private TextView serverButton, userButton;
     private AccountAuthenticatorResponse authenticatorResponse;
+    public boolean activityForResult = false;
 
     // -- Interface methods
     @Override
@@ -80,9 +84,6 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
-    // Login activity will check if there is any server already saved. If yes it will prompt add new user interface.
-    // If not will give the opportunity to create new server
-
     // -- Lifecycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +92,21 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         MainActivity.TABLET_MODE = GeneralUtility.isTabletMode(getApplicationContext());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
+        if(getCallingActivity() != null){
+            activityForResult =  true;
+        }
+
+        serverButton = findViewById(R.id.add_server_button);
+        userButton = findViewById(R.id.add_user_button);
 
         if (savedInstanceState == null) {
-            if (!ServerUtility.anyActiveServer()) {
+            if (UserUtility.checkAnyUserLogged()) {
+                userButton.setVisibility(View.GONE);
+                serverButton.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
             } else {
+                userButton.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
             }
@@ -127,9 +137,17 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     // Actions OnClick method -> change between server and user fragment
     public void changeSection(View v) {
         if (v.getId() == R.id.add_server_button) {
+            serverButton.setVisibility(View.GONE);
+            if (!checkAnyUserLogged()) {
+                userButton.setVisibility(View.GONE);
+            }
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
         } else {
+            userButton.setVisibility(View.GONE);
+            if(ServerUtility.anyActiveServer()){
+                serverButton.setVisibility(View.GONE);
+            }
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
         }

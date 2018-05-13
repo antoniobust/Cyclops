@@ -496,6 +496,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
     private void launchLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,100);
     }
 }

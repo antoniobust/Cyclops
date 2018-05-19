@@ -22,7 +22,18 @@
 
             <include layout="@layout/actionbar"/>
 
+            <ProgressBar
+                android:id="@+id/loading_bar"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="-1dp"
+                android:visibility="invisible"
+                tools:progress="25"
+                tools:visibility="visible"/>
+
             <include layout="@layout/filters_action_bar"/>
+
             <!--TODO: fina a solution to merge layout with parent in activity-->
             <FrameLayout
                 android:id="@+id/main_activity_fragment_container"
@@ -57,7 +68,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:menu="@menu/drawer_settings"
-            app:headerLayout="@layout/navigation_drawer_header"/>
+            app:headerLayout="@layout/navigation_drawer_header"
+            app:menu="@menu/drawer_settings"/>
     </android.support.v4.widget.DrawerLayout>
 </android.support.design.widget.CoordinatorLayout>

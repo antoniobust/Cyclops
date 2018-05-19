@@ -16,7 +16,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
@@ -54,7 +54,6 @@ import com.mdmobile.cyclops.utils.UserUtility;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
 import static android.view.View.GONE;
 import static com.mdmobile.cyclops.R.id.main_activity_fragment_container;
@@ -63,8 +62,10 @@ import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.D
 
 
 public class MainActivity extends BaseActivity implements DevicesListAdapter.DeviceSelected,
-        ServerListAdapter.onClick, NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
-    public static final String DEV_SYNC_BROADCAST_ACTION = "com.mdmobile.cyclops.DEVICE_SYNC_DONE";
+        ServerListAdapter.onClick, NavigationView.OnNavigationItemSelectedListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
+    public static final String SYNC_DONE_BROADCAST_ACTION = "com.mdmobile.cyclops.SYNC_DONE";
+    public static final String UPDATE_LOADING_BAR_ACTION = "com.mdmobile.cyclops.UPDATE_LOADING_BAR";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
     //Define a flag if we are in tablet layout or not
@@ -72,19 +73,29 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     String devId, devName;
     Toolbar filtersToolbar;
     RecyclerEmptyView filtersRecycler;
+    private ProgressBar progressBar;
     private TextView lastSyncTimeView;
-    private final BroadcastReceiver devSyncReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver syncReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SharedPreferences preferences =
-                    getApplicationContext().getSharedPreferences(getString(R.string.general_shared_preference), MODE_MULTI_PROCESS);
+            if (intent.getAction().equals(SYNC_DONE_BROADCAST_ACTION)) {
+                progressBar.incrementProgressBy(25);
+                SharedPreferences preferences =
+                        getApplicationContext().getSharedPreferences(getString(R.string.general_shared_preference), MODE_MULTI_PROCESS);
 
-            long lastSync = preferences.getLong(getString(R.string.last_dev_sync_pref), 0);
-            if (lastSync != 0) {
-                updateSyncTimeView(lastSync);
+                long lastSync = preferences.getLong(getString(R.string.last_dev_sync_pref), 0);
+                if (lastSync != 0) {
+                    updateSyncTimeView(lastSync);
+                }
+                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setProgress(0);
+
+            } else if (intent.getAction().equals(UPDATE_LOADING_BAR_ACTION)) {
+                progressBar.incrementProgressBy(25);
             }
         }
     };
+
     private NavigationView drawerNavigationView;
     private DrawerLayout navigationDrawer;
     private Observable mObservers = new Observable();
@@ -215,6 +226,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
 
+        progressBar = findViewById(R.id.loading_bar);
         setNavigationDrawer();
         setFiltersView();
         setLastSyncTimeView();
@@ -268,7 +280,11 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     @Override
     protected void onResume() {
         super.onResume();
-        this.registerReceiver(devSyncReceiver, new IntentFilter(DEV_SYNC_BROADCAST_ACTION));
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SYNC_DONE_BROADCAST_ACTION);
+        intentFilter.addAction(UPDATE_LOADING_BAR_ACTION);
+        this.registerReceiver(syncReceiver, intentFilter);
+
         getSharedPreferences(getString(R.string.server_shared_preference), MODE_PRIVATE)
                 .registerOnSharedPreferenceChangeListener(this);
 
@@ -277,7 +293,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     @Override
     protected void onPause() {
         super.onPause();
-        this.unregisterReceiver(devSyncReceiver);
+        this.unregisterReceiver(syncReceiver);
         getSharedPreferences(getString(R.string.server_shared_preference), MODE_PRIVATE)
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
@@ -295,7 +311,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     private void syncDevicesNow() {
         Logger.log(LOG_TAG, "Immediate device syc manually requested... ", Log.VERBOSE);
         Account account = UserUtility.getUser();
-        DevicesSyncAdapter.syncImmediately(account);
+        Bundle b = new Bundle();
+        b.putBoolean(DevicesSyncAdapter.SYNC_DEVICES, true);
+        DevicesSyncAdapter.syncImmediately(account, b);
     }
 
     private void refreshToken() {
@@ -496,6 +514,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
     private void launchLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivityForResult(intent,100);
+        startActivityForResult(intent, 100);
     }
+
 }

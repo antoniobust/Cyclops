@@ -43,7 +43,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
-import static com.mdmobile.cyclops.utils.ServerUtility.getActiveServer;
 
 /**
  * Main class for API requests.
@@ -161,7 +160,7 @@ public class ApiRequestManager {
                                 applicationContext.getString(R.string.last_dev_sync_pref),
                                 Calendar.getInstance().getTimeInMillis());
 
-                        Intent intent = new Intent(MainActivity.DEV_SYNC_BROADCAST_ACTION);
+                        Intent intent = new Intent(MainActivity.SYNC_DONE_BROADCAST_ACTION);
                         intent.setPackage(applicationContext.getPackageName());
                         applicationContext.sendBroadcast(intent);
 
@@ -184,7 +183,7 @@ public class ApiRequestManager {
 
     public String remoteControlDevice(Server server, String deviceId) {
         String apiAuthority = server.getServerAddress();
-        return ApiModel.DevicesApi.BuildRC(apiAuthority,deviceId).toString();
+        return ApiModel.DevicesApi.BuildRC(apiAuthority, deviceId).toString();
     }
 
     public void getDeviceProfiles(@NonNull Server server, @NonNull final String deviceID) {
@@ -306,6 +305,15 @@ public class ApiRequestManager {
         requestsQueue.add(userRequest);
     }
 
+    public void cancelRequest() {
+        requestsQueue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                Logger.log(LOG_TAG, "Request cancelled: " + request.getUrl(), Log.VERBOSE);
+                return true;
+            }
+        });
+    }
 
 
 }

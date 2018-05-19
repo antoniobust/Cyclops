@@ -6,25 +6,33 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
+import java.util.ArrayList;
+
 import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
+import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 
 /**
  * Sync adapter to get info refreshed in the DB.
  */
 
 public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
-    // Update schedule is 2h by default
+    public static String SYNC_DEVICES = "syncDevices";
+    public static String SYNC_SERVER = "syncServer";
+    public static String SYNC_USERS = "syncUsers";
     private static int UPDATE_SCHEDULE = 60 * 60;
     private static int SYNC_FLEXTIME = UPDATE_SCHEDULE / 3;
 
@@ -33,24 +41,28 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
         super(context, autoInitialize);
     }
 
-    public static void initializeSync(Account account, Context mContext) {
-        onNewAccountCreated(mContext, account);
+    public static void initializeSync(Account account) {
+        onNewAccountCreated(account);
     }
 
     //When adding an account call this method to schedule device information updates
-    private static void onNewAccountCreated(Context c, Account account) {
+    private static void onNewAccountCreated(Account account) {
 
         //Without calling setSyncAutomatically, periodic sync will not be enabled.
         ContentResolver.setSyncAutomatically(account, McContract.CONTENT_AUTHORITY, true);
 
-        DevicesSyncAdapter.configurePeriodicSync(c.getApplicationContext(), account);
+        DevicesSyncAdapter.configurePeriodicSync(account);
 
         //As the account was just created we should launch the first sync
-        syncImmediately(account);
+        Bundle b = new Bundle();
+        b.putBoolean(SYNC_USERS, true);
+        b.putBoolean(SYNC_DEVICES, true);
+        b.putBoolean(SYNC_SERVER, true);
+        syncImmediately(account, b);
     }
 
     //Helper method to set up a period sync interval
-    private static void configurePeriodicSync(Context context, Account account) {
+    private static void configurePeriodicSync(Account account) {
         String authority = McContract.CONTENT_AUTHORITY;
         Logger.log(LOG_TAG, "Configuring periodic sync: " + UPDATE_SCHEDULE, Log.VERBOSE);
 
@@ -63,15 +75,10 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
         ContentResolver.requestSync(request);
     }
 
-    public static void syncImmediately(Account account) {
+    public static void syncImmediately(Account account, Bundle bundle) {
         Logger.log(LOG_TAG, "Immediate Sync requested", Log.VERBOSE);
-        Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-
-//        ContentResolver
-//                .setSyncAutomatically(account, McContract.CONTENT_AUTHORITY, true);
-//        ContentResolver.setIsSyncable(account, McContract.CONTENT_AUTHORITY, 1);
 
         if (ContentResolver.isSyncActive(account, McContract.CONTENT_AUTHORITY)) {
             Logger.log(LOG_TAG, "Sync already active for: " + account.name + " cancelling and requesting new", Log.VERBOSE);
@@ -84,10 +91,49 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(final Account account, Bundle bundle, String authority,
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
         Server activeServer = ServerUtility.getActiveServer();
-        Logger.log(LOG_TAG,"Syncing " + activeServer.getServerName(),Log.VERBOSE);
-        ApiRequestManager.getInstance().getServicesInfo(activeServer);
-        ApiRequestManager.getInstance().getDeviceInfo(activeServer);
-        ApiRequestManager.getInstance().getUsers(activeServer);
+        ArrayList<String> actions = new ArrayList<>();
+        if (bundle.containsKey(SYNC_USERS) && bundle.getBoolean(SYNC_USERS)) {
+            actions.add(SYNC_USERS);
+        }
+        if (bundle.containsKey(SYNC_DEVICES) && bundle.getBoolean(SYNC_DEVICES)) {
+            actions.add(SYNC_DEVICES);
+        }
+        if (bundle.containsKey(SYNC_SERVER) && bundle.getBoolean(SYNC_SERVER)) {
+            actions.add(SYNC_SERVER);
+        }
+        if (actions.size() == 0) {
+            actions.add(SYNC_USERS);
+            actions.add(SYNC_DEVICES);
+            actions.add(SYNC_SERVER);
+        }
 
+        Logger.log(LOG_TAG, "Syncing " + activeServer.getServerName() +
+                "\n Action to perform:" + actions.toString(), Log.VERBOSE);
+
+        Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
+        intent.setPackage(getContext().getPackageName());
+
+        for (String action : actions) {
+            if (action.equals(SYNC_DEVICES)) {
+                this.getContext().sendBroadcast(intent);
+                ApiRequestManager.getInstance().getDeviceInfo(activeServer);
+            }
+            if (action.equals(SYNC_SERVER)) {
+                this.getContext().sendBroadcast(intent);
+                ApiRequestManager.getInstance().getServicesInfo(activeServer);
+            }
+            if (action.equals(SYNC_USERS)) {
+                this.getContext().sendBroadcast(intent);
+                ApiRequestManager.getInstance().getUsers(activeServer);
+            }
+        }
+
+
+    }
+
+    @Override
+    public void onSyncCanceled() {
+        super.onSyncCanceled();
+        ApiRequestManager.getInstance().cancelRequest();
     }
 }

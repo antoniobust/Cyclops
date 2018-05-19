@@ -1,5 +1,6 @@
 package com.mdmobile.cyclops.networkRequests;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -11,6 +12,7 @@ import com.google.gson.Gson;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.DbData;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
@@ -40,6 +42,9 @@ public class ServerInfoRequest extends BasicRequest<String> {
 
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
+        Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
+        intent.setPackage(applicationContext.getPackageName());
+
         try {
             String jsonResponseString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
@@ -49,6 +54,7 @@ public class ServerInfoRequest extends BasicRequest<String> {
             ArrayList<ServerInfo.ManagementServer> managementServers = new ArrayList<>(serverComponents.getManagementServers());
             ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(serverComponents.getDeploymentServers());
 
+            applicationContext.sendBroadcast(intent);
 
             //Update serverInfo table with version -> it could have changed since last sync
             Server serverInfo = ServerUtility.getActiveServer();
@@ -107,6 +113,7 @@ public class ServerInfoRequest extends BasicRequest<String> {
                 }
             }
 
+            applicationContext.sendBroadcast(intent);
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));

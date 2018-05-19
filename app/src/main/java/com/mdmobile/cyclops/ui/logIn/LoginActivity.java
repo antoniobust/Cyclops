@@ -44,9 +44,9 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
     private final String SERVER_FRAG_TAG = "SERVER_FRAG_TAG";
     private final String USER_FRAG_TAG = "USER_FRAG_TAG";
+    public boolean activityForResult = false;
     private TextView serverButton, userButton;
     private AccountAuthenticatorResponse authenticatorResponse;
-    public boolean activityForResult = false;
 
     // -- Interface methods
     @Override
@@ -92,8 +92,8 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         MainActivity.TABLET_MODE = GeneralUtility.isTabletMode(getApplicationContext());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-        if(getCallingActivity() != null){
-            activityForResult =  true;
+        if (getCallingActivity() != null) {
+            activityForResult = true;
         }
 
         serverButton = findViewById(R.id.add_server_button);
@@ -145,7 +145,7 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
                     .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
         } else {
             userButton.setVisibility(View.GONE);
-            if(ServerUtility.anyActiveServer()){
+            if (ServerUtility.anyActiveServer()) {
                 serverButton.setVisibility(View.GONE);
             }
             getSupportFragmentManager().beginTransaction()
@@ -221,7 +221,7 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         accountManager.setAuthToken(account, tokenType, response.getAccess_token());
 
         //Initialize SyncAdapter for periodic devices checks
-        DevicesSyncAdapter.initializeSync(account, getApplicationContext());
+        DevicesSyncAdapter.initializeSync(account);
 
         //If activity was launched from accountsUpdateListener authenticator return data back
         if (authenticatorResponse != null) {

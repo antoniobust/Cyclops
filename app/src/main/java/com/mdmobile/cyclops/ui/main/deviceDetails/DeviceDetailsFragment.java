@@ -44,6 +44,7 @@ import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.LabelHelper;
 import com.mdmobile.cyclops.utils.Logger;
+import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
 import java.util.ArrayList;
@@ -63,7 +64,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private String iconTransitionName;
     private String nameTransitionName;
     private CardView profilesCard;
-    private RecyclerView devInfoRecycler, profilesRecycler, installedAppsRecycler;
+    private RecyclerView devInfoRecycler;
+    private RecyclerEmptyView profilesRecycler, installedAppsRecycler;
     private IDevice<BasicDevice> device;
     private ArrayList<String[]> appList;
     private ArrayList<Profile> profiles;
@@ -96,7 +98,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onRefresh() {
         Logger.log(LOG_TAG, "Device " + deviceId + " info update requested", Log.VERBOSE);
-        ApiRequestManager.getInstance().getDeviceInfo(ServerUtility.getActiveServer(),deviceId);
+        ApiRequestManager.getInstance().getDeviceInfo(ServerUtility.getActiveServer(), deviceId);
         swipeLayout.setRefreshing(false);
     }
 
@@ -116,7 +118,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             case LOAD_APPS:
                 uri = McContract.InstalledApplications.buildUriWithDevId(deviceId);
                 return new CursorLoader(getContext().getApplicationContext(), uri, McContract.InstalledApplications.FULL_PROJECTION,
-                        null, null, McContract.InstalledApplications.APPLICATION_NAME +" ASC");
+                        null, null, McContract.InstalledApplications.APPLICATION_NAME + " ASC");
             default:
                 throw new UnsupportedOperationException("Loader id:" + id + " not supported");
         }
@@ -205,11 +207,16 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         profilesCard = rootView.findViewById(R.id.device_details_profiles_card);
         devInfoRecycler = infoCard.findViewById(R.id.device_details_info_recycler);
         profilesRecycler = rootView.findViewById(R.id.device_details_profiles_recycler);
+        View profileEmptyView = profilesCard.findViewById(R.id.profiles_empty_view);
         installedAppsRecycler = appsCard.findViewById(R.id.device_details_apps_recycler);
+        View appsEmptyView = appsCard.findViewById(R.id.apps_empty_view);
 
         devInfoRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         profilesRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        profilesRecycler.setEmptyView(profileEmptyView);
         installedAppsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        installedAppsRecycler.setEmptyView(appsEmptyView);
+
 
         devInfoRecycler.setAdapter(null);
         profilesRecycler.setAdapter(null);
@@ -265,7 +272,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     //    private void setLevelBars(Cursor data) {
 //        data.moveToFirst();
 //        Bundle extraInfo = DbData.getDeviceExtraInfo(
@@ -314,7 +321,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         Fragment newFrag;
         switch (v.getId()) {
             case R.id.device_details_info_card:
-                newFrag = FullDeviceInfoFragment.Companion.newInstance(deviceId,device.getDevice());
+                newFrag = FullDeviceInfoFragment.Companion.newInstance(deviceId, device.getDevice());
                 break;
             case R.id.device_details_profiles_card:
                 newFrag = ProfilesFragment.newInstance(deviceId, profiles);
@@ -347,11 +354,11 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         ImageView rcButton = getActivity().findViewById(R.id.device_detail_remote_control_view);
         if ((((BasicDevice) device.getDevice())).getIsAgentOnline()) {
             ((GradientDrawable) dot).setColor(getContext().getResources().getColor(R.color.darkGreen));
-            if(rcButton != null) {
+            if (rcButton != null) {
                 rcButton.setEnabled(true);
             }
         } else {
-            if(rcButton != null) {
+            if (rcButton != null) {
                 rcButton.setEnabled(false);
             }
             ((GradientDrawable) dot).setColor(Color.LTGRAY);
@@ -383,7 +390,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     private void setProfilesCard(Cursor data) {
         if (data == null || data.getCount() == 0) {
-            ApiRequestManager.getInstance().getDeviceProfiles(activeServer,deviceId);
+            ApiRequestManager.getInstance().getDeviceProfiles(activeServer, deviceId);
             return;
         }
         if (data.getCount() == 1 && data.moveToFirst() &&
@@ -411,7 +418,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     private void setAppsCard(Cursor data) {
         if (data != null && data.getCount() == 0) {
-            ApiRequestManager.getInstance().getDeviceInstalledApps(activeServer,deviceId);
+            ApiRequestManager.getInstance().getDeviceInstalledApps(activeServer, deviceId);
             return;
         }
         if (data == null || !data.moveToFirst()) {

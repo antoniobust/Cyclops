@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
@@ -34,6 +35,7 @@ import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
 import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.dialogs.PinFolderDialog;
 import com.mdmobile.cyclops.ui.dialogs.SortingDeviceDialog;
+import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -110,7 +112,11 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
     public void onRefresh() {
         Logger.log(LOG_TAG, "Devices refresh manually requested... ", Log.VERBOSE);
         Account account = AccountManager.get(getContext()).getAccountsByType(getString(R.string.account_type))[0];
-        DevicesSyncAdapter.syncImmediately(account);
+        Bundle b = new Bundle();
+        b.putBoolean(DevicesSyncAdapter.SYNC_DEVICES,true);
+        DevicesSyncAdapter.syncImmediately(account,b);
+        ProgressBar progressBar = getActivity().findViewById(R.id.loading_bar);
+        progressBar.setVisibility(View.VISIBLE);
         mSwipeToRefresh.setRefreshing(false);
 
     }

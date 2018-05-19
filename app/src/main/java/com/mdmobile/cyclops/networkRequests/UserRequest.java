@@ -1,5 +1,6 @@
 package com.mdmobile.cyclops.networkRequests;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -12,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.User;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.DbData;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
@@ -32,14 +34,19 @@ public class UserRequest extends BasicRequest<String> {
 
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
+        Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
+        intent.setPackage(applicationContext.getPackageName());
+
         try {
             String jsonResponseString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
 
             Type deviceCollectionType = new TypeToken<ArrayList<User>>() {
             }.getType();
-
             ArrayList<User> user = new Gson().fromJson(jsonResponseString, deviceCollectionType);
+
+            applicationContext.sendBroadcast(intent);
+
             Server server = ServerUtility.getActiveServer();
             Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, server.getServerName());
             Cursor c = applicationContext.getContentResolver().query(McContract.ServerInfo.buildServerInfoUriWithName(server.getServerName()),
@@ -54,6 +61,8 @@ public class UserRequest extends BasicRequest<String> {
             applicationContext.getContentResolver().delete(uri, null, null);
             applicationContext.getContentResolver().bulkInsert(McContract.UserInfo.CONTENT_URI,
                     DbData.prepareUserValues(user, serverId));
+
+            applicationContext.sendBroadcast(intent);
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));

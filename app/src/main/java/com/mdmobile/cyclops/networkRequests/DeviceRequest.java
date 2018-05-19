@@ -2,6 +2,7 @@ package com.mdmobile.cyclops.networkRequests;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -30,12 +31,15 @@ import com.mdmobile.cyclops.dataModel.api.devices.WindowsPhone;
 import com.mdmobile.cyclops.dataModel.api.devices.WindowsRuntime;
 import com.mdmobile.cyclops.dataTypes.DeviceKind;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 
 /**
  * Request devices
@@ -63,6 +67,8 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
+        Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
+        intent.setPackage(applicationContext.getPackageName());
         try {
 
             String jsonResponseString = new String(response.data,
@@ -94,13 +100,17 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             Type deviceCollectionType = new TypeToken<ArrayList<? extends BasicDevice>>() {
             }.getType();
             ArrayList<? extends BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
+
+            applicationContext.sendBroadcast(intent);
             Uri uri = McContract.buildUriWithServerName(McContract.Device.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
             mContext.getContentResolver().delete(uri, null, null);
 
-            Logger.log("TEST","Extrainfo: "+devices.get(0).getExtraInfo()+"\n", Log.VERBOSE);
-            Logger.log("TEST","ExtraAttributes: "+devices.get(0).getExtraAttributesList().toString(), Log.VERBOSE);
+            Logger.log("TEST", "Extrainfo: " + devices.get(0).getExtraInfo() + "\n", Log.VERBOSE);
+            Logger.log("TEST", "ExtraAttributes: " + devices.get(0).getExtraAttributesList().toString(), Log.VERBOSE);
 
             saveDevicesToDB(devices);
+
+            applicationContext.sendBroadcast(intent);
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));

@@ -66,6 +66,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String SYNC_DONE_BROADCAST_ACTION = "com.mdmobile.cyclops.SYNC_DONE";
     public static final String UPDATE_LOADING_BAR_ACTION = "com.mdmobile.cyclops.UPDATE_LOADING_BAR";
+    public static final String UPDATE_LOADING_BAR_ACTION_COUNT = "com.mdmobile.cyclops.UPDATE_LOADING_BAR_ACTIONS";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
     //Define a flag if we are in tablet layout or not
@@ -74,12 +75,14 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     Toolbar filtersToolbar;
     RecyclerEmptyView filtersRecycler;
     private ProgressBar progressBar;
+    private int syncActions = 0;
+    private int actionProgress = 0;
     private TextView lastSyncTimeView;
     private final BroadcastReceiver syncReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(SYNC_DONE_BROADCAST_ACTION)) {
-                progressBar.incrementProgressBy(25);
+                progressBar.setProgress(100);
                 SharedPreferences preferences =
                         getApplicationContext().getSharedPreferences(getString(R.string.general_shared_preference), MODE_MULTI_PROCESS);
 
@@ -91,7 +94,11 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                 progressBar.setProgress(0);
 
             } else if (intent.getAction().equals(UPDATE_LOADING_BAR_ACTION)) {
-                progressBar.incrementProgressBy(25);
+                if (syncActions == 0) {
+                    syncActions = intent.getIntExtra(UPDATE_LOADING_BAR_ACTION_COUNT, 3);
+                    actionProgress = calculateDelta(progressBar.getMax(), syncActions);
+                }
+                progressBar.incrementProgressBy(actionProgress);
             }
         }
     };
@@ -517,4 +524,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         startActivityForResult(intent, 100);
     }
 
+    private int calculateDelta(int max, int units) {
+        return max / (units * 3);
+    }
 }

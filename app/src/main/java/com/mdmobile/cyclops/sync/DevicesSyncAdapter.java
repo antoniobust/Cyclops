@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
@@ -23,7 +22,6 @@ import com.mdmobile.cyclops.utils.ServerUtility;
 import java.util.ArrayList;
 
 import static com.github.mikephil.charting.charts.Chart.LOG_TAG;
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 
 /**
  * Sync adapter to get info refreshed in the DB.
@@ -92,14 +90,12 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
         Server activeServer = ServerUtility.getActiveServer();
         ArrayList<String> actions = new ArrayList<>();
+        actions.add(SYNC_SERVER);
         if (bundle.containsKey(SYNC_USERS) && bundle.getBoolean(SYNC_USERS)) {
             actions.add(SYNC_USERS);
         }
         if (bundle.containsKey(SYNC_DEVICES) && bundle.getBoolean(SYNC_DEVICES)) {
             actions.add(SYNC_DEVICES);
-        }
-        if (bundle.containsKey(SYNC_SERVER) && bundle.getBoolean(SYNC_SERVER)) {
-            actions.add(SYNC_SERVER);
         }
         if (actions.size() == 0) {
             actions.add(SYNC_USERS);
@@ -111,6 +107,7 @@ public class DevicesSyncAdapter extends AbstractThreadedSyncAdapter {
                 "\n Action to perform:" + actions.toString(), Log.VERBOSE);
 
         Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
+        intent.putExtra(MainActivity.UPDATE_LOADING_BAR_ACTION_COUNT, actions.size());
         intent.setPackage(getContext().getPackageName());
 
         for (String action : actions) {

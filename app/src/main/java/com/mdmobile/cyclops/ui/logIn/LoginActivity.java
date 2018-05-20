@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +60,8 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
 
     @Override
     public void errorReceivingToken(VolleyError error) {
-
+        findViewById(R.id.login_progress_view).setVisibility(View.GONE);
+        findViewById(R.id.login_button).setVisibility(View.VISIBLE);
         String message;
         if (error == null || error.networkResponse == null) {
             message = "Login failed...Please try again";

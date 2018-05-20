@@ -1,6 +1,7 @@
 package com.mdmobile.cyclops.ui.logIn;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -8,13 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
-import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -28,6 +28,7 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
     private TextView userNameView, passwordView;
     private Spinner serverSpinner;
     private Button loginButton;
+    private ProgressBar progressBar;
 
     public AddNewUserFragment() {
         //Empty constructor required
@@ -46,14 +47,10 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
         if (!(userName.length() > 0 && password.length() > 0)) {
             return;
         }
-        Server serverInfo = ServerUtility.getActiveServer();
-
-        if (serverInfo == null) {
-            Toast.makeText(getContext(), "Add a server configuration to login", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
+        loginButton.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
         ApiRequestManager.getInstance().getToken(
                 ServerUtility.getActiveServer(),
                 userName, password, (NetworkCallBack) getActivity());
@@ -66,12 +63,13 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_user, container, false);
         userNameView = rootView.findViewById(R.id.user_name_text_view);
         passwordView = rootView.findViewById(R.id.password_text_view);
         serverSpinner = rootView.findViewById(R.id.login_servers_spinner);
         loginButton = rootView.findViewById(R.id.login_button);
+        progressBar = rootView.findViewById(R.id.login_progress_view);
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(USER_NAME_KEY)) {
@@ -88,9 +86,11 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().findViewById(R.id.add_user_button).setVisibility(View.INVISIBLE);
-        getActivity().findViewById(R.id.add_server_button).setVisibility(View.VISIBLE);
+        if (getActivity() != null) {
+            getActivity().findViewById(R.id.add_user_button).setVisibility(View.INVISIBLE);
+            getActivity().findViewById(R.id.add_server_button).setVisibility(View.VISIBLE);
+        }
     }
 }

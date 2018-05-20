@@ -100,13 +100,14 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         userButton = findViewById(R.id.add_user_button);
 
         if (savedInstanceState == null) {
-            if (UserUtility.checkAnyUserLogged()) {
-                userButton.setVisibility(View.GONE);
+            if (!UserUtility.checkAnyUserLogged() || getCallingActivity() != null) {
                 serverButton.setVisibility(View.GONE);
+                userButton.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
             } else {
-                userButton.setVisibility(View.VISIBLE);
+                serverButton.setVisibility(View.VISIBLE);
+                userButton.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
             }

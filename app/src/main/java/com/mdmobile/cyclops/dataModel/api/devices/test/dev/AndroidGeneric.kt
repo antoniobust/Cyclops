@@ -9,7 +9,6 @@ class AndroidGeneric(
         @SerializedName("AndroidApiLevel") val androidApiLevel: Int = 0,
         @SerializedName("AndroidDeviceAdmin") val androidDeviceAdmin: Boolean = false,
         @SerializedName("Antivirus") val antivirus: Antivirus = Antivirus(),
-        @SerializedName("Memory") val memory: Memory = Memory(),
         @SerializedName("BatteryStatus") val batteryStatus: Int = 0,
         @SerializedName("BuildSecurityPatch") val buildSecurityPatch: String = "",
         @SerializedName("CanResetPassword") val canResetPassword: Boolean = false,

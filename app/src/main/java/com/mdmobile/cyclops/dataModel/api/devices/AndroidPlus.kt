@@ -1,10 +1,6 @@
 package com.mdmobile.cyclops.dataModel.api.devices
 
-import android.content.ContentValues
 import android.database.Cursor
-import com.mdmobile.cyclops.provider.McContract
-import kotlin.reflect.KVisibility
-import kotlin.reflect.full.declaredMemberProperties
 
 /**
  * Represent Gson class for android Plus Device
@@ -12,7 +8,8 @@ import kotlin.reflect.full.declaredMemberProperties
 
 open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
 
-    val AgentVersion: String
+    private val cursor :Cursor?
+    var AgentVersion: String
     val HardwareSerialNumber: String
     val HardwareVersion: String
     val IMEI_MEID_ESN: String
@@ -96,10 +93,12 @@ open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
         this.NetworkConnectionType = NetworkConnectionType
         this.NetworkRSSI = NetworkRSSI
         this.HardwareEncryptionCaps = HardwareEncryptionCaps
+        this.cursor = null
     }
 
-    //    Secondary constructor
+    //Secondary constructor
     constructor(cursor: Cursor) : super(cursor) {
+        this.cursor = cursor
         this.AgentVersion = "N/A"
         this.HardwareSerialNumber = "N/A"
         this.HardwareVersion = "N/A"
@@ -132,6 +131,10 @@ open class AndroidPlus : BasicDevice, IDevice<AndroidPlus> {
         this.NetworkConnectionType = "N/A"
         this.NetworkRSSI = -1
         this.HardwareEncryptionCaps = -1
+    }
+
+    init {
+        val extraString = getExtraAttributesList()
     }
 
 

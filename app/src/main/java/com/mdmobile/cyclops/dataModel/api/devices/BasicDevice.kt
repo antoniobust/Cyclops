@@ -41,7 +41,7 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
     )
 
     companion object {
-        private fun nullSafe(obj: Any?): String {
+         fun nullSafe(obj: Any?): String {
             return if (obj == null) "N/A" else obj as String
         }
     }
@@ -136,6 +136,7 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
         }
         return list
     }
+
 
     protected fun extraInfoStringToBundle(extraInfo: String): Bundle {
         val extras = extraInfo.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()

@@ -129,7 +129,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
 
     private void showActionsMenu(final View view) {
         PopupMenu menu = new PopupMenu(mContext, view, Gravity.START);
-        menu.inflate(R.menu.device_action_menu);
+        menu.inflate(R.menu.device_fab_action_menu);
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

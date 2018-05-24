@@ -44,6 +44,13 @@ class LabelHelper {
                     SpecialDeviceProperties.SPECIAL_DEVICE_PROPERTIES.filter(filter)) as ArrayList<Property>
         }
 
+        fun getBasicDeviceStatisticProperties(): ArrayList<Property> {
+            val filter: (Property) -> Boolean = {
+                it.statisticable
+            }
+            return (BasicDeviceProperties.BASIC_DEVICE_PROPERTIES.filter(filter)) as ArrayList<Property>
+        }
+
         fun getAllUILabels(): Array<String> {
             return BasicDeviceProperties.BASIC_DEVICE_PROPERTIES.map {
                 it.uiLabel

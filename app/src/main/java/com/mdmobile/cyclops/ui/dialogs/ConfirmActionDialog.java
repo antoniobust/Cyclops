@@ -112,7 +112,12 @@ public class ConfirmActionDialog extends DialogFragment implements
     public void onClick(DialogInterface dialogInterface, int i) {
         if (i == Dialog.BUTTON_POSITIVE) {
             //Send confirmation back to the creator
-            actionCallback.actionConfirmed(checkBox.isChecked());
+            boolean flag = checkBox != null;
+                    if(flag) {
+                        actionCallback.actionConfirmed(checkBox.isChecked());
+                    }else{
+                        actionCallback.actionConfirmed(flag);
+                    }
         } else {
             dialogInterface.dismiss();
             //Send action canceled back to creator

@@ -232,6 +232,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="first_boot_preference">first_boot</string>
+    <string name="delete_label">Delete</string>
+    <string name="lock_device_label">Lock device</string>
+    <string name="unenroll_device_label">Unenroll</string>
+    <string name="wipe_device_label">Wipe</string>
+    <string name="confirm_action">Confirm action</string>
+    <string name="confirm_wipe_message">Are you sure you want to wipe \"%1$s\" ?</string>
+    <string name="yes_label">Yes</string>
+    <string name="confirm_unenroll_message">Are you sure you want to unenroll \"%1$s\" ?</string>
 
 
 </resources>

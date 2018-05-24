@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dashboard_card_height"
     android:layout_gravity="center"
-    android:layout_margin="12dp"
-    android:padding="8dp"
+    android:layout_marginBottom="@dimen/activity_horizontal_margin"
     app:cardElevation="2dp">
 
     <ProgressBar
@@ -21,10 +20,11 @@
     <ImageView
         android:id="@+id/chart_option_button"
         android:layout_width="wrap_content"
-        android:layout_height="?listPreferredItemHeightSmall"
+        android:layout_height="wrap_content"
         android:layout_gravity="end|top"
+        android:layout_margin="8dp"
         android:background="?selectableItemBackgroundBorderless"
-        android:scaleType="center"
+        android:scaleType="fitEnd"
         android:tint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_option_24dp"/>
 
@@ -32,7 +32,7 @@
         android:id="@+id/chart_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:padding="16dp">
     </FrameLayout>
 </android.support.v7.widget.CardView>
 

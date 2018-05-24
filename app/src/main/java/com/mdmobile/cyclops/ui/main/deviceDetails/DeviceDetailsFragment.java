@@ -39,7 +39,9 @@ import com.mdmobile.cyclops.dataModel.api.Profile;
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice;
 import com.mdmobile.cyclops.dataModel.api.devices.DeviceFactory;
 import com.mdmobile.cyclops.dataModel.api.devices.IDevice;
+import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.ui.dialogs.ConfirmActionDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.LabelHelper;
@@ -249,7 +251,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.device_action_menu, menu);
+        inflater.inflate(R.menu.device_actions_menu, menu);
     }
 
     @Override
@@ -264,12 +266,55 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            if (MainActivity.TABLET_MODE) {
-                hideDetailsFragment();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (MainActivity.TABLET_MODE) {
+                    hideDetailsFragment();
+                    return true;
+                }
+                break;
+            case R.id.action_wipe_device: {
+                ConfirmActionDialog.newInstance(
+                        getString(R.string.confirm_action),
+                        getString(R.string.confirm_wipe_message, deviceName),
+                        R.drawable.ic_priority, getString(R.string.yes_label), getString(R.string.dialog_cancel_label),
+                        false, new ConfirmActionDialog.ConfirmAction() {
+                            @Override
+                            public void actionConfirmed(boolean doNotShowAgain) {
+                                ApiRequestManager.getInstance()
+                                        .requestAction(ServerUtility.getActiveServer(), deviceId, ApiActions.WIPE, null, null);
+                            }
+
+                            @Override
+                            public void actionCanceled() {
+                            }
+                        }).show(getChildFragmentManager(), "CONFIRM_DIALOG");
+                return true;
+            }
+            case R.id.action_lock_device:
+                ApiRequestManager.getInstance()
+                        .requestAction(ServerUtility.getActiveServer(), deviceId, ApiActions.LOCK, null, null);
+                return true;
+            case R.id.action_unenroll_device: {
+                ConfirmActionDialog.newInstance(
+                        getString(R.string.confirm_action),
+                        getString(R.string.confirm_unenroll_message, deviceName),
+                        R.drawable.ic_priority, getString(R.string.yes_label), getString(R.string.dialog_cancel_label),
+                        false, new ConfirmActionDialog.ConfirmAction() {
+                            @Override
+                            public void actionConfirmed(boolean doNotShowAgain) {
+                                ApiRequestManager.getInstance()
+                                        .requestAction(ServerUtility.getActiveServer(), deviceId, ApiActions.UNENROL, null, null);
+                            }
+
+                            @Override
+                            public void actionCanceled() {
+                            }
+                        }).show(getChildFragmentManager(), "CONFIRM_DIALOG");
                 return true;
             }
         }
+
         return super.onOptionsItemSelected(item);
     }
 

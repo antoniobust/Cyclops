@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
@@ -105,7 +106,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
     private NavigationView drawerNavigationView;
     private DrawerLayout navigationDrawer;
-    private Observable mObservers = new Observable();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -254,26 +254,8 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        //TODO: create a debug Version of main_activity_toolbar for extra options
-        inflater.inflate(R.menu.main_activity_toolbar, menu);
-
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.debug_sync_devices_now:
-//                syncDevicesNow();
-//                return true;
-//            case R.id.debug_refresh_token:
-//                refreshToken();
-//                return true;
-//            case R.id.debug_invalidate_token:
-//                invalidateToken();
-//                return true;
             case android.R.id.home:
                 navigationDrawer.openDrawer(Gravity.START, true);
                 return true;

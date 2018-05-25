@@ -17,14 +17,13 @@
         android:visibility="gone"/>
 
 
-    <ImageView
+    <ImageButton
         android:id="@+id/chart_option_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="end|top"
-        android:layout_margin="8dp"
         android:background="?selectableItemBackgroundBorderless"
-        android:scaleType="fitEnd"
+        android:scaleType="centerInside"
         android:tint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_option_24dp"/>
 

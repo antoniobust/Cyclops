@@ -60,6 +60,16 @@ class LabelHelper {
         fun getAllExtraInfo(): ArrayList<Property> {
             return SpecialDeviceProperties.SPECIAL_DEVICE_PROPERTIES
         }
+
+        fun getAllBasicInfo(): ArrayList<Property>{
+            return BasicDeviceProperties.BASIC_DEVICE_PROPERTIES
+        }
+
+        fun isBasicProperty(internalLabel: String):Boolean{
+            val uiLabel = getUiLabelFor(internalLabel)
+            val isStatisticable = getStatisticProperties().contains(Property(internalLabel,uiLabel,true))
+            return getAllBasicInfo().contains(Property(internalLabel,uiLabel,isStatisticable))
+        }
     }
 
     object BasicDeviceProperties {

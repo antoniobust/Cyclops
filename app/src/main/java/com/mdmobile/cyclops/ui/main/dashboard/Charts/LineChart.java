@@ -13,8 +13,6 @@ public class LineChart extends com.github.mikephil.charting.charts.LineChart imp
         super(context);
     }
 
-
-
     // - Interface method
     @Override
     public void setData(Chart data) {

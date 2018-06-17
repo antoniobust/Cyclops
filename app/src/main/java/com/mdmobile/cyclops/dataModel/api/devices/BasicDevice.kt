@@ -138,7 +138,7 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
     }
 
 
-    protected fun extraInfoStringToBundle(extraInfo: String): Bundle {
+    fun extraInfoStringToBundle(extraInfo: String): Bundle {
         val extras = extraInfo.split(";".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var temp: Array<String>
         val extraBundle = Bundle()

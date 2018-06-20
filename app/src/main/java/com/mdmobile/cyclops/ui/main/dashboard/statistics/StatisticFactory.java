@@ -12,12 +12,12 @@ public class StatisticFactory {
     public StatisticFactory() {
     }
 
-    public static Statistic createStatistic(Context c, int statisticType, List<String> properties) {
+    public static Statistic createStatistic(int statisticType, List<String> properties) {
         switch (statisticType) {
-            case Statistic.Companion.getCOUNTER_STAT():
-                return new CounterStat(c.getContentResolver(), properties);
-            case Statistic.Companion.getCOUNTER_RANGE():
-                return new CounterStat(c.getContentResolver(), properties);
+            case Statistic.COUNTER_STAT:
+                return new CounterStat(properties);
+            case Statistic.COUNTER_RANGE:
+                return new CounterStat(properties);
             default:
                 throw new UnsupportedOperationException("Statistic type:" + statisticType + " not supported");
         }

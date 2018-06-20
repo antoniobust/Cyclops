@@ -17,23 +17,21 @@ class CounterStat constructor(properties: List<String>)
     : Statistic(properties) {
 
     override fun initPoll() {
+                val count = McContract.Device.FULL_PROJECTION
+//        + " , COUNT(" + McContract.DEVICE_TABLE_NAME + "." + McContract.Device._ID + ")"
+        val orderBy = "COUNT(?) DESC"
+        val serverName = ServerUtility.getActiveServer().serverName
 
+        for (i in 0 until properties.size) {
+            startQuery(i,
+                    properties[i],
+                    McContract.Device.buildUriWithServerName(serverName),
+                    count, null,null,null)
+        }
     }
 
 //    fun initPoll() {
-//        val count = "COUNT(" + McContract.DEVICE_TABLE_NAME + "." + McContract.Device._ID + ")"
-//        val orderBy = "COUNT(?) DESC"
-//
-//        val (serverName) = ServerUtility.getActiveServer()
-//        for (i in 0 until getMProperties().size()) {
-//            startQuery(i,
-//                    getMProperties().get(i),
-//                    McContract.Device.buildUriWithGroup(getMProperties().get(i)),
-//                    arrayOf(count, getMProperties().get(i)),
-//                    McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + " = ? ",
-//                    arrayOf(serverName),
-//                    orderBy.replace("?", getMProperties().get(i)))
-//        }
+
 //    }
 }
 

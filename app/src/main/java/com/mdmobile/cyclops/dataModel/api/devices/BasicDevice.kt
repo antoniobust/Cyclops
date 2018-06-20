@@ -41,8 +41,18 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
     )
 
     companion object {
-         fun nullSafe(obj: Any?): String {
+        fun nullSafe(obj: Any?): String {
             return if (obj == null) "N/A" else obj as String
+        }
+
+        fun devicesFromCursor(cursor: Cursor): ArrayList<BasicDevice> {
+            val devices = ArrayList<BasicDevice>()
+            if (cursor.moveToFirst()) {
+                do {
+                    devices.add(BasicDevice(cursor))
+                } while (cursor.moveToNext())
+            }
+            return devices
         }
     }
 

@@ -1,9 +1,10 @@
 package com.mdmobile.cyclops.ui.main.dashboard.statistics
 
+import android.content.AsyncQueryHandler
 import android.database.Cursor
-import android.os.Bundle
 import android.support.annotation.WorkerThread
 import android.util.Log
+import com.mdmobile.cyclops.ApplicationLoader.applicationContext
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.utils.LabelHelper
 import com.mdmobile.cyclops.utils.Logger
@@ -12,7 +13,7 @@ import com.mdmobile.cyclops.utils.Logger
  * Class responsible for creating a new statistic and return statsData from DB
  */
 
-abstract class Statistic constructor(val properties: List<String>) {
+abstract class Statistic constructor(val properties: List<String>) : AsyncQueryHandler(applicationContext.contentResolver) {
     companion object {
         const val COUNTER_STAT = 1
         const val COUNTER_RANGE = 2
@@ -21,29 +22,49 @@ abstract class Statistic constructor(val properties: List<String>) {
     private val maxPopulationSize = 7
     private val logTag = Statistic::class.java.simpleName
 
-    interface OnPollFinished {
-        fun IStatisticReady(statId: Int, values: Map<String, Array<StatDataEntry>>)
+    interface IStatisticReady {
+        fun getStatisticData(statId: Int, values: ArrayList<Pair<String, ArrayList<StatDataEntry>>>)
     }
 
-    private val listeners = ArrayList<OnPollFinished>()
+    private val listeners = ArrayList<IStatisticReady>()
 
     @WorkerThread
     abstract fun initPoll()
 
-    fun registerPollListener(listener: OnPollFinished) = listeners.add(listener)
-    fun unregisterListener(listener: OnPollFinished) {
+    fun registerPollListener(listener: IStatisticReady) = listeners.add(listener)
+    fun unregisterListener(listener: IStatisticReady) {
         if (listeners.contains(listener)) {
             listeners.remove(listener)
         }
     }
 
-    private fun groupByProperty(devices: List<BasicDevice>, property: String): Map<String, List<StatDataEntry>> {
+    override fun onQueryComplete(token: Int, cookie: Any?, cursor: Cursor?) {
+        if (cursor == null) {
+            Logger.log(logTag, "Empty cursor returned, statistic id: $token", Log.ERROR)
+            return
+        }
+        val devices = BasicDevice.devicesFromCursor(cursor)
+        var statData = groupDataByProperty(devices, cookie.toString())
+        statData = formatResult(statData)
+
+        val statDataList = ArrayList<Pair<String, ArrayList<StatDataEntry>>>()
+        statDataList.add(Pair(cookie.toString(), statData))
+
+        listeners.forEach {
+            it.getStatisticData(token, statDataList)
+        }
+    }
+
+    private fun groupDataByProperty(devices: List<BasicDevice>, property: String): ArrayList<StatDataEntry> {
         val statsEntryList = ArrayList<StatDataEntry>()
 
         if (LabelHelper.isBasicProperty(property)) {
             Logger.log(logTag, "Grouping by basic property: $property", Log.VERBOSE)
+
             val valuesMap = devices.groupBy {
-                it::class.java.getField(property)
+                val f = it::class.java.getDeclaredField(property)
+                f.isAccessible = true
+                f.get(it)
             }
             valuesMap.forEach {
                 statsEntryList.add(StatDataEntry(it.key.toString(), it.value.size))
@@ -59,20 +80,21 @@ abstract class Statistic constructor(val properties: List<String>) {
                 }
             }
         }
-        return mapOf(Pair(property, statsEntryList))
+        return statsEntryList
     }
 
-    private fun formatResult(statsMap: Map<String, ArrayList<StatDataEntry>>) {
+    private fun formatResult(statsDataList: ArrayList<StatDataEntry>): ArrayList<StatDataEntry> {
         //If collection is bigger than 6 different values we will just show "others" with the sum of other entries
-        statsMap.forEach {
-            if (it.value.size > maxPopulationSize) {
-                val other = StatDataEntry("Other", 0)
-                for (i in it.value.size downTo 6) {
-                    other.value = other.value + it.value[i - 1].value
-                    it.value.removeAt(i - 1)
-                }
-                it.value.add(other)
-            }
+        if (statsDataList.size <= maxPopulationSize) {
+            return statsDataList
         }
+        var sum = 0
+        for (i in statsDataList.size downTo maxPopulationSize) {
+            sum += statsDataList[i-1].value
+            statsDataList.removeAt(i - 1)
+        }
+        statsDataList.add(StatDataEntry("Other", sum))
+
+        return statsDataList
     }
 }

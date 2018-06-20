@@ -2,8 +2,6 @@ package com.mdmobile.cyclops.ui
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -27,7 +25,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!checkActiveUser() || !checkActveServer()) {
+        if (!checkActiveUser() || !checkActiveServer()) {
             redirectToLoginPage()
         }
     }
@@ -36,7 +34,7 @@ open class BaseActivity : AppCompatActivity() {
         return UserUtility.checkAnyUserLogged()
     }
 
-    private fun checkActveServer(): Boolean {
+    private fun checkActiveServer(): Boolean {
         return ServerUtility.anyActiveServer()
     }
 

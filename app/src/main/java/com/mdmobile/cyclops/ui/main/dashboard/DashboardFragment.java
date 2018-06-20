@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Pair;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,9 +27,12 @@ import com.mdmobile.cyclops.ui.main.dashboard.statistics.Statistic;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatisticFactory;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Set;
+
+import kotlin.Pair;
 
 
 public class DashboardFragment extends BasicFragment implements Statistic.IStatisticReady,
@@ -65,20 +67,14 @@ public class DashboardFragment extends BasicFragment implements Statistic.IStati
     }
 
     @Override
-    public void getData(int statId, Bundle values) {
+    public void getStatisticData(int statId, @NotNull ArrayList<Pair<String, ArrayList<StatDataEntry>>> values) {
         //Poll finished update charts list
-        Set<String> keySet = values.keySet();
-        ArrayList<StatDataEntry> valueList;
-        ArrayList<Pair<String, StatDataEntry[]>> chartsDataList = new ArrayList<>();
-        StatDataEntry[] chartValues = new StatDataEntry[]{};
-
-        for (String key : keySet) {
-            valueList = values.getParcelableArrayList(key);
-            chartsDataList.add(new Pair<>(key, valueList.toArray(chartValues)));
+        if (recyclerAdapter == null) {
+            recyclerAdapter = new ChartsAdapter(values);
+            chartsRecycler.setAdapter(recyclerAdapter);
+        } else {
+            recyclerAdapter.addChart(values.get(0),recyclerAdapter.getItemCount()+1);
         }
-
-        recyclerAdapter = new ChartsAdapter(chartsDataList);
-        chartsRecycler.setAdapter(recyclerAdapter);
     }
 
     @Override
@@ -112,7 +108,7 @@ public class DashboardFragment extends BasicFragment implements Statistic.IStati
             chartsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
-        recyclerAdapter = new ChartsAdapter(null);
+        recyclerAdapter = new ChartsAdapter();
         chartsRecycler.setEmptyView(rootView.findViewById(R.id.dashboard_recycler_empty_view));
         chartsRecycler.setAdapter(recyclerAdapter);
 
@@ -140,7 +136,7 @@ public class DashboardFragment extends BasicFragment implements Statistic.IStati
         super.onPause();
         preferences.unregisterOnSharedPreferenceChangeListener(this);
         if (counterStat != null) {
-            counterStat.unRegisterListener();
+            counterStat.unregisterListener(this);
         }
     }
 
@@ -173,8 +169,8 @@ public class DashboardFragment extends BasicFragment implements Statistic.IStati
 
         //TODO this only creates counter stat type implement other stat type
         counterStat = (CounterStat)
-                StatisticFactory.createStatistic(getContext(), 1, properties);
-        counterStat.registerListener(this);
+                StatisticFactory.createStatistic(1, properties);
+        counterStat.registerPollListener(this);
         counterStat.initPoll();
     }
 }

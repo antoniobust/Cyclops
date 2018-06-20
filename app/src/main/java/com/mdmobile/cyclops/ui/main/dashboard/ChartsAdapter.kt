@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
-import android.util.Pair
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -29,28 +28,19 @@ import com.mdmobile.cyclops.dataModel.chart.Chart
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatDataEntry
 import com.mdmobile.cyclops.utils.GeneralUtility
 import com.mdmobile.cyclops.utils.LabelHelper
-import java.util.*
 
 
 /**
  * Chart recycler nameView adapter
  */
 
-class ChartsAdapter(chartsDataList: ArrayList<Pair<String, Array<StatDataEntry>>>?)
+class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, ArrayList<StatDataEntry>>> = ArrayList<kotlin.Pair<String, ArrayList<StatDataEntry>>>())
     : RecyclerView.Adapter<ChartsAdapter.ChartViewHolder>(), View.OnClickListener,
         android.widget.PopupMenu.OnMenuItemClickListener {
 
     private val LOG_TAG = ChartsAdapter::class.java.simpleName
-    var chartsDataList: ArrayList<Pair<String, Array<StatDataEntry>>>? = null
-
-    init {
-        if (chartsDataList != null) {
-            this.chartsDataList = chartsDataList
-        }
-    }
 
     override fun onClick(view: View) {
-
 
     }
 
@@ -66,14 +56,13 @@ class ChartsAdapter(chartsDataList: ArrayList<Pair<String, Array<StatDataEntry>>
     }
 
     override fun getItemCount(): Int {
-        return if (chartsDataList == null || chartsDataList!!.isEmpty()) 0 else chartsDataList!!.size
+        return if (chartsDataList.isEmpty()) 0 else chartsDataList.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChartViewHolder {
         val item = LayoutInflater.from(parent.context).inflate(R.layout.chart_recycler_item, parent, false)
         return ChartViewHolder(item)
     }
-
 
     override fun onBindViewHolder(holder: ChartViewHolder, position: Int) {
         if (itemCount == 0) {
@@ -103,8 +92,18 @@ class ChartsAdapter(chartsDataList: ArrayList<Pair<String, Array<StatDataEntry>>
 
     }
 
-    private fun removeChart(adapterPosition: Int){
-        chartsDataList?.removeAt(adapterPosition)
+    fun updateData(chartsDataList: ArrayList<kotlin.Pair<String, ArrayList<StatDataEntry>>>) {
+        this.chartsDataList = chartsDataList
+        notifyDataSetChanged()
+    }
+
+    fun addChart(chartDataList :kotlin.Pair<String, ArrayList<StatDataEntry>>, position:Int ){
+        chartsDataList.add(chartDataList)
+        notifyItemInserted(position)
+    }
+
+    private fun removeChart(adapterPosition: Int) {
+        chartsDataList.removeAt(adapterPosition)
         val prefCurrentValue: String = applicationContext.getSharedPreferences(
                 applicationContext.getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
                 .getString(applicationContext.getString(R.string.charts_preference), String())
@@ -124,7 +123,7 @@ class ChartsAdapter(chartsDataList: ArrayList<Pair<String, Array<StatDataEntry>>
         val pieEntries = ArrayList<PieEntry>()
         val pieDataSet: PieDataSet
         val pieData = PieData()
-        val chartData = chartsDataList!![position]
+        val chartData = chartsDataList[position]
 
         for (i in chartData.second.indices) {
             pieEntries.add(PieEntry(chartData.second[i].value.toFloat(), chartData.second[i].label))
@@ -146,7 +145,7 @@ class ChartsAdapter(chartsDataList: ArrayList<Pair<String, Array<StatDataEntry>>
         legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
         legend.maxSizePercent = 0.1f
 
-        var chartProperty = chartsDataList!![position].first
+        var chartProperty = chartsDataList[position].first
         chartProperty = LabelHelper.getUiLabelFor(chartProperty)
         val descriptionLabel = Description()
         descriptionLabel.isEnabled = true

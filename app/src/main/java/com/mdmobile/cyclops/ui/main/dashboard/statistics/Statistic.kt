@@ -9,7 +9,6 @@ import com.mdmobile.cyclops.ApplicationLoader.applicationContext
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.utils.LabelHelper
 import com.mdmobile.cyclops.utils.Logger
-import java.nio.BufferUnderflowException
 
 /**
  * Class responsible for creating a new statistic and return statsData from DB
@@ -21,8 +20,10 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
         const val COUNTER_RANGE = 2
     }
 
+    private lateinit var devices : ArrayList<BasicDevice>
     private val maxPopulationSize = 7
     private val logTag = Statistic::class.java.simpleName
+    private val statDataList = ArrayList<Pair<String, ArrayList<StatDataEntry>>>()
 
     interface IStatisticReady {
         fun getStatisticData(statId: Int, values: ArrayList<Pair<String, ArrayList<StatDataEntry>>>)
@@ -45,15 +46,15 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
             Logger.log(logTag, "Empty cursor returned, statistic id: $token", Log.ERROR)
             return
         }
-        val devices = BasicDevice.devicesFromCursor(cursor)
+        devices = BasicDevice.devicesFromCursor(cursor)
         var statData = groupDataByProperty(devices, cookie.toString())
         statData = formatResult(statData)
 
-        val statDataList = ArrayList<Pair<String, ArrayList<StatDataEntry>>>()
         statDataList.add(Pair(cookie.toString(), statData))
-
-        listeners.forEach {
-            it.getStatisticData(token, statDataList)
+        if(statDataList.size == properties.size) {
+            listeners.forEach {
+                it.getStatisticData(token, statDataList)
+            }
         }
     }
 
@@ -73,8 +74,8 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
             }
         } else {
             Logger.log(logTag, "Grouping by extra property: $property", Log.VERBOSE)
-            var extraInfoBundle:Bundle
-            val propertyMap:ArrayList<Pair<String,String>> = ArrayList()
+            var extraInfoBundle: Bundle
+            val propertyMap: ArrayList<Pair<String, String>> = ArrayList()
             devices.forEach {
                 extraInfoBundle = it.extraInfoStringToBundle(it.ExtraInfo)
                 it.takeIf {
@@ -86,8 +87,8 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
             val valuesMap = propertyMap.groupBy {
                 it.second
             }
-            valuesMap.forEach{
-                statsEntryList.add(StatDataEntry(it.key,it.value.size))
+            valuesMap.forEach {
+                statsEntryList.add(StatDataEntry(it.key, it.value.size))
             }
         }
         return statsEntryList
@@ -100,7 +101,7 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
         }
         var sum = 0
         for (i in statsDataList.size downTo maxPopulationSize) {
-            sum += statsDataList[i-1].value
+            sum += statsDataList[i - 1].value
             statsDataList.removeAt(i - 1)
         }
         statsDataList.add(StatDataEntry("Other", sum))

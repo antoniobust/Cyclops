@@ -69,12 +69,8 @@ public class DashboardFragment extends BasicFragment implements Statistic.IStati
     @Override
     public void getStatisticData(int statId, @NotNull ArrayList<Pair<String, ArrayList<StatDataEntry>>> values) {
         //Poll finished update charts list
-        if (recyclerAdapter == null) {
             recyclerAdapter = new ChartsAdapter(values);
             chartsRecycler.setAdapter(recyclerAdapter);
-        } else {
-            recyclerAdapter.addChart(values.get(0),recyclerAdapter.getItemCount()+1);
-        }
     }
 
     @Override

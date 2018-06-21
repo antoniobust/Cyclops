@@ -1,10 +1,5 @@
 package com.mdmobile.cyclops.ui.main.dashboard.statistics
 
-import android.content.AsyncQueryHandler
-import android.content.ContentResolver
-
-import com.mdmobile.cyclops.dataModel.Server
-import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.utils.ServerUtility
 
@@ -17,7 +12,7 @@ class CounterStat constructor(properties: List<String>)
     : Statistic(properties) {
 
     override fun initPoll() {
-                val count = McContract.Device.FULL_PROJECTION
+        val count = McContract.Device.FULL_PROJECTION
 //        + " , COUNT(" + McContract.DEVICE_TABLE_NAME + "." + McContract.Device._ID + ")"
         val orderBy = "COUNT(?) DESC"
         val serverName = ServerUtility.getActiveServer().serverName
@@ -26,7 +21,7 @@ class CounterStat constructor(properties: List<String>)
             startQuery(i,
                     properties[i],
                     McContract.Device.buildUriWithServerName(serverName),
-                    count, null,null,null)
+                    count, null, null, null)
         }
     }
 

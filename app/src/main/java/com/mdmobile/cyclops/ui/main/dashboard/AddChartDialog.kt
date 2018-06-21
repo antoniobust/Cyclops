@@ -120,7 +120,7 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         chartTypeSpinner.adapter = spinnerAdapter
         chartTypeSpinner.onItemSelectedListener = this
 
-        val properties = LabelHelper.getBasicDeviceStatisticProperties()
+        val properties = LabelHelper.getStatisticProperties()
         val labelsList: ArrayList<String> = ArrayList()
         properties.mapTo(labelsList) { it.uiLabel }
         property1TextView.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, labelsList))

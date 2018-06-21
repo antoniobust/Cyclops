@@ -158,7 +158,6 @@ open class BasicDevice(val Kind: String = "N/A", val DeviceId: String = "N/A", v
                 extraBundle.putString(temp[0], "N/A")
                 continue
             }
-            temp[0] = temp[0].substring(1, temp[0].length)
             extraBundle.putString(temp[0], temp[1])
         }
         return extraBundle

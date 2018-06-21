@@ -2,12 +2,14 @@ package com.mdmobile.cyclops.ui.main.dashboard.statistics
 
 import android.content.AsyncQueryHandler
 import android.database.Cursor
+import android.os.Bundle
 import android.support.annotation.WorkerThread
 import android.util.Log
 import com.mdmobile.cyclops.ApplicationLoader.applicationContext
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.utils.LabelHelper
 import com.mdmobile.cyclops.utils.Logger
+import java.nio.BufferUnderflowException
 
 /**
  * Class responsible for creating a new statistic and return statsData from DB
@@ -71,13 +73,21 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
             }
         } else {
             Logger.log(logTag, "Grouping by extra property: $property", Log.VERBOSE)
+            var extraInfoBundle:Bundle
+            val propertyMap:ArrayList<Pair<String,String>> = ArrayList()
             devices.forEach {
-                val extraInfoBundle = it.extraInfoStringToBundle(it.ExtraInfo)
+                extraInfoBundle = it.extraInfoStringToBundle(it.ExtraInfo)
                 it.takeIf {
                     extraInfoBundle.containsKey(property)
                 }?.apply {
-                    statsEntryList.add(StatDataEntry(property, extraInfoBundle.getInt(property)))
+                    propertyMap.add(Pair(property, extraInfoBundle.getString(property)))
                 }
+            }
+            val valuesMap = propertyMap.groupBy {
+                it.second
+            }
+            valuesMap.forEach{
+                statsEntryList.add(StatDataEntry(it.key,it.value.size))
             }
         }
         return statsEntryList

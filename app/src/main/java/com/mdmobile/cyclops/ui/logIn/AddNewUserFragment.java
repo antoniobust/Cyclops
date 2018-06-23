@@ -1,11 +1,14 @@
 package com.mdmobile.cyclops.ui.logIn;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,6 +32,30 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
     private Spinner serverSpinner;
     private Button loginButton;
     private ProgressBar progressBar;
+    private View.OnTouchListener pwdVisibilityListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            view.performClick();
+            if (motionEvent.getRawX() >= passwordView.getRight() - passwordView.getCompoundDrawables()[2].getBounds().width()) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP: {
+                        passwordView.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, view.getContext().getDrawable(R.drawable.ic_visibility_off), null);
+                        passwordView.setInputType(InputType.TYPE_CLASS_TEXT |
+                                InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        return true;
+                    }
+                    case MotionEvent.ACTION_DOWN: {
+                        passwordView.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, view.getContext().getDrawable(R.drawable.ic_visibility_on), null);
+                        passwordView.setInputType(InputType.TYPE_CLASS_TEXT);
+                        return true;
+                    }
+                    default:
+                        return false;
+                }
+            }
+            return false;
+        }
+    };
 
     public AddNewUserFragment() {
         //Empty constructor required
@@ -82,6 +109,7 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
 
         loginButton.setOnClickListener(this);
         serverSpinner.setAdapter(null);
+        passwordView.setOnTouchListener(pwdVisibilityListener);
         return rootView;
     }
 
@@ -93,4 +121,10 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
             getActivity().findViewById(R.id.add_server_button).setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
 }

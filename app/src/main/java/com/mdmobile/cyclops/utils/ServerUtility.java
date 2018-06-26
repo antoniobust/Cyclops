@@ -156,7 +156,6 @@ public class ServerUtility {
     }
 
     public static void deleteServer(int serverId) {
-        deactivateServer();
         applicationContext.getContentResolver().delete(McContract.ServerInfo.CONTENT_URI,
                 McContract.ServerInfo._ID + "=?", new String[]{String.valueOf(serverId)});
     }

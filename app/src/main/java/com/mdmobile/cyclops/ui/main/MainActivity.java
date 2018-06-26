@@ -22,7 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -30,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
@@ -46,7 +44,6 @@ import com.mdmobile.cyclops.ui.main.myDevices.DevicesFragment;
 import com.mdmobile.cyclops.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.cyclops.ui.main.server.ServerFragment;
 import com.mdmobile.cyclops.ui.main.users.UsersFragment;
-import com.mdmobile.cyclops.ui.settings.AppCompatPreferenceActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -54,7 +51,6 @@ import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Observable;
 
 import static android.view.View.GONE;
 import static com.mdmobile.cyclops.R.id.main_activity_fragment_container;
@@ -70,7 +66,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     public static final String UPDATE_LOADING_BAR_ACTION_COUNT = "com.mdmobile.cyclops.UPDATE_LOADING_BAR_ACTIONS";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
-    //Define a flag if we are in tablet layout or not
     public static boolean TABLET_MODE;
     String devId, devName;
     Toolbar filtersToolbar;
@@ -183,11 +178,11 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                 logout();
                 navigationDrawer.closeDrawer(Gravity.START, true);
                 return true;
-            case R.id.drawer_settings:
-                Intent intent = new Intent(this, AppCompatPreferenceActivity.class);
-                startActivity(intent);
-                navigationDrawer.closeDrawer(Gravity.START, true);
-                return true;
+//            case R.id.drawer_settings:
+//                Intent intent = new Intent(this, SettingsActivity.class);
+//                startActivity(intent);
+//                navigationDrawer.closeDrawer(Gravity.START, true);
+//                return true;
             case R.id.nav_drawer_add_server:
                 launchLoginActivity();
                 return true;
@@ -484,19 +479,27 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         // 2. Current user preferences
         // 3. Go back to login activity
         // TODO: optimize
-        String serverName = ServerUtility.getActiveServer().getServerName();
+        Server[] servers = ServerUtility.getAllServers();
+        String[] selectionArgs = new String[servers.length];
+        String selection = "";
+        for (int i = 0; i < servers.length; i++) {
+            selection = selection.concat(McContract.ServerInfo.NAME + "=? OR ");
+            selectionArgs[i] = servers[i].getServerName();
+        }
+        selection = selection.substring(0, selection.length() - 3);
 
         Cursor c = getContentResolver().query(McContract.ServerInfo.CONTENT_URI, new String[]{McContract.ServerInfo._ID},
-                McContract.ServerInfo.NAME + "=?", new String[]{serverName}, null);
+                selection, selectionArgs, null);
         if (c == null || !c.moveToFirst()) {
             return;
         }
-        int serverId = c.getInt(0);
+        do {
+            int serverId = c.getInt(0);
+            ServerUtility.deleteServer(serverId);
+        }while(c.moveToNext());
         c.close();
-        ServerUtility.deleteServer(serverId);
-
         UserUtility.clearUserPreferences(UserUtility.getUser().name);
-
+        AccountManager.get(this).removeAccount(UserUtility.getUser(),null,null);
         launchLoginActivity();
         finish();
     }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +40,6 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         implements NetworkCallBack {
 
 
-    private static final String ATTACHED_FRAGMENT_KEY = "FRAGMENT_ATTACHED";
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
     private final String SERVER_FRAG_TAG = "SERVER_FRAG_TAG";
     private final String USER_FRAG_TAG = "USER_FRAG_TAG";
@@ -114,30 +112,9 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
                         .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
             }
         }
-
-        //If activity was launched from authenticator get the intent with the auth response
         authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
-
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(ATTACHED_FRAGMENT_KEY, getAttachedFragmentTag());
-    }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if (authenticatorResponse == null) {
-//            if (UserUtility.checkAnyUserLogged()) {
-//                startMainActivity();
-//            }
-//        }
-//
-//    }
-
-    // Actions OnClick method -> change between server and user fragment
     public void changeSection(View v) {
         if (v.getId() == R.id.add_server_button) {
             serverButton.setVisibility(View.GONE);
@@ -166,19 +143,13 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         return SERVER_FRAG_TAG;
     }
 
-    //Create accountsUpdateListener and return info to accountsUpdateListener authenticator
     private void finishLogin(Bundle userInput, Token response) {
         //TODO: support multiple account
         String userName, tokenType = null, accountType = null, psw;
         Boolean newAccount = true;
-
-        //Save new user in Account, if we are here is because there is no accountsUpdateListener saved so
-        //we will add it explicitly
         Bundle userInfo = new Bundle();
-
         userName = userInput.getString(USER_NAME_KEY);
         psw = userInput.getString(PASSWORD_KEY);
-
 
         userInfo.putInt(AUTH_TOKEN_EXPIRATION_KEY, response.getTokenExpiration());
         userInfo.putString(REFRESH_AUTH_TOKEN_KEY, response.getRefreshToken());
@@ -209,39 +180,27 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
 
         if (newAccount) {
             account = new Account(userName, accountType);
-            //Create the accountsUpdateListener
             accountManager.addAccountExplicitly(account, psw, userInfo);
             accountManager.setPassword(account, psw);
         } else {
             account = accountManager.getAccountsByType(getString(R.string.account_type))[0];
-            //Update accountsUpdateListener with new info
             accountManager.setPassword(account, psw);
-            //Update account with new user data (token type would be teh same, the others may have changed)
             UserUtility.updateUserData(userInfo);
         }
-
-        //Set the token we have for this accountsUpdateListener
         accountManager.setAuthToken(account, tokenType, response.getAccess_token());
-
-        //Initialize SyncAdapter for periodic devices checks
         DevicesSyncAdapter.initializeSync(account);
 
-        //If activity was launched from accountsUpdateListener authenticator return data back
         if (authenticatorResponse != null) {
             setAccountAuthenticatorResult(getIntent().getExtras());
-
-            // Tell the accountsUpdateListener manager settings page that all went well
             setResult(RESULT_OK, getIntent());
             finish();
         } else {
-            //Launch MainActivity
             startMainActivity();
         }
 
     }
 
     private void startMainActivity() {
-        //Login done launch main activity
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -59,7 +59,8 @@ public class DashboardFragment extends BasicFragment implements Statistic.IStati
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.charts_preference))) {
             String prefJson = preferences.getString(key, null);
-            if (prefJson == null) {
+            if (prefJson == null || prefJson.equals("[]")) {
+                chartsRecycler.setAdapter(null);
                 return;
             }
             createCharts();

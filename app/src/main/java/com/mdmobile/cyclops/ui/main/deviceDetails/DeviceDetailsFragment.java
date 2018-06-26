@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
@@ -77,6 +78,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
     private Server activeServer;
+    private ProgressBar profileProgressBar, infoProgressBar, appsProgressBar;
 
     public DeviceDetailsFragment() {
     }
@@ -131,10 +133,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
         switch (loader.getId()) {
             case LOAD_INFO:
-//                setLevelBars(c);
-//                BasicDevice dev = new BasicDevice();
-//                Bundle a = new Bundle();
-//                a.putParcelable("S", dev);
                 data.moveToFirst();
                 device = DeviceFactory.Companion.createDevice(data).get(0);
                 setHeader();
@@ -155,9 +153,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
     }
-
 
     // -- Lifecycle methods
     @Override
@@ -207,6 +203,9 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         CardView infoCard = rootView.findViewById(R.id.device_details_info_card);
         CardView appsCard = rootView.findViewById(R.id.device_details_apps_card);
         profilesCard = rootView.findViewById(R.id.device_details_profiles_card);
+        profileProgressBar = profilesCard.findViewById(R.id.profiles_loading_view);
+        infoProgressBar = infoCard.findViewById(R.id.info_loading_view);
+        appsProgressBar = appsCard.findViewById(R.id.apps_loading_view);
         devInfoRecycler = infoCard.findViewById(R.id.device_details_info_recycler);
         profilesRecycler = rootView.findViewById(R.id.device_details_profiles_recycler);
         View profileEmptyView = profilesCard.findViewById(R.id.profiles_empty_view);
@@ -223,28 +222,18 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         devInfoRecycler.setAdapter(null);
         profilesRecycler.setAdapter(null);
         installedAppsRecycler.setAdapter(null);
-//        batteryView = rootView.findViewById(R.id.device_details_battery);
-//        wifiView = rootView.findViewById(R.id.device_details_wifi);
-//        simView = rootView.findViewById(R.id.device_details_simcard);
-//        ramView = rootView.findViewById(R.id.device_details_memory);
-//        sdCardView = rootView.findViewById(R.id.device_details_sdcard);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             titleIconView.setTransitionName(iconTransitionName);
             titleView.setTransitionName(nameTransitionName);
         }
 
-        //Profiles card listener is set in loader call back in case there are no profiles assigned
-        //info and app are populated in any case
         infoCard.setOnClickListener(this);
         appsCard.setOnClickListener(this);
-
 
         titleIconView.setImageResource(R.drawable.ic_phone_android);
         titleView.setText(deviceName);
         subtitleView.setText(deviceId);
-
-
         return rootView;
     }
 
@@ -259,8 +248,11 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
 //        getActivity().supportStartPostponedEnterTransition();
         getLoaderManager().initLoader(LOAD_INFO, null, this);
+        infoProgressBar.setVisibility(View.VISIBLE);
         getLoaderManager().initLoader(LOAD_PROFILE, null, this);
+        profileProgressBar.setVisibility(View.VISIBLE);
         getLoaderManager().initLoader(LOAD_APPS, null, this);
+        appsProgressBar.setVisibility(View.VISIBLE);
     }
 
 
@@ -430,7 +422,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             }
             infoList.add(new String[]{label, contentValues.getAsString(key)});
         }
-        devInfoRecycler.swapAdapter(new InfoAdapter(infoList, true), true);
+        infoProgressBar.setVisibility(View.GONE);
+        devInfoRecycler.setAdapter(new InfoAdapter(infoList, true));
     }
 
     private void setProfilesCard(Cursor data) {
@@ -456,8 +449,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                     data.getString(data.getColumnIndex(McContract.Profile.STATUS))});
             data.moveToNext();
         } while (!data.isAfterLast());
-
-        profilesRecycler.swapAdapter(new InfoAdapter(profileList, true), true);
+        profileProgressBar.setVisibility(View.GONE);
+        profilesRecycler.setAdapter(new InfoAdapter(profileList, true));
         profilesCard.setOnClickListener(this);
     }
 
@@ -477,7 +470,8 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             appList.add(new String[]{data.getString(2), data.getString(3)});
             data.moveToNext();
         } while (!data.isAfterLast());
-        installedAppsRecycler.swapAdapter(new InfoAdapter(appList, true), true);
+        appsProgressBar.setVisibility(View.GONE);
+        installedAppsRecycler.setAdapter(new InfoAdapter(appList, true));
     }
 
     private void hideDetailsFragment() {

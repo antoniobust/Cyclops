@@ -125,16 +125,16 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
         val pieData = PieData()
         val chartData = chartsDataList[position]
 
-        for (i in chartData.second.indices) {
-            pieEntries.add(PieEntry(chartData.second[i].value.toFloat(), chartData.second[i].label))
+        if(chartData.second.size > 0) {
+            for (i in chartData.second.indices) {
+                pieEntries.add(PieEntry(chartData.second[i].value.toFloat(), chartData.second[i].label))
+            }
+            pieDataSet = PieDataSet(pieEntries, null)
+            pieDataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
+            pieData.addDataSet(pieDataSet)
+            pieData.setValueTextSize(0f)
+            pieChart.data = pieData
         }
-
-        pieDataSet = PieDataSet(pieEntries, null)
-        pieDataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
-        pieData.addDataSet(pieDataSet)
-        pieData.setValueTextSize(0f)
-
-        pieChart.data = pieData
 
         val legend = pieChart.legend
         legend.isWordWrapEnabled = true
@@ -164,6 +164,7 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
         pieChart.setOnChartValueSelectedListener(holder)
 
         pieChart.setNoDataText(holder.chartContainer.context.getString(R.string.no_data_found_chart))
+        pieChart.setNoDataTextColor(holder.itemView.context.resources.getColor(R.color.colorPrimary))
     }
 
     class ChartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), OnChartValueSelectedListener {

@@ -4,11 +4,23 @@
     style="@style/AppTheme.MainActivity.Fragment"
     tools:context=".ui.main.users.UsersFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <com.mdmobile.cyclops.utils.RecyclerEmptyView
         android:id="@+id/users_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         tools:listitem="@layout/user_list_item"/>
+
+    <TextView
+        android:id="@+id/user_list_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/empty_user_list_label"
+        android:textColor="@color/colorPrimaryDark"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:visibility="gone"
+        />
 
 </FrameLayout>

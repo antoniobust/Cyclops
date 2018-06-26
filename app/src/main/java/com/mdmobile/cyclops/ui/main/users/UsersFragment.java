@@ -18,6 +18,7 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.UserListAdapter;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.BasicFragment;
+import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
 
@@ -50,12 +51,12 @@ public class UsersFragment extends BasicFragment implements LoaderManager.Loader
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         adapter.swapCursor(null);
     }
 
@@ -65,7 +66,7 @@ public class UsersFragment extends BasicFragment implements LoaderManager.Loader
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //Apply style to fragment
         final Context contextThemeWrapper = new android.view.ContextThemeWrapper(getActivity(), R.style.AppTheme_MainActivity_Fragment);
@@ -74,8 +75,9 @@ public class UsersFragment extends BasicFragment implements LoaderManager.Loader
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_users, container, false);
-        RecyclerView recycler = rootView.findViewById(R.id.users_recycler);
+        RecyclerEmptyView recycler = rootView.findViewById(R.id.users_recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recycler.setEmptyView(rootView.findViewById(R.id.user_list_empty_view));
 
         adapter = new UserListAdapter(null);
         recycler.setAdapter(adapter);

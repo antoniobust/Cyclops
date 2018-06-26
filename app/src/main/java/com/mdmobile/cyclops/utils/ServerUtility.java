@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_MULTI_PROCESS;
 import static android.content.Context.MODE_PRIVATE;
-import static android.content.Context.MODE_WORLD_READABLE;
 import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 
 /**
@@ -59,6 +58,10 @@ public class ServerUtility {
         }
     }
 
+    public static void setActiveServer(String serverName) {
+        setActiveServer(getServer(serverName));
+    }
+
     public static void setActiveServer(Server server) {
         SharedPreferences.Editor editor = applicationContext
                 .getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE).edit();
@@ -74,10 +77,6 @@ public class ServerUtility {
 
     }
 
-    public static void setActiveServer(String serverName) {
-        setActiveServer(getServer(serverName));
-    }
-
     public static void deactivateServer() {
         SharedPreferences.Editor editor =
                 applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_MULTI_PROCESS).edit();
@@ -87,8 +86,6 @@ public class ServerUtility {
         editor.remove(applicationContext.getString(R.string.server_address_preference));
         editor.apply();
         Logger.log(LOG_TAG, " active server deactivated", Log.VERBOSE);
-
-
     }
 
     public static int serverStatus(ServerInfo.DeploymentServer server) {
@@ -152,7 +149,6 @@ public class ServerUtility {
                 .setSmallIcon(R.drawable.ic_block)
                 .setContentTitle(applicationContext.getString(R.string.notification_server_status_title))
                 .setContentText(message);
-
 
         NotificationManager notificationManager = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notificationBuilder.build());

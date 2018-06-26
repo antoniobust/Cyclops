@@ -82,7 +82,6 @@ public class ServerInfoRequest extends BasicRequest<String> {
             uri = McContract.buildUriWithServerName(McContract.DsInfo.CONTENT_URI, serverInfo.getServerName());
             applicationContext.getContentResolver().delete(uri, null, null);
 
-            //TODO: update serverInfo. version could have changed since last sync
             if (managementServers.size() > 1) {
                 applicationContext.getContentResolver().bulkInsert(McContract.MsInfo.CONTENT_URI,
                         DbData.prepareMsValues(managementServers, serverId));

@@ -1,7 +1,5 @@
 package com.mdmobile.cyclops.ui.main.deviceDetails;
 
-import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -39,6 +37,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
     public static final String EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY = "DeviceIconTransition";
     public static final String EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY = "DeviceNameTransition";
     private final String LOG_TAG = DeviceDetailsActivity.class.getSimpleName();
+    public Server activeServer;
     FloatingActionButton mainFab;
     FloatingActionButton subFab1;
     FloatingActionButton subFab2;
@@ -50,10 +49,9 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
     TextView label4;
     String deviceName;
     String deviceId;
+    ImageView remoteControlButton;
     private String nameTransitionName;
     private String iconTransitionName;
-    public Server activeServer;
-    ImageView remoteControlButton;
 
     // -- Interface methods
     @Override
@@ -94,13 +92,13 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
         label3 = findViewById(R.id.fab_label3);
         label4 = findViewById(R.id.fab_label4);
 
-        if(activeServer.getServerMajorVersion() >= 1400){
+        if (activeServer.getServerMajorVersion() >= 1400) {
             remoteControlButton.setVisibility(View.VISIBLE);
             remoteControlButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     RemoteControl rcFragment = RemoteControl.newInstance(deviceId);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.device_details_activity_main_container,rcFragment)
+                    getSupportFragmentManager().beginTransaction().replace(R.id.device_details_activity_main_container, rcFragment)
                             .commit();
                 }
             });
@@ -207,7 +205,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
         switch (view.getId()) {
             case R.id.sub_fab1:
                 //Check in action
-                ApiRequestManager.getInstance().requestAction(server,deviceId, ApiActions.CHECKIN, null, null);
+                ApiRequestManager.getInstance().requestAction(server, deviceId, ApiActions.CHECKIN, null, null);
                 break;
             case R.id.sub_fab2:
                 //Script action
@@ -215,7 +213,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
                 break;
             case R.id.sub_fab3:
                 //Localize action
-                ApiRequestManager.getInstance().requestAction(server,deviceId, ApiActions.LOCATE, null, null);
+                ApiRequestManager.getInstance().requestAction(server, deviceId, ApiActions.LOCATE, null, null);
                 break;
             case R.id.sub_fab4:
                 //send message action

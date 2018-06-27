@@ -19,13 +19,13 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mdmobile.cyclops.ApplicationLoader.applicationContext
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.chart.Chart
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatDataEntry
+import com.mdmobile.cyclops.ui.main.dashboard.statistics.Statistic
 import com.mdmobile.cyclops.utils.GeneralUtility
 import com.mdmobile.cyclops.utils.LabelHelper
 
@@ -39,6 +39,9 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
         android.widget.PopupMenu.OnMenuItemClickListener {
 
     private val LOG_TAG = ChartsAdapter::class.java.simpleName
+    var colors = mutableListOf(R.color.orange, R.color.cyan, R.color.yellow, R.color.green, R.color.blue,
+            R.color.pink, R.color.teal, R.color.red)
+
 
     override fun onClick(view: View) {
 
@@ -97,7 +100,7 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
         notifyDataSetChanged()
     }
 
-    fun addChart(chartDataList :kotlin.Pair<String, ArrayList<StatDataEntry>>, position:Int ){
+    fun addChart(chartDataList: kotlin.Pair<String, ArrayList<StatDataEntry>>, position: Int) {
         chartsDataList.add(chartDataList)
         notifyItemInserted(position)
     }
@@ -125,12 +128,14 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
         val pieData = PieData()
         val chartData = chartsDataList[position]
 
-        if(chartData.second.size > 0) {
+        if (chartData.second.size > 0) {
             for (i in chartData.second.indices) {
                 pieEntries.add(PieEntry(chartData.second[i].value.toFloat(), chartData.second[i].label))
             }
             pieDataSet = PieDataSet(pieEntries, null)
-            pieDataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
+
+            colors.shuffle()
+            pieDataSet.setColors(colors.toIntArray(), holder.itemView.context)
             pieData.addDataSet(pieDataSet)
             pieData.setValueTextSize(0f)
             pieChart.data = pieData
@@ -140,10 +145,10 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
         legend.isWordWrapEnabled = true
         legend.form = Legend.LegendForm.CIRCLE
         legend.formSize = 8f
-        legend.xEntrySpace = 14f
+        legend.xEntrySpace = 12f
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
         legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        legend.maxSizePercent = 0.1f
+        legend.maxSizePercent = 0.2f
 
         var chartProperty = chartsDataList[position].first
         chartProperty = LabelHelper.getUiLabelFor(chartProperty)

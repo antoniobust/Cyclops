@@ -75,6 +75,16 @@
         <!--<item>Bar Chart</item>-->
         <!--<item>Horizontal bar chart</item>-->
     </string-array>
+
+    <array name="chart_colors">
+        <item>@color/cyan</item>
+        <item>@color/pink</item>
+        <item>@color/yellow</item>
+        <item>@color/red</item>
+        <item>@color/teal</item>
+        <item>@color/orange</item>
+        <item>@color/green</item>
+    </array>
 </resources>
 
 

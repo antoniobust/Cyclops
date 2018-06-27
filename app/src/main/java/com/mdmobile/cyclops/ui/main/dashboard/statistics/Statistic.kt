@@ -18,10 +18,10 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
     companion object {
         const val COUNTER_STAT = 1
         const val COUNTER_RANGE = 2
+        const val MAX_POPULATION_SIZE = 7
     }
 
     private lateinit var devices : ArrayList<BasicDevice>
-    private val maxPopulationSize = 7
     private val logTag = Statistic::class.java.simpleName
     private val statDataList = ArrayList<Pair<String, ArrayList<StatDataEntry>>>()
 
@@ -96,11 +96,11 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
 
     private fun formatResult(statsDataList: ArrayList<StatDataEntry>): ArrayList<StatDataEntry> {
         //If collection is bigger than 6 different values we will just show "others" with the sum of other entries
-        if (statsDataList.size <= maxPopulationSize) {
+        if (statsDataList.size <= MAX_POPULATION_SIZE) {
             return statsDataList
         }
         var sum = 0
-        for (i in statsDataList.size downTo maxPopulationSize) {
+        for (i in statsDataList.size downTo MAX_POPULATION_SIZE) {
             sum += statsDataList[i - 1].value
             statsDataList.removeAt(i - 1)
         }

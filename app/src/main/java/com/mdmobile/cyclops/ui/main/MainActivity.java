@@ -474,10 +474,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     }
 
     private void logout() {
-        // To log out we need to clear
-        // 1. The server currently active and all related devices
-        // 2. Current user preferences
-        // 3. Go back to login activity
         // TODO: optimize
         Server[] servers = ServerUtility.getAllServers();
         String[] selectionArgs = new String[servers.length];
@@ -496,10 +492,10 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         do {
             int serverId = c.getInt(0);
             ServerUtility.deleteServer(serverId);
-        }while(c.moveToNext());
+        } while (c.moveToNext());
         c.close();
         UserUtility.clearUserPreferences(UserUtility.getUser().name);
-        AccountManager.get(this).removeAccount(UserUtility.getUser(),null,null);
+        AccountManager.get(this).removeAccount(UserUtility.getUser(), null, null);
         launchLoginActivity();
         finish();
     }

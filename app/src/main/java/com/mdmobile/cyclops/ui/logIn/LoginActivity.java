@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
+import com.mdmobile.cyclops.ui.dialogs.HintDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -37,7 +39,7 @@ import static com.mdmobile.cyclops.utils.UserUtility.USER_NAME_KEY;
 import static com.mdmobile.cyclops.utils.UserUtility.checkAnyUserLogged;
 
 public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticatorActivity
-        implements NetworkCallBack {
+        implements NetworkCallBack, View.OnClickListener {
 
 
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
@@ -46,8 +48,18 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     public boolean activityForResult = false;
     private TextView serverButton, userButton;
     private AccountAuthenticatorResponse authenticatorResponse;
+    private ImageView hintView;
 
     // -- Interface methods
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.light_bulb_view:
+                HintDialog.Companion.newInstance(getString(R.string.api_console_hint)).show(getSupportFragmentManager(),null);
+                break;
+        }
+    }
+
     @Override
     public void tokenReceived(Bundle userInput, Token response) {
         if (BuildConfig.DEBUG) {
@@ -98,6 +110,7 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
 
         serverButton = findViewById(R.id.add_server_button);
         userButton = findViewById(R.id.add_user_button);
+        hintView = findViewById(R.id.light_bulb_view);
 
         if (savedInstanceState == null) {
             if (!UserUtility.checkAnyUserLogged() || getCallingActivity() != null) {
@@ -113,6 +126,8 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
             }
         }
         authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
+
+        hintView.setOnClickListener(this);
     }
 
     public void changeSection(View v) {

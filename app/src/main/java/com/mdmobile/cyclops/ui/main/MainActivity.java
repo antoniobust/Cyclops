@@ -37,6 +37,7 @@ import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
 import com.mdmobile.cyclops.ui.BaseActivity;
 import com.mdmobile.cyclops.ui.BasicFragment;
+import com.mdmobile.cyclops.ui.dialogs.HintDialog;
 import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.ui.main.dashboard.DashboardFragment;
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity;
@@ -98,7 +99,6 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             }
         }
     };
-
     private NavigationView drawerNavigationView;
     private DrawerLayout navigationDrawer;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -507,5 +507,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
     private int calculateDelta(int max, int units) {
         return max / (units * 3);
+    }
+
+    private void showServerServerSecretHint() {
+        HintDialog.Companion.newInstance("bkaaaa");
     }
 }

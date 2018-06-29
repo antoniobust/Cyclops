@@ -42,6 +42,7 @@ public class ApplicationLoader extends Application {
             Gson gson = new Gson();
             String json = gson.toJson(defaultChart, deviceCollectionType);
             GeneralUtility.setSharedPreference(applicationContext, getString(R.string.charts_preference), json);
+            GeneralUtility.setSharedPreference(applicationContext, getString(R.string.first_boot_preference), false);
 
             Logger.log(LOG_TAG,
                     "First boot... Added following charts:\n" + json.replace("},{", "}\n{") + "}\n in saved charts",

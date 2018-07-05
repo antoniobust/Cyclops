@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android-extensions'
 
 
 // Load keystore
@@ -16,8 +18,8 @@ android {
         applicationId "com.mdmobile.cyclops"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 4
-        versionName "0.0.4"
+        versionCode 6
+        versionName "0.0.401"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         lintOptions.abortOnError false
@@ -77,8 +79,8 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    implementation project(':PlayLicencing')
     implementation 'com.android.support:support-dynamic-animation:27.1.1'
-    implementation 'com.google.firebase:firebase-core:15.0.0'
     implementation 'com.android.volley:volley:1.0.0'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
@@ -100,9 +102,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
 }
-
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'kotlin-android-extensions'
 
 repositories {
     mavenCentral()

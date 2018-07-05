@@ -25,7 +25,6 @@ import com.mdmobile.cyclops.ApplicationLoader.applicationContext
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.chart.Chart
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatDataEntry
-import com.mdmobile.cyclops.ui.main.dashboard.statistics.Statistic
 import com.mdmobile.cyclops.utils.GeneralUtility
 import com.mdmobile.cyclops.utils.LabelHelper
 
@@ -39,8 +38,8 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
         android.widget.PopupMenu.OnMenuItemClickListener {
 
     private val LOG_TAG = ChartsAdapter::class.java.simpleName
-    var colors = mutableListOf(R.color.orange, R.color.cyan, R.color.yellow, R.color.green, R.color.blue,
-            R.color.pink, R.color.teal, R.color.red)
+    private val colors = arrayOf(R.color.blue_dark,R.color.teal,R.color.colorPrimary, R.color.red,
+            R.color.orange, R.color.yellow, R.color.dark_grey).toIntArray()
 
 
     override fun onClick(view: View) {
@@ -134,8 +133,7 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
             }
             pieDataSet = PieDataSet(pieEntries, null)
 
-            colors.shuffle()
-            pieDataSet.setColors(colors.toIntArray(), holder.itemView.context)
+            pieDataSet.setColors(colors, holder.itemView.context)
             pieData.addDataSet(pieDataSet)
             pieData.setValueTextSize(0f)
             pieChart.data = pieData

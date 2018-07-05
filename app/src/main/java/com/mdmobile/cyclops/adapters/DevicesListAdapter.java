@@ -149,7 +149,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                         break;
                     case R.id.action_send_message:
                         //send message action
-                        MessageDialog.newInstance(selected)
+                        MessageDialog.Companion.newInstance(selected)
                                 .show(((MainActivity) mContext).getSupportFragmentManager(), null);
                         break;
                 }

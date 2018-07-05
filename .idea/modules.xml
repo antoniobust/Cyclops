@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Cyclops.iml" filepath="$PROJECT_DIR$/Cyclops.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayLicencing/PlayLicencing.iml" filepath="$PROJECT_DIR$/PlayLicencing/PlayLicencing.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

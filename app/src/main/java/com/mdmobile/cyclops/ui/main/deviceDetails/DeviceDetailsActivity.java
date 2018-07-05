@@ -217,7 +217,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
                 break;
             case R.id.sub_fab4:
                 //send message action
-                MessageDialog.newInstance(deviceId).show(getSupportFragmentManager(), null);
+                MessageDialog.Companion.newInstance(deviceId).show(getSupportFragmentManager(), null);
                 break;
         }
         hideFabs();

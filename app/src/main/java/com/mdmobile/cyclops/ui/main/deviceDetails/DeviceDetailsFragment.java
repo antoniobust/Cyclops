@@ -44,7 +44,6 @@ import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.ui.dialogs.ConfirmActionDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
-import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.LabelHelper;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
@@ -181,9 +180,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
         if (getActivity() != null) {
             Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-            if (GeneralUtility.isTabletMode(getContext())) {
-                toolbar.setVisibility(View.GONE);
-            }
             ActionBar actionBar;
             ((DeviceDetailsActivity) getActivity()).setSupportActionBar(toolbar);
             actionBar = ((DeviceDetailsActivity) getActivity()).getSupportActionBar();

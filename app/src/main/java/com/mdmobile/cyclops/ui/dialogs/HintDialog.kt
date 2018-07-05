@@ -26,5 +26,4 @@ class HintDialog : DialogFragment() {
                 .setPositiveButton(R.string.ok_label, null)
                 .create()
     }
-
 }

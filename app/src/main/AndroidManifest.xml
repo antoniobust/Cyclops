@@ -3,6 +3,7 @@
           package="com.mdmobile.cyclops">
 
     <!-- Permissions -->
+    <uses-permission android:name="com.android.vending.CHECK_LICENSE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>

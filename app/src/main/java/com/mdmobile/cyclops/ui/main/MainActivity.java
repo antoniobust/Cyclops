@@ -3,6 +3,7 @@ package com.mdmobile.cyclops.ui.main;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.animation.Animator;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +11,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -29,6 +32,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.vending.licensing.AESObfuscator;
+import com.google.android.vending.licensing.LicenseChecker;
+import com.google.android.vending.licensing.LicenseCheckerCallback;
+import com.google.android.vending.licensing.Policy;
+import com.google.android.vending.licensing.ServerManagedPolicy;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
@@ -37,7 +45,7 @@ import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
 import com.mdmobile.cyclops.ui.BaseActivity;
 import com.mdmobile.cyclops.ui.BasicFragment;
-import com.mdmobile.cyclops.ui.dialogs.HintDialog;
+import com.mdmobile.cyclops.ui.dialogs.LicenceErrorDialog;
 import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.ui.main.dashboard.DashboardFragment;
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity;
@@ -45,6 +53,7 @@ import com.mdmobile.cyclops.ui.main.myDevices.DevicesFragment;
 import com.mdmobile.cyclops.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.cyclops.ui.main.server.ServerFragment;
 import com.mdmobile.cyclops.ui.main.users.UsersFragment;
+import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -54,6 +63,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.view.View.GONE;
+import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 import static com.mdmobile.cyclops.R.id.main_activity_fragment_container;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
@@ -67,7 +77,10 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     public static final String UPDATE_LOADING_BAR_ACTION_COUNT = "com.mdmobile.cyclops.UPDATE_LOADING_BAR_ACTIONS";
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String TOOLBAR_FILTER_STATUS = "FILTER_TOOLBAR_VISIBILITY";
-    public static boolean TABLET_MODE;
+    private static final byte[] SALT = new byte[]{
+            -56, 45, 35, -128, -3, -57, 74, -64, 51, 88, -95,
+            -45, 77, -17, -36, -113, -111, 13, -54, 99};
+    public static boolean TABLET_MODE = GeneralUtility.isTabletMode(applicationContext);
     String devId, devName;
     Toolbar filtersToolbar;
     RecyclerEmptyView filtersRecycler;
@@ -99,6 +112,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             }
         }
     };
+    private LicenseChecker mLicenceChecker;
+    private LicenseCheckerCallback mLicenseCheckerCallback;
+    private Handler mHandler;
     private NavigationView drawerNavigationView;
     private DrawerLayout navigationDrawer;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -228,12 +244,28 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
 
+        mHandler = new Handler();
+        mLicenseCheckerCallback = new LicenceCheckerCallback();
+        mLicenceChecker = new LicenseChecker(this,
+                new ServerManagedPolicy(this,
+                        new AESObfuscator(SALT, applicationContext.getPackageName(), Settings.Secure.ANDROID_ID)),
+                getString(R.string.app_billing_public_key)
+        );
+
+        checkLicence();
+
         progressBar = findViewById(R.id.loading_bar);
         setNavigationDrawer();
         setFiltersView();
         setLastSyncTimeView();
         setBottomNavigationView(savedInstanceState);
         setActionBar();
+
+
+    }
+
+    public void checkLicence() {
+        mLicenceChecker.checkAccess(mLicenseCheckerCallback);
     }
 
     private void setActionBar() {
@@ -268,7 +300,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         intentFilter.addAction(SYNC_DONE_BROADCAST_ACTION);
         intentFilter.addAction(UPDATE_LOADING_BAR_ACTION);
         this.registerReceiver(syncReceiver, intentFilter);
-
+        checkLicence();
         getSharedPreferences(getString(R.string.server_shared_preference), MODE_PRIVATE)
                 .registerOnSharedPreferenceChangeListener(this);
 
@@ -290,6 +322,12 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             outState.putString(DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY, devId);
         }
         outState.putInt(TOOLBAR_FILTER_STATUS, filtersToolbar.getVisibility());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLicenceChecker.onDestroy();
     }
 
     private void syncDevicesNow() {
@@ -509,7 +547,40 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         return max / (units * 3);
     }
 
-    private void showServerServerSecretHint() {
-        HintDialog.Companion.newInstance("bkaaaa");
+    private void displayDialog(final boolean showRetry) {
+        mHandler.post(new Runnable() {
+            public void run() {
+                LicenceErrorDialog dialog = LicenceErrorDialog.Companion.newInstance(showRetry);
+                dialog.show(getSupportFragmentManager(),"licenceError");
+            }
+        });
+    }
+
+    private class LicenceCheckerCallback implements LicenseCheckerCallback {
+
+        @Override
+        public void allow(int reason) {
+            //Do nothing
+            Logger.log(LOG_TAG, "Valid installation licence: " + reason, Log.VERBOSE);
+        }
+
+        @Override
+        public void dontAllow(int reason) {
+            Logger.log(LOG_TAG, "Invalid installation licence: " + reason, Log.ERROR);
+            if (isFinishing()) {
+                return;
+            }
+            if (reason == Policy.RETRY) {
+                displayDialog(true);
+                return;
+            }
+            displayDialog(false);
+        }
+
+        @Override
+        public void applicationError(int errorCode) {
+            Logger.log(LOG_TAG, "Application error verifying installation licence:" + errorCode, Log.ERROR);
+        }
+
     }
 }

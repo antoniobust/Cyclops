@@ -17,7 +17,7 @@ import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
-import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
+import com.mdmobile.cyclops.sync.SyncService;
 import com.mdmobile.cyclops.ui.dialogs.HintDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
@@ -203,7 +203,7 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
             UserUtility.updateUserData(userInfo);
         }
         accountManager.setAuthToken(account, tokenType, response.getAccess_token());
-        DevicesSyncAdapter.initializeSync(account);
+        SyncService.initializeSync(account);
 
         if (authenticatorResponse != null) {
             setAccountAuthenticatorResult(getIntent().getExtras());

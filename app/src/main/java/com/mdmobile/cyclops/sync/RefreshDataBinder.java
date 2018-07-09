@@ -8,7 +8,7 @@ public class RefreshDataBinder extends Service {
     // Object to use as a thread-safe lock
     private static final Object sSyncAdapterLock = new Object();
     // Storage for an instance of the sync adapter
-    private static DevicesSyncAdapter sSyncAdapter = null;
+    private static SyncService sSyncAdapter = null;
 
     public RefreshDataBinder() {
     }
@@ -17,7 +17,7 @@ public class RefreshDataBinder extends Service {
     public void onCreate() {
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null) {
-                sSyncAdapter = new DevicesSyncAdapter(getApplicationContext(), true);
+                sSyncAdapter = new SyncService(getApplicationContext(), true);
             }
         }
     }

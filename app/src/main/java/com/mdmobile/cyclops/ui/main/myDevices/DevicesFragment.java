@@ -31,7 +31,7 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
-import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
+import com.mdmobile.cyclops.sync.SyncService;
 import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.dialogs.PinFolderDialog;
 import com.mdmobile.cyclops.ui.dialogs.SortingDeviceDialog;
@@ -115,8 +115,8 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setProgress(0);
         Bundle b = new Bundle();
-        b.putBoolean(DevicesSyncAdapter.SYNC_DEVICES,true);
-        DevicesSyncAdapter.syncImmediately(account,b);
+        b.putBoolean(SyncService.SYNC_DEVICES,true);
+        SyncService.syncImmediately(account,b);
         mSwipeToRefresh.setRefreshing(false);
     }
 

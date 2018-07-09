@@ -3,7 +3,6 @@ package com.mdmobile.cyclops.ui.main;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.animation.Animator;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -42,7 +41,7 @@ import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
-import com.mdmobile.cyclops.sync.DevicesSyncAdapter;
+import com.mdmobile.cyclops.sync.SyncService;
 import com.mdmobile.cyclops.ui.BaseActivity;
 import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.dialogs.LicenceErrorDialog;
@@ -114,7 +113,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     };
     private LicenseChecker mLicenceChecker;
     private LicenseCheckerCallback mLicenseCheckerCallback;
-    private Handler mHandler;
+    private Handler mLicenceCheckHandler;
     private NavigationView drawerNavigationView;
     private DrawerLayout navigationDrawer;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -244,7 +243,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
 
-        mHandler = new Handler();
+        mLicenceCheckHandler = new Handler();
         mLicenseCheckerCallback = new LicenceCheckerCallback();
         mLicenceChecker = new LicenseChecker(this,
                 new ServerManagedPolicy(this,
@@ -334,8 +333,8 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         Logger.log(LOG_TAG, "Immediate device syc manually requested... ", Log.VERBOSE);
         Account account = UserUtility.getUser();
         Bundle b = new Bundle();
-        b.putBoolean(DevicesSyncAdapter.SYNC_DEVICES, true);
-        DevicesSyncAdapter.syncImmediately(account, b);
+        b.putBoolean(SyncService.SYNC_DEVICES, true);
+        SyncService.syncImmediately(account, b);
     }
 
     private void refreshToken() {
@@ -548,7 +547,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     }
 
     private void displayDialog(final boolean showRetry) {
-        mHandler.post(new Runnable() {
+        mLicenceCheckHandler.post(new Runnable() {
             public void run() {
                 LicenceErrorDialog dialog = LicenceErrorDialog.Companion.newInstance(showRetry);
                 dialog.show(getSupportFragmentManager(),"licenceError");

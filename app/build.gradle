@@ -19,7 +19,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 8
-        versionName "0.0.501"
+        versionName '0.0.501'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         lintOptions.abortOnError false

@@ -247,13 +247,14 @@
     <string name="ok_label">OK</string>
     <string name="api_console_hint"><![CDATA[You can insert your server details placing an XML file in the root folder.\n
     i.e. \n
+        ServerSetup.xml\n
         <McServer>\n
         \t<server name="serverName">\n
             \t\t<secret>…</secret>\n
             \t\t<clientId>…</clientId>\n
             \t\t<address>https://serverAddress/address>\n
         \t</server>\n
-            \t…\n
+          <server …>…</server>\n
         </McServer>\n
     ]]></string>
     <string name="licence_error_dialog_title">Licence error</string>

@@ -29,7 +29,6 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
     private static final String USER_NAME_KEY = "USER_NAME_KEY";
     private static final String PASSWORD_KEY = "PASSWORD_KEY";
     private TextView userNameView, passwordView;
-    private Spinner serverSpinner;
     private Button loginButton;
     private ProgressBar progressBar;
     private View.OnTouchListener pwdVisibilityListener = new View.OnTouchListener() {
@@ -94,7 +93,6 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.fragment_add_user, container, false);
         userNameView = rootView.findViewById(R.id.user_name_text_view);
         passwordView = rootView.findViewById(R.id.password_text_view);
-        serverSpinner = rootView.findViewById(R.id.login_servers_spinner);
         loginButton = rootView.findViewById(R.id.login_button);
         progressBar = rootView.findViewById(R.id.login_progress_view);
 
@@ -108,7 +106,6 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
         }
 
         loginButton.setOnClickListener(this);
-        serverSpinner.setAdapter(null);
         passwordView.setOnTouchListener(pwdVisibilityListener);
         return rootView;
     }

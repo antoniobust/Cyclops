@@ -8,6 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="end"
     android:clickable="true"
+    android:tint="@color/colorAccent"
     android:contentDescription="@string/hint_bulb_content_descritpion"
     android:focusable="true"
     android:padding="4dp"

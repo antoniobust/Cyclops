@@ -8,22 +8,22 @@
     android:orientation="vertical"
     tools:background="@android:color/black">
 
-    <include layout="@layout/info_button"/>
-
     <EditText
         android:id="@+id/server_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/server_name_hint"
-        android:textColorHint="@android:color/white"
-        android:inputType="textCapWords"/>
+        android:inputType="textCapWords"
+        android:textColor="@android:color/black"
+        android:textColorHint="@color/colorAccent"/>
 
     <EditText
         android:id="@+id/server_address_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textColorHint="@android:color/white"
         android:hint="@string/server_address_hint"
-        android:inputType="textCapWords"/>
+        android:inputType="textCapWords"
+        android:textColor="@android:color/black"
+        android:textColorHint="@color/colorAccent"/>
 </LinearLayout>

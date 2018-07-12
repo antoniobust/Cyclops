@@ -43,7 +43,7 @@ public class SortingDeviceDialog extends DialogFragment implements
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 //        ViewGroup container = (ViewGroup) getActivity().getWindow().getDecorView(;
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.sorting_dialog_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_sorting_dialog, null);
         AlertDialog dialog = new AlertDialog.Builder(getActivity()).setTitle(R.string.sort_devices_menu_label)
                 .setPositiveButton(R.string.dialog_apply_label, this)
                 .setNegativeButton(R.string.dialog_cancel_label, this)

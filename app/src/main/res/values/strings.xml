@@ -140,7 +140,7 @@
     <string name="add_filter_label">Add a filter…</string>
     <string name="add_new_user_label">Add new user</string>
     <string name="add_server_label">Add server</string>
-    <string name="xml_file_read">Server XML file read</string>
+    <string name="xml_file_read">Server added from XML file!</string>
     <string name="empty_device_list_label">:(\nCouldn\'t find devices</string>
     <string name="no_data_chart_label">Data could not be displayed</string>
     <string name="last_dev_sync_pref">last_device_sync</string>
@@ -149,7 +149,7 @@
     <string name="property_2_label">Second property</string>
     <string name="property_1_label">First property</string>
     <string name="dashboard_recycler_empty_view_label">Click the + button to create new charts</string>
-    <string name="server_name_hint">Server name</string>
+    <string name="server_name_hint">Instance name</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="server_settings_label">Server settings</string>
     <string name="title_activity_settings">Settings</string>

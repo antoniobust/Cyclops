@@ -18,8 +18,8 @@ android {
         applicationId "com.mdmobile.cyclops"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 8
-        versionName '0.0.501'
+        versionCode 9
+        versionName '0.0.600'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         lintOptions.abortOnError false

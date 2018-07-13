@@ -31,6 +31,7 @@ import com.mdmobile.cyclops.dataModel.api.devices.WindowsPhone;
 import com.mdmobile.cyclops.dataModel.api.devices.WindowsRuntime;
 import com.mdmobile.cyclops.dataTypes.DeviceKind;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -114,7 +115,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException|ServerNotFound e) {
             e.printStackTrace();
             return Response.error(new ParseError(e));
         }

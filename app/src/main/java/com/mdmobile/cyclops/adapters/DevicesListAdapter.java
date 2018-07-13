@@ -20,6 +20,7 @@ import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.MessageDialog;
 import com.mdmobile.cyclops.ui.dialogs.ScriptDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
@@ -133,11 +134,17 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Server activeServer = ServerUtility.getActiveServer();
+                Server activeServer;
+                try {
+                    activeServer = ServerUtility.getActiveServer();
+                } catch (ServerNotFound e) {
+                    e.printStackTrace();
+                    return false;
+                }
                 switch (menuItem.getItemId()) {
                     case R.id.action_checkin:
                         //Check in action
-                        ApiRequestManager.getInstance().requestAction(activeServer,selected, ApiActions.CHECKIN, null, null);
+                        ApiRequestManager.getInstance().requestAction(activeServer, selected, ApiActions.CHECKIN, null, null);
                         break;
                     case R.id.action_send_script:
                         //Script action
@@ -145,7 +152,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                         break;
                     case R.id.action_locate:
                         //Localize action
-                        ApiRequestManager.getInstance().requestAction(activeServer,selected, ApiActions.LOCATE, null, null);
+                        ApiRequestManager.getInstance().requestAction(activeServer, selected, ApiActions.LOCATE, null, null);
                         break;
                     case R.id.action_send_message:
                         //send message action

@@ -15,10 +15,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
@@ -77,9 +80,15 @@ public class AddNewUserFragment extends Fragment implements View.OnClickListener
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
         loginButton.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        ApiRequestManager.getInstance().getToken(
-                ServerUtility.getActiveServer(),
-                userName, password, (NetworkCallBack) getActivity());
+        try {
+            ApiRequestManager.getInstance().getToken(
+                    ServerUtility.getActiveServer(),
+                    userName, password, (NetworkCallBack) getActivity());
+        }catch (ServerNotFound e){
+            Toast.makeText(getContext(),"Add at least one instance...",Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.GONE);
+            loginButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

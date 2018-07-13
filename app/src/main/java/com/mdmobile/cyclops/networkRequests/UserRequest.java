@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.User;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.DbData;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -67,7 +68,7 @@ public class UserRequest extends BasicRequest<String> {
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));
 
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException|ServerNotFound e) {
             e.printStackTrace();
             return Response.error(new ParseError(e));
         }

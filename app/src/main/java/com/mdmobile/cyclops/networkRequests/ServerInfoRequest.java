@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.DbData;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -118,7 +119,7 @@ public class ServerInfoRequest extends BasicRequest<String> {
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException | ServerNotFound e) {
             e.printStackTrace();
             return Response.error(new ParseError(e));
         }

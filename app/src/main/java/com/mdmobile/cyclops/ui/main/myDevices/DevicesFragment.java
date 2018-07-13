@@ -5,6 +5,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -31,10 +32,12 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.sync.SyncService;
 import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.dialogs.PinFolderDialog;
 import com.mdmobile.cyclops.ui.dialogs.SortingDeviceDialog;
+import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -150,8 +153,14 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //Get sorting option from arguments and create query
         String sortingParameter, pathSelection = "", searchQuery = "";
-
-        Server server = ServerUtility.getActiveServer();
+        Server server;
+        try {
+            server = ServerUtility.getActiveServer();
+        } catch (ServerNotFound e){
+            e.printStackTrace();
+            LoginActivity.LaunchActivity();
+            return null;
+        }
 
         if (args.containsKey(SEARCH_QUERY_KEY)) {
             searchQuery = args.getString(SEARCH_QUERY_KEY);

@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.interfaces.OnTokenAcquired;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
@@ -110,8 +111,12 @@ abstract public class BasicRequest<T> extends Request<T> {
                         null, false, new OnTokenAcquired(new WeakReference<BasicRequest>(this)), null);
             }
         } else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
-            String serverName = ServerUtility.getActiveServer().getServerName();
-            ServerUtility.notifyServerStatus(serverName, ServerUtility.SERVER_OFFLINE);
+            try {
+                String serverName = ServerUtility.getActiveServer().getServerName();
+                ServerUtility.notifyServerStatus(serverName, ServerUtility.SERVER_OFFLINE);
+            }catch (ServerNotFound e){
+                e.printStackTrace();
+            }
         } else if (errorCode == 422) {
             //TODO: show error message in toast
         } else if (errorCode == HttpsURLConnection.HTTP_INTERNAL_ERROR) {

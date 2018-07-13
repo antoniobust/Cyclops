@@ -15,6 +15,7 @@ import android.util.Log;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -88,41 +89,45 @@ public class SyncService extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(final Account account, Bundle bundle, String authority,
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
-        Server activeServer = ServerUtility.getActiveServer();
-        ArrayList<String> actions = new ArrayList<>();
-        actions.add(SYNC_SERVER);
-        if (bundle.containsKey(SYNC_USERS) && bundle.getBoolean(SYNC_USERS)) {
-            actions.add(SYNC_USERS);
-        }
-        if (bundle.containsKey(SYNC_DEVICES) && bundle.getBoolean(SYNC_DEVICES)) {
-            actions.add(SYNC_DEVICES);
-        }
-        if (actions.size() == 0) {
-            actions.add(SYNC_USERS);
-            actions.add(SYNC_DEVICES);
+        try {
+            Server activeServer = ServerUtility.getActiveServer();
+            ArrayList<String> actions = new ArrayList<>();
             actions.add(SYNC_SERVER);
-        }
-
-        Logger.log(LOG_TAG, "Syncing " + activeServer.getServerName() +
-                "\n Action to perform:" + actions.toString(), Log.VERBOSE);
-
-        Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
-        intent.putExtra(MainActivity.UPDATE_LOADING_BAR_ACTION_COUNT, actions.size());
-        intent.setPackage(getContext().getPackageName());
-
-        for (String action : actions) {
-            if (action.equals(SYNC_DEVICES)) {
-                this.getContext().sendBroadcast(intent);
-                ApiRequestManager.getInstance().getDeviceInfo(activeServer);
+            if (bundle.containsKey(SYNC_USERS) && bundle.getBoolean(SYNC_USERS)) {
+                actions.add(SYNC_USERS);
             }
-            if (action.equals(SYNC_SERVER)) {
-                this.getContext().sendBroadcast(intent);
-                ApiRequestManager.getInstance().getServicesInfo(activeServer);
+            if (bundle.containsKey(SYNC_DEVICES) && bundle.getBoolean(SYNC_DEVICES)) {
+                actions.add(SYNC_DEVICES);
             }
-            if (action.equals(SYNC_USERS)) {
-                this.getContext().sendBroadcast(intent);
-                ApiRequestManager.getInstance().getUsers(activeServer);
+            if (actions.size() == 0) {
+                actions.add(SYNC_USERS);
+                actions.add(SYNC_DEVICES);
+                actions.add(SYNC_SERVER);
             }
+
+            Logger.log(LOG_TAG, "Syncing " + activeServer.getServerName() +
+                    "\n Action to perform:" + actions.toString(), Log.VERBOSE);
+
+            Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
+            intent.putExtra(MainActivity.UPDATE_LOADING_BAR_ACTION_COUNT, actions.size());
+            intent.setPackage(getContext().getPackageName());
+
+            for (String action : actions) {
+                if (action.equals(SYNC_DEVICES)) {
+                    this.getContext().sendBroadcast(intent);
+                    ApiRequestManager.getInstance().getDeviceInfo(activeServer);
+                }
+                if (action.equals(SYNC_SERVER)) {
+                    this.getContext().sendBroadcast(intent);
+                    ApiRequestManager.getInstance().getServicesInfo(activeServer);
+                }
+                if (action.equals(SYNC_USERS)) {
+                    this.getContext().sendBroadcast(intent);
+                    ApiRequestManager.getInstance().getUsers(activeServer);
+                }
+            }
+        }catch (ServerNotFound e){
+            e.printStackTrace();
         }
     }
 

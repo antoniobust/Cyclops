@@ -19,7 +19,9 @@ import com.mdmobile.cyclops.adapters.DsInfoAdapter;
 import com.mdmobile.cyclops.adapters.MsInfoAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.BasicFragment;
+import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
 
@@ -74,12 +76,18 @@ public class ServerFragment extends BasicFragment implements LoaderManager.Loade
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (id == 50) {
-            Uri uri = McContract.buildUriWithServerName(McContract.DsInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
-            return new CursorLoader(getContext(), uri, null, null, null, null);
-        } else if (id == 51) {
-            Uri uri = McContract.buildUriWithServerName(McContract.MsInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
-            return new CursorLoader(getContext(), uri, null, null, null, null);
+        try {
+            if (id == 50) {
+                Uri uri = McContract.buildUriWithServerName(McContract.DsInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
+                return new CursorLoader(getContext(), uri, null, null, null, null);
+            } else if (id == 51) {
+                Uri uri = McContract.buildUriWithServerName(McContract.MsInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
+                return new CursorLoader(getContext(), uri, null, null, null, null);
+            }
+        }catch (ServerNotFound e){
+            e.printStackTrace();
+            LoginActivity.LaunchActivity();
+            this.getActivity().finish();
         }
         return null;
     }

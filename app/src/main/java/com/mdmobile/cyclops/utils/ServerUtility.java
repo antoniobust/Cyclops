@@ -12,6 +12,7 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class ServerUtility {
         return preferences.contains(applicationContext.getString(R.string.server_name_preference));
     }
 
-    public static Server getActiveServer() {
+    public static Server getActiveServer() throws ServerNotFound {
         SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_MULTI_PROCESS);
         String serverName = preferences.getString(applicationContext.getString(R.string.server_name_preference), null);
         String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);
@@ -54,7 +55,7 @@ public class ServerUtility {
         if (serverName != null && apiSecret != null && clientId != null && address != null) {
             return new Server(serverName, apiSecret, clientId, address, version, build);
         } else {
-            throw new UnsupportedOperationException("Active server not found");
+            throw new ServerNotFound("Active server not found");
         }
     }
 

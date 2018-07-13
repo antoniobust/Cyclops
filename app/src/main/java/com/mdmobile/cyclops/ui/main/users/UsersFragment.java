@@ -16,8 +16,11 @@ import android.view.ViewGroup;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.UserListAdapter;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.BasicFragment;
+import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
@@ -44,10 +47,16 @@ public class UsersFragment extends BasicFragment implements LoaderManager.Loader
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
-        return new CursorLoader(getContext(), uri,
-                new String[]{McContract.USER_TABLE_NAME + "." + McContract.UserInfo.DISPLAYED_NAME, McContract.UserInfo.IS_LOCKED},
-                null, null, McContract.UserInfo.DISPLAYED_NAME + " asc");
+        try {
+            Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
+            return new CursorLoader(getContext(), uri,
+                    new String[]{McContract.USER_TABLE_NAME + "." + McContract.UserInfo.DISPLAYED_NAME, McContract.UserInfo.IS_LOCKED},
+                    null, null, McContract.UserInfo.DISPLAYED_NAME + " asc");
+        }catch (ServerNotFound e){
+            e.printStackTrace();
+            LoginActivity.LaunchActivity();
+            return null;
+        }
     }
 
     @Override

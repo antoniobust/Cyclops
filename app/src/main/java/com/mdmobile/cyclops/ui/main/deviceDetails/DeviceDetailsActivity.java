@@ -21,6 +21,7 @@ import com.mdmobile.cyclops.RemoteControl;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.MessageDialog;
 import com.mdmobile.cyclops.ui.dialogs.ScriptDialog;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -79,7 +80,11 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
 
         setContentView(R.layout.activity_device_details);
 
-        activeServer = ServerUtility.getActiveServer();
+        try {
+            activeServer = ServerUtility.getActiveServer();
+        } catch (ServerNotFound e) {
+            e.printStackTrace();
+        }
 
         remoteControlButton = findViewById(R.id.device_detail_remote_control_view);
         mainFab = findViewById(R.id.details_main_fab);
@@ -201,11 +206,10 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
     }
 
     public void executeAction(View view) {
-        Server server = ServerUtility.getActiveServer();
         switch (view.getId()) {
             case R.id.sub_fab1:
                 //Check in action
-                ApiRequestManager.getInstance().requestAction(server, deviceId, ApiActions.CHECKIN, null, null);
+                ApiRequestManager.getInstance().requestAction(activeServer, deviceId, ApiActions.CHECKIN, null, null);
                 break;
             case R.id.sub_fab2:
                 //Script action
@@ -213,7 +217,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
                 break;
             case R.id.sub_fab3:
                 //Localize action
-                ApiRequestManager.getInstance().requestAction(server, deviceId, ApiActions.LOCATE, null, null);
+                ApiRequestManager.getInstance().requestAction(activeServer, deviceId, ApiActions.LOCATE, null, null);
                 break;
             case R.id.sub_fab4:
                 //send message action

@@ -12,6 +12,7 @@ import android.widget.PopupMenu;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.ConfirmActionDialog;
 import com.mdmobile.cyclops.ui.ViewHolder.InstalledAppViewHolder;
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity;
@@ -87,11 +88,15 @@ public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnM
     //Confirmation dialog callback
     @Override
     public void actionConfirmed(boolean doNotShowAgain) {
-        ApiRequestManager.getInstance().uninstallApplication(ServerUtility.getActiveServer(),devId, packageName);
-        //Set show dialog preference
-        if (doNotShowAgain) {
-            String prefKey = mContext.getString(R.string.uninstall_app_confirm_disabled_pref);
-            GeneralUtility.setSharedPreference(mContext, prefKey, true);
+        try {
+            ApiRequestManager.getInstance().uninstallApplication(ServerUtility.getActiveServer(), devId, packageName);
+            //Set show dialog preference
+            if (doNotShowAgain) {
+                String prefKey = mContext.getString(R.string.uninstall_app_confirm_disabled_pref);
+                GeneralUtility.setSharedPreference(mContext, prefKey, true);
+            }
+        }catch (ServerNotFound e){
+            e.printStackTrace();
         }
     }
 

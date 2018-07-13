@@ -3,6 +3,7 @@ package com.mdmobile.cyclops.ui.logIn;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.ACCOUNT_TYPE_KEY;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.ADDING_NEW_ACCOUNT_KEY;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_EXPIRATION_KEY;
@@ -50,12 +52,17 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     private AccountAuthenticatorResponse authenticatorResponse;
     private ImageView hintView;
 
+    public static void LaunchActivity() {
+        Intent intent = new Intent(applicationContext, LoginActivity.class);
+        applicationContext.startActivity(intent);
+    }
+
     // -- Interface methods
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.light_bulb_view:
-                HintDialog.Companion.newInstance(getString(R.string.api_console_hint)).show(getSupportFragmentManager(),null);
+                HintDialog.Companion.newInstance(getString(R.string.api_console_hint)).show(getSupportFragmentManager(), null);
                 break;
         }
     }

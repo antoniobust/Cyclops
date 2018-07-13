@@ -42,6 +42,7 @@ import com.mdmobile.cyclops.dataModel.api.devices.DeviceFactory;
 import com.mdmobile.cyclops.dataModel.api.devices.IDevice;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.ConfirmActionDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.LabelHelper;
@@ -101,7 +102,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onRefresh() {
         Logger.log(LOG_TAG, "Device " + deviceId + " info update requested", Log.VERBOSE);
-        ApiRequestManager.getInstance().getDeviceInfo(ServerUtility.getActiveServer(), deviceId);
+        ApiRequestManager.getInstance().getDeviceInfo(activeServer, deviceId);
         swipeLayout.setRefreshing(false);
     }
 
@@ -163,7 +164,11 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         deviceName = getArguments().getString(DEVICE_NAME_EXTRA_KEY);
         nameTransitionName = getArguments().getString(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY, null);
         iconTransitionName = getArguments().getString(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY, null);
-        activeServer = ServerUtility.getActiveServer();
+        try {
+            activeServer = ServerUtility.getActiveServer();
+        }catch (ServerNotFound e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -270,7 +275,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                             @Override
                             public void actionConfirmed(boolean doNotShowAgain) {
                                 ApiRequestManager.getInstance()
-                                        .requestAction(ServerUtility.getActiveServer(), deviceId, ApiActions.WIPE, null, null);
+                                        .requestAction(activeServer, deviceId, ApiActions.WIPE, null, null);
                             }
 
                             @Override
@@ -281,7 +286,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             }
             case R.id.action_lock_device:
                 ApiRequestManager.getInstance()
-                        .requestAction(ServerUtility.getActiveServer(), deviceId, ApiActions.LOCK, null, null);
+                        .requestAction(activeServer, deviceId, ApiActions.LOCK, null, null);
                 return true;
             case R.id.action_unenroll_device: {
                 ConfirmActionDialog.newInstance(
@@ -292,7 +297,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                             @Override
                             public void actionConfirmed(boolean doNotShowAgain) {
                                 ApiRequestManager.getInstance()
-                                        .requestAction(ServerUtility.getActiveServer(), deviceId, ApiActions.UNENROL, null, null);
+                                        .requestAction(activeServer, deviceId, ApiActions.UNENROL, null, null);
                             }
 
                             @Override

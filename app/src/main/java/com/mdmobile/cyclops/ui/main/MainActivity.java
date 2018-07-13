@@ -41,6 +41,7 @@ import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.sync.SyncService;
 import com.mdmobile.cyclops.ui.BaseActivity;
 import com.mdmobile.cyclops.ui.BasicFragment;
@@ -410,15 +411,20 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         navigationDrawer = findViewById(R.id.main_activity_drawer_layout);
         drawerNavigationView = navigationDrawer.findViewById(R.id.drawer_nav_view);
 
-        View headerView = drawerNavigationView.getHeaderView(0);
-        ((TextView) headerView.findViewById(R.id.nav_user_name_text_view))
-                .setText(UserUtility.getUser().name);
-        ((TextView) headerView.findViewById(R.id.nav_server_text_view))
-                .setText(ServerUtility.getActiveServer().getServerName());
-        ((ImageView) headerView.findViewById(R.id.nav_user_icon))
-                .setImageDrawable(UserUtility.getUserLogo());
+        try {
+            View headerView = drawerNavigationView.getHeaderView(0);
+            ((TextView) headerView.findViewById(R.id.nav_user_name_text_view))
+                    .setText(UserUtility.getUser().name);
+            ((TextView) headerView.findViewById(R.id.nav_server_text_view))
+                    .setText(ServerUtility.getActiveServer().getServerName());
+            ((ImageView) headerView.findViewById(R.id.nav_user_icon))
+                    .setImageDrawable(UserUtility.getUserLogo());
+        } catch (ServerNotFound e){
+            e.printStackTrace();
+            LoginActivity.LaunchActivity();
+        }
+            drawerNavigationView.setNavigationItemSelectedListener(this);
 
-        drawerNavigationView.setNavigationItemSelectedListener(this);
     }
 
     // Navigation Drawer -> on server text view click toggle menu

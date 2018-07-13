@@ -17,6 +17,7 @@ import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
+import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -63,9 +64,15 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         final AccountManager accountManager = AccountManager.get(mContext);
         final Bundle userInfo = UserUtility.getUserInfo(account);
-        final Server serverInfo = ServerUtility.getActiveServer();
+        final Server serverInfo;
+        try {
+            serverInfo = ServerUtility.getActiveServer();
+        } catch (ServerNotFound e) {
+            e.printStackTrace();
+            return null;
+        }
 
-        if (serverInfo == null || userInfo == null) {
+        if (userInfo == null) {
             return promptLoginActivity(authenticatorResponse, account.type, authTokenType, null);
         }
 
@@ -80,7 +87,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             Logger.log(LOG_TAG, "Requesting new token...", Log.VERBOSE);
 
             ApiRequestManager.getInstance()
-                    .getToken(ServerUtility.getActiveServer(), account.name, password,
+                    .getToken(serverInfo, account.name, password,
                             new NetworkCallBack() {
                                 @Override
                                 public void tokenReceived(Bundle userInfo, Token JsonToken) {

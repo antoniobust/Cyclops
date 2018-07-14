@@ -1,2 +1,5 @@
 /build
+/app/alpha
+/app/release
 keystone.properties
+

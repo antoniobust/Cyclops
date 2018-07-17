@@ -36,6 +36,7 @@ import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
 import com.google.android.vending.licensing.Policy;
 import com.google.android.vending.licensing.ServerManagedPolicy;
+import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
@@ -243,16 +244,17 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         if (savedInstanceState != null && savedInstanceState.containsKey(TOOLBAR_FILTER_STATUS)) {
             filtersToolbar.setVisibility(savedInstanceState.getInt(TOOLBAR_FILTER_STATUS));
         }
+        if (!BuildConfig.DEBUG) {
+            mLicenceCheckHandler = new Handler();
+            mLicenseCheckerCallback = new LicenceCheckerCallback();
+            mLicenceChecker = new LicenseChecker(this,
+                    new ServerManagedPolicy(this,
+                            new AESObfuscator(SALT, applicationContext.getPackageName(), Settings.Secure.ANDROID_ID)),
+                    getString(R.string.app_billing_public_key)
+            );
 
-        mLicenceCheckHandler = new Handler();
-        mLicenseCheckerCallback = new LicenceCheckerCallback();
-        mLicenceChecker = new LicenseChecker(this,
-                new ServerManagedPolicy(this,
-                        new AESObfuscator(SALT, applicationContext.getPackageName(), Settings.Secure.ANDROID_ID)),
-                getString(R.string.app_billing_public_key)
-        );
-
-        checkLicence();
+            checkLicence();
+        }
 
         progressBar = findViewById(R.id.loading_bar);
         setNavigationDrawer();
@@ -300,7 +302,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         intentFilter.addAction(SYNC_DONE_BROADCAST_ACTION);
         intentFilter.addAction(UPDATE_LOADING_BAR_ACTION);
         this.registerReceiver(syncReceiver, intentFilter);
-        checkLicence();
+        if (!BuildConfig.DEBUG) {
+            checkLicence();
+        }
         getSharedPreferences(getString(R.string.server_shared_preference), MODE_PRIVATE)
                 .registerOnSharedPreferenceChangeListener(this);
 
@@ -419,11 +423,11 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                     .setText(ServerUtility.getActiveServer().getServerName());
             ((ImageView) headerView.findViewById(R.id.nav_user_icon))
                     .setImageDrawable(UserUtility.getUserLogo());
-        } catch (ServerNotFound e){
+        } catch (ServerNotFound e) {
             e.printStackTrace();
             LoginActivity.LaunchActivity();
         }
-            drawerNavigationView.setNavigationItemSelectedListener(this);
+        drawerNavigationView.setNavigationItemSelectedListener(this);
 
     }
 
@@ -556,7 +560,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         mLicenceCheckHandler.post(new Runnable() {
             public void run() {
                 LicenceErrorDialog dialog = LicenceErrorDialog.Companion.newInstance(showRetry);
-                dialog.show(getSupportFragmentManager(),"licenceError");
+                dialog.show(getSupportFragmentManager(), "licenceError");
             }
         });
     }
@@ -565,7 +569,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
         @Override
         public void allow(int reason) {
-            //Do nothing
+            //Do nothing licence is valid
             Logger.log(LOG_TAG, "Valid installation licence: " + reason, Log.VERBOSE);
         }
 

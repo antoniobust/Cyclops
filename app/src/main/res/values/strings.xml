@@ -228,7 +228,7 @@
     <string name="server_version_preference">server_version_preference</string>
     <string name="server_build_preference">server_build_preference</string>
     <string name="user_logo_preference">user_logo_preference</string>
-    <string name="add_new_server_label">Add a new server</string>
+    <string name="add_new_server_label">Add new Instance</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -258,7 +258,7 @@
         </McServer>\n
     ]]></string>
     <string name="licence_error_dialog_title">Licence error</string>
-    <string name="licence_error_message">We could not validate the licence for this installation.\\n
+    <string name="licence_error_message">We could not validate the licence for this installation.\n
         Please install Cyclops from the Play Store or contact the developer for more info</string>
     <string name="retry_label">Retry</string>
     <string name="play_store_label">Play Store</string>

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.LogInViewPagerAdapter;
@@ -39,11 +40,10 @@ import java.util.Objects;
  * Fragment displayed to add a new server
  */
 
-public class AddServerFragment extends Fragment implements ServerXmlConfigParser.ServerXmlParse,
-        ActivityCompat.OnRequestPermissionsResultCallback, View.OnClickListener {
+public class AddServerFragment extends Fragment implements ServerXmlConfigParser.ServerXmlParse, View.OnClickListener {
 
     private final static String LOG_TAG = AddServerFragment.class.getSimpleName();
-    private int permissionReqID = 100;
+    public static final int EXTERNAL_STORAGE_READ_PREMISSION = 100;
     private ViewPager viewPager;
     private TabLayout dotsIndicator;
     private LogInViewPagerAdapter viewPagerAdapter;
@@ -89,20 +89,10 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         servers.add(new Server(serverName, secret, clientId, address, -1, -1));
 
         saveServer(servers);
-        if(((LoginActivity) Objects.requireNonNull(getActivity())).activityForResult){
+        if (((LoginActivity) Objects.requireNonNull(getActivity())).activityForResult) {
             Intent returnIntent = new Intent();
-            getActivity().setResult(Activity.RESULT_OK,returnIntent);
+            getActivity().setResult(Activity.RESULT_OK, returnIntent);
             getActivity().finish();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == permissionReqID) {
-            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                parseServerConfFile();
-            }
         }
     }
 
@@ -169,19 +159,24 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         }
     }
 
-    private void parseServerConfFile() {
-        File serverSetupFile = new File(Environment.getExternalStorageDirectory() + File.separator + getString(R.string.server_ini_file_name));
+    public void parseServerConfFile() {
         if (!GeneralUtility.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
             } else {
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, permissionReqID);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_READ_PREMISSION);
             }
         } else {
-            ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
-            configureServerAsyncTask.execute(serverSetupFile);
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                File serverSetupFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.server_ini_file_name));
+                ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
+                configureServerAsyncTask.execute(serverSetupFile);
+            } else {
+                Logger.log(LOG_TAG, "Storage not available at the moment", Log.INFO);
+                Toast.makeText(getContext(), "Storage not available", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

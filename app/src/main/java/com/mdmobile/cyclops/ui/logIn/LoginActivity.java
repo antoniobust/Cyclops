@@ -5,8 +5,12 @@ import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -41,7 +45,7 @@ import static com.mdmobile.cyclops.utils.UserUtility.USER_NAME_KEY;
 import static com.mdmobile.cyclops.utils.UserUtility.checkAnyUserLogged;
 
 public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticatorActivity
-        implements NetworkCallBack, View.OnClickListener {
+        implements NetworkCallBack, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
@@ -65,6 +69,18 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
                 HintDialog.Companion.newInstance(getString(R.string.api_console_hint)).show(getSupportFragmentManager(), null);
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == AddServerFragment.EXTERNAL_STORAGE_READ_PREMISSION) {
+            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ((AddServerFragment)getSupportFragmentManager().findFragmentByTag(getAttachedFragmentTag())).parseServerConfFile();
+            }
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

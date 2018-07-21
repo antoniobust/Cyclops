@@ -110,12 +110,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         serverAddressEditText = rootView.findViewById(R.id.server_address_text_view);
 
         addServerButton.setOnClickListener(this);
-
         setViewPager();
-//        if (checkStoragePermission()) {
-            parseServerConfigFile();
-//        }
-
         return rootView;
     }
 
@@ -124,6 +119,9 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         super.onViewCreated(view, savedInstanceState);
         if (!UserUtility.checkAnyUserLogged()) {
             getActivity().findViewById(R.id.add_user_button).setVisibility(View.VISIBLE);
+        }
+        if (checkStoragePermission()) {
+            parseServerConfigFile();
         }
     }
 

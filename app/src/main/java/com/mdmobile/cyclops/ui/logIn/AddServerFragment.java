@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -42,8 +41,8 @@ import java.util.Objects;
 
 public class AddServerFragment extends Fragment implements ServerXmlConfigParser.ServerXmlParse, View.OnClickListener {
 
-    private final static String LOG_TAG = AddServerFragment.class.getSimpleName();
     public static final int EXTERNAL_STORAGE_READ_PREMISSION = 100;
+    private final static String LOG_TAG = AddServerFragment.class.getSimpleName();
     private ViewPager viewPager;
     private TabLayout dotsIndicator;
     private LogInViewPagerAdapter viewPagerAdapter;
@@ -112,8 +111,11 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
 
         addServerButton.setOnClickListener(this);
 
-
         setViewPager();
+//        if (checkStoragePermission()) {
+            parseServerConfigFile();
+//        }
+
         return rootView;
     }
 
@@ -122,9 +124,6 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         super.onViewCreated(view, savedInstanceState);
         if (!UserUtility.checkAnyUserLogged()) {
             getActivity().findViewById(R.id.add_user_button).setVisibility(View.VISIBLE);
-        }
-        if (checkConfigurationFile()) {
-            parseServerConfFile();
         }
     }
 
@@ -159,24 +158,31 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         }
     }
 
-    public void parseServerConfFile() {
+    public boolean checkStoragePermission() {
         if (!GeneralUtility.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
+                return false;
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_READ_PREMISSION);
+                return false;
             }
         } else {
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                File serverSetupFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.server_ini_file_name));
-                ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
-                configureServerAsyncTask.execute(serverSetupFile);
-            } else {
-                Logger.log(LOG_TAG, "Storage not available at the moment", Log.INFO);
-                Toast.makeText(getContext(), "Storage not available", Toast.LENGTH_SHORT).show();
-            }
+            return true;
+        }
+    }
+
+    void parseServerConfigFile() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ||
+                Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+            File serverSetupFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.server_ini_file_name));
+            ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
+            configureServerAsyncTask.execute(serverSetupFile);
+        } else {
+            Logger.log(LOG_TAG, "Storage not available at the moment", Log.INFO);
+            Toast.makeText(getContext(), "Storage not available", Toast.LENGTH_SHORT).show();
         }
     }
 

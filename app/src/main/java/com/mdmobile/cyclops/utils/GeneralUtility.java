@@ -4,6 +4,7 @@ package com.mdmobile.cyclops.utils;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 
 import com.mdmobile.cyclops.R;
@@ -100,7 +101,8 @@ public class GeneralUtility {
     }
 
     public static boolean hasPermission(String permission) {
-        return ContextCompat.checkSelfPermission(applicationContext, permission) == PackageManager.PERMISSION_GRANTED;
+        return Build.VERSION.SDK_INT < 23 ||
+                ContextCompat.checkSelfPermission(applicationContext, permission) == PackageManager.PERMISSION_GRANTED;
     }
 }
 

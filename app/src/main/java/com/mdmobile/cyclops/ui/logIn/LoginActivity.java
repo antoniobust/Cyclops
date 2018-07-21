@@ -3,14 +3,13 @@ package com.mdmobile.cyclops.ui.logIn;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -26,6 +25,7 @@ import com.mdmobile.cyclops.sync.SyncService;
 import com.mdmobile.cyclops.ui.dialogs.HintDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
+import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
 
@@ -76,7 +76,10 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
                                            @NonNull int[] grantResults) {
         if (requestCode == AddServerFragment.EXTERNAL_STORAGE_READ_PREMISSION) {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ((AddServerFragment)getSupportFragmentManager().findFragmentByTag(getAttachedFragmentTag())).parseServerConfFile();
+                Logger.log(LOG_TAG, android.Manifest.permission.READ_EXTERNAL_STORAGE + " has been granted", Log.VERBOSE);
+                ((AddServerFragment) getSupportFragmentManager().findFragmentByTag(getAttachedFragmentTag())).parseServerConfigFile();
+            } else {
+                Logger.log(LOG_TAG, android.Manifest.permission.READ_EXTERNAL_STORAGE + " has been denied", Log.INFO);
             }
             return;
         }
@@ -151,6 +154,12 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
         hintView.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        ((AddServerFragment) getSupportFragmentManager().findFragmentByTag(getAttachedFragmentTag())).parseServerConfigFile();
     }
 
     public void changeSection(View v) {

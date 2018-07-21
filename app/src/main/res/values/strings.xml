@@ -242,20 +242,14 @@
     <string name="yes_label">Yes</string>
     <string name="confirm_unenroll_message">Are you sure you want to unenroll \"%1$s\" ?</string>
     <string name="empty_user_list_label">:( \n No users found</string>
-    <string name="hint_bulb_content_descritpion">Hint bulb</string>
+    <string name="hint_bulb_content_description">Hint bulb</string>
     <string name="tip">Tips</string>
     <string name="ok_label">OK</string>
     <string name="api_console_hint"><![CDATA[You can insert your server details placing an XML file in the root folder.\n
     i.e. \n
         ServerSetup.xml\n
-        <McServer>\n
-        \t<server name="serverName">\n
-            \t\t<secret>…</secret>\n
-            \t\t<clientId>…</clientId>\n
-            \t\t<address>https://serverAddress/address>\n
-        \t</server>\n
-          <server …>…</server>\n
-        </McServer>\n
+        <McServer>\n   <server Name="Instance name">\n   <secret>XXXX</secret>\n   <clientId>XXXX</clientId>\n   <address>http://xxx</address>\n   </server>\n
+        <server Name="Instance 2 name">…\n</server>\n</McServer>\n
     ]]></string>
     <string name="licence_error_dialog_title">Licence error</string>
     <string name="licence_error_message">We could not validate the licence for this installation.\n

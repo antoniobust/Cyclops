@@ -78,7 +78,8 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Logger.log(LOG_TAG, android.Manifest.permission.READ_EXTERNAL_STORAGE + " has been granted \n app restart required",
                         Log.INFO);
-                //READ STORAGE PERMISSION requires application restart as it is a linux permission
+//                ((AddServerFragment)getSupportFragmentManager().findFragmentByTag(getAttachedFragmentTag())).parseServerConfigFile();
+//                //READ STORAGE PERMISSION requires application restart as it is a linux permission
                 Intent i = getBaseContext().getPackageManager()
                         .getLaunchIntentForPackage(getBaseContext().getPackageName());
                 if (i != null) {

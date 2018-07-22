@@ -30,6 +30,7 @@ import com.mdmobile.cyclops.ui.dialogs.HintDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.Logger;
+import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.net.HttpURLConnection;
@@ -54,9 +55,11 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
     private final String SERVER_FRAG_TAG = "SERVER_FRAG_TAG";
     private final String USER_FRAG_TAG = "USER_FRAG_TAG";
+    private final String instanceListKey = "InstanceList";
     public boolean activityForResult = false;
     public Button actionChip;
     public ProgressBar progressBar;
+    public ArrayList<Server> instanceList = new ArrayList<>();
     private AccountAuthenticatorResponse authenticatorResponse;
 
     public static void LaunchActivity() {
@@ -80,7 +83,7 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == AddServerFragment.EXTERNAL_STORAGE_READ_PREMISSION) {
+        if (requestCode == AddServerFragment.EXTERNAL_STORAGE_READ_PERMISSION) {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Logger.log(LOG_TAG, android.Manifest.permission.READ_EXTERNAL_STORAGE + " has been granted \n app restart required",
                         Log.INFO);
@@ -98,6 +101,7 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         if (BuildConfig.DEBUG) {
             Toast.makeText(getApplicationContext(), "token received", Toast.LENGTH_SHORT).show();
         }
+        ((AddServerFragment) getSupportFragmentManager().findFragmentByTag(SERVER_FRAG_TAG)).saveServer(instanceList);
         finishLogin(userInput, response);
     }
 
@@ -145,6 +149,9 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         actionChip = findViewById(R.id.action_chip);
         progressBar = findViewById(R.id.login_progress_view);
 
+        if (savedInstanceState != null && savedInstanceState.containsKey(instanceListKey)) {
+            instanceList = savedInstanceState.getParcelableArrayList(instanceListKey);
+        }
 
         if (savedInstanceState == null) {
             if (!UserUtility.checkAnyUserLogged() || getCallingActivity() != null) {
@@ -178,6 +185,13 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
 //                    .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
 //        }
 //    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(instanceListKey, instanceList);
+    }
 
     private String getAttachedFragmentTag() {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
@@ -252,23 +266,28 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         switch (currentFragTag) {
             case SERVER_FRAG_TAG:
                 AddServerFragment f = ((AddServerFragment) getSupportFragmentManager().findFragmentById(R.id.login_activity_container));
+                Server s = f.grabServerInfo();
+                if (s != null) {
+                    instanceList.add(s);
+                }
+                if (instanceList.size() == 0) {
+                    break;
+                }
                 if (activityForResult) {
-                    ArrayList<Server> server = grabServerInfo(f);
-                    f.saveServer(server);
+                    f.saveServer(instanceList);
                     Intent resultData = new Intent();
-                    resultData.putParcelableArrayListExtra("RESULT", server);
+                    resultData.putParcelableArrayListExtra("RESULT", instanceList);
                     setResult(1, resultData);
                     finish();
                     break;
+                } else {
+                    ServerUtility.setActiveServer(instanceList.get(0));
+                    ft.replace(R.id.login_activity_container, new AddNewUserFragment(), USER_FRAG_TAG)
+                            .addToBackStack(SERVER_FRAG_TAG)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .commit();
+                    break;
                 }
-                if (!f.xmlParsedFlag) {
-                    f.saveServer(grabServerInfo(f));
-                }
-                ft.replace(R.id.login_activity_container, new AddNewUserFragment(), USER_FRAG_TAG)
-                        .addToBackStack(SERVER_FRAG_TAG)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
-                break;
             case USER_FRAG_TAG:
                 ((AddNewUserFragment) getSupportFragmentManager().findFragmentById(R.id.login_activity_container)).logIn();
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -285,20 +304,6 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-    }
-
-    private ArrayList<Server> grabServerInfo(AddServerFragment f) {
-        View rootView = f.getView();
-        String serverName = ((TextView) rootView.findViewById(R.id.server_name_text_view)).getText().toString();
-        String secret = ((TextView) rootView.findViewById(R.id.api_secret_text_view)).getText().toString();
-        String clientId = ((TextView) rootView.findViewById(R.id.client_id_text_view)).getText().toString();
-        String address = ((TextView) rootView.findViewById(R.id.server_address_text_view)).getText().toString();
-
-        if (!address.startsWith("https://")) {
-            address = "https://" + address;
-        }
-        f.servers.add(new Server(serverName, secret, clientId, address, -1, -1));
-        return f.servers;
     }
 }
 

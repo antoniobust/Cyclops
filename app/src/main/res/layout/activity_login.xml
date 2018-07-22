@@ -20,51 +20,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"/>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/login_title_strip"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#EBECED"
-        android:elevation="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
-
-        <TextView
-            android:id="@+id/add_user_button"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_gravity="center|end"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp"
-            android:drawableEnd="@drawable/ic_arrow_right"
-            android:gravity="center_vertical"
-            android:onClick="changeSection"
-            android:text="@string/add_new_user_label"
-            android:textAppearance="?android:textAppearanceButton"
-            android:textColor="@color/colorAccent"
-            android:visibility="invisible"
-            tools:visibility="visible"/>
-
-        <TextView
-            android:id="@+id/add_server_button"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_gravity="center|start"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:drawableStart="@drawable/ic_arrow_left"
-            android:gravity="center_vertical"
-            android:onClick="changeSection"
-            android:text="@string/add_server_label"
-            android:textAppearance="?android:textAppearanceButton"
-            android:textColor="@color/colorAccent"
-            android:visibility="invisible"
-            tools:visibility="visible"/>
-    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/login_activity_container"
@@ -78,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_title_strip">
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <include
             layout="@layout/light_bulb"
@@ -86,6 +41,28 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/activity_horizontal_margin"/>
+
+        <Button
+            android:id="@+id/action_chip"
+            style="@style/AppTheme.ActionChip"
+            android:layout_gravity="center|bottom"
+            android:layout_margin="8dp"
+            android:drawablePadding="0dp"
+            android:drawableTint="@android:color/white"
+            android:text="@string/add_server_label"
+            android:visibility="visible"
+            tools:text="add new instance"
+            tools:drawableStart="@drawable/ic_add"/>
+
+        <ProgressBar
+            android:id="@+id/login_progress_view"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="gone"/>
 
     </FrameLayout>
 </android.support.constraint.ConstraintLayout>

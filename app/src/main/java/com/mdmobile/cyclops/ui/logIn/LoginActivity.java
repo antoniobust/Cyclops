@@ -3,29 +3,32 @@ package com.mdmobile.cyclops.ui.logIn;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
+import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
 import com.mdmobile.cyclops.sync.SyncService;
 import com.mdmobile.cyclops.ui.dialogs.HintDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
-import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -38,7 +41,6 @@ import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE
 import static com.mdmobile.cyclops.services.AccountAuthenticator.REFRESH_AUTH_TOKEN_KEY;
 import static com.mdmobile.cyclops.utils.UserUtility.PASSWORD_KEY;
 import static com.mdmobile.cyclops.utils.UserUtility.USER_NAME_KEY;
-import static com.mdmobile.cyclops.utils.UserUtility.checkAnyUserLogged;
 
 public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticatorActivity
         implements NetworkCallBack, View.OnClickListener {
@@ -48,9 +50,9 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     private final String SERVER_FRAG_TAG = "SERVER_FRAG_TAG";
     private final String USER_FRAG_TAG = "USER_FRAG_TAG";
     public boolean activityForResult = false;
-    private TextView serverButton, userButton;
+    public Button actionChip;
+    public ProgressBar progressBar;
     private AccountAuthenticatorResponse authenticatorResponse;
-    private ImageView hintView;
 
     public static void LaunchActivity() {
         Intent intent = new Intent(applicationContext, LoginActivity.class);
@@ -63,6 +65,9 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         switch (view.getId()) {
             case R.id.light_bulb_view:
                 HintDialog.Companion.newInstance(getString(R.string.api_console_hint)).show(getSupportFragmentManager(), null);
+                break;
+            case R.id.action_chip:
+                buttonChipClick();
                 break;
         }
     }
@@ -77,8 +82,8 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
 
     @Override
     public void errorReceivingToken(VolleyError error) {
-        findViewById(R.id.login_progress_view).setVisibility(View.GONE);
-        findViewById(R.id.login_button).setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+        actionChip.setVisibility(View.VISIBLE);
         String message;
         if (error == null || error.networkResponse == null) {
             message = "Login failed...Please try again";
@@ -115,19 +120,16 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
             activityForResult = true;
         }
 
-        serverButton = findViewById(R.id.add_server_button);
-        userButton = findViewById(R.id.add_user_button);
-        hintView = findViewById(R.id.light_bulb_view);
+        ImageView hintView = findViewById(R.id.light_bulb_view);
+        actionChip = findViewById(R.id.action_chip);
+        progressBar = findViewById(R.id.login_progress_view);
+
 
         if (savedInstanceState == null) {
             if (!UserUtility.checkAnyUserLogged() || getCallingActivity() != null) {
-                serverButton.setVisibility(View.GONE);
-                userButton.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
             } else {
-                serverButton.setVisibility(View.VISIBLE);
-                userButton.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
             }
@@ -135,25 +137,26 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
         hintView.setOnClickListener(this);
+        actionChip.setOnClickListener(this);
     }
 
-    public void changeSection(View v) {
-        if (v.getId() == R.id.add_server_button) {
-            serverButton.setVisibility(View.GONE);
-            if (!checkAnyUserLogged()) {
-                userButton.setVisibility(View.GONE);
-            }
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
-        } else {
-            userButton.setVisibility(View.GONE);
-            if (ServerUtility.anyActiveServer()) {
-                serverButton.setVisibility(View.GONE);
-            }
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
-        }
-    }
+//    public void changeSection(View v) {
+//        if (v.getId() == R.id.add_server_button) {
+//            serverButton.setVisibility(View.GONE);
+//            if (!checkAnyUserLogged()) {
+//                userButton.setVisibility(View.GONE);
+//            }
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
+//        } else {
+//            userButton.setVisibility(View.GONE);
+//            if (ServerUtility.anyActiveServer()) {
+//                serverButton.setVisibility(View.GONE);
+//            }
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
+//        }
+//    }
 
     private String getAttachedFragmentTag() {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
@@ -222,12 +225,59 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
 
     }
 
+    private void buttonChipClick() {
+        String currentFragTag = getAttachedFragmentTag();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        switch (currentFragTag) {
+            case SERVER_FRAG_TAG:
+                AddServerFragment f = ((AddServerFragment) getSupportFragmentManager().findFragmentById(R.id.login_activity_container));
+                if (activityForResult) {
+                    ArrayList<Server> server = grabServerInfo(f);
+                    f.saveServer(server);
+                    Intent resultData = new Intent();
+                    resultData.putParcelableArrayListExtra("RESULT", server);
+                    setResult(1, resultData);
+                    finish();
+                    break;
+                }
+                if (!f.xmlParsedFlag) {
+                    f.saveServer(grabServerInfo(f));
+                }
+                ft.replace(R.id.login_activity_container, new AddNewUserFragment(), USER_FRAG_TAG)
+                        .addToBackStack(SERVER_FRAG_TAG)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
+                break;
+            case USER_FRAG_TAG:
+                ((AddNewUserFragment) getSupportFragmentManager().findFragmentById(R.id.login_activity_container)).logIn();
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+                break;
+        }
+
+
+    }
+
     private void startMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    private ArrayList<Server> grabServerInfo(AddServerFragment f) {
+        View rootView = f.getView();
+        String serverName = ((TextView) rootView.findViewById(R.id.server_name_text_view)).getText().toString();
+        String secret = ((TextView) rootView.findViewById(R.id.api_secret_text_view)).getText().toString();
+        String clientId = ((TextView) rootView.findViewById(R.id.client_id_text_view)).getText().toString();
+        String address = ((TextView) rootView.findViewById(R.id.server_address_text_view)).getText().toString();
+
+        if (!address.startsWith("https://")) {
+            address = "https://" + address;
+        }
+        f.servers.add(new Server(serverName, secret, clientId, address, -1, -1));
+        return f.servers;
     }
 }
 

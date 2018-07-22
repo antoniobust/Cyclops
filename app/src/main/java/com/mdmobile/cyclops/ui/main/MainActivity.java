@@ -331,7 +331,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLicenceChecker.onDestroy();
+        if (mLicenceChecker != null) {
+            mLicenceChecker.onDestroy();
+        }
     }
 
     private void syncDevicesNow() {

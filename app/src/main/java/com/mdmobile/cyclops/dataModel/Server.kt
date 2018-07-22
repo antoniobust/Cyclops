@@ -1,11 +1,14 @@
 package com.mdmobile.cyclops.dataModel
 
 import android.content.ContentValues
+import android.os.Parcelable
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.utils.ServerUtility
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Server(val serverName: String = "", val apiSecret: String = "", val clientId: String = "", val serverAddress: String = "",
-                  val serverMajorVersion: Int = -1, val buildNumber: Int = -1) {
+                  val serverMajorVersion: Int = -1, val buildNumber: Int = -1):Parcelable {
 
     fun setActive() {
         ServerUtility.setActiveServer(this)

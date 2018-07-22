@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center|center_vertical"
+    android:layout_gravity="center"
     android:animateLayoutChanges="true"
     android:orientation="vertical"
     tools:context=".ui.logIn.LoginActivity">
@@ -15,15 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_gravity="center"
+        android:layout_marginTop="52dp"
         android:clipToPadding="false"
         android:isScrollContainer="false"
         android:paddingBottom="2dp"
         android:paddingEnd="54dp"
         android:paddingStart="54dp"
         android:paddingTop="2dp"
-        android:layout_marginTop="52dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/add_server_button"/>
+        app:layout_constraintBottom_toTopOf="@id/login_view_pager_dots_indicator"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/login_view_pager_dots_indicator"
@@ -39,19 +39,6 @@
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"/>
 
-    <Button
-        android:id="@+id/add_server_button"
-        style="@style/AppTheme.ActionChip"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:text="@string/add_server_label"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/server_conf_read_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_view_pager_dots_indicator"
-        app:layout_constraintVertical_bias="1.0"/>
-
     <TextView
         android:id="@+id/server_conf_read_label"
         android:layout_width="wrap_content"
@@ -65,7 +52,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_server_button"/>
+        app:layout_constraintTop_toBottomOf="@id/login_view_pager_dots_indicator"/>
 
     <ImageButton
         android:id="@+id/add_server_navigation_back"

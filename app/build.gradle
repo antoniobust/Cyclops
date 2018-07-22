@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "com.mdmobile.cyclops"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 10
         versionName '0.0.650'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

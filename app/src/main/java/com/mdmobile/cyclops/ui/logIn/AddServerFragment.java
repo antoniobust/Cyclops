@@ -81,7 +81,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         super.onViewCreated(view, savedInstanceState);
 
         LoginActivity hosting = ((LoginActivity) Objects.requireNonNull(getActivity()));
-        hosting.actionChip.setText(R.string.add_new_server_label);
+        hosting.actionChip.setText(R.string.add_instance_label);
         hosting.actionChip
                 .setCompoundDrawablesWithIntrinsicBounds(Objects.requireNonNull(getContext()).getDrawable(R.drawable.ic_add),
                         null, null, null);

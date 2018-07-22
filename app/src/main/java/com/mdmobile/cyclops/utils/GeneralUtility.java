@@ -97,7 +97,7 @@ public class GeneralUtility {
     }
 
     public static boolean isTabletMode(Context mContext) {
-        return mContext.getResources().getConfiguration().smallestScreenWidthDp >= 720;
+        return mContext.getResources().getConfiguration().smallestScreenWidthDp >= 600;
     }
 
     public static boolean hasPermission(String permission) {

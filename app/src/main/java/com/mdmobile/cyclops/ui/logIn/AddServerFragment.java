@@ -84,9 +84,13 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (checkConfigurationFile()) {
-            parseServerConfFile();
+
+        if(checkConfigurationFile()){
+            if (checkStoragePermission()) {
+                parseServerConfigFile();
+            }
         }
+
         LoginActivity hosting = ((LoginActivity) Objects.requireNonNull(getActivity()));
         hosting.actionChip.setText(R.string.add_new_server_label);
         hosting.actionChip
@@ -123,10 +127,9 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         }
     }
 
-    private void parseServerConfFile() {
-        File serverSetupFile = new File(Environment.getExternalStorageDirectory() + File.separator + getString(R.string.server_ini_file_name));
-        if (!GeneralUtility.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(getActivity()), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+    public boolean checkStoragePermission() {
+        if (!GeneralUtility.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.

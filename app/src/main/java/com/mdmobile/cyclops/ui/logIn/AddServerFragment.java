@@ -2,7 +2,6 @@ package com.mdmobile.cyclops.ui.logIn;
 
 import android.Manifest;
 import android.content.ContentValues;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -16,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.LogInViewPagerAdapter;
@@ -34,9 +34,9 @@ import java.util.Objects;
  * Fragment displayed to add a new server
  */
 
-public class AddServerFragment extends Fragment implements ServerXmlConfigParser.ServerXmlParse,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+public class AddServerFragment extends Fragment implements ServerXmlConfigParser.ServerXmlParse {
 
+    public static final int EXTERNAL_STORAGE_READ_PREMISSION = 100;
     private final static String LOG_TAG = AddServerFragment.class.getSimpleName();
     public ArrayList<Server> servers = new ArrayList<>();
     public EditText serverNameEditText, apiSecretEditText, clientIdEditText, serverAddressEditText;
@@ -62,16 +62,6 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         servers.addAll(allServerInfo);
         saveServer(allServerInfo);
         xmlParsedFlag = true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == permissionReqID) {
-            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                parseServerConfFile();
-            }
-        }
     }
 
     @Nullable
@@ -140,12 +130,25 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
+                return false;
             } else {
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, permissionReqID);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_READ_PREMISSION);
+                return false;
             }
         } else {
+            return true;
+        }
+    }
+
+    void parseServerConfigFile() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ||
+                Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+            File serverSetupFile = new File(Environment.getExternalStorageDirectory(), getString(R.string.server_ini_file_name));
             ConfigureServerAsyncTask configureServerAsyncTask = new ConfigureServerAsyncTask(this);
             configureServerAsyncTask.execute(serverSetupFile);
+        } else {
+            Logger.log(LOG_TAG, "Storage not available at the moment", Log.INFO);
+            Toast.makeText(getContext(), "Storage not available", Toast.LENGTH_SHORT).show();
         }
     }
 

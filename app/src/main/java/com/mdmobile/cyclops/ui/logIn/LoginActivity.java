@@ -4,9 +4,13 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -25,6 +29,7 @@ import com.mdmobile.cyclops.sync.SyncService;
 import com.mdmobile.cyclops.ui.dialogs.HintDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
+import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.UserUtility;
 
 import java.net.HttpURLConnection;
@@ -43,7 +48,7 @@ import static com.mdmobile.cyclops.utils.UserUtility.PASSWORD_KEY;
 import static com.mdmobile.cyclops.utils.UserUtility.USER_NAME_KEY;
 
 public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticatorActivity
-        implements NetworkCallBack, View.OnClickListener {
+        implements NetworkCallBack, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     public final String LOG_TAG = LoginActivity.class.getSimpleName();
@@ -70,6 +75,22 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
                 buttonChipClick();
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == AddServerFragment.EXTERNAL_STORAGE_READ_PREMISSION) {
+            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Logger.log(LOG_TAG, android.Manifest.permission.READ_EXTERNAL_STORAGE + " has been granted \n app restart required",
+                        Log.INFO);
+                ((AddServerFragment) getSupportFragmentManager().findFragmentByTag(getAttachedFragmentTag())).parseServerConfigFile();
+            } else {
+                Logger.log(LOG_TAG, android.Manifest.permission.READ_EXTERNAL_STORAGE + " has been denied", Log.INFO);
+            }
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

@@ -9,7 +9,7 @@
     android:layout_gravity="end"
     android:clickable="true"
     android:tint="@color/colorAccent"
-    android:contentDescription="@string/hint_bulb_content_descritpion"
+    android:contentDescription="@string/hint_bulb_content_description"
     android:focusable="true"
     android:padding="4dp"
     android:src="@drawable/ic_lightbulb"

@@ -81,6 +81,8 @@ public class ServerXmlConfigParser {
                     address = readServerAddress(xmlPullParser);
                     xmlPullParser.nextTag();
                     break;
+                default:
+                    throw new XmlPullParserException("Error reading xml file:" + xmlPullParser.getName());
             }
         }
         return new Server(name, secret, clientId, address, -1, -1);

@@ -18,8 +18,8 @@ android {
         applicationId "com.mdmobile.cyclops"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 10
-        versionName '0.0.650'
+        versionCode 11
+        versionName '0.0.700'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         lintOptions.abortOnError false
@@ -57,9 +57,6 @@ android {
     flavorDimensions "default"
     productFlavors {
         alpha {
-            dimension "default"
-        }
-        beta {
             dimension "default"
         }
         relase {

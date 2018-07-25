@@ -13,6 +13,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -21,6 +23,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.chart.Chart
+import com.mdmobile.cyclops.ui.CustomAutoCompleteView
 import com.mdmobile.cyclops.utils.GeneralUtility
 import com.mdmobile.cyclops.utils.LabelHelper
 import com.mdmobile.cyclops.utils.Logger
@@ -28,10 +31,11 @@ import com.mdmobile.cyclops.utils.Logger
 /**
  * Dialog to be presented in order to create a new chart
  */
-class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, DialogInterface.OnClickListener, TextWatcher {
+class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, DialogInterface.OnClickListener,
+        TextWatcher, AutoCompleteTextView.OnDismissListener, View.OnFocusChangeListener {
     private var selectedChartType: Int = -1
-    private lateinit var property1TextView: AutoCompleteTextView
-    private lateinit var property2TextView: AutoCompleteTextView
+    private lateinit var property1TextView: CustomAutoCompleteView
+    private lateinit var property2TextView: CustomAutoCompleteView
     private lateinit var chartTypeSpinner: Spinner
     private lateinit var dialog: AlertDialog
     private val APPLY_LABEL_VISIBILITY_KEY = "APPLY_VISIBILITY_KEY"
@@ -101,6 +105,28 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         //Do not need to perform any action
     }
 
+    override fun onFocusChange(view: View?, focussed: Boolean) {
+        if (!focussed || view?.windowToken == null) {
+            return
+        }
+        when (view.id) {
+            R.id.chart_property_1 -> property1TextView.showDropDown()
+            R.id.chart_property_2 -> property2TextView.showDropDown()
+            else -> {
+                return
+            }
+
+        }
+    }
+
+    override fun onDismiss() {
+        if (property2TextView.isPopupShowing || property1TextView.isPopupShowing) {
+            val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(dialog.currentFocus.windowToken, 0)
+            return
+        }
+    }
+
     // -- Lifecycle methods
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -110,6 +136,11 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
 
         property1TextView = rootView.findViewById(R.id.chart_property_1)
         property2TextView = rootView.findViewById(R.id.chart_property_2)
+
+        property1TextView.onFocusChangeListener = this
+        property2TextView.onFocusChangeListener = this
+        property2TextView.setOnDismissListener(this)
+        property1TextView.setOnDismissListener(this)
 
         chartTypeSpinner = rootView.findViewById(R.id.chart_type_spinner)
         val spinnerAdapter: ArrayAdapter<CharSequence> =
@@ -132,6 +163,8 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
                 .setNegativeButton(R.string.dialog_cancel_label, this)
                 .setView(rootView)
                 .create()
+
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return dialog
     }
 
@@ -162,6 +195,7 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         super.onSaveInstanceState(outState)
         outState.putBoolean(APPLY_LABEL_VISIBILITY_KEY, dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled);
     }
+
 
     private fun getCurrentValues(): Chart {
         val firstProperty = LabelHelper.getInternalLabelFor(property1TextView.text.toString())

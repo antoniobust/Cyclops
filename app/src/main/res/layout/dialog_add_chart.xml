@@ -22,24 +22,28 @@
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown"/>
 
-    <AutoCompleteTextView
+    <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
+    <com.mdmobile.cyclops.ui.CustomAutoCompleteView
         android:id="@+id/chart_property_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/property_1_label"
-        android:maxLines="1"
-        android:lines="1"
         android:completionThreshold="0"
-        android:singleLine="true"/>
+        android:hint="@string/property_1_label"
+        android:nextFocusLeft="@id/chart_type_spinner"
+        android:nextFocusUp="@id/chart_type_spinner"/>
 
-    <AutoCompleteTextView
-        android:singleLine="true"
-        android:lines="1"
+    <com.mdmobile.cyclops.ui.CustomAutoCompleteView
         android:id="@+id/chart_property_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/property_2_label"
-        android:maxLines="1"/>
+        android:completionThreshold="0"
+        android:hint="@string/property_2_label"/>
 
 
 </LinearLayout>

@@ -27,6 +27,7 @@
         android:layout_width="0px"
         android:layout_height="0px"
         android:focusable="true"
+        android:orientation="vertical"
         android:focusableInTouchMode="true"/>
 
     <com.mdmobile.cyclops.ui.CustomAutoCompleteView
@@ -34,6 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:completionThreshold="0"
+        android:dropDownHeight="254dp"
         android:hint="@string/property_1_label"
         android:nextFocusLeft="@id/chart_type_spinner"
         android:nextFocusUp="@id/chart_type_spinner"/>

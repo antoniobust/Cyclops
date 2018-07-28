@@ -90,7 +90,6 @@ public class ApiRequestManager {
                         if (BuildConfig.DEBUG) {
                             Log.v(LOG_TAG, "Token Response:" + response.replace(",", "\n"));
                         }
-
                         //Parse network response to get token details
                         Token token = new Gson().fromJson(response, Token.class);
                         callBack.tokenReceived(userInput, token);
@@ -104,7 +103,7 @@ public class ApiRequestManager {
             }
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders(){
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", "Basic ".concat(Base64.encodeToString(header.getBytes(), Base64.NO_WRAP)));
                 return headers;

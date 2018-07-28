@@ -5,7 +5,6 @@ import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
-import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +21,8 @@ import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
@@ -48,7 +49,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType,
-                             String[] requiredFeatures, Bundle options){
+                             String[] requiredFeatures, Bundle options) {
 
         return promptLoginActivity(response, accountType, authTokenType, true);
     }
@@ -78,44 +79,38 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             return promptLoginActivity(authenticatorResponse, account.type, authTokenType, null);
         }
 
-        final String password = accountManager.getPassword(account);
+        Logger.log(LOG_TAG, "Requesting new token...", Log.VERBOSE);
 
-        //If we have all necessary details let's attempt a token request
-        if (password != null) {
-            Logger.log(LOG_TAG, "Requesting new token...", Log.VERBOSE);
+        ApiRequestManager.getInstance()
+                .getToken(serverInfo, account.name, accountManager.getPassword(account),
+                        new NetworkCallBack() {
+                            @Override
+                            public void tokenReceived(Bundle userInfo, Token JsonToken) {
+                                Bundle result = new Bundle();
+                                result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+                                result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+                                result.putString(AUTH_TOKEN_TYPE_KEY, JsonToken.getToken_type());
+                                result.putString(AccountManager.KEY_AUTHTOKEN, JsonToken.getAccess_token());
 
-            ApiRequestManager.getInstance()
-                    .getToken(serverInfo, account.name, password,
-                            new NetworkCallBack() {
-                                @Override
-                                public void tokenReceived(Bundle userInfo, Token JsonToken) {
-                                    //Credentials still valid, token received
-                                    //Returning data back to authenticatorResponse
-                                    Bundle result = new Bundle();
-                                    result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-                                    result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-                                    result.putString(AUTH_TOKEN_TYPE_KEY, JsonToken.getToken_type());
-                                    result.putString(AccountManager.KEY_AUTHTOKEN, JsonToken.getAccess_token());
+                                authenticatorResponse.onResult(result);
+                            }
 
+                            @Override
+                            public void errorReceivingToken(VolleyError errorResponse) {
+                                //If we are here with error 400 it only means credentials have changed
+                                //Return the error to authenticatorResponse
+                                if (errorResponse.networkResponse.statusCode == HttpsURLConnection.HTTP_UNAUTHORIZED
+                                        ||errorResponse.networkResponse.statusCode == HttpsURLConnection.HTTP_BAD_REQUEST ) {
+
+                                    Bundle result = promptLoginActivity(authenticatorResponse, account.type, authTokenType, null);
                                     authenticatorResponse.onResult(result);
+//                                    authenticatorResponse.onError(errorResponse.networkResponse.statusCode,
+//                                            "AuthenticationException: Cannot retrieve new token from: " + serverInfo.getServerName()
+//                                                    + " for: " + account.name);
                                 }
-
-                                @Override
-                                public void errorReceivingToken(VolleyError errorResponse) {
-                                    //If we are here with error 400 it only means credentials have changed
-                                    //Return the error to authenticatorResponse
-                                    if (errorResponse.networkResponse.statusCode == 400) {
-                                        authenticatorResponse.onError(errorResponse.networkResponse.statusCode, "AuthenticationException");
-                                    }
-                                }
-                            });
-            return null;
-        }
-
-
-        //If we are here then means either we do not have an account signed
-        //or credentials are no longer valid -> prompt login procedure again
-        return promptLoginActivity(authenticatorResponse, account.type, authTokenType, null);
+                            }
+                        });
+        return null;
     }
 
     @Override

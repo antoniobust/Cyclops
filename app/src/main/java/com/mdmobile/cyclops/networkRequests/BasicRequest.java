@@ -3,6 +3,10 @@ package com.mdmobile.cyclops.networkRequests;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -12,12 +16,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.interfaces.OnTokenAcquired;
+import com.mdmobile.cyclops.interfaces.OnTokenResponse;
 import com.mdmobile.cyclops.sec.ServerNotFound;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -71,7 +76,6 @@ abstract public class BasicRequest<T> extends Request<T> {
     protected VolleyError parseNetworkError(VolleyError volleyError) {
 
         //TODO:support Multiple account
-
         NetworkResponse response = volleyError.networkResponse;
         if (response == null) {
             Logger.log(LOG_TAG, "Network request Error: error response: NULL\n", Log.ERROR);
@@ -81,16 +85,15 @@ abstract public class BasicRequest<T> extends Request<T> {
         try {
             String errorResponse = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             Logger.log(LOG_TAG, errorResponse, Log.ERROR);
-        } catch (UnsupportedEncodingException e) {
+            //CHECK ALL ERRORS CODE
+            parseErrorCode(response.statusCode);
+        } catch (UnsupportedEncodingException | ServerNotFound e) {
             e.printStackTrace();
         }
-
-        //CHECK ALL ERRORS CODE
-        parseErrorCode(response.statusCode);
         return super.parseNetworkError(volleyError);
     }
 
-    private void parseErrorCode(int errorCode) {
+    private void parseErrorCode(int errorCode) throws ServerNotFound {
 
         if (errorCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
             Logger.log(LOG_TAG, "Error " + errorCode + " HTTP BAD REQUEST", Log.ERROR);
@@ -107,16 +110,15 @@ abstract public class BasicRequest<T> extends Request<T> {
                 manager.invalidateAuthToken(applicationContext.getString(R.string.account_type), token);
 
                 manager.getAuthToken(accounts[0],
-                        manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
-                        null, false, new OnTokenAcquired(new WeakReference<BasicRequest>(this)), null);
+                        manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY), null, true,
+                        new OnTokenResponse(new WeakReference<BasicRequest>(this)), null);
             }
+
         } else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
-            try {
-                String serverName = ServerUtility.getActiveServer().getServerName();
-                ServerUtility.notifyServerStatus(serverName, ServerUtility.SERVER_OFFLINE);
-            }catch (ServerNotFound e){
-                e.printStackTrace();
-            }
+
+            String serverName = ServerUtility.getActiveServer().getServerName();
+            ServerUtility.notifyServerStatus(serverName, ServerUtility.SERVER_OFFLINE);
+
         } else if (errorCode == 422) {
             //TODO: show error message in toast
         } else if (errorCode == HttpsURLConnection.HTTP_INTERNAL_ERROR) {

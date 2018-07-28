@@ -1,6 +1,7 @@
 package com.mdmobile.cyclops.ui.main.dashboard.statistics
 
 import com.mdmobile.cyclops.provider.McContract
+import com.mdmobile.cyclops.sec.ServerNotFound
 import com.mdmobile.cyclops.utils.ServerUtility
 
 /**
@@ -11,7 +12,7 @@ import com.mdmobile.cyclops.utils.ServerUtility
 class CounterStat constructor(properties: List<String>)
     : Statistic(properties) {
 
-    override fun initPoll() {
+    override fun initPoll() = try {
         val count = McContract.Device.FULL_PROJECTION
 //        + " , COUNT(" + McContract.DEVICE_TABLE_NAME + "." + McContract.Device._ID + ")"
         val orderBy = "COUNT(?) DESC"
@@ -23,10 +24,9 @@ class CounterStat constructor(properties: List<String>)
                     McContract.Device.buildUriWithServerName(serverName),
                     count, null, null, null)
         }
+    } catch (e: ServerNotFound){
+        e.printStackTrace()
     }
 
-//    fun initPoll() {
-
-//    }
 }
 

@@ -546,7 +546,9 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         UserUtility.clearUserPreferences(UserUtility.getUser().name);
         AccountManager.get(this).removeAccount(UserUtility.getUser(), null, null);
         launchLoginActivity();
+        ServerUtility.deactivateServer();
         finish();
+
     }
 
     private void launchLoginActivity() {

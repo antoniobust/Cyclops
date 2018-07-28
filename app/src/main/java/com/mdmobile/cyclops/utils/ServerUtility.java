@@ -55,7 +55,7 @@ public class ServerUtility {
         if (serverName != null && apiSecret != null && clientId != null && address != null) {
             return new Server(serverName, apiSecret, clientId, address, version, build);
         } else {
-            throw new ServerNotFound("Active server not found");
+            throw  new ServerNotFound("Active server not found");
         }
     }
 

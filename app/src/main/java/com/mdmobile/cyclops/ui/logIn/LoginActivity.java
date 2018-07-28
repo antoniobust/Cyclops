@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -141,12 +142,8 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         MainActivity.TABLET_MODE = GeneralUtility.isTabletMode(getApplicationContext());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-        if(!MainActivity.TABLET_MODE){
+        if (!MainActivity.TABLET_MODE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-
-        if (getCallingActivity() != null) {
-            activityForResult = true;
         }
 
         ImageView hintView = findViewById(R.id.light_bulb_view);
@@ -158,13 +155,13 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         }
 
         if (savedInstanceState == null) {
-            if (!UserUtility.checkAnyUserLogged() || getCallingActivity() != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
-            } else {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
-            }
+//            if (!UserUtility.checkAnyUserLogged() || getCallingActivity() != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
+//            } else {
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
+//            }
         }
         authenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
@@ -172,24 +169,13 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         actionChip.setOnClickListener(this);
     }
 
-//    public void changeSection(View v) {
-//        if (v.getId() == R.id.add_server_button) {
-//            serverButton.setVisibility(View.GONE);
-//            if (!checkAnyUserLogged()) {
-//                userButton.setVisibility(View.GONE);
-//            }
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit();
-//        } else {
-//            userButton.setVisibility(View.GONE);
-//            if (ServerUtility.anyActiveServer()) {
-//                serverButton.setVisibility(View.GONE);
-//            }
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
-//        }
-//    }
-
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (getCallingActivity() != null && ServerUtility.anyActiveServer()) {
+            activityForResult = true;
+        }
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

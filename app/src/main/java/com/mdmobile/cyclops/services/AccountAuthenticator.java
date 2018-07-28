@@ -34,32 +34,34 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private Context mContext;
     private String LOG_TAG = AccountAuthenticator.class.getSimpleName();
 
-    public AccountAuthenticator(Context context) {
+    AccountAuthenticator(Context context) {
         super(context);
         mContext = context.getApplicationContext();
     }
 
+
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse accountAuthenticatorResponse, String s) {
-        return null;
+        throw new UnsupportedOperationException("Confirm credentials is not a supported operation");
+
     }
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType,
-                             String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+                             String[] requiredFeatures, Bundle options){
 
         return promptLoginActivity(response, accountType, authTokenType, true);
     }
 
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse accountAuthenticatorResponse,
-                                     Account account, Bundle bundle) throws NetworkErrorException {
-        return null;
+                                     Account account, Bundle bundle) {
+        throw new UnsupportedOperationException("Confirm credentials is not a supported operation");
     }
 
     @Override
     public Bundle getAuthToken(final AccountAuthenticatorResponse authenticatorResponse, final Account account,
-                               final String authTokenType, Bundle bundle) throws NetworkErrorException {
+                               final String authTokenType, Bundle bundle) {
 
 
         final AccountManager accountManager = AccountManager.get(mContext);
@@ -77,10 +79,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         }
 
         final String password = accountManager.getPassword(account);
-        final String clientID = serverInfo.getClientId();
-        final String apiSecret = serverInfo.getApiSecret();
-        final String serverUrl = serverInfo.getServerAddress();
-
 
         //If we have all necessary details let's attempt a token request
         if (password != null) {
@@ -127,13 +125,13 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse accountAuthenticatorResponse,
-                                    Account account, String s, Bundle bundle) throws NetworkErrorException {
+                                    Account account, String s, Bundle bundle) {
         return null;
     }
 
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse accountAuthenticatorResponse,
-                              Account account, String[] strings) throws NetworkErrorException {
+                              Account account, String[] strings) {
         return null;
     }
 
@@ -141,7 +139,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     //Utility method to return a bundle with KEY_INTENT key and the intent to show login activity
     private Bundle promptLoginActivity(AccountAuthenticatorResponse response, String accountType,
                                        String authTokenType, @Nullable Boolean addingNewAccount) {
-        //Create a new intent to launch the log in activity
         final Intent intent = new Intent(mContext, LoginActivity.class);
 
         //Insert the parameter required from LoginActivity to create a new account
@@ -151,8 +148,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             intent.putExtra(ADDING_NEW_ACCOUNT_KEY, addingNewAccount);
         }
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-
-        //Create a bundle with key KEY_INTENT as per documentation
         Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;

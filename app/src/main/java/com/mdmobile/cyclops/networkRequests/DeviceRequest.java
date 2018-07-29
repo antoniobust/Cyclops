@@ -56,6 +56,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
     private int insertInfoMethod;
     private Server server;
 
+
     public DeviceRequest(Context context, int method, String url, Server server, Response.Listener<T> listener,
                          Response.ErrorListener errorListener, int insertDataMethod) {
         super(method, url, errorListener);
@@ -115,7 +116,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));
-        } catch (UnsupportedEncodingException|ServerNotFound e) {
+        } catch (UnsupportedEncodingException | ServerNotFound e) {
             e.printStackTrace();
             return Response.error(new ParseError(e));
         }

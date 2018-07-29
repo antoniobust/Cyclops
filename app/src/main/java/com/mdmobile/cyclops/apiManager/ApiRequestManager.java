@@ -8,7 +8,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,6 +24,8 @@ import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
 import com.mdmobile.cyclops.networkRequests.ActionRequest;
+import com.mdmobile.cyclops.networkRequests.BasicRequest;
+import com.mdmobile.cyclops.networkRequests.BasicRequestRetry;
 import com.mdmobile.cyclops.networkRequests.DeviceInstalledAppRequest;
 import com.mdmobile.cyclops.networkRequests.DeviceRequest;
 import com.mdmobile.cyclops.networkRequests.ProfilesRequest;
@@ -71,8 +72,7 @@ public class ApiRequestManager {
     /**
      * Get a new token for the provided user and server
      */
-    public void getToken(Server server,
-                         String userName, String password, final NetworkCallBack callBack) {
+    public void getToken(Server server, String userName, String password, final NetworkCallBack callBack) {
 
         String serverUrl = server.getServerAddress().concat("/MobiControl/api/token");
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
@@ -103,7 +103,7 @@ public class ApiRequestManager {
             }
         }) {
             @Override
-            public Map<String, String> getHeaders(){
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", "Basic ".concat(Base64.encodeToString(header.getBytes(), Base64.NO_WRAP)));
                 return headers;
@@ -115,13 +115,8 @@ public class ApiRequestManager {
             }
         };
 
-        tokenRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        if (!tokenRequest.isCanceled()) {
-            requestsQueue.add(tokenRequest);
-        }
+//        tokenRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestsQueue.add(tokenRequest);
 
     }
 
@@ -142,7 +137,7 @@ public class ApiRequestManager {
             }
         }, DeviceRequest.UPDATE_EXISTING_DEVICE_INFO);
 
-        requestsQueue.add(deviceRequest);
+        queueUp(deviceRequest);
     }
 
     public void getDeviceInfo(Server server) {
@@ -177,7 +172,8 @@ public class ApiRequestManager {
             }
         }, DeviceRequest.ERASE_OLD_DEVICE_INFO);
 
-        requestsQueue.add(deviceRequest);
+
+        queueUp(deviceRequest);
     }
 
     public String remoteControlDevice(Server server, String deviceId) {
@@ -201,6 +197,7 @@ public class ApiRequestManager {
             }
         });
 
+        queueUp(request);
         requestsQueue.add(request);
     }
 
@@ -221,7 +218,7 @@ public class ApiRequestManager {
             }
         });
 
-        requestsQueue.add(installedAppRequest);
+        queueUp(installedAppRequest);
     }
 
     public void uninstallApplication(@NonNull Server server, @NonNull String devID, @NonNull String packageName) {
@@ -249,7 +246,7 @@ public class ApiRequestManager {
         });
 
 
-        requestsQueue.add(actionRequest);
+        queueUp(actionRequest);
         Logger.log(LOG_TAG, "Request( " + action + " -> " + message + ") requested to device: " + deviceID, Log.VERBOSE);
         Toast.makeText(applicationContext, action + " request sent", Toast.LENGTH_SHORT).show();
     }
@@ -277,7 +274,7 @@ public class ApiRequestManager {
             }
         });
 
-        requestsQueue.add(request);
+        queueUp(request);
     }
 
     public void getUsers(Server server) {
@@ -301,10 +298,10 @@ public class ApiRequestManager {
                     }
                 });
 
-        requestsQueue.add(userRequest);
+        queueUp(userRequest);
     }
 
-    public void cancelRequest() {
+    public void cancelAllPendingRequest() {
         requestsQueue.cancelAll(new RequestQueue.RequestFilter() {
             @Override
             public boolean apply(Request<?> request) {
@@ -314,5 +311,11 @@ public class ApiRequestManager {
         });
     }
 
-
+    private void queueUp(BasicRequest request) {
+        if (request.isCanceled()) {
+            return;
+        }
+        request.setRetryPolicy(new BasicRequestRetry(request));
+        requestsQueue.add(request);
+    }
 }

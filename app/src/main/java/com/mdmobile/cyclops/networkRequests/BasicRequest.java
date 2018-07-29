@@ -45,7 +45,7 @@ abstract public class BasicRequest<T> extends Request<T> {
 
     public BasicRequest(int method, String url, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
-        setRetryPolicy(new BasicRequestRetry(this));
+//        setRetryPolicy(new BasicRequestRetry(this));
     }
 
     @Override
@@ -99,20 +99,20 @@ abstract public class BasicRequest<T> extends Request<T> {
             Logger.log(LOG_TAG, "Error " + errorCode + " HTTP BAD REQUEST", Log.ERROR);
         } else if (errorCode == HttpsURLConnection.HTTP_UNAUTHORIZED ||
                 errorCode == HttpsURLConnection.HTTP_FORBIDDEN) {
-            Logger.log(LOG_TAG, "Attempt to request new token\n", Log.VERBOSE);
-
-            AccountManager manager = AccountManager.get(applicationContext);
-            Account[] accounts = manager.getAccountsByType(applicationContext.getString(R.string.account_type));
-
-            if (accounts.length == 1) {
-                String tokenType = manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY);
-                String token = manager.peekAuthToken(accounts[0], tokenType);
-                manager.invalidateAuthToken(applicationContext.getString(R.string.account_type), token);
-
-                manager.getAuthToken(accounts[0],
-                        manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY), null, true,
-                        new OnTokenResponse(new WeakReference<BasicRequest>(this)), null);
-            }
+//            Logger.log(LOG_TAG, "Attempt to request new token\n", Log.VERBOSE);
+//
+//            AccountManager manager = AccountManager.get(applicationContext);
+//            Account[] accounts = manager.getAccountsByType(applicationContext.getString(R.string.account_type));
+//
+//            if (accounts.length == 1) {
+//                String tokenType = manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY);
+//                String token = manager.peekAuthToken(accounts[0], tokenType);
+//                manager.invalidateAuthToken(applicationContext.getString(R.string.account_type), token);
+//
+//                manager.getAuthToken(accounts[0],
+//                        manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY), null, true,
+//                        new OnTokenResponse(new WeakReference<BasicRequest>(this)), null);
+//            }
 
         } else if (errorCode == HttpsURLConnection.HTTP_NOT_FOUND) {
 

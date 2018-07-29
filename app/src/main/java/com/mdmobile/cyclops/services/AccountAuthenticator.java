@@ -51,7 +51,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType,
                              String[] requiredFeatures, Bundle options) {
 
-        return promptLoginActivity(response, accountType, authTokenType, true);
+        return promptError(response, accountType, authTokenType, true);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         }
 
         if (userInfo == null) {
-            return promptLoginActivity(authenticatorResponse, account.type, authTokenType, null);
+            return promptError(authenticatorResponse, account.type, authTokenType, null);
         }
 
         Logger.log(LOG_TAG, "Requesting new token...", Log.VERBOSE);
@@ -91,7 +91,6 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                                 result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
                                 result.putString(AUTH_TOKEN_TYPE_KEY, JsonToken.getToken_type());
                                 result.putString(AccountManager.KEY_AUTHTOKEN, JsonToken.getAccess_token());
-
                                 authenticatorResponse.onResult(result);
                             }
 
@@ -100,13 +99,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                                 //If we are here with error 400 it only means credentials have changed
                                 //Return the error to authenticatorResponse
                                 if (errorResponse.networkResponse.statusCode == HttpsURLConnection.HTTP_UNAUTHORIZED
-                                        ||errorResponse.networkResponse.statusCode == HttpsURLConnection.HTTP_BAD_REQUEST ) {
-
-                                    Bundle result = promptLoginActivity(authenticatorResponse, account.type, authTokenType, null);
+                                        || errorResponse.networkResponse.statusCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
+                                    Bundle result = promptError(authenticatorResponse, account.type, authTokenType, null);
                                     authenticatorResponse.onResult(result);
-//                                    authenticatorResponse.onError(errorResponse.networkResponse.statusCode,
-//                                            "AuthenticationException: Cannot retrieve new token from: " + serverInfo.getServerName()
-//                                                    + " for: " + account.name);
                                 }
                             }
                         });
@@ -132,8 +127,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
 
     //Utility method to return a bundle with KEY_INTENT key and the intent to show login activity
-    private Bundle promptLoginActivity(AccountAuthenticatorResponse response, String accountType,
-                                       String authTokenType, @Nullable Boolean addingNewAccount) {
+    private Bundle promptError(AccountAuthenticatorResponse response, String accountType,
+                               String authTokenType, @Nullable Boolean addingNewAccount) {
         final Intent intent = new Intent(mContext, LoginActivity.class);
 
         //Insert the parameter required from LoginActivity to create a new account

@@ -134,6 +134,6 @@ public class SyncService extends AbstractThreadedSyncAdapter {
     @Override
     public void onSyncCanceled() {
         super.onSyncCanceled();
-        ApiRequestManager.getInstance().cancelRequest();
+        ApiRequestManager.getInstance().cancelAllPendingRequest();
     }
 }

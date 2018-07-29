@@ -35,10 +35,9 @@ public class OnTokenResponse implements AccountManagerCallback<Bundle> {
 
     @Override
     public void run(AccountManagerFuture<Bundle> future) {
-        Bundle newInfo = new Bundle();
         try {
             if (future.isDone() && !future.isCancelled()) {
-                newInfo = future.getResult();
+                Bundle newInfo = future.getResult();
                 //If result contains KEY INTENT than we require new credentials
                 if (!newInfo.containsKey(AccountManager.KEY_INTENT)) {
                     String accountName = newInfo.getString(AccountManager.KEY_ACCOUNT_NAME);
@@ -60,11 +59,9 @@ public class OnTokenResponse implements AccountManagerCallback<Bundle> {
             }
 
         } catch (AuthenticatorException e) {
-            //TODO:Launch log in activity
             Logger.log(LOG_TAG, "Authentication exception ...\n" +
                     " No connection was possible with account authenticator\nRedirecting to login ", Log.ERROR);
             e.printStackTrace();
-            newInfo.describeContents();
         } catch (IOException | OperationCanceledException e) {
             e.printStackTrace();
         }

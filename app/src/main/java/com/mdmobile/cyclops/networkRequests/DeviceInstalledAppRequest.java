@@ -31,6 +31,11 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
         this.listener = listener;
     }
 
+    public DeviceInstalledAppRequest(DeviceInstalledAppRequest request) {
+        super(request.getMethod(), request.getUrl(), request.getErrorListener());
+        this.listener = request.listener;
+    }
+
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         try {

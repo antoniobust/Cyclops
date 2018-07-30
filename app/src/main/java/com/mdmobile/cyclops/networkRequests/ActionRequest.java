@@ -22,6 +22,12 @@ public class ActionRequest extends BasicRequest<String> {
         this.actionPayload = actionPayload;
     }
 
+    public ActionRequest(ActionRequest request) {
+        super(request.getMethod(), request.getUrl(), request.getErrorListener());
+        this.responseListener = request.responseListener;
+        this.actionPayload = request.actionPayload;
+    }
+
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         return Response.success(null,

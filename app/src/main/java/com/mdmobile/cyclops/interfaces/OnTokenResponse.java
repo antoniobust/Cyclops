@@ -9,8 +9,7 @@ import android.accounts.OperationCanceledException;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.android.volley.toolbox.Volley;
-import com.mdmobile.cyclops.ApplicationLoader;
+import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.networkRequests.BasicRequest;
 import com.mdmobile.cyclops.utils.Logger;
 
@@ -27,9 +26,9 @@ import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE
 public class OnTokenResponse implements AccountManagerCallback<Bundle> {
 
     private static final String LOG_TAG = OnTokenResponse.class.getSimpleName();
-    private WeakReference<BasicRequest> request;
+    private WeakReference<? extends BasicRequest> request;
 
-    public OnTokenResponse(WeakReference<BasicRequest> request) {
+    public OnTokenResponse(WeakReference<? extends BasicRequest> request) {
         this.request = request;
     }
 
@@ -52,7 +51,8 @@ public class OnTokenResponse implements AccountManagerCallback<Bundle> {
                         Logger.log(LOG_TAG, "Account " + accountName + " new token saved: " + authToken, Log.VERBOSE);
                         if (request != null && request.get() != null) {
                             Logger.log(LOG_TAG, "Resending request ", Log.VERBOSE);
-                            Volley.newRequestQueue(ApplicationLoader.applicationContext).add(request.get());
+                            ApiRequestManager.getInstance().queueUp(
+                                    ApiRequestManager.getInstance().rebuildRequest(request.get()));
                         }
                     }
                 }

@@ -32,6 +32,10 @@ public class UserRequest extends BasicRequest<String> {
         super(Method.GET, url, errorListener);
         this.responseListener = responseListener;
     }
+    public UserRequest(UserRequest request){
+        super(request.getMethod(),request.getUrl(),request.getErrorListener());
+        this.responseListener = request.responseListener;
+    }
 
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {

@@ -8,7 +8,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -100,6 +99,8 @@ public class ApiRequestManager {
                 callBack.errorReceivingToken(error);
                 Log.e(LOG_TAG, "Error receiving token");
                 error.printStackTrace();
+                Toast.makeText(applicationContext, "Request couldn't be authorized\n Please check your user name & password" +
+                        "and the instance information", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
@@ -124,7 +125,7 @@ public class ApiRequestManager {
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.SelectDevice.Builder(apiAuthority, devId).build();
 
-        DeviceRequest deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, server,
+        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, server,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -144,7 +145,7 @@ public class ApiRequestManager {
         String apiAuthority = server.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, server.getServerMajorVersion()).build();
 
-        DeviceRequest deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, server,
+        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, server,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -311,11 +312,28 @@ public class ApiRequestManager {
         });
     }
 
-    private void queueUp(BasicRequest request) {
-        if (request.isCanceled()) {
-            return;
-        }
+
+    public void queueUp(BasicRequest request) {
         request.setRetryPolicy(new BasicRequestRetry(request));
         requestsQueue.add(request);
+    }
+
+    public <T extends BasicRequest> T rebuildRequest(BasicRequest request) {
+        if (request instanceof DeviceRequest) {
+            return (T) new DeviceRequest((DeviceRequest) request);
+        } else if (request instanceof ProfilesRequest) {
+            return (T) new ProfilesRequest((ProfilesRequest) request);
+        } else if (request instanceof DeviceInstalledAppRequest) {
+            return (T) new DeviceInstalledAppRequest((DeviceInstalledAppRequest) request);
+        } else if (request instanceof ActionRequest) {
+            return (T) new ActionRequest((ActionRequest) request);
+        } else if (request instanceof ServerInfoRequest) {
+            return (T) new ServerInfoRequest((ServerInfoRequest) request);
+        } else if (request instanceof UserRequest) {
+            return (T) new UserRequest((UserRequest) request);
+        } else {
+            throw new UnsupportedOperationException("Request is not supported" + request.toString());
+        }
+
     }
 }

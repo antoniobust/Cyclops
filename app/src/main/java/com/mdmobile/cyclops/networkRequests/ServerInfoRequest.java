@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
@@ -34,6 +35,11 @@ public class ServerInfoRequest extends BasicRequest<String> {
         super(Method.GET, url, errorListener);
         this.responseListener = responseListener;
         serverSynced = serverName;
+    }
+    public ServerInfoRequest(ServerInfoRequest request){
+        super(request.getMethod(),request.getUrl(),request.getErrorListener());
+        this.responseListener = request.responseListener;
+        this.serverSynced = request.serverSynced;
     }
 
     @Override

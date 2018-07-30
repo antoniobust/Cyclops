@@ -51,7 +51,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
     public final static int ERASE_OLD_DEVICE_INFO = 1;
     public final static int UPDATE_EXISTING_DEVICE_INFO = 2;
-    private Response.Listener<T> listener;
+    private Response.Listener listener;
     private Context mContext;
     private int insertInfoMethod;
     private Server server;
@@ -65,6 +65,14 @@ public class DeviceRequest<T> extends BasicRequest<T> {
         this.listener = listener;
         insertInfoMethod = insertDataMethod;
         this.server = server;
+    }
+
+    public DeviceRequest(DeviceRequest request) {
+        super(request.getMethod(), request.getUrl(), request.getErrorListener());
+        this.mContext = request.mContext;
+        this.listener = request.listener;
+        insertInfoMethod = request.insertInfoMethod;
+        this.server = request.server;
     }
 
     @Override

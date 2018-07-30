@@ -36,6 +36,12 @@ public class ProfilesRequest extends BasicRequest<String> {
         this.devId = devId;
     }
 
+    public ProfilesRequest(ProfilesRequest request){
+        super(request.getMethod(),request.getUrl(),request.getErrorListener());
+        this.devId = request.devId;
+        this.responseListener = request.responseListener;
+    }
+
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
 

@@ -92,9 +92,12 @@ public class SyncService extends AbstractThreadedSyncAdapter {
         try {
             Server activeServer = ServerUtility.getActiveServer();
             ArrayList<String> actions = new ArrayList<>();
-            actions.add(SYNC_SERVER);
+//            actions.add(SYNC_SERVER);
             if (bundle.containsKey(SYNC_USERS) && bundle.getBoolean(SYNC_USERS)) {
                 actions.add(SYNC_USERS);
+            }
+            if (bundle.containsKey(SYNC_SERVER) && bundle.getBoolean(SYNC_SERVER)) {
+                actions.add(SYNC_SERVER);
             }
             if (bundle.containsKey(SYNC_DEVICES) && bundle.getBoolean(SYNC_DEVICES)) {
                 actions.add(SYNC_DEVICES);

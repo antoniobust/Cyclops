@@ -12,7 +12,7 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
-import com.mdmobile.cyclops.sec.ServerNotFound;
+import com.mdmobile.cyclops.security.ServerNotFound;
 
 import java.util.ArrayList;
 

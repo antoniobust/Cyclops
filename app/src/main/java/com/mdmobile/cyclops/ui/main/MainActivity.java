@@ -42,7 +42,7 @@ import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
-import com.mdmobile.cyclops.sec.ServerNotFound;
+import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.sync.SyncService;
 import com.mdmobile.cyclops.ui.BaseActivity;
 import com.mdmobile.cyclops.ui.BasicFragment;

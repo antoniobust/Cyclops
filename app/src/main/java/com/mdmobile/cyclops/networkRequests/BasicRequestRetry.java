@@ -5,11 +5,10 @@ import android.accounts.AccountManager;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
-import com.mdmobile.cyclops.interfaces.OnTokenResponse;
+import com.mdmobile.cyclops.services.OnTokenResponse;
 import com.mdmobile.cyclops.utils.Logger;
 
 import java.lang.ref.WeakReference;

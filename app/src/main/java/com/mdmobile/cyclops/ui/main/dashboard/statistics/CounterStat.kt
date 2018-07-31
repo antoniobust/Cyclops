@@ -1,7 +1,7 @@
 package com.mdmobile.cyclops.ui.main.dashboard.statistics
 
 import com.mdmobile.cyclops.provider.McContract
-import com.mdmobile.cyclops.sec.ServerNotFound
+import com.mdmobile.cyclops.security.ServerNotFound
 import com.mdmobile.cyclops.utils.ServerUtility
 
 /**

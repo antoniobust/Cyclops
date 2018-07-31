@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.interfaces;
+package com.mdmobile.cyclops.services;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -43,7 +43,6 @@ public class OnTokenResponse implements AccountManagerCallback<Bundle> {
                     String accountType = newInfo.getString(AccountManager.KEY_ACCOUNT_TYPE);
                     String authTokenType = newInfo.getString(AUTH_TOKEN_TYPE_KEY);
                     String authToken = newInfo.getString(AccountManager.KEY_AUTHTOKEN);
-
                     AccountManager accountManager = AccountManager.get(applicationContext);
                     Account[] accounts = accountManager.getAccountsByType(accountType);
                     if (accounts[0].name.equals(accountName)) {
@@ -57,7 +56,6 @@ public class OnTokenResponse implements AccountManagerCallback<Bundle> {
                     }
                 }
             }
-
         } catch (AuthenticatorException e) {
             Logger.log(LOG_TAG, "Authentication exception ...\n" +
                     " No connection was possible with account authenticator\nRedirecting to login ", Log.ERROR);

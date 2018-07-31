@@ -42,7 +42,7 @@ import com.mdmobile.cyclops.dataModel.api.devices.DeviceFactory;
 import com.mdmobile.cyclops.dataModel.api.devices.IDevice;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;
-import com.mdmobile.cyclops.sec.ServerNotFound;
+import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.ConfirmActionDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.LabelHelper;

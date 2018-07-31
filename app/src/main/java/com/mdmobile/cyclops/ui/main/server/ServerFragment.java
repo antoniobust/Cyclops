@@ -19,7 +19,7 @@ import com.mdmobile.cyclops.adapters.DsInfoAdapter;
 import com.mdmobile.cyclops.adapters.MsInfoAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
 import com.mdmobile.cyclops.provider.McContract;
-import com.mdmobile.cyclops.sec.ServerNotFound;
+import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.logIn.LoginActivity;
 import com.mdmobile.cyclops.utils.ServerUtility;

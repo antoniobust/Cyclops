@@ -20,7 +20,7 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.apiManager.ApiRequestManager;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
-import com.mdmobile.cyclops.sec.ServerNotFound;
+import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.MessageDialog;
 import com.mdmobile.cyclops.ui.dialogs.ScriptDialog;
 import com.mdmobile.cyclops.utils.ServerUtility;

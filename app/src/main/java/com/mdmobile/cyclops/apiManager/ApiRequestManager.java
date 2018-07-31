@@ -101,6 +101,9 @@ public class ApiRequestManager {
                 error.printStackTrace();
                 Toast.makeText(applicationContext, "Request couldn't be authorized\n Please check your user name & password" +
                         "and the instance information", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.SYNC_DONE_BROADCAST_ACTION);
+                intent.setPackage(applicationContext.getPackageName());
+                applicationContext.sendBroadcast(intent);
             }
         }) {
             @Override
@@ -115,8 +118,6 @@ public class ApiRequestManager {
                 return grantType.getBytes();
             }
         };
-
-//        tokenRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestsQueue.add(tokenRequest);
 
     }

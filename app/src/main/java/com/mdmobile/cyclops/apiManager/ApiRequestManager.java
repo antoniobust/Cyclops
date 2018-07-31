@@ -71,7 +71,7 @@ public class ApiRequestManager {
     /**
      * Get a new token for the provided user and server
      */
-    public void getToken(Server server, String userName, String password, final NetworkCallBack callBack) {
+    public void getToken(final Server server, String userName, String password, final NetworkCallBack callBack) {
 
         String serverUrl = server.getServerAddress().concat("/MobiControl/api/token");
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
@@ -99,8 +99,8 @@ public class ApiRequestManager {
                 callBack.errorReceivingToken(error);
                 Log.e(LOG_TAG, "Error receiving token");
                 error.printStackTrace();
-                Toast.makeText(applicationContext, "Request couldn't be authorized\n Please check your user name & password" +
-                        "and the instance information", Toast.LENGTH_LONG).show();
+                Toast.makeText(applicationContext, "Request couldn't be authorized\n Please check your user name & password " +
+                        "and "+server.getServerName()+" instance information", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(MainActivity.SYNC_DONE_BROADCAST_ACTION);
                 intent.setPackage(applicationContext.getPackageName());
                 applicationContext.sendBroadcast(intent);

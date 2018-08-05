@@ -3,6 +3,7 @@ package com.mdmobile.cyclops.networkRequests;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.net.Uri;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -11,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -85,6 +87,9 @@ abstract public class BasicRequest<T> extends Request<T> {
         return super.parseNetworkError(volleyError);
     }
 
+    public String getServerUrl(){
+        return Uri.parse(getUrl()).getAuthority();
+    }
     private void parseErrorCode(int errorCode) throws ServerNotFound {
 
         if (errorCode == HttpsURLConnection.HTTP_BAD_REQUEST) {

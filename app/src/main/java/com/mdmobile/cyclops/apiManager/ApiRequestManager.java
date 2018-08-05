@@ -54,6 +54,7 @@ public class ApiRequestManager {
     private final static String LOG_TAG = ApiRequestManager.class.getSimpleName();
     private static ApiRequestManager server;
     private RequestQueue requestsQueue;
+    public final static String API_AUTH_ERROR = "apiAuthError";
 
     private ApiRequestManager() {
         requestsQueue = Volley.newRequestQueue(applicationContext);
@@ -97,13 +98,7 @@ public class ApiRequestManager {
             @Override
             public void onErrorResponse(VolleyError error) {
                 callBack.errorReceivingToken(error);
-                Log.e(LOG_TAG, "Error receiving token");
-                error.printStackTrace();
-                Toast.makeText(applicationContext, "Request couldn't be authorized\n Please check your user name & password " +
-                        "and "+server.getServerName()+" instance information", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(MainActivity.SYNC_DONE_BROADCAST_ACTION);
-                intent.setPackage(applicationContext.getPackageName());
-                applicationContext.sendBroadcast(intent);
+                Log.e(LOG_TAG, "Error receiving token:" + error.networkResponse.statusCode);
             }
         }) {
             @Override

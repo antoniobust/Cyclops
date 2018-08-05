@@ -6,6 +6,7 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -37,8 +38,13 @@ public class OnTokenResponse implements AccountManagerCallback<Bundle> {
         try {
             if (future.isDone() && !future.isCancelled()) {
                 Bundle newInfo = future.getResult();
-                //If result contains KEY INTENT than we require new credentials
-                if (!newInfo.containsKey(AccountManager.KEY_INTENT)) {
+                //If result contains KEY INTENT then we require new credential otherwise resend req
+                if (newInfo.containsKey(AccountManager.KEY_INTENT)) {
+                    Intent intent = new Intent(ApiRequestManager.API_AUTH_ERROR);
+                    intent.setPackage(applicationContext.getPackageName());
+                    intent.putExtra("srvName", request.get().getServerUrl());
+                    applicationContext.sendBroadcast(intent);
+                } else{
                     String accountName = newInfo.getString(AccountManager.KEY_ACCOUNT_NAME);
                     String accountType = newInfo.getString(AccountManager.KEY_ACCOUNT_TYPE);
                     String authTokenType = newInfo.getString(AUTH_TOKEN_TYPE_KEY);

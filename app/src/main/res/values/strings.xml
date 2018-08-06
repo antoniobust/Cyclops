@@ -73,16 +73,13 @@
     <string name="deployment_servers_label">Deployment Servers</string>
     <string name="management_servers_label">Management Servers</string>
     <string name="server_ini_file_name">ServerSetup.xml</string>
-
     <string name="title_activity_service_details">ServiceDetailsActivity</string>
     <string name="add_chart_label">Add chart</string>
-
     <string name="more_label">more</string>
     <string name="logout_label">Logout</string>
     <string name="notification_channel_name">MDM Alerts</string>
     <string name="notification_channel_description">Get notified when MDM services are not reachable</string>
     <string name="notification_server_status_title">Alert: Server status changed</string>
-
     <string name="server_offline">%1$s status: Offline</string>
     <string name="server_stopped">%1$s status: Stopped</string>
     <string name="server_online">%1$s status: Online</string>
@@ -91,15 +88,12 @@
     <string name="server_started_but_not_registered">%1$s status: Started but not registered</string>
     <string name="server_deleted">%1$s status: Deleted</string>
     <string name="server_unknown">%1$s status: Unknown</string>
-
-
     <string-array name="sorting_options_radio_labels">
         <item>@string/sort_device_a_z</item>
         <item>@string/sort_device_z_a</item>
         <item>@string/sort_device_online_first</item>
         <item>@string/sort_device_offline_first</item>
     </string-array>
-
     <string-array name="server_notification_labels">
         <item>@string/server_stopped</item>
         <item>@string/server_online</item>
@@ -110,7 +104,6 @@
         <item>@string/server_offline</item>
         <item>@string/server_unknown</item>
     </string-array>
-
     <string-array name="last_sync_labels">
         <item>@string/last_sync_now_label</item>
         <item>@string/last_sync_min_label</item>
@@ -118,14 +111,11 @@
         <item>@string/last_sync_days_label</item>
         <item>@string/last_sync_unknown</item>
     </string-array>
-
     <string name="last_sync_now_label">Just now!</string>
     <string name="last_sync_min_label">%1$dm ago</string>
     <string name="last_sync_hour_label">%1$dh ago</string>
     <string name="last_sync_days_label">%1$dd ago</string>
     <string name="last_sync_unknown">Unknown</string>
-
-    <!--Shared preferences strings-->
     <string name="general_shared_preference">CyclopesGeneralPref</string>
     <string name="user_shared_preference">CyclopesUser_%1$s_Pref</string>
     <string name="server_shared_preference">CyclopesServerPref</string>
@@ -154,20 +144,10 @@
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="server_settings_label">Server settings</string>
     <string name="title_activity_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact based on your message
-        history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_title_auto_sync">Auto sync</string>
+    <string name="pref_description_auto_sync">Sync instances automatically</string>
+    <string name="pref_title_auto_sync_frequency">Frequency</string>
     <string name="pref_default_display_name">John Smith</string>
-
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
         <item>Always</item>
@@ -179,69 +159,36 @@
         <item>0</item>
         <item>-1</item>
     </string-array>
-
-    <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
-
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
         <item>3 hours</item>
         <item>6 hours</item>
-        <item>Never</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
-        <item>15</item>
         <item>30</item>
         <item>60</item>
         <item>180</item>
         <item>360</item>
-        <item>-1</item>
     </string-array>
 
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
 
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value"/>
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
     <string name="server_version_preference">server_version_preference</string>
     <string name="server_build_preference">server_build_preference</string>
     <string name="user_logo_preference">user_logo_preference</string>
     <string name="add_new_server_label">Add new Instance</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="first_boot_preference">first_boot</string>
     <string name="delete_label">Delete</string>
     <string name="lock_device_label">Lock device</string>
-    <string name="unenroll_device_label">Unenroll</string>
+    <string name="unenroll_device_label">Unenrol</string>
     <string name="wipe_device_label">Wipe</string>
     <string name="confirm_action">Confirm action</string>
     <string name="confirm_wipe_message">Are you sure you want to wipe \"%1$s\" ?</string>
     <string name="yes_label">Yes</string>
-    <string name="confirm_unenroll_message">Are you sure you want to unenroll \"%1$s\" ?</string>
+    <string name="confirm_unenroll_message">Are you sure you want to unenrol \"%1$s\" ?</string>
     <string name="empty_user_list_label">:( \n No users found</string>
     <string name="hint_bulb_content_description">Hint bulb</string>
     <string name="tip">Tips</string>

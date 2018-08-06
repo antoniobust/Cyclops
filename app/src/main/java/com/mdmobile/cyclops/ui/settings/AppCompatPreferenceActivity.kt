@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import com.mdmobile.cyclops.R
+import kotlinx.android.synthetic.main.actionbar.*
 
 abstract class AppCompatPreferenceActivity : PreferenceActivity() {
 
@@ -17,6 +19,9 @@ abstract class AppCompatPreferenceActivity : PreferenceActivity() {
         delegate.installViewFactory()
         delegate.onCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_settings)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

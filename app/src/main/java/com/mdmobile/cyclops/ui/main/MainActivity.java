@@ -54,6 +54,7 @@ import com.mdmobile.cyclops.ui.main.myDevices.DevicesFragment;
 import com.mdmobile.cyclops.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.cyclops.ui.main.server.ServerFragment;
 import com.mdmobile.cyclops.ui.main.users.UsersFragment;
+import com.mdmobile.cyclops.ui.settings.SettingsActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
@@ -195,11 +196,11 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                 logout();
                 navigationDrawer.closeDrawer(Gravity.START, true);
                 return true;
-//            case R.id.drawer_settings:
-//                Intent intent = new Intent(this, SettingsActivity.class);
-//                startActivity(intent);
-//                navigationDrawer.closeDrawer(Gravity.START, true);
-//                return true;
+            case R.id.drawer_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                navigationDrawer.closeDrawer(Gravity.START, true);
+                return true;
             case R.id.nav_drawer_add_server:
                 launchLoginActivity();
                 return true;

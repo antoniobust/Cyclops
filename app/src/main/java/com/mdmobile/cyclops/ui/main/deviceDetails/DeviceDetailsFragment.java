@@ -74,7 +74,6 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private ArrayList<Profile> profiles;
     private ArrayList<InstalledApp> applications;
     private OnCardClick mCallback;
-    private View rootView;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
     private Server activeServer;
@@ -181,7 +180,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_device_details, container, false);
 
         if (getActivity() != null) {
             Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
@@ -197,7 +196,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 //        swipeLayout = rootView.findViewById(R.id.device_info_swipe_to_refresh);
 //        swipeLayout.setOnRefreshListener(this);
 
-        View header = getActivity().getFragmentManager().findFragmentById(R.id.details_header).getView();
+        View header = getActivity().getSupportFragmentManager().findFragmentById(R.id.details_header).getView();
         ImageView titleIconView = header.findViewById(R.id.device_detail_icon);
         TextView titleView = header.findViewById(R.id.device_detail_title_view);
         TextView subtitleView = header.findViewById(R.id.device_detail_subtitle_view);

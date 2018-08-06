@@ -14,9 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/include"
-            layout="@layout/actionbar"/>
+        <include layout="@layout/actionbar"/>
 
         <fragment
             android:id="@+id/details_header"

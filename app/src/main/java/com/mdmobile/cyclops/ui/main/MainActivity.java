@@ -57,7 +57,6 @@ import com.mdmobile.cyclops.ui.main.users.UsersFragment;
 import com.mdmobile.cyclops.ui.settings.SettingsActivity;
 import com.mdmobile.cyclops.utils.GeneralUtility;
 import com.mdmobile.cyclops.utils.Logger;
-import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
 import com.mdmobile.cyclops.utils.UserUtility;
 
@@ -67,7 +66,6 @@ import java.util.List;
 import static android.view.View.GONE;
 import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
 import static com.mdmobile.cyclops.R.id.main_activity_fragment_container;
-import static com.mdmobile.cyclops.apiManager.ApiRequestManager.API_AUTH_ERROR;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
 
@@ -445,7 +443,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, true);
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, false);
 
-            Server[] servers = ServerUtility.getAllServers();
+            Server[] servers = ServerUtility.getAllInstances();
 
             Menu menu = drawerNavigationView.getMenu();
             MenuItem item;
@@ -525,7 +523,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
     private void logout() {
         // TODO: optimize
-        Server[] servers = ServerUtility.getAllServers();
+        Server[] servers = ServerUtility.getAllInstances();
         String[] selectionArgs = new String[servers.length];
         String selection = "";
         for (int i = 0; i < servers.length; i++) {

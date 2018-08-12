@@ -8,7 +8,7 @@
     <include layout="@layout/actionbar"/>
 
     <FrameLayout
-        android:id="@+id/prefs"
+        android:id="@+id/pref_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

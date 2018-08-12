@@ -175,7 +175,7 @@ public class ServerUtility {
         return s;
     }
 
-    public static Server[] getAllServers() {
+    public static Server[] getAllInstances() {
         String[] projection = {McContract.ServerInfo.NAME, McContract.ServerInfo.SERVER_ADDRESS, McContract.ServerInfo.SERVER_MAJOR_VERSION,
                 McContract.ServerInfo.SERVER_BUILD_NUMBER, McContract.ServerInfo.CLIENT_ID, McContract.ServerInfo.CLIENT_SECRET};
         Cursor c = applicationContext.getContentResolver()

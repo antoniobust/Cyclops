@@ -204,4 +204,6 @@
         Please install Cyclops from the Play Store or contact the developer for more info</string>
     <string name="retry_label">Retry</string>
     <string name="play_store_label">Play Store</string>
+    <string name="pref_general_category_title">General</string>
+    <string name="pref_instance_category_title">Instances</string>
 </resources>

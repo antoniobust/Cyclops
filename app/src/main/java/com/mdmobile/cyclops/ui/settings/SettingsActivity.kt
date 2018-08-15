@@ -5,6 +5,7 @@ import android.preference.ListPreference
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceCategory
 import android.support.v7.preference.PreferenceFragmentCompat
@@ -14,12 +15,18 @@ import com.mdmobile.cyclops.utils.ServerUtility
 
 
 class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListener {
+    public val serverExtraKey = "serverExtraKey"
+
     override fun onPreferenceClick(preference: Preference?): Boolean {
         return if (preference?.fragment != null) {
             //TODO: support multi pane view
+            val f = Fragment.instantiate(this, preference.fragment)
+            val args = Bundle()
+            args.putString(serverExtraKey, preference.key)
+            f.arguments = args
             supportFragmentManager.beginTransaction()
                     .addToBackStack(SettingsActivity::class.java.name)
-                    .replace(R.id.pref_container, Fragment.instantiate(this, preference.fragment))
+                    .replace(R.id.pref_container, f)
                     .commit()
             true
         } else {
@@ -79,6 +86,7 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
             for (s: Server in instances) {
                 pref = Preference(context)
                 pref.title = s.serverName
+                pref.key = s.serverName
                 pref.onPreferenceClickListener = (activity as Preference.OnPreferenceClickListener)
                 pref.fragment = InstancePrefFragment::class.java.name
                 instancesCategory.addPreference(pref)
@@ -97,7 +105,31 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
             (activity as SettingsActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
         }
 
-        override fun onCreatePreferences(p0: Bundle?, p1: String?) {
+        override fun onCreatePreferences(bundle: Bundle?, key: String?) {
+            val serverName = arguments?.getString("serverExtraKey")
+            val server = ServerUtility.getServer(serverName)
+
+            val preferenceScreen = preferenceManager.createPreferenceScreen(activity)
+            setPreferenceScreen(preferenceScreen)
+
+            var editTextPref = EditTextPreference(activity)
+            editTextPref.key = server.serverName
+            editTextPref.title = server.serverName
+            preferenceScreen.addPreference(editTextPref)
+
+            editTextPref = EditTextPreference(activity)
+            editTextPref.title = server.serverAddress
+            preferenceScreen.addPreference(editTextPref)
+
+
+            editTextPref = EditTextPreference(activity)
+            editTextPref.title = server.clientId
+            preferenceScreen.addPreference(editTextPref)
+
+            editTextPref = EditTextPreference(activity)
+            editTextPref.title = server.apiSecret
+            preferenceScreen.addPreference(editTextPref)
+
         }
     }
 }

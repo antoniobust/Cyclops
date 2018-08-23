@@ -97,7 +97,8 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                     .registerSubtype(WindowsPhone.class, DeviceKind.WINDOWS_PHONE)
                     .registerSubtype(WindowsRuntime.class, DeviceKind.WINDOWS_RUNTIME)
                     .registerSubtype(WindowsCE.class, DeviceKind.WINDOWS_CE)
-                    .registerSubtype(NotYetSupportedDevice.class, DeviceKind.LINUX);
+                    .registerSubtype(NotYetSupportedDevice.class, DeviceKind.LINUX)
+                    .registerSubtype(NotYetSupportedDevice.class, DeviceKind.MAC);
 //            .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
 
 

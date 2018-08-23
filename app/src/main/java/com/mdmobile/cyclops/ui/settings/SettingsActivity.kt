@@ -2,20 +2,16 @@ package com.mdmobile.cyclops.ui.settings
 
 import android.os.Bundle
 import android.preference.ListPreference
-import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.EditTextPreference
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceCategory
-import android.support.v7.preference.PreferenceFragmentCompat
+import android.support.v7.preference.*
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.Server
 import com.mdmobile.cyclops.utils.ServerUtility
 
 
 class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListener {
-    public val serverExtraKey = "serverExtraKey"
+    val serverExtraKey = "serverExtraKey"
 
     override fun onPreferenceClick(preference: Preference?): Boolean {
         return if (preference?.fragment != null) {
@@ -92,10 +88,6 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
                 instancesCategory.addPreference(pref)
             }
         }
-
-        override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-            return super.onPreferenceTreeClick(preference)
-        }
     }
 
     class InstancePrefFragment : PreferenceFragmentCompat() {
@@ -108,28 +100,60 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
         override fun onCreatePreferences(bundle: Bundle?, key: String?) {
             val serverName = arguments?.getString("serverExtraKey")
             val server = ServerUtility.getServer(serverName)
-
-            val preferenceScreen = preferenceManager.createPreferenceScreen(activity)
-            setPreferenceScreen(preferenceScreen)
-
-            var editTextPref = EditTextPreference(activity)
-            editTextPref.key = server.serverName
-            editTextPref.title = server.serverName
-            preferenceScreen.addPreference(editTextPref)
-
-            editTextPref = EditTextPreference(activity)
-            editTextPref.title = server.serverAddress
-            preferenceScreen.addPreference(editTextPref)
+            addPreferencesFromResource(R.xml.instance_preference)
+            val root = preferenceManager.preferenceScreen
 
 
-            editTextPref = EditTextPreference(activity)
-            editTextPref.title = server.clientId
-            preferenceScreen.addPreference(editTextPref)
+            val instanceNameEditText = root.findPreference("instanceNamePref")
+            instanceNameEditText.summary = serverName
+            val instanceAddressEditText = root.findPreference("instanceAddressPref")
+            instanceAddressEditText.summary = server.serverAddress
+            val clientIdEditText = root.findPreference("instanceClientIdPref")
+            clientIdEditText.summary = server.clientId
+            val secretEditText = root.findPreference("instanceClientSecretPref")
+            secretEditText.summary = server.apiSecret
 
-            editTextPref = EditTextPreference(activity)
-            editTextPref.title = server.apiSecret
-            preferenceScreen.addPreference(editTextPref)
+            root.addPreference(instanceNameEditText)
+            root.addPreference(instanceAddressEditText)
+            root.addPreference(clientIdEditText)
+            root.addPreference(secretEditText)
 
+            val checkBoxPref = CheckBoxPreference(activity)
+            checkBoxPref.title = "title"
+            checkBoxPref.summary = "summary"
+            checkBoxPref.isChecked = true
+            preferenceScreen.addPreference(checkBoxPref)
+
+//            val instanceNamePref = EditTextPreference(activity)
+//            instanceNamePref.key = server.serverName
+//            instanceNamePref.title = getString(R.string.server_name_hint)
+//            instanceNamePref.summary = server.serverName
+//            instanceNamePref.dialogTitle = getString(R.string.server_name_hint)
+//            instanceNamePref.dialogMessage = getString(R.string.server_name_hint)
+//
+//            preferenceScreen.addPreference(EditTextPreference(activity))
+
+//            val instanceAddressPref = EditTextPreference(activity)
+//            instanceNamePref.key = server.serverAddress
+//            instanceAddressPref.title = getString(R.string.server_address_hint)
+//            instanceAddressPref.summary = server.serverAddress
+//            instanceAddressPref.dialogTitle = getString(R.string.server_address_hint)
+//            preferenceScreen.addPreference(instanceAddressPref)
+//
+//
+//            val clientIdPref = EditTextPreference(activity)
+//            instanceNamePref.key = server.clientId
+//            clientIdPref.title = getString(R.string.client_id_hint)
+//            clientIdPref.summary = server.clientId
+//            clientIdPref.dialogTitle = getString(R.string.client_id_hint)
+//            preferenceScreen.addPreference(clientIdPref)
+//
+//            val apiSecretPref = EditTextPreference(activity)
+//            instanceNamePref.key = server.apiSecret
+//            apiSecretPref.title = getString(R.string.api_secret_hint)
+//            apiSecretPref.summary = server.apiSecret
+//            apiSecretPref.dialogTitle = getString(R.string.api_secret_hint)
+//            preferenceScreen.addPreference(apiSecretPref)
         }
     }
 }

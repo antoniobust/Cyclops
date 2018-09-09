@@ -40,8 +40,8 @@ class DeviceFactory {
                         DeviceKind.WINDOWS_PHONE -> add(WindowsPhone(cursor))
                         DeviceKind.WINDOWS_RUNTIME -> add(WindowsRuntime(cursor))
 //                DeviceKind.ZEBRA_PRINTER -> add( newZebraPrinter(cursor))
-                        DeviceKind.LINUX -> add(NotYetSupportedDevice(cursor))
-                        DeviceKind.WINDOWS_HOLO_LENS -> add(NotYetSupportedDevice(cursor))
+                        DeviceKind.LINUX -> add(Linux(cursor))
+                        DeviceKind.WINDOWS_HOLO_LENS -> add(Linux(cursor))
                         else -> {
                             throw UnsupportedOperationException("Non Supported device type: $kind")
                         }

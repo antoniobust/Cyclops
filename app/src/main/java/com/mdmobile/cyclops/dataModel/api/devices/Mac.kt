@@ -2,7 +2,7 @@ package com.mdmobile.cyclops.dataModel.api.devices
 
 import android.database.Cursor
 
-class NotYetSupportedDevice : BasicDevice, IDevice<NotYetSupportedDevice> {
+class Mac : BasicDevice, IDevice<Mac> {
 
     constructor(Kind: String, DeviceId: String, DeviceName: String, EnrollmentTime: String,
                 Family: String, HostName: String, MACAddress: String, Manufacturer: String,
@@ -14,8 +14,7 @@ class NotYetSupportedDevice : BasicDevice, IDevice<NotYetSupportedDevice> {
 
     constructor(cursor: Cursor) : super(cursor)
 
-    override fun getDevice(): NotYetSupportedDevice {
+    override fun getDevice(): Mac {
         return this
     }
-
 }

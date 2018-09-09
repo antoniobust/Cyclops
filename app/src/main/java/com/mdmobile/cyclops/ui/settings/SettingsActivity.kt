@@ -1,5 +1,9 @@
 package com.mdmobile.cyclops.ui.settings
 
+import android.content.AsyncQueryHandler
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.content.Context
 import android.os.Bundle
 import android.preference.ListPreference
 import android.support.v4.app.Fragment
@@ -7,11 +11,12 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.*
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.Server
+import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.utils.ServerUtility
 
 
 class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListener {
-    val serverExtraKey = "serverExtraKey"
+    private val serverExtraKey = "serverExtraKey"
 
     override fun onPreferenceClick(preference: Preference?): Boolean {
         return if (preference?.fragment != null) {
@@ -91,38 +96,59 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
     }
 
     class InstancePrefFragment : PreferenceFragmentCompat() {
+        private lateinit var instanceNameEditText: EditTextPreference
+        private lateinit var instanceAddressEditText: EditTextPreference
+        private lateinit var clientIdEditText: EditTextPreference
+        private lateinit var secretEditText: EditTextPreference
+        private var serverName: String? = ""
+        private var server: Server? = Server()
+
         override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
             (activity as SettingsActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
             (activity as SettingsActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+            if (arguments != null) {
+                serverName = arguments?.getString("serverExtraKey")
+                server = ServerUtility.getServer(serverName)
+            }
+            super.onCreate(savedInstanceState)
         }
 
         override fun onCreatePreferences(bundle: Bundle?, key: String?) {
-            val serverName = arguments?.getString("serverExtraKey")
-            val server = ServerUtility.getServer(serverName)
             addPreferencesFromResource(R.xml.instance_preference)
             val root = preferenceManager.preferenceScreen
+            val customDataStore = CustomDataStore(context, server)
 
-
-            val instanceNameEditText = root.findPreference("instanceNamePref")
+            instanceNameEditText = root.findPreference(McContract.ServerInfo.NAME) as EditTextPreference
             instanceNameEditText.summary = serverName
-            val instanceAddressEditText = root.findPreference("instanceAddressPref")
-            instanceAddressEditText.summary = server.serverAddress
-            val clientIdEditText = root.findPreference("instanceClientIdPref")
-            clientIdEditText.summary = server.clientId
-            val secretEditText = root.findPreference("instanceClientSecretPref")
-            secretEditText.summary = server.apiSecret
+            instanceNameEditText.setDefaultValue(serverName)
+            instanceNameEditText.text = serverName
+            instanceNameEditText.preferenceDataStore = customDataStore
+
+            instanceAddressEditText = root.findPreference(McContract.ServerInfo.SERVER_ADDRESS) as EditTextPreference
+            instanceAddressEditText.summary = server?.serverAddress
+            instanceAddressEditText.text = server?.serverAddress
+            instanceAddressEditText.setDefaultValue(server?.serverAddress)
+
+            instanceAddressEditText.preferenceDataStore = customDataStore
+
+            clientIdEditText = root.findPreference(McContract.ServerInfo.CLIENT_ID) as EditTextPreference
+            clientIdEditText.text = server?.clientId
+            clientIdEditText.summary = server?.clientId
+            clientIdEditText.setDefaultValue(server?.clientId)
+            clientIdEditText.preferenceDataStore = customDataStore
+
+            secretEditText = root.findPreference(McContract.ServerInfo.CLIENT_SECRET) as EditTextPreference
+            secretEditText.summary = server?.apiSecret
+            secretEditText.text = server?.apiSecret
+            secretEditText.setDefaultValue(server?.apiSecret)
+            secretEditText.preferenceDataStore
+            secretEditText.preferenceDataStore = customDataStore
 
             root.addPreference(instanceNameEditText)
             root.addPreference(instanceAddressEditText)
             root.addPreference(clientIdEditText)
             root.addPreference(secretEditText)
 
-            val checkBoxPref = CheckBoxPreference(activity)
-            checkBoxPref.title = "title"
-            checkBoxPref.summary = "summary"
-            checkBoxPref.isChecked = true
-            preferenceScreen.addPreference(checkBoxPref)
 
 //            val instanceNamePref = EditTextPreference(activity)
 //            instanceNamePref.key = server.serverName
@@ -155,5 +181,27 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
 //            apiSecretPref.dialogTitle = getString(R.string.api_secret_hint)
 //            preferenceScreen.addPreference(apiSecretPref)
         }
+
+//        override fun onDestroyView() {
+//            super.onDestroyView()
+//            val s = Server(instanceNameEditText.title.toString(), instanceAddressEditText.title.toString(),
+//                    clientIdEditText.title.toString(), instanceAddressEditText.title.toString(), server!!.serverMajorVersion,
+//                    server!!.buildNumber)
+//            val dbOp = AsyncDbOp(context?.contentResolver)
+//            dbOp.startUpdate(s.describeContents(), Any(), McContract.ServerInfo.buildServerInfoUriWithName(s.serverName),
+//                    s.toContentValues(), null, null)
+//        }
     }
+
+    class CustomDataStore(val c: Context?, val s: Server?) : PreferenceDataStore() {
+        override fun putString(key: String?, value: String?) {
+            val dbOp = AsyncDbOp(c?.contentResolver)
+            val values = ContentValues()
+            values.put(key, value)
+            dbOp.startUpdate(1, Any(), McContract.ServerInfo.buildServerInfoUriWithName(s?.serverName),
+                    values, null, null)
+        }
+    }
+
+    class AsyncDbOp(cr: ContentResolver?) : AsyncQueryHandler(cr)
 }

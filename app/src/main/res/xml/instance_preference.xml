@@ -4,21 +4,21 @@
     <EditTextPreference
         android:id="@+id/instance_name_pref_view"
         android:dialogTitle="@string/server_name_hint"
-        android:key="instanceNamePref"
+        android:key="Name"
         android:title="@string/server_name_hint"/>
     <EditTextPreference
         android:id="@+id/instance_address_pref_view"
         android:dialogTitle="@string/server_address_hint"
-        android:key="instanceAddressPref"
+        android:key="Address"
         android:title="@string/server_address_hint"/>
     <EditTextPreference
         android:id="@+id/instance_client_id_pref_view"
         android:dialogTitle="@string/client_id_hint"
-        android:key="instanceClientIdPref"
+        android:key="ClientId"
         android:title="@string/client_id_hint"/>
     <EditTextPreference
         android:id="@+id/instance_client_secret_pref_view"
         android:dialogTitle="@string/api_secret_hint"
-        android:key="instanceClientSecretPref"
+        android:key="ClientSecret"
         android:title="@string/api_secret_hint"/>
 </PreferenceScreen>

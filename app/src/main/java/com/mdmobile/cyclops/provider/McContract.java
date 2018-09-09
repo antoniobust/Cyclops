@@ -198,6 +198,7 @@ public class McContract {
         String SERVER_ID = "ServerId";
     }
 
+    //If these column name are changed, check settings xml @xml/instance_preference
     interface ServerInfoColumns {
         String NAME = "Name";
         String CLIENT_ID = "ClientId";
@@ -458,7 +459,7 @@ public class McContract {
             return uri.getLastPathSegment();
         }
 
-        public static Uri buildServerInfoUriWithName(@NonNull String serverName) {
+        public static Uri buildServerInfoUriWithName(String serverName) {
             return CONTENT_URI.buildUpon().appendPath(serverName).build();
         }
     }

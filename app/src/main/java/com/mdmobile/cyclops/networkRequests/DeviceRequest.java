@@ -22,7 +22,8 @@ import com.mdmobile.cyclops.dataModel.api.devices.AndroidPlus;
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice;
 import com.mdmobile.cyclops.dataModel.api.devices.IosDevice;
 import com.mdmobile.cyclops.dataModel.api.devices.IosDeviceV14;
-import com.mdmobile.cyclops.dataModel.api.devices.NotYetSupportedDevice;
+import com.mdmobile.cyclops.dataModel.api.devices.Linux;
+import com.mdmobile.cyclops.dataModel.api.devices.Mac;
 import com.mdmobile.cyclops.dataModel.api.devices.SamsungElm;
 import com.mdmobile.cyclops.dataModel.api.devices.WindowsCE;
 import com.mdmobile.cyclops.dataModel.api.devices.WindowsDesktop;
@@ -97,8 +98,8 @@ public class DeviceRequest<T> extends BasicRequest<T> {
                     .registerSubtype(WindowsPhone.class, DeviceKind.WINDOWS_PHONE)
                     .registerSubtype(WindowsRuntime.class, DeviceKind.WINDOWS_RUNTIME)
                     .registerSubtype(WindowsCE.class, DeviceKind.WINDOWS_CE)
-                    .registerSubtype(NotYetSupportedDevice.class, DeviceKind.LINUX)
-                    .registerSubtype(NotYetSupportedDevice.class, DeviceKind.MAC);
+                    .registerSubtype(Linux.class, DeviceKind.LINUX)
+                    .registerSubtype(Mac.class, DeviceKind.MAC);
 //            .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
 
 

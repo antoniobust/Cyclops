@@ -3,12 +3,18 @@ package com.mdmobile.cyclops.ui.settings
 import android.content.AsyncQueryHandler
 import android.content.ContentResolver
 import android.content.ContentValues
-import android.content.Context
+import android.database.ContentObserver
+import android.net.Uri
 import android.os.Bundle
-import android.preference.ListPreference
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.*
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.Server
 import com.mdmobile.cyclops.provider.McContract
@@ -35,43 +41,12 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
         }
     }
 
-    companion object {
-
-        private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { preference, value ->
-            val stringValue = value.toString()
-
-            if (preference is ListPreference) {
-                val index = preference.findIndexOfValue(stringValue)
-                preference.setSummary(
-                        if (index >= 0)
-                            preference.entries[index]
-                        else
-                            null)
-            } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.summary = stringValue
-            }
-            true
-        }
-
-        private fun bindPreferenceSummaryToValue(preference: Preference) {
-            preference.onPreferenceChangeListener = sBindPreferenceSummaryToValueListener
-
-            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                    PreferenceManager
-                            .getDefaultSharedPreferences(preference.context)
-                            .getString(preference.key, ""))
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportFragmentManager.beginTransaction().add(R.id.pref_container, GeneralPreferenceFragment()).commit()
     }
-
 
     class GeneralPreferenceFragment : PreferenceFragmentCompat() {
 
@@ -102,6 +77,15 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
         private lateinit var secretEditText: EditTextPreference
         private var serverName: String? = ""
         private var server: Server? = Server()
+        lateinit var contentResolver: ContentResolver
+        private val updateHandler: Handler = Handler(Looper.getMainLooper()) {
+            if (it.what == 101) {
+                true
+            } else {
+                false
+            }
+        }
+        private val contentObserver = UriContentObserver(updateHandler)
 
         override fun onCreate(savedInstanceState: Bundle?) {
             (activity as SettingsActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -110,13 +94,20 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
                 serverName = arguments?.getString("serverExtraKey")
                 server = ServerUtility.getServer(serverName)
             }
+            if (context != null) {
+                contentResolver = context!!.contentResolver
+            }
+
+            contentResolver.registerContentObserver(
+                    McContract.ServerInfo.buildServerInfoUriWithName(serverName),
+                    false, contentObserver)
             super.onCreate(savedInstanceState)
         }
 
         override fun onCreatePreferences(bundle: Bundle?, key: String?) {
             addPreferencesFromResource(R.xml.instance_preference)
             val root = preferenceManager.preferenceScreen
-            val customDataStore = CustomDataStore(context, server)
+            val customDataStore = CustomDataStore(contentResolver, server)
 
             instanceNameEditText = root.findPreference(McContract.ServerInfo.NAME) as EditTextPreference
             instanceNameEditText.summary = serverName
@@ -148,54 +139,26 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
             root.addPreference(instanceAddressEditText)
             root.addPreference(clientIdEditText)
             root.addPreference(secretEditText)
-
-
-//            val instanceNamePref = EditTextPreference(activity)
-//            instanceNamePref.key = server.serverName
-//            instanceNamePref.title = getString(R.string.server_name_hint)
-//            instanceNamePref.summary = server.serverName
-//            instanceNamePref.dialogTitle = getString(R.string.server_name_hint)
-//            instanceNamePref.dialogMessage = getString(R.string.server_name_hint)
-//
-//            preferenceScreen.addPreference(EditTextPreference(activity))
-
-//            val instanceAddressPref = EditTextPreference(activity)
-//            instanceNamePref.key = server.serverAddress
-//            instanceAddressPref.title = getString(R.string.server_address_hint)
-//            instanceAddressPref.summary = server.serverAddress
-//            instanceAddressPref.dialogTitle = getString(R.string.server_address_hint)
-//            preferenceScreen.addPreference(instanceAddressPref)
-//
-//
-//            val clientIdPref = EditTextPreference(activity)
-//            instanceNamePref.key = server.clientId
-//            clientIdPref.title = getString(R.string.client_id_hint)
-//            clientIdPref.summary = server.clientId
-//            clientIdPref.dialogTitle = getString(R.string.client_id_hint)
-//            preferenceScreen.addPreference(clientIdPref)
-//
-//            val apiSecretPref = EditTextPreference(activity)
-//            instanceNamePref.key = server.apiSecret
-//            apiSecretPref.title = getString(R.string.api_secret_hint)
-//            apiSecretPref.summary = server.apiSecret
-//            apiSecretPref.dialogTitle = getString(R.string.api_secret_hint)
-//            preferenceScreen.addPreference(apiSecretPref)
         }
 
-//        override fun onDestroyView() {
-//            super.onDestroyView()
-//            val s = Server(instanceNameEditText.title.toString(), instanceAddressEditText.title.toString(),
-//                    clientIdEditText.title.toString(), instanceAddressEditText.title.toString(), server!!.serverMajorVersion,
-//                    server!!.buildNumber)
-//            val dbOp = AsyncDbOp(context?.contentResolver)
-//            dbOp.startUpdate(s.describeContents(), Any(), McContract.ServerInfo.buildServerInfoUriWithName(s.serverName),
-//                    s.toContentValues(), null, null)
-//        }
+        override fun onPause() {
+            super.onPause()
+            contentResolver.unregisterContentObserver(contentObserver)
+        }
+
+        class UriContentObserver(private val handler: Handler) : ContentObserver(handler) {
+            override fun onChange(selfChange: Boolean, uri: Uri) {
+                val msg = Message()
+                msg.what = 101
+                handler.sendMessage(msg)
+            }
+        }
     }
 
-    class CustomDataStore(val c: Context?, val s: Server?) : PreferenceDataStore() {
+
+    class CustomDataStore(private val contentResolver: ContentResolver?, val s: Server?) : PreferenceDataStore() {
         override fun putString(key: String?, value: String?) {
-            val dbOp = AsyncDbOp(c?.contentResolver)
+            val dbOp = AsyncDbOp(contentResolver)
             val values = ContentValues()
             values.put(key, value)
             dbOp.startUpdate(1, Any(), McContract.ServerInfo.buildServerInfoUriWithName(s?.serverName),

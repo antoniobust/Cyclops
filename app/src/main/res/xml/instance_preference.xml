@@ -5,20 +5,28 @@
         android:id="@+id/instance_name_pref_view"
         android:dialogTitle="@string/server_name_hint"
         android:key="Name"
+        android:maxLines="1"
+        android:singleLine="true"
         android:title="@string/server_name_hint"/>
     <EditTextPreference
         android:id="@+id/instance_address_pref_view"
         android:dialogTitle="@string/server_address_hint"
         android:key="Address"
+        android:maxLines="1"
+        android:singleLine="true"
         android:title="@string/server_address_hint"/>
     <EditTextPreference
         android:id="@+id/instance_client_id_pref_view"
         android:dialogTitle="@string/client_id_hint"
         android:key="ClientId"
+        android:maxLines="1"
+        android:singleLine="true"
         android:title="@string/client_id_hint"/>
     <EditTextPreference
         android:id="@+id/instance_client_secret_pref_view"
         android:dialogTitle="@string/api_secret_hint"
         android:key="ClientSecret"
+        android:maxLines="1"
+        android:singleLine="true"
         android:title="@string/api_secret_hint"/>
 </PreferenceScreen>

@@ -4,6 +4,7 @@ import android.content.AsyncQueryHandler
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.database.ContentObserver
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -12,13 +13,11 @@ import android.os.Message
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.*
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.Server
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.utils.ServerUtility
+import java.lang.ref.WeakReference
 
 
 class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListener {
@@ -70,22 +69,19 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
         }
     }
 
-    class InstancePrefFragment : PreferenceFragmentCompat() {
+    class InstancePrefFragment : PreferenceFragmentCompat(),Preference.OnPreferenceChangeListener {
         private lateinit var instanceNameEditText: EditTextPreference
         private lateinit var instanceAddressEditText: EditTextPreference
         private lateinit var clientIdEditText: EditTextPreference
         private lateinit var secretEditText: EditTextPreference
         private var serverName: String? = ""
         private var server: Server? = Server()
-        lateinit var contentResolver: ContentResolver
-        private val updateHandler: Handler = Handler(Looper.getMainLooper()) {
-            if (it.what == 101) {
-                true
-            } else {
-                false
-            }
+        private lateinit var contentResolver: ContentResolver
+
+        override fun onPreferenceChange(pref: Preference?, value: Any?): Boolean {
+            pref?.summary = value.toString()
+            return true
         }
-        private val contentObserver = UriContentObserver(updateHandler)
 
         override fun onCreate(savedInstanceState: Bundle?) {
             (activity as SettingsActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -98,9 +94,6 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
                 contentResolver = context!!.contentResolver
             }
 
-            contentResolver.registerContentObserver(
-                    McContract.ServerInfo.buildServerInfoUriWithName(serverName),
-                    false, contentObserver)
             super.onCreate(savedInstanceState)
         }
 
@@ -113,45 +106,37 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
             instanceNameEditText.summary = serverName
             instanceNameEditText.setDefaultValue(serverName)
             instanceNameEditText.text = serverName
-            instanceNameEditText.preferenceDataStore = customDataStore
 
             instanceAddressEditText = root.findPreference(McContract.ServerInfo.SERVER_ADDRESS) as EditTextPreference
             instanceAddressEditText.summary = server?.serverAddress
             instanceAddressEditText.text = server?.serverAddress
             instanceAddressEditText.setDefaultValue(server?.serverAddress)
 
-            instanceAddressEditText.preferenceDataStore = customDataStore
 
             clientIdEditText = root.findPreference(McContract.ServerInfo.CLIENT_ID) as EditTextPreference
             clientIdEditText.text = server?.clientId
             clientIdEditText.summary = server?.clientId
             clientIdEditText.setDefaultValue(server?.clientId)
-            clientIdEditText.preferenceDataStore = customDataStore
 
             secretEditText = root.findPreference(McContract.ServerInfo.CLIENT_SECRET) as EditTextPreference
             secretEditText.summary = server?.apiSecret
             secretEditText.text = server?.apiSecret
             secretEditText.setDefaultValue(server?.apiSecret)
             secretEditText.preferenceDataStore
+
+            instanceNameEditText.preferenceDataStore = customDataStore
+            instanceAddressEditText.preferenceDataStore = customDataStore
+            clientIdEditText.preferenceDataStore = customDataStore
             secretEditText.preferenceDataStore = customDataStore
+            instanceNameEditText.onPreferenceChangeListener = this
+            instanceAddressEditText.onPreferenceChangeListener = this
+            clientIdEditText.onPreferenceChangeListener = this
+            secretEditText.onPreferenceChangeListener = this
 
             root.addPreference(instanceNameEditText)
             root.addPreference(instanceAddressEditText)
             root.addPreference(clientIdEditText)
             root.addPreference(secretEditText)
-        }
-
-        override fun onPause() {
-            super.onPause()
-            contentResolver.unregisterContentObserver(contentObserver)
-        }
-
-        class UriContentObserver(private val handler: Handler) : ContentObserver(handler) {
-            override fun onChange(selfChange: Boolean, uri: Uri) {
-                val msg = Message()
-                msg.what = 101
-                handler.sendMessage(msg)
-            }
         }
     }
 

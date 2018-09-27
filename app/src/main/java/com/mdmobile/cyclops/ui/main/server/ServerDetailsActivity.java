@@ -2,8 +2,8 @@ package com.mdmobile.cyclops.ui.main.server;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.provider.McContract;

@@ -3,21 +3,14 @@ package com.mdmobile.cyclops.ui.settings
 import android.content.AsyncQueryHandler
 import android.content.ContentResolver
 import android.content.ContentValues
-import android.database.ContentObserver
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.preference.*
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.Server
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.utils.ServerUtility
-import java.lang.ref.WeakReference
 
 
 class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListener {
@@ -69,7 +62,7 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
         }
     }
 
-    class InstancePrefFragment : PreferenceFragmentCompat(),Preference.OnPreferenceChangeListener {
+    class InstancePrefFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
         private lateinit var instanceNameEditText: EditTextPreference
         private lateinit var instanceAddressEditText: EditTextPreference
         private lateinit var clientIdEditText: EditTextPreference

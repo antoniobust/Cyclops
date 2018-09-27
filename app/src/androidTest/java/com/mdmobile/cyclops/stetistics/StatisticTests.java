@@ -1,11 +1,10 @@
 package com.mdmobile.cyclops.stetistics;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 
 import org.junit.Before;
 
-import static org.junit.Assert.assertTrue;
+import androidx.test.InstrumentationRegistry;
 
 /**
  * Test class for statistic that populates  charts in dashboard

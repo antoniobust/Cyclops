@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.annotation.CallSuper
+import androidx.annotation.CallSuper
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.utils.LabelHelper

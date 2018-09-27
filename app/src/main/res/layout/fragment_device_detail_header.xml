@@ -2,18 +2,18 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:maxHeight="86dp"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:layout_weight="5"
         tools:targetApi="lollipop">
 
@@ -51,11 +51,11 @@
             android:id="@+id/device_detail_remote_control_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:tint="@color/state_tint_list"
-            app:srcCompat="@drawable/ic_cast"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_cast"/>
 
     </RelativeLayout>
 

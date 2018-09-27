@@ -4,7 +4,7 @@ package com.mdmobile.cyclops.provider;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class McContract {
 

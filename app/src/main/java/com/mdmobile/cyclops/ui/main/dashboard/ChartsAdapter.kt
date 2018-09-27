@@ -2,14 +2,14 @@ package com.mdmobile.cyclops.ui.main.dashboard
 
 import android.content.Context
 import android.graphics.Typeface
-import android.support.v7.widget.PopupMenu
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageButton
+import android.widget.PopupMenu
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend

@@ -4,8 +4,6 @@ package com.mdmobile.cyclops.dbTesting;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.provider.McHelper;
@@ -15,6 +13,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.HashSet;
+
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 
 import static junit.framework.Assert.assertTrue;
 

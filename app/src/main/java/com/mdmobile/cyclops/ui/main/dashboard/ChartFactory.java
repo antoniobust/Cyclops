@@ -1,7 +1,7 @@
 package com.mdmobile.cyclops.ui.main.dashboard;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.mdmobile.cyclops.ui.main.dashboard.Charts.BarChart;
 import com.mdmobile.cyclops.ui.main.dashboard.Charts.PieChart;

@@ -5,24 +5,23 @@
     <item
         android:id="@+id/navigation_dashboard"
         android:icon="@drawable/ic_equalizer"
-        android:title="@string/title_profile" />
+        android:title="@string/title_profile"/>
 
 
     <item
         android:id="@+id/navigation_devices"
         android:icon="@drawable/ic_smartphone_black_24dp"
-        android:title="@string/title_devices" />
-
+        android:title="@string/title_devices"/>
 
 
     <item
         android:id="@+id/navigation_server"
         android:icon="@drawable/ic_server_black_24dp"
-        android:title="@string/title_server" />
+        android:title="@string/title_server"/>
 
     <item
         android:id="@+id/navigation_users"
         android:icon="@drawable/ic_account_circle_black_24dp"
-        android:title="@string/title_users" />
+        android:title="@string/title_users"/>
 
 </menu>

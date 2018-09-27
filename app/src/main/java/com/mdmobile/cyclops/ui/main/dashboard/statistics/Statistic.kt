@@ -3,8 +3,8 @@ package com.mdmobile.cyclops.ui.main.dashboard.statistics
 import android.content.AsyncQueryHandler
 import android.database.Cursor
 import android.os.Bundle
-import android.support.annotation.WorkerThread
 import android.util.Log
+import androidx.annotation.WorkerThread
 import com.mdmobile.cyclops.ApplicationLoader.applicationContext
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.utils.LabelHelper

@@ -4,27 +4,27 @@
 
     <item
         android:id="@+id/devices_menu_sort_action"
-        android:title="@string/sort_devices_menu_label"
         android:orderInCategory="1"
+        android:title="@string/sort_devices_menu_label"
         app:showAsAction="never"/>
 
     <!--<item-->
-        <!--android:id="@+id/devices_menu_filter_action"-->
-        <!--android:icon="@drawable/ic_filter_list"-->
-        <!--android:title="@string/devices_menu_filter_label"-->
-        <!--android:orderInCategory="2"-->
-        <!--app:showAsAction="ifRoom"/>-->
+    <!--android:id="@+id/devices_menu_filter_action"-->
+    <!--android:icon="@drawable/ic_filter_list"-->
+    <!--android:title="@string/devices_menu_filter_label"-->
+    <!--android:orderInCategory="2"-->
+    <!--app:showAsAction="ifRoom"/>-->
     <item
         android:id="@+id/main_activity_search_button"
         android:icon="@drawable/ic_search"
-        android:title="@string/search_label"
-        app:showAsAction="collapseActionView|ifRoom"
         android:orderInCategory="1"
-        app:actionViewClass="android.support.v7.widget.SearchView"/>
+        android:title="@string/search_label"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom"/>
 
     <item
         android:id="@+id/devices_menu_pin_folder_action"
-        android:title="@string/pin_folder_menu_label"
         android:orderInCategory="3"
+        android:title="@string/pin_folder_menu_label"
         app:showAsAction="never"/>
 </menu>

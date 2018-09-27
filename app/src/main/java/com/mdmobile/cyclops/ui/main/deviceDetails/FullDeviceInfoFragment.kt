@@ -1,13 +1,13 @@
 package com.mdmobile.cyclops.ui.main.deviceDetails
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_EXTRA_KEY

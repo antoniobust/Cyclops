@@ -3,10 +3,10 @@
 
     <!-- Define possible state of every dot in the view pager indicator-->
 
-    <item android:state_selected="true"
-        android:drawable="@drawable/dot_shape_selected"/>
+    <item android:drawable="@drawable/dot_shape_selected"
+          android:state_selected="true"/>
 
-    <item android:state_selected = "false"
-        android:drawable="@drawable/dot_shape_standard"/>
+    <item android:drawable="@drawable/dot_shape_standard"
+          android:state_selected="false"/>
 
 </selector>

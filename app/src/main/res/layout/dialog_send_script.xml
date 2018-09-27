@@ -5,13 +5,13 @@
               android:orientation="vertical"
               android:padding="?attr/dialogPreferredPadding">
 
-    <android.support.v7.widget.AppCompatSpinner
+    <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/preset_scripts_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
         android:minHeight="?attr/listPreferredItemHeightLarge"
-        android:tooltipText="Select script..."
-        android:layout_marginBottom="12dp"/>
+        android:tooltipText="Select script..."/>
 
     <EditText
         android:id="@+id/script_edit_text"

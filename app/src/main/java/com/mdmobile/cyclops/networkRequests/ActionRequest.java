@@ -1,6 +1,6 @@
 package com.mdmobile.cyclops.networkRequests;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;

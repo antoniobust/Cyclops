@@ -30,8 +30,8 @@
         android:clickable="false"
         android:focusable="false"
         android:gravity="center_vertical"
-        android:paddingEnd="0dp"
         android:paddingStart="16dp"
+        android:paddingEnd="0dp"
         android:textAllCaps="true"
         android:textStyle="bold"
         tools:text="UK-MS"/>

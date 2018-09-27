@@ -3,8 +3,8 @@ package com.mdmobile.cyclops.ui
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.ui.logIn.LoginActivity
 import com.mdmobile.cyclops.ui.main.MainActivity
@@ -31,10 +31,10 @@ class SplashScreenActivity : AppCompatActivity() {
                     val intent = Intent(Intent.ACTION_VIEW)
 
                     if (UserUtility.checkAnyUserLogged() && ServerUtility.anyActiveServer()) {
-                        Logger.log(LOG_TAG,"User logged, redirecting to main activity", Log.VERBOSE)
+                        Logger.log(LOG_TAG, "User logged, redirecting to main activity", Log.VERBOSE)
                         intent.setClass(this, MainActivity::class.java)
                     } else {
-                        Logger.log(LOG_TAG,"No user/server found, redirecting to login", Log.VERBOSE)
+                        Logger.log(LOG_TAG, "No user/server found, redirecting to login", Log.VERBOSE)
                         intent.setClass(this, LoginActivity::class.java)
                     }
                     startActivity(intent)

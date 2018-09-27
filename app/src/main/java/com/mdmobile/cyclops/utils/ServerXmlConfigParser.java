@@ -1,6 +1,6 @@
 package com.mdmobile.cyclops.utils;
 
-import android.support.annotation.WorkerThread;
+import androidx.annotation.WorkerThread;
 import android.util.Xml;
 
 import com.mdmobile.cyclops.dataModel.Server;

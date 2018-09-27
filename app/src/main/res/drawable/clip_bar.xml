@@ -11,11 +11,11 @@
             <corners android:radius="50dp"/>
         </shape>
     </item>
-    <item android:id= "@+id/horizontal_bar_filling">
+    <item android:id="@+id/horizontal_bar_filling">
         <clip
             android:clipOrientation="horizontal"
-            android:gravity="start"
-            android:drawable="@drawable/rounded_horizontal_bar">
+            android:drawable="@drawable/rounded_horizontal_bar"
+            android:gravity="start">
 
             <shape
                 android:shape="rectangle"

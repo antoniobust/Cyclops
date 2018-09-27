@@ -1,10 +1,10 @@
 package com.mdmobile.cyclops.ui.main.deviceDetails
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * This adapter populates device info profiles apps ecc..
@@ -47,7 +47,7 @@ class InfoAdapter(val values: ArrayList<Array<String>>, private val isPreview: B
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.textView.text = values[getRowPosition(position)][getColumnPosition(position)]
+        holder.textView.text = values[getRowPosition(position)][getColumnPosition(position)]
     }
 
 

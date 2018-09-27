@@ -6,7 +6,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -19,6 +18,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Spinner
+import androidx.fragment.app.DialogFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mdmobile.cyclops.R

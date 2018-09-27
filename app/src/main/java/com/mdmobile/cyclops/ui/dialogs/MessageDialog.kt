@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.fragment.app.DialogFragment
 
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.apiManager.ApiRequestManager
@@ -25,7 +26,7 @@ import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_I
  * Dialog shown to let the user send a script to a device
  */
 
-class MessageDialog : android.support.v4.app.DialogFragment(), DialogInterface.OnClickListener, TextWatcher {
+class MessageDialog : DialogFragment(), DialogInterface.OnClickListener, TextWatcher {
 
 
     private var editText: EditText = EditText(context)

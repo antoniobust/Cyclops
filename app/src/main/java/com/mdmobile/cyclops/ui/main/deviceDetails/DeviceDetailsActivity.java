@@ -1,12 +1,12 @@
 package com.mdmobile.cyclops.ui.main.deviceDetails;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.view.ViewCompat;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -25,7 +25,7 @@ import com.mdmobile.cyclops.ui.dialogs.MessageDialog;
 import com.mdmobile.cyclops.ui.dialogs.ScriptDialog;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
-import static android.support.v4.view.ViewCompat.animate;
+import static androidx.core.view.ViewCompat.animate;
 
 public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDetailsFragment.OnCardClick {
 

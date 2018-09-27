@@ -1,8 +1,9 @@
 package com.mdmobile.cyclops.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.mdmobile.cyclops.ui.logIn.LoginConfigureSecretIdFragment;
 import com.mdmobile.cyclops.ui.logIn.LoginConfigureServerFragment;
@@ -16,7 +17,7 @@ public class LogInViewPagerAdapter extends FragmentPagerAdapter {
 
     private int FRAGMENT_COUNT;
 
-    public LogInViewPagerAdapter(android.support.v4.app.FragmentManager fm) {
+    public LogInViewPagerAdapter(FragmentManager fm) {
         super(fm);
         FRAGMENT_COUNT = 2;
     }

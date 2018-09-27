@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,25 +21,25 @@
             android:name="com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsHeaderFragment"
             android:layout_width="@dimen/match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             tools:layout="@layout/fragment_device_detail_header"/>
 
         <FrameLayout
             android:id="@+id/device_details_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
 
             tools:layout="@layout/fragment_device_details"/>
 
     </LinearLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/details_fabs_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
         android:layout_margin="0dp"
         android:padding="0dp">
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/details_main_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:srcCompat="@drawable/ic_settings"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/sub_fab1"
             style="@style/DetailsMiniFAB"
             android:onClick="executeAction"
@@ -68,7 +68,7 @@
             app:layout_constraintRight_toRightOf="@id/details_main_fab"
             app:srcCompat="@drawable/ic_check"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/sub_fab2"
             style="@style/DetailsMiniFAB"
             android:onClick="executeAction"
@@ -77,7 +77,7 @@
             app:layout_constraintRight_toRightOf="@id/details_main_fab"
             app:srcCompat="@drawable/ic_code"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/sub_fab3"
             style="@style/DetailsMiniFAB"
             android:onClick="executeAction"
@@ -86,7 +86,7 @@
             app:layout_constraintRight_toRightOf="@id/details_main_fab"
             app:srcCompat="@drawable/ic_gps_fixed"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/sub_fab4"
             style="@style/DetailsMiniFAB"
             android:onClick="executeAction"
@@ -127,6 +127,6 @@
             app:layout_constraintEnd_toStartOf="@id/sub_fab4"
             app:layout_constraintTop_toTopOf="@+id/sub_fab4"/>
 
-    </android.support.constraint.ConstraintLayout>
-</android.support.design.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

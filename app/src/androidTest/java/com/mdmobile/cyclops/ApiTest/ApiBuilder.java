@@ -1,12 +1,12 @@
 package com.mdmobile.cyclops.ApiTest;
 
-import android.support.test.runner.AndroidJUnit4;
-
 import com.mdmobile.cyclops.apiManager.api.ApiModel;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import androidx.test.runner.AndroidJUnit4;
 
 import static junit.framework.Assert.assertTrue;
 
@@ -40,7 +40,7 @@ public class ApiBuilder {
 
 
         //CheckIn action api
-        api = ApiModel.DevicesApi.Builder(serverAuthority,devID).actionRequest().build();
+        api = ApiModel.DevicesApi.Builder(serverAuthority, devID).actionRequest().build();
         expectedApi = serverAuthority.concat("/MobiControl/api/devices/").concat(devID).concat("/actions");
         assertTrue("URL returned: " + api + "\n URL expected: " + expectedApi, api.equals(expectedApi));
 

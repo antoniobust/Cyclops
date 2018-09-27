@@ -43,7 +43,6 @@ public class FakeApiManager {
         String response;
 
 
-
         RequestQueue queue = Volley.newRequestQueue(mContext);
         RequestFuture<String> requestFuture = RequestFuture.newFuture();
 
@@ -57,7 +56,7 @@ public class FakeApiManager {
 
             @Override
             public byte[] getBody() {
-                return ("grant_type=password&username="+userName+"&password="+password).getBytes();
+                return ("grant_type=password&username=" + userName + "&password=" + password).getBytes();
             }
         };
 

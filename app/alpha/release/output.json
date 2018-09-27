@@ -1,1 +1,19 @@
-[{"outputType":{"type":"APK"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":11,"versionName":"0.0.700","enabled":true,"outputFile":"app-alpha-release.apk","fullName":"alphaRelease","baseName":"alpha-release"},"path":"app-alpha-release.apk","properties":{}}]
+[
+  {
+    "outputType": {
+      "type": "APK"
+    },
+    "apkInfo": {
+      "type": "MAIN",
+      "splits": [],
+      "versionCode": 11,
+      "versionName": "0.0.700",
+      "enabled": true,
+      "outputFile": "app-alpha-release.apk",
+      "fullName": "alphaRelease",
+      "baseName": "alpha-release"
+    },
+    "path": "app-alpha-release.apk",
+    "properties": {}
+  }
+]

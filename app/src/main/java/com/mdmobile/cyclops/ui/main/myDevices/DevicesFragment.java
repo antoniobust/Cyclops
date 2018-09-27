@@ -8,15 +8,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.SearchView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.core.view.MenuItemCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.appcompat.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -220,13 +220,13 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
     }
 
     @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
 //        getActivity().supportStartPostponedEnterTransition();
     }
 
     @Override
-    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+    public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
     }
 
@@ -288,7 +288,7 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
         inflater.inflate(R.menu.devices_action_menu, menu);
         //Get search view and set searchable conf
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(SEARCH_SERVICE);
-        SearchView searchView = (android.support.v7.widget.SearchView) menu.findItem(R.id.main_activity_search_button).getActionView();
+        SearchView searchView = (androidx.appcompat.widget.SearchView) menu.findItem(R.id.main_activity_search_button).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setIconifiedByDefault(true);
         searchView.setQueryRefinementEnabled(true);

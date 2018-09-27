@@ -5,10 +5,12 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.DialogFragment
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.ui.main.MainActivity
 
-class LicenceErrorDialog : android.support.v4.app.DialogFragment() {
+class LicenceErrorDialog : DialogFragment() {
     companion object {
         private const val RETRY_EXTRA_KEY = "retry_extra_key"
         fun newInstance(retry: Boolean): LicenceErrorDialog {

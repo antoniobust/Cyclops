@@ -1786,7 +1786,7 @@ public class FakeJSON {
             "  }\n" +
             "]";
 
-    public static final String serverJson ="{\n" +
+    public static final String serverJson = "{\n" +
             "  \"DeploymentServers\": [\n" +
             "    {\n" +
             "      \"IsConnected\": true,\n" +

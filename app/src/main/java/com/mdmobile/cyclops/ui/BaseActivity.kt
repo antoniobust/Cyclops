@@ -5,11 +5,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.support.annotation.CallSuper
-import android.support.annotation.IdRes
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.CallSuper
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import com.mdmobile.cyclops.apiManager.ApiRequestManager.API_AUTH_ERROR
 import com.mdmobile.cyclops.ui.logIn.LoginActivity
 import com.mdmobile.cyclops.utils.ServerUtility

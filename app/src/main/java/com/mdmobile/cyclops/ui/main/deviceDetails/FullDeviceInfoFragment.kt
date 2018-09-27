@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
@@ -57,7 +56,7 @@ class FullDeviceInfoFragment : Fragment() {
         }
 
         infoRecycler = rootView.findViewById(R.id.device_details_recycler)
-        infoRecycler.layoutManager = GridLayoutManager(context, 2, LinearLayoutManager.VERTICAL, false)
+        infoRecycler.layoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
         infoRecycler.adapter = InfoAdapter(infoList, false)
 
         return rootView

@@ -176,7 +176,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         return new Server(serverName, secret, clientId, address, -1, -1);
     }
 
-    public void saveServer(ArrayList<Server> servers) {
+    void saveServer(ArrayList<Server> servers) {
         ArrayList<ContentValues> values = new ArrayList<>(servers.size());
         for (Server s : servers) {
             values.add(s.toContentValues());

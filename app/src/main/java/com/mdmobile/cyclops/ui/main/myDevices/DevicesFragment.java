@@ -8,15 +8,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.core.view.MenuItemCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.appcompat.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +32,17 @@ import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.RecyclerEmptyView;
 import com.mdmobile.cyclops.utils.ServerUtility;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import static android.content.Context.SEARCH_SERVICE;
 
 
@@ -52,8 +54,8 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
     private final static String SEARCH_QUERY_KEY = "searchQueryKey";
     private final String sortingOptionKey = "SortingOptionKey";
     private final String pinnedFolderOptionKey = "PinnedFolderOptionKey";
-    RecyclerEmptyView recyclerView;
-    TextView emptyView;
+    private RecyclerEmptyView recyclerView;
+    private TextView emptyView;
     private DevicesListAdapter mAdapter;
     private SharedPreferences preferences;
     private int currentSortingOption;
@@ -117,15 +119,14 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setProgress(0);
         Bundle b = new Bundle();
-        b.putBoolean(SyncService.SYNC_DEVICES,true);
-        SyncService.syncImmediately(account,b);
+        b.putBoolean(SyncService.SYNC_DEVICES, true);
+        SyncService.syncImmediately(account, b);
         mSwipeToRefresh.setRefreshing(false);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        //Check if preference changed is sorting one
-
+        //Check if preference changed is "sorting"  pref
         if (isAdded()) {
             if (key.equals(getString(R.string.sorting_shared_preference))) {
                 currentSortingOption = sharedPreferences.getInt(key, 0);
@@ -155,7 +156,7 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
         Server server;
         try {
             server = ServerUtility.getActiveServer();
-        } catch (ServerNotFound e){
+        } catch (ServerNotFound e) {
             e.printStackTrace();
             LoginActivity.LaunchActivity();
             return null;
@@ -260,7 +261,7 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
         emptyView = rootView.findViewById(R.id.devices_recycler_empty_view);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(mLinearLayoutManager);
         recyclerView.setEmptyView(emptyView);
 
@@ -288,13 +289,15 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
         inflater.inflate(R.menu.devices_action_menu, menu);
         //Get search view and set searchable conf
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(SEARCH_SERVICE);
-        SearchView searchView = (androidx.appcompat.widget.SearchView) menu.findItem(R.id.main_activity_search_button).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchView.setIconifiedByDefault(true);
-        searchView.setQueryRefinementEnabled(true);
-        searchView.setQueryHint(getString(R.string.search_view_hint));
-        searchView.setOnQueryTextListener(this);
-        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.main_activity_search_button), this);
+        if (searchManager != null) {
+            SearchView searchView = (androidx.appcompat.widget.SearchView) menu.findItem(R.id.main_activity_search_button).getActionView();
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+            searchView.setIconifiedByDefault(true);
+            searchView.setQueryRefinementEnabled(true);
+            searchView.setQueryHint(getString(R.string.search_view_hint));
+            searchView.setOnQueryTextListener(this);
+            MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.main_activity_search_button), this);
+        }
 
     }
 
@@ -329,11 +332,9 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        preferences.unregisterOnSharedPreferenceChangeListener(this);
-//        filtersView.setVisibility(View.GONE);
     }
 
-    public void initializeLoader() {
+    private void initializeLoader() {
         Bundle args = new Bundle();
         args.putInt(sortingOptionKey, currentSortingOption);
         args.putString(pinnedFolderOptionKey, currentPinnedPath);

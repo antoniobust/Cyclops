@@ -12,8 +12,7 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/login_add_server_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
+        android:layout_height="102dp"
         android:layout_marginTop="52dp"
         android:clipToPadding="false"
         android:isScrollContainer="false"
@@ -21,12 +20,13 @@
         android:paddingTop="2dp"
         android:paddingEnd="54dp"
         android:paddingBottom="2dp"
+        app:layout_constraintVertical_bias="0.3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/login_view_pager_dots_indicator"
-        android:layout_width="24dp"
+        android:layout_width="32dp"
         android:layout_height="8dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="16dp"
@@ -52,17 +52,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_view_pager_dots_indicator"/>
-
-    <ImageButton
-        android:id="@+id/add_server_navigation_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
-
-    <ImageButton
-        android:id="@+id/add_server_navigation_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

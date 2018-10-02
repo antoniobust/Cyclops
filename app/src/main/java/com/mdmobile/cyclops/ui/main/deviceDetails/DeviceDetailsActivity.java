@@ -134,10 +134,6 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
         //attach device fragment
         DeviceDetailsFragment detailsActivityFragment = DeviceDetailsFragment.newInstance(deviceId, deviceName,
                 iconTransitionName, nameTransitionName);
-//        Bundle args = new Bundle();
-//        args.putString(DEVICE_NAME_EXTRA_KEY, deviceName);
-//        args.putString(DEVICE_ID_EXTRA_KEY, DeviceId);
-//        detailsActivityFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction().replace(R.id.device_details_fragment_container, detailsActivityFragment).commit();
 
     }

@@ -16,6 +16,8 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -192,12 +194,12 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
         switch (item.getItemId()) {
             case R.id.drawer_logout:
                 logout();
-                navigationDrawer.closeDrawer(Gravity.START, true);
+                navigationDrawer.closeDrawer(GravityCompat.START, true);
                 return true;
             case R.id.drawer_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
-                navigationDrawer.closeDrawer(Gravity.START, true);
+                navigationDrawer.closeDrawer(GravityCompat.START, true);
                 return true;
             case R.id.nav_drawer_add_server:
                 launchLoginActivity();
@@ -205,7 +207,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             case 1000:
                 ServerUtility.setActiveServer(item.getTitle().toString());
                 setNavigationDrawer();
-                navigationDrawer.closeDrawer(Gravity.START, true);
+                navigationDrawer.closeDrawer(GravityCompat.START, true);
                 return true;
 
         }
@@ -285,7 +287,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                navigationDrawer.openDrawer(Gravity.START, true);
+                navigationDrawer.openDrawer(GravityCompat.START, true);
                 return true;
             case R.id.main_activity_search_button:
                 item.expandActionView();

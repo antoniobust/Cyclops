@@ -3,8 +3,6 @@ package com.mdmobile.cyclops.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +24,9 @@ import com.mdmobile.cyclops.ui.dialogs.ScriptDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Adapter bound to list of devices in main activity
@@ -212,10 +213,10 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
         ViewHolder(View view) {
             super(view);
             coloredMarkerView = view.findViewById(R.id.device_list_item_colored_marker);
-            deviceIconView = (ImageView) view.findViewById(R.id.list_item_device_icon);
-            optionIconView = (ImageView) view.findViewById(R.id.list_item_menu_icon);
-            deviceNameView = (TextView) view.findViewById(R.id.list_item_device_name);
-            arrowIconView = (ImageView) view.findViewById(R.id.list_item_arrow_icon);
+            deviceIconView = view.findViewById(R.id.list_item_device_icon);
+            optionIconView = view.findViewById(R.id.list_item_menu_icon);
+            deviceNameView = view.findViewById(R.id.list_item_device_name);
+            arrowIconView = view.findViewById(R.id.list_item_arrow_icon);
 
             view.setOnClickListener(deviceClickListener);
             arrowIconView.setOnClickListener(deviceClickListener);

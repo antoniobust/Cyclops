@@ -27,7 +27,7 @@ public class BasicRequestRetry extends DefaultRetryPolicy {
     private BasicRequest originalReq;
 
     public BasicRequestRetry(BasicRequest originalReq) {
-        super(10000,
+        super(30000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 

@@ -5,6 +5,12 @@ import androidx.annotation.StringDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import static com.mdmobile.cyclops.dataTypes.ApiActions.ALLOW_EXCHANGE_ACCESS;
+import static com.mdmobile.cyclops.dataTypes.ApiActions.ALLOW_SOTI_SURF;
+import static com.mdmobile.cyclops.dataTypes.ApiActions.APPLE_SOFTWARE_UPDATE_REFRESH_STATUS;
+import static com.mdmobile.cyclops.dataTypes.ApiActions.APPLE_SOFTWARE_UPDATE_SCAN;
+import static com.mdmobile.cyclops.dataTypes.ApiActions.APPLE_SOFTWARE_UPDATE_SCHEDULE;
+import static com.mdmobile.cyclops.dataTypes.ApiActions.BLOCK_EXCHANGE_ACCESS;
 import static com.mdmobile.cyclops.dataTypes.ApiActions.CHECKIN;
 import static com.mdmobile.cyclops.dataTypes.ApiActions.LOCATE;
 import static com.mdmobile.cyclops.dataTypes.ApiActions.LOCK;
@@ -17,7 +23,8 @@ import static com.mdmobile.cyclops.dataTypes.ApiActions.WIPE;
  * Constants to define possible api actions
  */
 @SuppressWarnings("unused")
-@StringDef({CHECKIN, WIPE, LOCK, UNENROL, SEND_MESSAGE, LOCATE, SEND_SCRIPT})
+@StringDef({CHECKIN, WIPE, LOCK, UNENROL, SEND_MESSAGE, LOCATE, SEND_SCRIPT,ALLOW_EXCHANGE_ACCESS,ALLOW_SOTI_SURF,APPLE_SOFTWARE_UPDATE_REFRESH_STATUS,
+        APPLE_SOFTWARE_UPDATE_SCAN,APPLE_SOFTWARE_UPDATE_SCHEDULE,BLOCK_EXCHANGE_ACCESS,})
 @Retention(RetentionPolicy.SOURCE)
 public @interface ApiActions {
     String CHECKIN = "Checkin";

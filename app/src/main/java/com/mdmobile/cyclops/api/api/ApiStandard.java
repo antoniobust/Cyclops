@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.apiManager.api;
+package com.mdmobile.cyclops.api.api;
 
 
 import android.net.Uri;

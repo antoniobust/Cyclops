@@ -10,12 +10,11 @@ import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
-import com.mdmobile.cyclops.apiManager.ApiRequestManager.API_AUTH_ERROR
+import com.mdmobile.cyclops.api.ApiRequestManager.API_AUTH_ERROR
 import com.mdmobile.cyclops.ui.logIn.LoginActivity
 import com.mdmobile.cyclops.utils.ServerUtility
 import com.mdmobile.cyclops.utils.UserUtility
 import kotlinx.android.synthetic.main.actionbar.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * Every Activity should extend this base Activity

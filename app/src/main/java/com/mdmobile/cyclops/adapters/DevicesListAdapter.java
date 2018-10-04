@@ -14,7 +14,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;

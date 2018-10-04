@@ -95,6 +95,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.2.71'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     releaseImplementation('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
         transitive = true
     }

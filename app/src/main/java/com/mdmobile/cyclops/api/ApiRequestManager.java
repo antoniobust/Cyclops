@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.apiManager;
+package com.mdmobile.cyclops.api;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.apiManager.api.ApiModel;
+import com.mdmobile.cyclops.api.api.ApiModel;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.Action;
 import com.mdmobile.cyclops.dataModel.api.Token;

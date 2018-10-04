@@ -33,7 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.dataModel.api.InstalledApp;
 import com.mdmobile.cyclops.dataModel.api.Profile;

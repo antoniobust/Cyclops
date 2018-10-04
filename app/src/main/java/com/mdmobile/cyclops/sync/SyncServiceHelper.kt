@@ -2,7 +2,7 @@ package com.mdmobile.cyclops.sync
 
 import android.content.Context
 import android.util.Log
-import com.mdmobile.cyclops.apiManager.ApiRequestManager
+import com.mdmobile.cyclops.api.ApiRequestManager
 import com.mdmobile.cyclops.dataModel.Server
 import com.mdmobile.cyclops.sync.SyncService.*
 import com.mdmobile.cyclops.utils.Logger

@@ -1,6 +1,6 @@
 package com.mdmobile.cyclops.ApiTest;
 
-import com.mdmobile.cyclops.apiManager.api.ApiModel;
+import com.mdmobile.cyclops.api.api.ApiModel;
 
 import org.junit.Before;
 import org.junit.Test;

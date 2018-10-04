@@ -9,13 +9,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 
 import com.mdmobile.cyclops.R
-import com.mdmobile.cyclops.apiManager.ApiRequestManager
+import com.mdmobile.cyclops.api.ApiRequestManager
 import com.mdmobile.cyclops.dataTypes.ApiActions
 import com.mdmobile.cyclops.utils.ServerUtility
 

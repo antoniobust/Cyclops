@@ -25,7 +25,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;

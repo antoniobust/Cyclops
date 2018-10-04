@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.utils.Logger;

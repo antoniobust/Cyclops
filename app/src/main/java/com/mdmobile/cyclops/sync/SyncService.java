@@ -12,7 +12,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.dataModel.Server;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;

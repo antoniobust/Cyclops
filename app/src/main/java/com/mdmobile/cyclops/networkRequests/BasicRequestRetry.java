@@ -7,7 +7,7 @@ import android.util.Log;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.VolleyError;
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.services.OnTokenResponse;
 import com.mdmobile.cyclops.utils.Logger;
 

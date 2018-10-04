@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.mdmobile.cyclops.apiManager.ApiRequestManager;
+import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.networkRequests.BasicRequest;
 import com.mdmobile.cyclops.utils.Logger;
 

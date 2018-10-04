@@ -14,7 +14,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.dataModel.api.RuntimeTypeAdapterFactory;
 import com.mdmobile.cyclops.dataModel.api.devices.AndroidForWork;
 import com.mdmobile.cyclops.dataModel.api.devices.AndroidGeneric;
@@ -55,17 +55,17 @@ public class DeviceRequest<T> extends BasicRequest<T> {
     private Response.Listener listener;
     private Context mContext;
     private int insertInfoMethod;
-    private Server server;
+    private Instance instance;
 
 
-    public DeviceRequest(Context context, int method, String url, Server server, Response.Listener<T> listener,
+    public DeviceRequest(Context context, int method, String url, Instance instance, Response.Listener<T> listener,
                          Response.ErrorListener errorListener, int insertDataMethod) {
         super(method, url, errorListener);
 
         this.mContext = context.getApplicationContext();
         this.listener = listener;
         insertInfoMethod = insertDataMethod;
-        this.server = server;
+        this.instance = instance;
     }
 
     public DeviceRequest(DeviceRequest request) {
@@ -73,7 +73,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
         this.mContext = request.mContext;
         this.listener = request.listener;
         insertInfoMethod = request.insertInfoMethod;
-        this.server = request.server;
+        this.instance = request.instance;
     }
 
     @Override
@@ -141,7 +141,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
         Cursor c = mContext.getContentResolver().query(McContract.ServerInfo.CONTENT_URI,
                 new String[]{McContract.ServerInfo._ID},
-                McContract.ServerInfo.NAME + "=?", new String[]{server.getServerName()}, null);
+                McContract.ServerInfo.NAME + "=?", new String[]{instance.getServerName()}, null);
 
         if (c == null || !c.moveToFirst()) {
             return;

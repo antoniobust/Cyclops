@@ -24,7 +24,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,7 +41,7 @@ import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
 import com.mdmobile.cyclops.adapters.ServerListAdapter;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.sync.SyncService;
@@ -445,11 +444,11 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_server_list_group, true);
             drawerNavigationView.getMenu().setGroupVisible(R.id.nav_drawer_general_settings_group, false);
 
-            Server[] servers = ServerUtility.getAllInstances();
+            Instance[] instances = ServerUtility.getAllInstances();
 
             Menu menu = drawerNavigationView.getMenu();
             MenuItem item;
-            for (Server s : servers) {
+            for (Instance s : instances) {
                 item = menu.add(R.id.nav_drawer_server_list_group, 1000, Menu.NONE, s.getServerName());
                 item.setIcon(R.drawable.ic_server_black_24dp);
             }
@@ -525,12 +524,12 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
 
     private void logout() {
         // TODO: optimize
-        Server[] servers = ServerUtility.getAllInstances();
-        String[] selectionArgs = new String[servers.length];
+        Instance[] instances = ServerUtility.getAllInstances();
+        String[] selectionArgs = new String[instances.length];
         String selection = "";
-        for (int i = 0; i < servers.length; i++) {
+        for (int i = 0; i < instances.length; i++) {
             selection = selection.concat(McContract.ServerInfo.NAME + "=? OR ");
-            selectionArgs[i] = servers[i].getServerName();
+            selectionArgs[i] = instances[i].getServerName();
         }
         selection = selection.substring(0, selection.length() - 3);
 

@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
 import com.mdmobile.cyclops.sync.SyncService;
@@ -60,7 +60,7 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
     public boolean activityForResult = false;
     public Button actionChip;
     public ProgressBar progressBar;
-    public ArrayList<Server> instanceList = new ArrayList<>();
+    public ArrayList<Instance> instanceList = new ArrayList<>();
     private AccountAuthenticatorResponse authenticatorResponse;
 
     public static void LaunchActivity() {
@@ -256,7 +256,7 @@ public class LoginActivity extends com.mdmobile.cyclops.utils.AccountAuthenticat
         switch (currentFragTag) {
             case SERVER_FRAG_TAG:
                 AddServerFragment f = ((AddServerFragment) getSupportFragmentManager().findFragmentById(R.id.login_activity_container));
-                Server s = f.grabServerInfo();
+                Instance s = f.grabServerInfo();
                 if (s != null) {
                     instanceList.add(s);
                 }

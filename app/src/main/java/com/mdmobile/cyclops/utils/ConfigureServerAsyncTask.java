@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.ui.logIn.AddServerFragment;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ArrayList<Server>> {
+public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ArrayList<Instance>> {
     private static final String LOG_TAG = ConfigureServerAsyncTask.class.getSimpleName();
     private final WeakReference<AddServerFragment> hostingFragment;
     private Throwable throwable;
@@ -29,7 +29,7 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ArrayList<Se
     }
 
     @Override
-    protected ArrayList<Server> doInBackground(File... serverSetupFile) {
+    protected ArrayList<Instance> doInBackground(File... serverSetupFile) {
         try {
             FileInputStream fileInputStream = new FileInputStream(serverSetupFile[0]);
             ServerXmlConfigParser fileParser = new ServerXmlConfigParser();
@@ -41,7 +41,7 @@ public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ArrayList<Se
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Server> info) {
+    protected void onPostExecute(ArrayList<Instance> info) {
         if (info == null) {
             if (throwable instanceof FileNotFoundException) {
                 Logger.log(LOG_TAG, "No ServerSetup.xml file found", Log.INFO);

@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.api.ApiRequestManager;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.MessageDialog;
@@ -37,7 +37,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
     public static final String EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY = "DeviceIconTransition";
     public static final String EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY = "DeviceNameTransition";
     private final String LOG_TAG = DeviceDetailsActivity.class.getSimpleName();
-    public Server activeServer;
+    public Instance activeInstance;
     FloatingActionButton mainFab;
     FloatingActionButton subFab1;
     FloatingActionButton subFab2;
@@ -80,7 +80,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
         setContentView(R.layout.activity_device_details);
 
         try {
-            activeServer = ServerUtility.getActiveServer();
+            activeInstance = ServerUtility.getActiveServer();
         } catch (ServerNotFound e) {
             e.printStackTrace();
         }
@@ -96,7 +96,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
         label3 = findViewById(R.id.fab_label3);
         label4 = findViewById(R.id.fab_label4);
 
-        if (activeServer.getServerMajorVersion() >= 1400) {
+        if (activeInstance.getServerMajorVersion() >= 1400) {
             remoteControlButton.setVisibility(View.VISIBLE);
             remoteControlButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -204,7 +204,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
         switch (view.getId()) {
             case R.id.sub_fab1:
                 //Check in action
-                ApiRequestManager.getInstance().requestAction(activeServer, deviceId, ApiActions.CHECKIN, null, null);
+                ApiRequestManager.getInstance().requestAction(activeInstance, deviceId, ApiActions.CHECKIN, null, null);
                 break;
             case R.id.sub_fab2:
                 //Script action
@@ -212,7 +212,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
                 break;
             case R.id.sub_fab3:
                 //Localize action
-                ApiRequestManager.getInstance().requestAction(activeServer, deviceId, ApiActions.LOCATE, null, null);
+                ApiRequestManager.getInstance().requestAction(activeInstance, deviceId, ApiActions.LOCATE, null, null);
                 break;
             case R.id.sub_fab4:
                 //send message action

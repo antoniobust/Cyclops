@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.preference.*
 import com.mdmobile.cyclops.R
-import com.mdmobile.cyclops.dataModel.Server
+import com.mdmobile.cyclops.dataModel.Instance
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.utils.ServerUtility
 
@@ -51,7 +51,7 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
 
             val instances = ServerUtility.getAllInstances()
             var pref: Preference
-            for (s: Server in instances) {
+            for (s: Instance in instances) {
                 pref = Preference(context)
                 pref.title = s.serverName
                 pref.key = s.serverName
@@ -68,7 +68,7 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
         private lateinit var clientIdEditText: EditTextPreference
         private lateinit var secretEditText: EditTextPreference
         private var serverName: String? = ""
-        private var server: Server? = Server()
+        private var instance: Instance? = Instance()
         private lateinit var contentResolver: ContentResolver
 
         override fun onPreferenceChange(pref: Preference?, value: Any?): Boolean {
@@ -81,7 +81,7 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
             (activity as SettingsActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
             if (arguments != null) {
                 serverName = arguments?.getString("serverExtraKey")
-                server = ServerUtility.getServer(serverName)
+                instance = ServerUtility.getServer(serverName)
             }
             if (context != null) {
                 contentResolver = context!!.contentResolver
@@ -93,7 +93,7 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
         override fun onCreatePreferences(bundle: Bundle?, key: String?) {
             addPreferencesFromResource(R.xml.instance_preference)
             val root = preferenceManager.preferenceScreen
-            val customDataStore = CustomDataStore(contentResolver, server)
+            val customDataStore = CustomDataStore(contentResolver, instance)
 
             instanceNameEditText = root.findPreference(McContract.ServerInfo.NAME) as EditTextPreference
             instanceNameEditText.summary = serverName
@@ -101,20 +101,20 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
             instanceNameEditText.text = serverName
 
             instanceAddressEditText = root.findPreference(McContract.ServerInfo.SERVER_ADDRESS) as EditTextPreference
-            instanceAddressEditText.summary = server?.serverAddress
-            instanceAddressEditText.text = server?.serverAddress
-            instanceAddressEditText.setDefaultValue(server?.serverAddress)
+            instanceAddressEditText.summary = instance?.serverAddress
+            instanceAddressEditText.text = instance?.serverAddress
+            instanceAddressEditText.setDefaultValue(instance?.serverAddress)
 
 
             clientIdEditText = root.findPreference(McContract.ServerInfo.CLIENT_ID) as EditTextPreference
-            clientIdEditText.text = server?.clientId
-            clientIdEditText.summary = server?.clientId
-            clientIdEditText.setDefaultValue(server?.clientId)
+            clientIdEditText.text = instance?.clientId
+            clientIdEditText.summary = instance?.clientId
+            clientIdEditText.setDefaultValue(instance?.clientId)
 
             secretEditText = root.findPreference(McContract.ServerInfo.CLIENT_SECRET) as EditTextPreference
-            secretEditText.summary = server?.apiSecret
-            secretEditText.text = server?.apiSecret
-            secretEditText.setDefaultValue(server?.apiSecret)
+            secretEditText.summary = instance?.apiSecret
+            secretEditText.text = instance?.apiSecret
+            secretEditText.setDefaultValue(instance?.apiSecret)
             secretEditText.preferenceDataStore
 
             instanceNameEditText.preferenceDataStore = customDataStore
@@ -134,7 +134,7 @@ class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListen
     }
 
 
-    class CustomDataStore(private val contentResolver: ContentResolver?, val s: Server?) : PreferenceDataStore() {
+    class CustomDataStore(private val contentResolver: ContentResolver?, val s: Instance?) : PreferenceDataStore() {
         override fun putString(key: String?, value: String?) {
             val dbOp = AsyncDbOp(contentResolver)
             val values = ContentValues()

@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;
@@ -44,7 +44,7 @@ public class ServerUtility {
         return preferences.contains(applicationContext.getString(R.string.server_name_preference));
     }
 
-    public static Server getActiveServer() throws ServerNotFound {
+    public static Instance getActiveServer() throws ServerNotFound {
         SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_MULTI_PROCESS);
         String serverName = preferences.getString(applicationContext.getString(R.string.server_name_preference), null);
         String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);
@@ -54,7 +54,7 @@ public class ServerUtility {
         int build = preferences.getInt(applicationContext.getString(R.string.server_build_preference), -1);
 
         if (serverName != null && apiSecret != null && clientId != null && address != null) {
-            return new Server(serverName, apiSecret, clientId, address, version, build);
+            return new Instance(serverName, apiSecret, clientId, address, version, build);
         } else {
             throw  new ServerNotFound("Active server not found");
         }
@@ -64,18 +64,18 @@ public class ServerUtility {
         setActiveServer(getServer(serverName));
     }
 
-    public static void setActiveServer(Server server) {
+    public static void setActiveServer(Instance instance) {
         SharedPreferences.Editor editor = applicationContext
                 .getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE).edit();
-        editor.putString(applicationContext.getString(R.string.server_name_preference), server.getServerName());
-        editor.putString(applicationContext.getString(R.string.api_secret_preference), server.getApiSecret());
-        editor.putString(applicationContext.getString(R.string.client_id_preference), server.getClientId());
-        editor.putString(applicationContext.getString(R.string.server_address_preference), server.getServerAddress());
-        editor.putInt(applicationContext.getString(R.string.server_version_preference), server.getServerMajorVersion());
-        editor.putInt(applicationContext.getString(R.string.server_build_preference), server.getBuildNumber());
+        editor.putString(applicationContext.getString(R.string.server_name_preference), instance.getServerName());
+        editor.putString(applicationContext.getString(R.string.api_secret_preference), instance.getApiSecret());
+        editor.putString(applicationContext.getString(R.string.client_id_preference), instance.getClientId());
+        editor.putString(applicationContext.getString(R.string.server_address_preference), instance.getServerAddress());
+        editor.putInt(applicationContext.getString(R.string.server_version_preference), instance.getServerMajorVersion());
+        editor.putInt(applicationContext.getString(R.string.server_build_preference), instance.getBuildNumber());
         editor.apply();
 
-        Logger.log(LOG_TAG, server.getServerName() + " set as active", Log.VERBOSE);
+        Logger.log(LOG_TAG, instance.getServerName() + " set as active", Log.VERBOSE);
 
     }
 
@@ -162,7 +162,7 @@ public class ServerUtility {
                 McContract.ServerInfo._ID + "=?", new String[]{String.valueOf(serverId)});
     }
 
-    public static Server getServer(String serverName) {
+    public static Instance getServer(String serverName) {
         String[] projection = {McContract.ServerInfo.NAME, McContract.ServerInfo.SERVER_ADDRESS, McContract.ServerInfo.SERVER_MAJOR_VERSION,
                 McContract.ServerInfo.SERVER_BUILD_NUMBER, McContract.ServerInfo.CLIENT_ID, McContract.ServerInfo.CLIENT_SECRET};
         Cursor c = applicationContext.getContentResolver()
@@ -170,12 +170,12 @@ public class ServerUtility {
         if (c == null || !c.moveToFirst()) {
             throw new UnsupportedOperationException("No server found");
         }
-        Server s = new Server(c.getString(0), c.getString(5), c.getString(4), c.getString(1), c.getInt(2), c.getInt(3));
+        Instance s = new Instance(c.getString(0), c.getString(5), c.getString(4), c.getString(1), c.getInt(2), c.getInt(3));
         c.close();
         return s;
     }
 
-    public static Server[] getAllInstances() {
+    public static Instance[] getAllInstances() {
         String[] projection = {McContract.ServerInfo.NAME, McContract.ServerInfo.SERVER_ADDRESS, McContract.ServerInfo.SERVER_MAJOR_VERSION,
                 McContract.ServerInfo.SERVER_BUILD_NUMBER, McContract.ServerInfo.CLIENT_ID, McContract.ServerInfo.CLIENT_SECRET};
         Cursor c = applicationContext.getContentResolver()
@@ -183,12 +183,12 @@ public class ServerUtility {
         if (c == null || !c.moveToFirst()) {
             throw new UnsupportedOperationException("No server found");
         }
-        ArrayList<Server> serverList = new ArrayList<>(c.getCount());
+        ArrayList<Instance> instanceList = new ArrayList<>(c.getCount());
         do {
-            serverList.add(new Server(c.getString(0), c.getString(5), c.getString(4), c.getString(1), c.getInt(2), c.getInt(3)));
+            instanceList.add(new Instance(c.getString(0), c.getString(5), c.getString(4), c.getString(1), c.getInt(2), c.getInt(3)));
             c.moveToNext();
         } while (!c.isAfterLast());
         c.close();
-        return serverList.toArray(new Server[]{});
+        return instanceList.toArray(new Instance[]{});
     }
 }

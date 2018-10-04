@@ -3,7 +3,7 @@ package com.mdmobile.cyclops.utils;
 import androidx.annotation.WorkerThread;
 import android.util.Xml;
 
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -27,9 +27,9 @@ public class ServerXmlConfigParser {
 
     private final String nameSpace = null;
 
-    public ArrayList<Server> parseXml(InputStream inputStream) throws XmlPullParserException, IOException {
+    public ArrayList<Instance> parseXml(InputStream inputStream) throws XmlPullParserException, IOException {
 
-        ArrayList<Server> serverList = new ArrayList<>();
+        ArrayList<Instance> instanceList = new ArrayList<>();
         XmlPullParser xmlPullParser = Xml.newPullParser();
         xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         xmlPullParser.setInput(inputStream, null);
@@ -38,29 +38,29 @@ public class ServerXmlConfigParser {
             throw new XmlPullParserException("Wrong root tag name: " + xmlPullParser.getName());
         }
         while (xmlPullParser.nextTag() != XmlPullParser.END_TAG) {
-            serverList.add(readServer(xmlPullParser));
+            instanceList.add(readServer(xmlPullParser));
         }
-        return serverList;
+        return instanceList;
     }
 
-    private Server readServer(XmlPullParser xmlParser) throws XmlPullParserException, IOException {
+    private Instance readServer(XmlPullParser xmlParser) throws XmlPullParserException, IOException {
 //        xmlParser.require(XmlPullParser.START_TAG, nameSpace, "server");
         String serverName = xmlParser.getAttributeValue(0);
-        Server server;
+        Instance instance;
 
         while (xmlParser.next() != XmlPullParser.END_TAG) {
             if (xmlParser.getEventType() == XmlPullParser.START_DOCUMENT || xmlParser.getEventType() == XmlPullParser.END_TAG) {
                 continue;
             }
             if (xmlParser.getEventType() == XmlPullParser.START_TAG) {
-                server = readServerProperties(serverName, xmlParser);
-                return server;
+                instance = readServerProperties(serverName, xmlParser);
+                return instance;
             }
         }
         throw new XmlPullParserException("No server found, error reading serverInfo file");
     }
 
-    private Server readServerProperties(String name, XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
+    private Instance readServerProperties(String name, XmlPullParser xmlPullParser) throws XmlPullParserException, IOException {
         String secret = "", clientId = "", address = "";
 
         while (xmlPullParser.getEventType() != XmlPullParser.END_TAG) {
@@ -85,7 +85,7 @@ public class ServerXmlConfigParser {
                     throw new XmlPullParserException("Error reading xml file:" + xmlPullParser.getName());
             }
         }
-        return new Server(name, secret, clientId, address, -1, -1);
+        return new Instance(name, secret, clientId, address, -1, -1);
     }
 
     private String readSecret(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -126,6 +126,6 @@ public class ServerXmlConfigParser {
     }
 
     public interface ServerXmlParse {
-        void xmlParseComplete(ArrayList<Server> serverInfo);
+        void xmlParseComplete(ArrayList<Instance> instanceInfo);
     }
 }

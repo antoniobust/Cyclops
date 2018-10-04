@@ -10,7 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.dataModel.api.User;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;
@@ -52,13 +52,13 @@ public class UserRequest extends BasicRequest<String> {
 
             applicationContext.sendBroadcast(intent);
 
-            Server server = ServerUtility.getActiveServer();
-            Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, server.getServerName());
-            Cursor c = applicationContext.getContentResolver().query(McContract.ServerInfo.buildServerInfoUriWithName(server.getServerName()),
+            Instance instance = ServerUtility.getActiveServer();
+            Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, instance.getServerName());
+            Cursor c = applicationContext.getContentResolver().query(McContract.ServerInfo.buildServerInfoUriWithName(instance.getServerName()),
                     new String[]{McContract.ServerInfo._ID}, null, null, null);
 
             if (c == null || !c.moveToFirst()) {
-                throw new UnsupportedOperationException("No server found in DB: " + server.getServerName());
+                throw new UnsupportedOperationException("No server found in DB: " + instance.getServerName());
             }
             String serverId = c.getString(0);
             c.close();

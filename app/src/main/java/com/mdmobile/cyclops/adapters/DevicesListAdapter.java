@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.api.ApiRequestManager;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;
@@ -135,9 +135,9 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Server activeServer;
+                Instance activeInstance;
                 try {
-                    activeServer = ServerUtility.getActiveServer();
+                    activeInstance = ServerUtility.getActiveServer();
                 } catch (ServerNotFound e) {
                     e.printStackTrace();
                     return false;
@@ -145,7 +145,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                 switch (menuItem.getItemId()) {
                     case R.id.action_checkin:
                         //Check in action
-                        ApiRequestManager.getInstance().requestAction(activeServer, selected, ApiActions.CHECKIN, null, null);
+                        ApiRequestManager.getInstance().requestAction(activeInstance, selected, ApiActions.CHECKIN, null, null);
                         break;
                     case R.id.action_send_script:
                         //Script action
@@ -153,7 +153,7 @@ public class DevicesListAdapter extends RecyclerView.Adapter<DevicesListAdapter.
                         break;
                     case R.id.action_locate:
                         //Localize action
-                        ApiRequestManager.getInstance().requestAction(activeServer, selected, ApiActions.LOCATE, null, null);
+                        ApiRequestManager.getInstance().requestAction(activeInstance, selected, ApiActions.LOCATE, null, null);
                         break;
                     case R.id.action_send_message:
                         //send message action

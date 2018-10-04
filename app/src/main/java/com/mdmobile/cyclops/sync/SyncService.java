@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.mdmobile.cyclops.api.ApiRequestManager;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.main.MainActivity;
@@ -90,7 +90,7 @@ public class SyncService extends AbstractThreadedSyncAdapter {
     public void onPerformSync(final Account account, Bundle bundle, String authority,
                               ContentProviderClient contentProviderClient, SyncResult syncResult) {
         try {
-            Server activeServer = ServerUtility.getActiveServer();
+            Instance activeInstance = ServerUtility.getActiveServer();
             ArrayList<String> actions = new ArrayList<>();
 //            actions.add(SYNC_SERVER);
             if (bundle.containsKey(SYNC_USERS) && bundle.getBoolean(SYNC_USERS)) {
@@ -108,7 +108,7 @@ public class SyncService extends AbstractThreadedSyncAdapter {
                 actions.add(SYNC_SERVER);
             }
 
-            Logger.log(LOG_TAG, "Syncing " + activeServer.getServerName() +
+            Logger.log(LOG_TAG, "Syncing " + activeInstance.getServerName() +
                     "\n Action to perform:" + actions.toString(), Log.VERBOSE);
 
             Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
@@ -118,15 +118,15 @@ public class SyncService extends AbstractThreadedSyncAdapter {
             for (String action : actions) {
                 if (action.equals(SYNC_DEVICES)) {
                     this.getContext().sendBroadcast(intent);
-                    ApiRequestManager.getInstance().getDeviceInfo(activeServer);
+                    ApiRequestManager.getInstance().getDeviceInfo(activeInstance);
                 }
                 if (action.equals(SYNC_SERVER)) {
                     this.getContext().sendBroadcast(intent);
-                    ApiRequestManager.getInstance().getServicesInfo(activeServer);
+                    ApiRequestManager.getInstance().getServicesInfo(activeInstance);
                 }
                 if (action.equals(SYNC_USERS)) {
                     this.getContext().sendBroadcast(intent);
-                    ApiRequestManager.getInstance().getUsers(activeServer);
+                    ApiRequestManager.getInstance().getUsers(activeInstance);
                 }
             }
         }catch (ServerNotFound e){

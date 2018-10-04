@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.DevicesListAdapter;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.sync.SyncService;
@@ -153,9 +153,9 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //Get sorting option from arguments and create query
         String sortingParameter, pathSelection = "", searchQuery = "";
-        Server server;
+        Instance instance;
         try {
-            server = ServerUtility.getActiveServer();
+            instance = ServerUtility.getActiveServer();
         } catch (ServerNotFound e) {
             e.printStackTrace();
             LoginActivity.LaunchActivity();
@@ -199,7 +199,7 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
 
             String[] arguments = {"%" + searchQuery + "%", "%" + searchQuery, "%" + searchQuery + "%"};
 
-            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), null,
+            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(instance.getServerName()), null,
                     selection, arguments, sortingParameter);
 
         } else {
@@ -213,10 +213,10 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
                     selection = McContract.Device.COLUMN_PATH + " = ?";
                     String[] arguments = {pathSelection};
 //                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, selection, arguments, sortingParameter);
-                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, selection, arguments, sortingParameter);
+                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(instance.getServerName()), projection, selection, arguments, sortingParameter);
                 }
             }
-            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, null, null, sortingParameter);
+            return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(instance.getServerName()), projection, null, null, sortingParameter);
         }
     }
 

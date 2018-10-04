@@ -34,7 +34,7 @@ import android.widget.TextView;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.api.ApiRequestManager;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.dataModel.api.InstalledApp;
 import com.mdmobile.cyclops.dataModel.api.Profile;
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice;
@@ -76,7 +76,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     private OnCardClick mCallback;
     //    private ImageView batteryView, wifiView, simView, ramView, sdCardView;
     private SwipeRefreshLayout swipeLayout;
-    private Server activeServer;
+    private Instance activeInstance;
     private ProgressBar profileProgressBar, infoProgressBar, appsProgressBar;
 
     public DeviceDetailsFragment() {
@@ -101,7 +101,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onRefresh() {
         Logger.log(LOG_TAG, "Device " + deviceId + " info update requested", Log.VERBOSE);
-        ApiRequestManager.getInstance().getDeviceInfo(activeServer, deviceId);
+        ApiRequestManager.getInstance().getDeviceInfo(activeInstance, deviceId);
         swipeLayout.setRefreshing(false);
     }
 
@@ -164,7 +164,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
         nameTransitionName = getArguments().getString(EXTRA_DEVICE_NAME_TRANSITION_NAME_KEY, null);
         iconTransitionName = getArguments().getString(EXTRA_DEVICE_ICON_TRANSITION_NAME_KEY, null);
         try {
-            activeServer = ServerUtility.getActiveServer();
+            activeInstance = ServerUtility.getActiveServer();
         }catch (ServerNotFound e){
             e.printStackTrace();
         }
@@ -274,7 +274,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                             @Override
                             public void actionConfirmed(boolean doNotShowAgain) {
                                 ApiRequestManager.getInstance()
-                                        .requestAction(activeServer, deviceId, ApiActions.WIPE, null, null);
+                                        .requestAction(activeInstance, deviceId, ApiActions.WIPE, null, null);
                             }
 
                             @Override
@@ -285,7 +285,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
             }
             case R.id.action_lock_device:
                 ApiRequestManager.getInstance()
-                        .requestAction(activeServer, deviceId, ApiActions.LOCK, null, null);
+                        .requestAction(activeInstance, deviceId, ApiActions.LOCK, null, null);
                 return true;
             case R.id.action_unenroll_device: {
                 ConfirmActionDialog.newInstance(
@@ -296,7 +296,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
                             @Override
                             public void actionConfirmed(boolean doNotShowAgain) {
                                 ApiRequestManager.getInstance()
-                                        .requestAction(activeServer, deviceId, ApiActions.UNENROL, null, null);
+                                        .requestAction(activeInstance, deviceId, ApiActions.UNENROL, null, null);
                             }
 
                             @Override
@@ -428,7 +428,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     private void setProfilesCard(Cursor data) {
         if (data == null || data.getCount() == 0) {
-            ApiRequestManager.getInstance().getDeviceProfiles(activeServer, deviceId);
+            ApiRequestManager.getInstance().getDeviceProfiles(activeInstance, deviceId);
             return;
         }
         if (data.getCount() == 1 && data.moveToFirst() &&
@@ -456,7 +456,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
 
     private void setAppsCard(Cursor data) {
         if (data != null && data.getCount() == 0) {
-            ApiRequestManager.getInstance().getDeviceInstalledApps(activeServer, deviceId);
+            ApiRequestManager.getInstance().getDeviceInstalledApps(activeInstance, deviceId);
             return;
         }
         if (data == null || !data.moveToFirst()) {

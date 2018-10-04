@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.mdmobile.cyclops.BuildConfig;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.api.api.ApiModel;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.dataModel.api.Action;
 import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
@@ -72,11 +72,11 @@ public class ApiRequestManager {
     /**
      * Get a new token for the provided user and server
      */
-    public void getToken(final Server server, String userName, String password, final NetworkCallBack callBack) {
+    public void getToken(final Instance instance, String userName, String password, final NetworkCallBack callBack) {
 
-        String serverUrl = server.getServerAddress().concat("/MobiControl/api/token");
+        String serverUrl = instance.getServerAddress().concat("/MobiControl/api/token");
         final String grantType = "grant_type=password&username=" + userName + "&password=" + password;
-        final String header = server.getClientId().concat(":").concat(server.getApiSecret());
+        final String header = instance.getClientId().concat(":").concat(instance.getApiSecret());
         final Bundle userInput = new Bundle();
         userInput.putString(UserUtility.USER_NAME_KEY, userName);
         userInput.putString(UserUtility.PASSWORD_KEY, password);
@@ -117,11 +117,11 @@ public class ApiRequestManager {
 
     }
 
-    public void getDeviceInfo(@NonNull Server server, @NonNull final String devId) {
-        String apiAuthority = server.getServerAddress();
+    public void getDeviceInfo(@NonNull Instance instance, @NonNull final String devId) {
+        String apiAuthority = instance.getServerAddress();
         String api = ApiModel.DevicesApi.SelectDevice.Builder(apiAuthority, devId).build();
 
-        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, server,
+        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, instance,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -137,11 +137,11 @@ public class ApiRequestManager {
         queueUp(deviceRequest);
     }
 
-    public void getDeviceInfo(Server server) {
-        String apiAuthority = server.getServerAddress();
-        String api = ApiModel.DevicesApi.Builder(apiAuthority, server.getServerMajorVersion()).build();
+    public void getDeviceInfo(Instance instance) {
+        String apiAuthority = instance.getServerAddress();
+        String api = ApiModel.DevicesApi.Builder(apiAuthority, instance.getServerMajorVersion()).build();
 
-        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, server,
+        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, instance,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -173,13 +173,13 @@ public class ApiRequestManager {
         queueUp(deviceRequest);
     }
 
-    public String remoteControlDevice(Server server, String deviceId) {
-        String apiAuthority = server.getServerAddress();
+    public String remoteControlDevice(Instance instance, String deviceId) {
+        String apiAuthority = instance.getServerAddress();
         return ApiModel.DevicesApi.BuildRC(apiAuthority, deviceId).toString();
     }
 
-    public void getDeviceProfiles(@NonNull Server server, @NonNull final String deviceID) {
-        String apiAuthority = server.getServerAddress();
+    public void getDeviceProfiles(@NonNull Instance instance, @NonNull final String deviceID) {
+        String apiAuthority = instance.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).getProfiles().build();
 
         ProfilesRequest request = new ProfilesRequest(Request.Method.GET, api, deviceID, new Response.Listener<String>() {
@@ -198,8 +198,8 @@ public class ApiRequestManager {
         requestsQueue.add(request);
     }
 
-    public void getDeviceInstalledApps(@NonNull Server server, @NonNull final String devID) {
-        String apiAuthority = server.getServerAddress();
+    public void getDeviceInstalledApps(@NonNull Instance instance, @NonNull final String devID) {
+        String apiAuthority = instance.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, devID).getInstalledApplications().build();
 
         DeviceInstalledAppRequest installedAppRequest = new DeviceInstalledAppRequest(Request.Method.GET,
@@ -218,14 +218,14 @@ public class ApiRequestManager {
         queueUp(installedAppRequest);
     }
 
-    public void uninstallApplication(@NonNull Server server, @NonNull String devID, @NonNull String packageName) {
+    public void uninstallApplication(@NonNull Instance instance, @NonNull String devID, @NonNull String packageName) {
         String script = "uninstall \"".concat(packageName).concat("\"");
-        requestAction(server, devID, ApiActions.SEND_SCRIPT, script, null);
+        requestAction(instance, devID, ApiActions.SEND_SCRIPT, script, null);
     }
 
-    public void requestAction(@NonNull Server server, @NonNull final String deviceID, @NonNull @ApiActions final String action,
+    public void requestAction(@NonNull Instance instance, @NonNull final String deviceID, @NonNull @ApiActions final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
-        String apiAuthority = server.getServerAddress();
+        String apiAuthority = instance.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();
 
         String jsonPayload = new Gson().toJson(new Action(action, message, phoneNumber));
@@ -248,13 +248,13 @@ public class ApiRequestManager {
         Toast.makeText(applicationContext, action + " request sent", Toast.LENGTH_SHORT).show();
     }
 
-    public void getServicesInfo(Server server) {
+    public void getServicesInfo(Instance instance) {
 
-        String apiAuthority = server.getServerAddress();
+        String apiAuthority = instance.getServerAddress();
         String api = ApiModel.ServerApi.Builder(apiAuthority).getServerInfo().build();
 
         ServerInfoRequest request = new ServerInfoRequest(api,
-                server.getServerName(),
+                instance.getServerName(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -274,8 +274,8 @@ public class ApiRequestManager {
         queueUp(request);
     }
 
-    public void getUsers(Server server) {
-        String apiAuthority = server.getServerAddress();
+    public void getUsers(Instance instance) {
+        String apiAuthority = instance.getServerAddress();
         String api = ApiModel.UserSecurityApi.Builder(apiAuthority).getAllUsers(false, null, null).build();
         UserRequest userRequest = new UserRequest(api,
                 new Response.Listener<String>() {

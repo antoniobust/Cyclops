@@ -14,7 +14,7 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.mdmobile.cyclops.api.ApiRequestManager;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
 import com.mdmobile.cyclops.security.ServerNotFound;
@@ -68,9 +68,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         final AccountManager accountManager = AccountManager.get(mContext);
         final Bundle userInfo = UserUtility.getUserInfo(account);
-        final Server serverInfo;
+        final Instance instanceInfo;
         try {
-            serverInfo = ServerUtility.getActiveServer();
+            instanceInfo = ServerUtility.getActiveServer();
         } catch (ServerNotFound e) {
             e.printStackTrace();
             return null;
@@ -83,7 +83,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         Logger.log(LOG_TAG, "Requesting new token...", Log.VERBOSE);
 
         ApiRequestManager.getInstance()
-                .getToken(serverInfo, account.name, accountManager.getPassword(account),
+                .getToken(instanceInfo, account.name, accountManager.getPassword(account),
                         new NetworkCallBack() {
                             @Override
                             public void tokenReceived(Bundle userInfo, Token JsonToken) {

@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.LogInViewPagerAdapter;
-import com.mdmobile.cyclops.dataModel.Server;
+import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.utils.ConfigureServerAsyncTask;
 import com.mdmobile.cyclops.utils.GeneralUtility;
@@ -57,9 +57,9 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
 
     //Interface methods
     @Override
-    public void xmlParseComplete(ArrayList<Server> allServerInfo) {
+    public void xmlParseComplete(ArrayList<Instance> allInstanceInfo) {
         rootView.findViewById(R.id.server_conf_read_label).setVisibility(View.VISIBLE);
-        ((LoginActivity) Objects.requireNonNull(getActivity())).instanceList.addAll(allServerInfo);
+        ((LoginActivity) Objects.requireNonNull(getActivity())).instanceList.addAll(allInstanceInfo);
         xmlParsedFlag = true;
     }
 
@@ -160,7 +160,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         }
     }
 
-    public Server grabServerInfo() {
+    public Instance grabServerInfo() {
         String serverName = ((TextView) rootView.findViewById(R.id.server_name_text_view)).getText().toString();
         String secret = ((TextView) rootView.findViewById(R.id.api_secret_text_view)).getText().toString();
         String clientId = ((TextView) rootView.findViewById(R.id.client_id_text_view)).getText().toString();
@@ -173,16 +173,16 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         if (!address.startsWith("https://")) {
             address = "https://" + address;
         }
-        return new Server(serverName, secret, clientId, address, -1, -1);
+        return new Instance(serverName, secret, clientId, address, -1, -1);
     }
 
-    void saveServer(ArrayList<Server> servers) {
-        ArrayList<ContentValues> values = new ArrayList<>(servers.size());
-        for (Server s : servers) {
+    void saveServer(ArrayList<Instance> instances) {
+        ArrayList<ContentValues> values = new ArrayList<>(instances.size());
+        for (Instance s : instances) {
             values.add(s.toContentValues());
         }
-        servers.get(0).setActive();
-        ContentValues[] vals = values.toArray(new ContentValues[servers.size()]);
+        instances.get(0).setActive();
+        ContentValues[] vals = values.toArray(new ContentValues[instances.size()]);
         Objects.requireNonNull(getContext()).getContentResolver().bulkInsert(McContract.ServerInfo.CONTENT_URI, vals);
     }
 }

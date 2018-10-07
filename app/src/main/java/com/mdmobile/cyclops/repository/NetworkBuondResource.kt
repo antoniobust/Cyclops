@@ -5,6 +5,7 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.mdmobile.cyclops.api.ApiResponse
+import com.mdmobile.cyclops.api.ApiSuccessResponse
 import com.mdmobile.cyclops.dataModel.Resource
 
 abstract class NetworkBuondResource<ResultType,RequestType> {
@@ -15,7 +16,7 @@ abstract class NetworkBuondResource<ResultType,RequestType> {
         result.value = Resource.loading(null)
         val dbData = loadFromDb()
         result.addSource(dbData){
-            it ->  re
+//            it ->  re
         }
     }
 

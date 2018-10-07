@@ -13,12 +13,12 @@ sealed class ApiResponse<T> {
             return ApiErrorResponse(error.message ?: "Unknown API error")
         }
 
-        fun <T> create(response: Response<T>): ApiResponse<T?> {
+        fun <T> create(response: Response<T>): ApiResponse<T> {
             return if (response.isSuccessful) {
                 if (response.body() == null || response.code() == 204) {
                     ApiEmptyResponse()
                 } else {
-                    ApiSuccessResponse(response.body())
+                    ApiSuccessResponse(response.body()!!)
                 }
             } else {
                 val msg = response.errorBody()?.toString()

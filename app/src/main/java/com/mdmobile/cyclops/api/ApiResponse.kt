@@ -1,46 +1,40 @@
 package com.mdmobile.cyclops.api
 
-import android.util.Log
-import com.mdmobile.cyclops.utils.Logger
 import retrofit2.Response
-import java.io.IOException
 
+/**
+ * Wrapper for API response.
+ * Represent a failed or successful/empty response API
+ */
 
-class ApiResponse<T> {
-    private val code: Int
-    private val body: T?
-    private val errorMessage: String?
+sealed class ApiResponse<T> {
+    companion object {
+        fun <T> create(error: Throwable): ApiErrorResponse<T> {
+            return ApiErrorResponse(error.message ?: "Unknown API error")
+        }
 
-    val isSuccessful: Boolean
-        get() = code in 200..299
-
-
-    constructor(error: Throwable) {
-        code = 500
-        body = null
-        errorMessage = error.message
-    }
-
-    constructor(response: Response<T>) {
-        code = response.code()
-        if (response.isSuccessful) {
-            body = response.body()
-            errorMessage = null
-        } else {
-            var message: String? = null
-            if (response.errorBody() != null) {
-                try {
-                    message = response.errorBody()?.string()
-                } catch (ignored: IOException) {
-                    Logger.log(ApiResponse::class.java.simpleName, "error while parsing response", Log.ERROR)
+        fun <T> create(response: Response<T>): ApiResponse<T?> {
+            return if (response.isSuccessful) {
+                if (response.body() == null || response.code() == 204) {
+                    ApiEmptyResponse()
+                } else {
+                    ApiSuccessResponse(response.body())
                 }
-
+            } else {
+                val msg = response.errorBody()?.toString()
+                val errorMessage = if (msg.isNullOrEmpty()) {
+                    response.message()
+                } else {
+                    msg
+                }
+                ApiErrorResponse(errorMessage ?: "Unknown API error message")
             }
-            if (message == null || message.trim { it <= ' ' }.isEmpty()) {
-                message = response.message()
-            }
-            errorMessage = message
-            body = null
         }
     }
 }
+
+class ApiEmptyResponse<T> : ApiResponse<T>()
+
+data class ApiErrorResponse<T>(val errorMessage: String) : ApiResponse<T>()
+
+data class ApiSuccessResponse<T>(val body: T) : ApiResponse<T>()

@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * Adapter to transform a retrofit Call into a lve data object
  */
 
-class LivaDataCallAdapter<R>(private val responseType: Type) : CallAdapter<R, LiveData<ApiResponse<R>>> {
+class LiveDataCallAdapter<R>(private val responseType: Type) : CallAdapter<R, LiveData<ApiResponse<R>>> {
 
     override fun responseType(): Type = responseType
 

@@ -8,19 +8,36 @@ import com.mdmobile.cyclops.api.ApiResponse
 import com.mdmobile.cyclops.api.ApiSuccessResponse
 import com.mdmobile.cyclops.dataModel.Resource
 
-abstract class NetworkBuondResource<ResultType,RequestType> {
+abstract class NetworkBuondResource<ResultType, RequestType> {
 
     private val result = MediatorLiveData<Resource<ResultType>>()
 
-    init{
+    init {
         result.value = Resource.loading(null)
         val dbData = loadFromDb()
-        result.addSource(dbData){
-//            it ->  re
+        result.addSource(dbData) { data ->
+            result.removeSource(dbData)
+            if (shouldFetch(data)) {
+                fetchFromNetwork()
+            } else {
+                result.addSource(dbData) { newData ->
+                    setValue(Resource.success(newData))
+                }
+            }
         }
     }
 
+    private fun fetchFromNetwork() {
+
+    }
+
     protected open fun onFetchFailed() {}
+
+    private fun setValue(newData: Resource<ResultType>) {
+        if (newData != result.value) {
+            result.value = newData
+        }
+    }
 
     fun asLiveData() = result as LiveData<Resource<ResultType>>
 

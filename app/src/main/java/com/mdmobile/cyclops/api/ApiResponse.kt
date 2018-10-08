@@ -7,6 +7,7 @@ import retrofit2.Response
  * Represent a failed or successful/empty response API
  */
 
+@Suppress("unused")
 sealed class ApiResponse<T> {
     companion object {
         fun <T> create(error: Throwable): ApiErrorResponse<T> {

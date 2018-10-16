@@ -14,6 +14,10 @@ import retrofit2.http.*
 
 interface McApiService {
 
+    //Token
+    @GET("/token")
+    fun getAuthToken() : Call<Token>
+
     //Devices APIs
     @GET("/devices")
     fun getDevices(

@@ -1,10 +1,10 @@
 package com.mdmobile.cyclops.api
 
+import androidx.lifecycle.LiveData
 import com.mdmobile.cyclops.dataModel.api.*
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.dataTypes.ComplexDataType
 import com.mdmobile.cyclops.dataTypes.ProfileActions
-import retrofit2.Call
 import retrofit2.http.*
 
 /**
@@ -16,7 +16,7 @@ interface McApiService {
 
     //Token
     @GET("/token")
-    fun getAuthToken() : Call<Token>
+    fun getAuthToken(): LiveData<ApiResponse<Token>>
 
     //Devices APIs
     @GET("/devices")
@@ -27,19 +27,19 @@ interface McApiService {
             @Query("order") order: String?,
             @Query("filter") filter: String?,
             @Query("userFilter") userFilter: String?
-    ): Call<List<BasicDevice>>
+    ): LiveData<ApiResponse<List<BasicDevice>>>
 
     @GET("/search")
-    fun getDevicesV14(): Call<List<BasicDevice>>
+    fun getDevicesV14(): LiveData<ApiResponse<List<BasicDevice>>>
 
     @GET("/devices/{deviceId}")
-    fun getDevice(@Path("deviceId") devId: String): Call<BasicDevice>
+    fun getDevice(@Path("deviceId") devId: String): LiveData<ApiResponse<BasicDevice>>
 
     @DELETE("/devices/{deviceId}")
-    fun deleteDevice(): Call<Void>
+    fun deleteDevice(): LiveData<ApiResponse<Void>>
 
     @POST("/devices/{deviceId}/actions")
-    fun sendAction(@Path("deviceId") devId: String, @Body action: Action): Call<Void>
+    fun sendAction(@Path("deviceId") devId: String, @Body action: Action): LiveData<ApiResponse<Void>>
 
     @GET("/api/devices/{deviceId}/collectedData")
     fun getCollectedData(
@@ -48,7 +48,7 @@ interface McApiService {
             @Query("endDate") endDate: String,
             @Query("builtInDataType") builtInDataType: ComplexDataType.BuiltInDataType?,
             @Query("customDataType") customDataType: String?
-    ): Call<List<CollectedData>>
+    ): LiveData<ApiResponse<List<CollectedData>>>
 
     @GET("/api/devices/collectedData")
     fun getAllCollectedData(
@@ -59,26 +59,26 @@ interface McApiService {
             @Query("path") path: String?,
             @Query("skip") skip: Int?,
             @Query("take") take: Int?
-    ): Call<List<CollectedData>>
+    ): LiveData<ApiResponse<List<CollectedData>>>
 
     @GET("/api/devices/{deviceId}/installedApplications")
-    fun getInstalledApps(@Path("deviceId") devId: String): Call<List<InstalledApp>>
+    fun getInstalledApps(@Path("deviceId") devId: String): LiveData<ApiResponse<List<InstalledApp>>>
 
     @GET("/api/devices/{deviceId}/profiles")
-    fun getDeviceProfiles(@Path("deviceId") devId: String): Call<List<Profile>>
+    fun getDeviceProfiles(@Path("deviceId") devId: String): LiveData<ApiResponse<List<Profile>>>
 
     @POST("/api/devices/{deviceId}/profiles/{profileId}/actions")
     fun deviceProfileAction(@Path("deviceId") devId: String,
                             @Path("profileId") profileId: String,
-                            @Body @ProfileActions action: String): Call<Void>
+                            @Body @ProfileActions action: String): LiveData<ApiResponse<Void>>
 
 
     //Server APIs
     @GET("/api/servers")
-    fun getServers(): Call<List<ServerInfo>>
+    fun getServers(): LiveData<ApiResponse<List<ServerInfo>>>
 
     //User APIs
     @GET("/api/security/users")
-    fun getInstalledApps(): Call<List<User>>
+    fun getInstalledApps(): LiveData<ApiResponse<List<User>>>
 
 }

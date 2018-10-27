@@ -5,9 +5,14 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android-extensions'
 
 // Load keystore
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def provideSigning = false
+def keystoreProperties
+if (rootProject.file("keystore.properties").exists()) {
+    provideSigning = true
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 def lifecycle_version = "1.1.1"
 
 android {
@@ -29,11 +34,13 @@ android {
     }
 
     signingConfigs {
-        release {
-            keyAlias keystoreProperties['KEY_ALIAS']
-            keyPassword keystoreProperties['KEY_PASSWORD']
-            storeFile file(keystoreProperties['STORE_FILE'])
-            storePassword keystoreProperties['STORE_PASSWORD']
+        if(provideSigning) {
+            release {
+                keyAlias keystoreProperties['KEY_ALIAS']
+                keyPassword keystoreProperties['KEY_PASSWORD']
+                storeFile file(keystoreProperties['STORE_FILE'])
+                storePassword keystoreProperties['STORE_PASSWORD']
+            }
         }
     }
 
@@ -45,11 +52,13 @@ android {
             jniDebuggable true
         }
 
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable false
-            signingConfig signingConfigs.release
+        if(provideSigning) {
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                debuggable false
+                signingConfig signingConfigs.release
+            }
         }
     }
 
@@ -103,8 +112,8 @@ dependencies {
     }
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'
-    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
-    androidTestImplementation 'androidx.test:rules:1.1.0-beta02'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
 }
 
 repositories {

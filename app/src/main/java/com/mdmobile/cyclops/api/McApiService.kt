@@ -5,6 +5,8 @@ import com.mdmobile.cyclops.dataModel.api.*
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.dataTypes.ComplexDataType
 import com.mdmobile.cyclops.dataTypes.ProfileActions
+import com.mdmobile.cyclops.interfaces.InstanceVersion
+import com.mdmobile.cyclops.interfaces.InstanceVersion.Companion.VERSION_14
 import retrofit2.http.*
 
 /**
@@ -19,14 +21,15 @@ interface McApiService {
     fun getAuthToken(): LiveData<ApiResponse<Token>>
 
     //Devices APIs
+    @InstanceVersion.InstanceVersion(version = VERSION_14)
     @GET("/devices")
     fun getDevices(
-            @Query("path") path: String?,
-            @Query("skip") skip: Int?,
-            @Query("take") take: Int?,
-            @Query("order") order: String?,
-            @Query("filter") filter: String?,
-            @Query("userFilter") userFilter: String?
+            @Query("path") path: String? = null,
+            @Query("skip") skip: Int?= null,
+            @Query("take") take: Int?= null,
+            @Query("order") order: String?= null,
+            @Query("filter") filter: String?= null,
+            @Query("userFilter") userFilter: String?= null
     ): LiveData<ApiResponse<List<BasicDevice>>>
 
     @GET("/search")

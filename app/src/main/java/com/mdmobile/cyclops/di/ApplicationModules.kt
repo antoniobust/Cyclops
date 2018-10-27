@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class ApplicationModules() {
+class ApplicationModules {
 
     @Provides
     @Singleton

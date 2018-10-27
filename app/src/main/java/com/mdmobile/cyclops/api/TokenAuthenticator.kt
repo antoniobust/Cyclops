@@ -1,5 +1,6 @@
 package com.mdmobile.cyclops.api
 
+import android.os.AsyncTask.execute
 import android.util.Log
 import com.mdmobile.cyclops.utils.Logger
 import okhttp3.Authenticator
@@ -58,13 +59,15 @@ class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
         Logger.log(TokenAuthenticator::class.java.simpleName,
                 "Attempting a token refresh with current credentials ($retryCount)", Log.INFO)
 
-        val newToken = apiService.getAuthToken().execute()
+        val newToken = apiService.getAuthToken().value
+
+
 
         newToken.let {
-            return if (it.isSuccessful) {
+            return if (it is ApiSuccessResponse ) {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
                         "Got new token -> resending request -> (${oldReq.method()}) - ${oldReq.url()}", Log.VERBOSE)
-                rewriteRequest(oldReq, retryCount, newToken.body()?.access_token)
+                rewriteRequest(oldReq, retryCount, it.body.access_token)
             } else {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
                         "Failed to retrieve new Auth token...", Log.VERBOSE)

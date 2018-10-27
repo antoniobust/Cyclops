@@ -204,7 +204,7 @@ public class DeviceDetailsActivity extends AppCompatActivity implements DeviceDe
         switch (view.getId()) {
             case R.id.sub_fab1:
                 //Check in action
-                ApiRequestManager.getInstance().requestAction(activeInstance, deviceId, ApiActions.CHECKIN, null, null);
+                ApiRequestManager.getInstance().requestAction(activeInstance, deviceId, ApiActions.SEND_SCRIPT, null, null);
                 break;
             case R.id.sub_fab2:
                 //Script action

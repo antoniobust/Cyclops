@@ -1,0 +1,474 @@
+[
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Administrator",
+    "DisplayName": "Administrator",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "johnb",
+    "DisplayName": "johnb",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "andy",
+    "DisplayName": "andy",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Rhys",
+    "DisplayName": "Rhys",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Stain",
+    "DisplayName": "Stain",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "israr",
+    "DisplayName": "israr",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "RickW",
+    "DisplayName": "RickW",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "nick",
+    "DisplayName": "nick",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "ahasan",
+    "DisplayName": "ahasan",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Zak",
+    "DisplayName": "Zak",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "murat",
+    "DisplayName": "murat",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "raul",
+    "DisplayName": "raul",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "benoit",
+    "DisplayName": "benoit",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Tim",
+    "DisplayName": "Tim",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "test",
+    "DisplayName": "test",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "johnm",
+    "DisplayName": "johnm",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Fiaz",
+    "DisplayName": "Fiaz",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "keith",
+    "DisplayName": "keith",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "testrc",
+    "DisplayName": "testrc",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "anto",
+    "DisplayName": "anto",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Chicken1",
+    "DisplayName": "Chicken1",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "rschafer",
+    "DisplayName": "rschafer",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Abi",
+    "DisplayName": "Abi",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Abi2",
+    "DisplayName": "Abi2",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "saleem",
+    "DisplayName": "saleem",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "test1",
+    "DisplayName": "test1",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "IT Helpldesk Dummy",
+    "DisplayName": "IT Helpldesk Dummy",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LdapConnectionName": "SOTI LDAP",
+    "DomainName": "soti.net",
+    "Sid": "S-1-5-21-1085031214-436374069-1202660629-15903",
+    "EmailAddress": null,
+    "IsHiddenUser": false,
+    "Name": "soti.net\\agrichting",
+    "DisplayName": "Andy Grichting",
+    "Kind": "LdapUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Kevin",
+    "DisplayName": "Kevin",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "radu",
+    "DisplayName": "radu",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "safestyle_test",
+    "DisplayName": "safestyle_test",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "yang",
+    "DisplayName": "yang",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "SOTISupport",
+    "DisplayName": "SOTISupport",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Zebra_Amar",
+    "DisplayName": "Zebra_Amar",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "BantouTest",
+    "DisplayName": "BantouTest",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Bantu King",
+    "DisplayName": "Bantu King",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "remotecontrol",
+    "DisplayName": "remotecontrol",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LdapConnectionName": "CloudAD",
+    "DomainName": "cloudad.net",
+    "Sid": "S-1-5-21-2923028193-1207709524-820488773-1114",
+    "EmailAddress": null,
+    "IsHiddenUser": false,
+    "Name": "cloudad.net\\Fiaz",
+    "DisplayName": "Fiaz",
+    "Kind": "LdapUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "SOTI",
+    "DisplayName": "SOTI",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "John M",
+    "DisplayName": "John M",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "nini",
+    "DisplayName": "nini",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Eldad",
+    "DisplayName": "Eldad",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Joel",
+    "DisplayName": "Joel",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Mahesh",
+    "DisplayName": "Mahesh",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LdapConnectionName": null,
+    "DomainName": "",
+    "Sid": "S-1-5-21-1085031214-436374069-1202660629-19230",
+    "EmailAddress": "javier.sainzdemurieta@soti.net",
+    "IsHiddenUser": false,
+    "Name": "jsainzdemurieta",
+    "DisplayName": "Javier Sainzdemurieta",
+    "Kind": "LdapUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  },
+  {
+    "LastPasswordChangeDate": null,
+    "Name": "Mahesh_Walia",
+    "DisplayName": "Mahesh_Walia",
+    "Kind": "MobiControlUser",
+    "IsEulaAccepted": null,
+    "EulaAcceptanceDate": null,
+    "IsAccountLocked": false,
+    "NumberOfFailedLogins": 0
+  }
+]

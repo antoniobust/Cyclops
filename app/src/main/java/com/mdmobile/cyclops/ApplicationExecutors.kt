@@ -11,9 +11,9 @@ import java.util.concurrent.Executors
  */
 
 class ApplicationExecutors private constructor(
-        private val applicationTread: Executor,
-        private val networkIO: Executor,
-        private val diskIO: Executor) {
+        val applicationTread: Executor,
+        val networkIO: Executor,
+        val diskIO: Executor) {
 
     private val singleton by lazy{
         ApplicationExecutors()

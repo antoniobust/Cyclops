@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -21,6 +22,7 @@ class ApplicationModules {
                 .authenticator(TokenAuthenticator(
                         Retrofit.Builder()
                                 .baseUrl(serverInstance.serverAddress)
+                                .addConverterFactory(GsonConverterFactory.create())
                                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
                                 .build()
                                 .create(McApiService::class.java))
@@ -31,6 +33,7 @@ class ApplicationModules {
 
         return Retrofit.Builder()
                 .baseUrl(serverInstance.serverAddress)
+                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .client(client)
                 .build()

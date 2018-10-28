@@ -21,7 +21,7 @@ interface McApiService {
     fun getAuthToken(): LiveData<ApiResponse<Token>>
 
     //Devices APIs
-    @InstanceVersion.InstanceVersion(version = VERSION_14)
+//    @InstanceVersion.InstanceVersion(version = VERSION_14)
     @GET("/devices")
     fun getDevices(
             @Query("path") path: String? = null,
@@ -82,6 +82,6 @@ interface McApiService {
 
     //User APIs
     @GET("/api/security/users")
-    fun getInstalledApps(): LiveData<ApiResponse<List<User>>>
+    fun getUsers(): LiveData<ApiResponse<List<User>>>
 
 }

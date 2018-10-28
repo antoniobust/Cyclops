@@ -1,0 +1,578 @@
+[
+  {
+    "Name": "My Company",
+    "Path": "\\\\My Company",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Management Devices",
+    "Path": "\\\\My Company\\Management Devices",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Sales Devices",
+    "Path": "\\\\My Company\\Sales Devices",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Warehouse Devices",
+    "Path": "\\\\My Company\\Warehouse Devices",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "__ALL devices",
+    "Path": "\\\\__ALL devices",
+    "Icon": "Red",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "New Virtual Group",
+    "Path": "\\\\New Virtual Group",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "Benoit",
+    "Path": "\\\\Benoit",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Test",
+    "Path": "\\\\Benoit\\Test",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Test child",
+    "Path": "\\\\Benoit\\Test\\Test child",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Test2nd Child",
+    "Path": "\\\\Benoit\\Test\\Test child\\Test2nd Child",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Benoit Tests clients",
+    "Path": "\\\\Benoit\\Benoit Tests clients",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "Raul",
+    "Path": "\\\\Raul",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Israr",
+    "Path": "\\\\Israr",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Azim",
+    "Path": "\\\\Azim",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Andy",
+    "Path": "\\\\Andy",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Radu",
+    "Path": "\\\\Radu",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "zZ - Clean Folder",
+    "Path": "\\\\zZ - Clean Folder",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Scrap",
+    "Path": "\\\\Scrap",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "disconnected",
+    "Path": "\\\\disconnected",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "keith",
+    "Path": "\\\\keith",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "John",
+    "Path": "\\\\John",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Test-Solitus",
+    "Path": "\\\\John\\Test-Solitus",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "sub group",
+    "Path": "\\\\John\\sub group",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "virtual sub group",
+    "Path": "\\\\John\\virtual sub group",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "SamsunDev",
+    "Path": "\\\\John\\SamsunDev",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "TAZ",
+    "Path": "\\\\TAZ",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Adam-Lockdown-Test",
+    "Path": "\\\\Adam-Lockdown-Test",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Abi",
+    "Path": "\\\\Abi",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "ITHelpdesk",
+    "Path": "\\\\Abi\\ITHelpdesk",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "IOS Devices",
+    "Path": "\\\\Abi\\IOS Devices",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Android Devices",
+    "Path": "\\\\Abi\\Android Devices",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Samsung",
+    "Path": "\\\\Abi\\Samsung",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Lenovo BizNiz",
+    "Path": "\\\\Abi\\Lenovo BizNiz",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Zebra TC56",
+    "Path": "\\\\Abi\\Zebra TC56",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Windows CE Test Device",
+    "Path": "\\\\Abi\\Windows CE Test Device",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Windows Classic Test Devices",
+    "Path": "\\\\Abi\\Windows Classic Test Devices",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "testgroup",
+    "Path": "\\\\Abi\\testgroup",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Adam-Client Group",
+    "Path": "\\\\Adam-Client Group",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Samsung Devices",
+    "Path": "\\\\Samsung Devices",
+    "Icon": "Cyan",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "Nick Safestyle Test",
+    "Path": "\\\\Nick Safestyle Test",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "test",
+    "Path": "\\\\Nick Safestyle Test\\test",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Junior Test for cutomer(Please don't torch)",
+    "Path": "\\\\Junior Test for cutomer(Please don't torch)",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Android 8.0 Test",
+    "Path": "\\\\Android 8.0 Test",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Inheritance Enabled",
+    "Path": "\\\\Android 8.0 Test\\Inheritance Enabled",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Inheritance Not Enabled",
+    "Path": "\\\\Android 8.0 Test\\Inheritance Not Enabled",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Control Group",
+    "Path": "\\\\Android 8.0 Test\\Control Group",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "ITHELPDESK",
+    "Path": "\\\\ITHELPDESK",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "New Group Created Tue 16 Oct 2018 15:12:40 GMT",
+    "Path": "\\\\ITHELPDESK\\New Group Created Tue 16 Oct 2018 15:12:40 GMT",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Lenovo BizNiz",
+    "Path": "\\\\Lenovo BizNiz",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "zz",
+    "Path": "\\\\zz",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "test",
+    "Path": "\\\\test",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Robert",
+    "Path": "\\\\Robert",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "11",
+    "Path": "\\\\11",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "John Virtual Group",
+    "Path": "\\\\John Virtual Group",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "!!Anto",
+    "Path": "\\\\!!Anto",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Anto step 1",
+    "Path": "\\\\!!Anto\\Anto step 1",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Step 2",
+    "Path": "\\\\!!Anto\\Step 2",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Test Virtual Group",
+    "Path": "\\\\Test Virtual Group",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Zebra Test Device",
+    "Path": "\\\\Zebra Test Device",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Encryption",
+    "Path": "\\\\Encryption",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "!!!Rhys",
+    "Path": "\\\\!!!Rhys",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "sTAIN",
+    "Path": "\\\\sTAIN",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "inside geofence",
+    "Path": "\\\\inside geofence",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "outside geofence",
+    "Path": "\\\\outside geofence",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Mahesh Walia",
+    "Path": "\\\\Mahesh Walia",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "SOTI",
+    "Path": "\\\\SOTI",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "0. Staging",
+    "Path": "\\\\SOTI\\0. Staging",
+    "Icon": "Blue",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Android Enterprise",
+    "Path": "\\\\SOTI\\0. Staging\\Android Enterprise",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Android+",
+    "Path": "\\\\SOTI\\0. Staging\\Android+",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "1. Pilot",
+    "Path": "\\\\SOTI\\1. Pilot",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "2. Production",
+    "Path": "\\\\SOTI\\2. Production",
+    "Icon": "Green",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Support Team",
+    "Path": "\\\\SOTI\\2. Production\\Support Team",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Professional Services",
+    "Path": "\\\\SOTI\\2. Production\\Professional Services",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "EMEA",
+    "Path": "\\\\SOTI\\2. Production\\Professional Services\\EMEA",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Canada",
+    "Path": "\\\\SOTI\\2. Production\\Professional Services\\Canada",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "ASIA",
+    "Path": "\\\\SOTI\\2. Production\\Professional Services\\ASIA",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Team Leads",
+    "Path": "\\\\SOTI\\2. Production\\Team Leads",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "3. Testing",
+    "Path": "\\\\SOTI\\3. Testing",
+    "Icon": "Purple",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "4. Repairs",
+    "Path": "\\\\SOTI\\4. Repairs",
+    "Icon": "Blue",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "5. Lost & Stolen",
+    "Path": "\\\\SOTI\\5. Lost & Stolen",
+    "Icon": "Red",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Joel",
+    "Path": "\\\\Joel",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "JoelDeviceClass",
+    "Path": "\\\\Joel\\JoelDeviceClass",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "Tim Test",
+    "Path": "\\\\Tim Test",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "nini",
+    "Path": "\\\\nini",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Out of contact",
+    "Path": "\\\\Out of contact",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "Benoit Tests clients",
+    "Path": "\\\\Benoit Tests clients",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "new nINI",
+    "Path": "\\\\new nINI",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "New Virtual Groupadam100test",
+    "Path": "\\\\New Virtual Groupadam100test",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "Manuel",
+    "Path": "\\\\Manuel",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Kitchenware-Apple",
+    "Path": "\\\\Kitchenware-Apple",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Eldad test",
+    "Path": "\\\\Eldad test",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Javier",
+    "Path": "\\\\Javier",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "New Group Created Wed 17 Oct 2018 07:55:27 GMT",
+    "Path": "\\\\New Group Created Wed 17 Oct 2018 07:55:27 GMT",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "IOSDevices",
+    "Path": "\\\\IOSDevices",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  },
+  {
+    "Name": "Report Connectivity",
+    "Path": "\\\\Report Connectivity",
+    "Icon": "Yellow",
+    "Kind": "Virtual"
+  },
+  {
+    "Name": "SOTI_Test",
+    "Path": "\\\\SOTI_Test",
+    "Icon": "Yellow",
+    "Kind": "Regular"
+  }
+]

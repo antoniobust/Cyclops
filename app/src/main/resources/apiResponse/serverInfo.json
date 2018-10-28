@@ -1,0 +1,37 @@
+{
+  "DeploymentServers": [
+    {
+      "IsConnected": true,
+      "PrimaryManagementAddress": "uk.mobicontrolcloud.com:5494",
+      "SecondaryManagementAddress": null,
+      "PrimaryAgentAddress": "uk.mobicontrolcloud.com:5494",
+      "SecondaryAgentAddress": null,
+      "PulseTimeout": 60,
+      "RuleReload": 10,
+      "ScheduleInterval": 30,
+      "MinThreads": 2,
+      "MaxThreads": 16,
+      "MaxBurstThreads": 256,
+      "PulseWaitInterval": 0,
+      "ConnectedDeviceCount": 1,
+      "ConnectedManagerCount": 0,
+      "MsgQueueLength": 0,
+      "CurrentThreadCount": 2,
+      "DeviceManagementAddress": "uk.mobicontrolcloud.com",
+      "Name": "UK",
+      "Status": "Started"
+    }
+  ],
+  "ManagementServers": [
+    {
+      "Fqdn": "uk",
+      "PortNumber": 443,
+      "Description": null,
+      "StatusTime": "2018-10-28T11:53:38.85",
+      "MacAddress": "0AD3F06ECE09",
+      "TotalConsoleUsers": 0,
+      "Name": "uk",
+      "Status": "Started"
+    }
+  ]
+}

@@ -18,6 +18,7 @@ def lifecycle_version = "1.1.1"
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
+
     defaultConfig {
         applicationId "com.mdmobile.cyclops"
         minSdkVersion 21
@@ -28,13 +29,20 @@ android {
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         lintOptions.abortOnError false
     }
+
+    sourceSets {
+        main {
+            res.srcDirs += ['src/main/resources']
+        }
+    }
+
     dexOptions {
         javaMaxHeapSize "4g" //specify the heap size for the dex process
         preDexLibraries = false //delete the already predexed libraries
     }
 
     signingConfigs {
-        if(provideSigning) {
+        if (provideSigning) {
             release {
                 keyAlias keystoreProperties['KEY_ALIAS']
                 keyPassword keystoreProperties['KEY_PASSWORD']
@@ -52,7 +60,7 @@ android {
             jniDebuggable true
         }
 
-        if(provideSigning) {
+        if (provideSigning) {
             release {
                 minifyEnabled false
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -105,6 +113,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.2.71'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.google.dagger:dagger:2.15'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
     releaseImplementation('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {

@@ -13,9 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.mdmobile.cyclops.api.ApiRequestManager;
-import com.mdmobile.cyclops.api.McApiService;
 import com.mdmobile.cyclops.dataModel.Instance;
-import com.mdmobile.cyclops.di.ApplicationModules;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.main.MainActivity;
@@ -117,11 +115,10 @@ public class SyncService extends AbstractThreadedSyncAdapter {
             intent.putExtra(MainActivity.UPDATE_LOADING_BAR_ACTION_COUNT, actions.size());
             intent.setPackage(getContext().getPackageName());
 
-            McApiService apiService = new ApplicationModules().getMcService(activeInstance);
             for (String action : actions) {
                 if (action.equals(SYNC_DEVICES)) {
                     this.getContext().sendBroadcast(intent);
-                    apiService.getDevices(null,null,null,null,null,null);
+                    ApiRequestManager.getInstance().getDeviceInfo(activeInstance);
                 }
                 if (action.equals(SYNC_SERVER)) {
                     this.getContext().sendBroadcast(intent);
@@ -132,7 +129,7 @@ public class SyncService extends AbstractThreadedSyncAdapter {
                     ApiRequestManager.getInstance().getUsers(activeInstance);
                 }
             }
-        }catch (ServerNotFound e){
+        } catch (ServerNotFound e) {
             e.printStackTrace();
         }
     }

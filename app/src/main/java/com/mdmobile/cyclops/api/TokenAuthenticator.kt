@@ -1,6 +1,5 @@
 package com.mdmobile.cyclops.api
 
-import android.os.AsyncTask.execute
 import android.util.Log
 import com.mdmobile.cyclops.utils.Logger
 import okhttp3.Authenticator

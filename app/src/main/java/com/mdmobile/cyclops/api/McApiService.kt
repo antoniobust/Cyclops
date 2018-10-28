@@ -5,8 +5,6 @@ import com.mdmobile.cyclops.dataModel.api.*
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.dataTypes.ComplexDataType
 import com.mdmobile.cyclops.dataTypes.ProfileActions
-import com.mdmobile.cyclops.interfaces.InstanceVersion
-import com.mdmobile.cyclops.interfaces.InstanceVersion.Companion.VERSION_14
 import retrofit2.http.*
 
 /**

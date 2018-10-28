@@ -5,8 +5,6 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.mdmobile.cyclops.ApplicationExecutors
-import com.mdmobile.cyclops.api.ApiEmptyResponse
-import com.mdmobile.cyclops.api.ApiErrorResponse
 import com.mdmobile.cyclops.api.ApiResponse
 import com.mdmobile.cyclops.api.ApiSuccessResponse
 import com.mdmobile.cyclops.dataModel.Resource

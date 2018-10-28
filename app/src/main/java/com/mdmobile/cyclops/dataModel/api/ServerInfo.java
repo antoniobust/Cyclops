@@ -1,13 +1,18 @@
 package com.mdmobile.cyclops.dataModel.api;
 
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.mdmobile.cyclops.provider.McContract;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.WorkerThread;
 
 public class ServerInfo implements Parcelable {
 
@@ -76,6 +81,65 @@ public class ServerInfo implements Parcelable {
 
     public List<ManagementServer> getManagementServers() {
         return managementServers;
+    }
+
+    @WorkerThread
+    public ContentValues[] dsToContentValues(String instanceId){
+        ArrayList<DeploymentServer> deploymentServerList = (ArrayList<DeploymentServer>) getDeploymentServers();
+        ContentValues[] dsValuesArray = new ContentValues[deploymentServerList.size()];
+        for (int i = 0; i < deploymentServerList.size(); i++) {
+            dsValuesArray[i] = getDsContentValues(deploymentServerList.get(i), instanceId);
+        }
+        return dsValuesArray;
+    }
+
+    public ContentValues[] msToContentValues(String instanceId){
+        ArrayList<ManagementServer> managementServerList = (ArrayList<ManagementServer>) getManagementServers();
+        ContentValues[] dsValuesArray = new ContentValues[managementServerList.size()];
+        for (int i = 0; i < managementServerList.size(); i++) {
+            dsValuesArray[i] = getMsContentValues(managementServerList.get(i), instanceId);
+        }
+        return dsValuesArray;
+    }
+
+
+    private ContentValues getDsContentValues(ServerInfo.DeploymentServer server, String serverId) {
+        ContentValues values = new ContentValues();
+        values.put(McContract.DsInfo.NAME, server.getName());
+        values.put(McContract.DsInfo.STATUS, server.getStatus());
+        values.put(McContract.DsInfo.CONNECTED, server.getConnected() ? 1 : 0);
+        values.put(McContract.DsInfo.PRIMARY_AGENT_ADDRESS, server.getPrimaryAgentAddress());
+        values.put(McContract.DsInfo.SECONDARY_AGENT_ADDRESS, server.getSecondaryAgentAddress());
+        values.put(McContract.DsInfo.DEVICE_MANAGEMENT_ADDRESS, server.getDeviceManagementAddress());
+        values.put(McContract.DsInfo.PRIMARY_MANAGEMENT_ADDRESS, server.getPrimaryManagementAddress());
+        values.put(McContract.DsInfo.SECONDARY_MANAGEMENT_ADDRESS, server.getSecondaryManagementAddress());
+        values.put(McContract.DsInfo.RULE_RELOAD, server.getRuleReload());
+        values.put(McContract.DsInfo.SCHEDULE_INTERVAL, server.getScheduleInterval());
+        values.put(McContract.DsInfo.MIN_THREADS, server.getMinThreads());
+        values.put(McContract.DsInfo.MAX_THREADS, server.getMaxThread());
+        values.put(McContract.DsInfo.MAX_BURST_THREADS, server.getMaxBurstThreads());
+        values.put(McContract.DsInfo.DEVICES_CONNECTED, server.getConnectedDeviceCount());
+        values.put(McContract.DsInfo.MANAGERS_CONNECTED, server.getConnectedManagerCount());
+        values.put(McContract.DsInfo.QUEUE_LENGTH, server.getMsgQueueLength());
+        values.put(McContract.DsInfo.CURRENT_THREAD_COUNT, server.getMsgQueueLength());
+        values.put(McContract.DsInfo.PULSE_WAIT_INTERVAL, server.getPulseWaitInterval());
+        values.put(McContract.DsInfo.SERVER_ID, serverId);
+
+        return values;
+    }
+
+    private ContentValues getMsContentValues(ServerInfo.ManagementServer server, String serverId) {
+        ContentValues msValues = new ContentValues();
+        msValues.put(McContract.MsInfo.NAME, server.getName());
+        msValues.put(McContract.MsInfo.FULLY_QUALIFIED_NAME, server.getFqdn());
+        msValues.put(McContract.MsInfo.DESCRIPTION, server.getDescription());
+        msValues.put(McContract.MsInfo.MAC_ADDRESS, server.getMacAddress());
+        msValues.put(McContract.MsInfo.PORT_NUMBER, server.getPortNumber());
+        msValues.put(McContract.MsInfo.STATUS_TIME, server.getStatusTime());
+        msValues.put(McContract.MsInfo.STATUS, server.getStatus());
+        msValues.put(McContract.MsInfo.TOTAL_USER_COUNT, server.getTotalConsoleUsers());
+        msValues.put(McContract.MsInfo.SERVER_ID, serverId);
+        return msValues;
     }
 
     @Override

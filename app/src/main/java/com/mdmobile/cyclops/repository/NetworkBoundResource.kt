@@ -5,6 +5,8 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.mdmobile.cyclops.ApplicationExecutors
+import com.mdmobile.cyclops.api.ApiEmptyResponse
+import com.mdmobile.cyclops.api.ApiErrorResponse
 import com.mdmobile.cyclops.api.ApiResponse
 import com.mdmobile.cyclops.api.ApiSuccessResponse
 import com.mdmobile.cyclops.dataModel.Resource
@@ -39,36 +41,36 @@ abstract class NetworkBoundResource<ResultType, RequestType>(val appExecutors: A
          *      - if response is error -> execute on fetch failed  and set new soruce with resource error
          */
         val apiResponse = createCall()
-//        //while loading reattach DB as a source which will dispatch data quicker
-//        liveDataManager.addSource(dbSource){ newData ->
-//            setValue(Resource.loading(newData))
-//        }
+        //while loading reattach DB as a source which will dispatch data quicker
+        liveDataManager.addSource(dbSource){ newData ->
+            setValue(Resource.loading(newData))
+        }
 
-//        liveDataManager.addSource(apiResponse) { response ->
-//            liveDataManager.removeSource(apiResponse)
-//            liveDataManager.removeSource(dbSource)
-//
-//            when (apiResponse) {
-//                is ApiSuccessResponse<RequestType> -> {
-//                    appExecutors.diskIO.execute {
-//                        saveApiResult(processResponse(response))
-//                        appExecutors.applicationTread.execute {
-//                            liveDataManager.addSource(loadFromDb()) { newData ->
-//                                setValue(Resource.success(newData))
-//                            }
-//                        }
-//                    }
-//                }
-//                is ApiEmptyResponse<*> -> {
-//                    appExecutors.applicationTread.execute {
+        liveDataManager.addSource(apiResponse) { response ->
+            liveDataManager.removeSource(apiResponse)
+            liveDataManager.removeSource(dbSource)
+
+            when (response) {
+                is ApiSuccessResponse -> {
+                    appExecutors.diskIO.execute {
+                        saveApiResult(processResponse(response))
+                        appExecutors.applicationTread.execute {
+                            liveDataManager.addSource(loadFromDb()) { newData ->
+                                setValue(Resource.success(newData))
+                            }
+                        }
+                    }
+                }
+                is ApiEmptyResponse<*> -> {
+                    appExecutors.applicationTread.execute {
 //                        setValue(Resource.success())
-//                    }
-//                }
-//                is ApiErrorResponse<*> -> {
-//
-//                }
-//            }
-//        }
+                    }
+                }
+                is ApiErrorResponse<*> -> {
+                    onFetchFailed()
+                }
+            }
+        }
     }
 
     protected open fun onFetchFailed() {}

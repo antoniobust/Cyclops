@@ -17,27 +17,28 @@ class ServerRepository @Inject constructor(
         private val instance: Instance,
         private val apiService: McApiService) {
 
-    fun loadServer(): LiveData<Resource<ServerInfo>> {
-        return object : NetworkBoundResource<ServerInfo, ServerInfo>(appExecutors) {
-            override fun saveApiResult(item: ServerInfo) {
-                applicationContext.contentResolver
-                        .bulkInsert(McContract.DsInfo.CONTENT_URI, item.dsToContentValues(instance.serverName))
-                applicationContext.contentResolver
-                        .bulkInsert(McContract.MsInfo.CONTENT_URI, item.msToContentValues(instance.serverName))
-
-            }
-
-            override fun shouldFetch(data: ServerInfo?): Boolean = data == null
-
-
-            override fun loadFromDb(): LiveData<ServerInfo> {
-                val cursor = applicationContext.contentResolver.query(
-                        McContract.DsInfo.CONTENT_URI,null,null,null,null)
-
-            }
-
-            override fun createCall(): LiveData<ApiResponse<ServerInfo>> {
-            }
-
-        }.asLiveData()
-    }
+//    fun loadServer(): LiveData<Resource<ServerInfo>> {
+//        return object : NetworkBoundResource<ServerInfo, ServerInfo>(appExecutors) {
+//            override fun saveApiResult(item: ServerInfo) {
+//                applicationContext.contentResolver
+//                        .bulkInsert(McContract.DsInfo.CONTENT_URI, item.dsToContentValues(instance.serverName))
+//                applicationContext.contentResolver
+//                        .bulkInsert(McContract.MsInfo.CONTENT_URI, item.msToContentValues(instance.serverName))
+//
+//            }
+//
+//            override fun shouldFetch(data: ServerInfo?): Boolean = data == null
+//
+//
+//            override fun loadFromDb(): LiveData<ServerInfo> {
+//                val cursor = applicationContext.contentResolver.query(
+//                        McContract.DsInfo.CONTENT_URI, null, null, null, null)
+//
+//            }
+//
+//            override fun createCall(): LiveData<ApiResponse<ServerInfo>> {
+//            }
+//
+//        }.asLiveData()
+//    }
+}

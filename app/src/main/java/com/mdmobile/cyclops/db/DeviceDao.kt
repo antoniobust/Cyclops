@@ -16,6 +16,9 @@ interface DeviceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(devices: List<BasicDevice>)
 
-    @Query("SELECT * FROM ")
-    fun findByDevId(devId:String): LiveData<BasicDevice>
+    @Query("SELECT * FROM DeviceInfo")
+    fun getDevices(): LiveData<List<BasicDevice>>
+
+    @Query("SELECT * FROM DeviceInfo WHERE DeviceId = :devId")
+    fun getDevice(devId:String):LiveData<BasicDevice>
 }

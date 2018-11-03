@@ -1,15 +1,18 @@
-package com.mdmobile.cyclops.db.tables
+package com.mdmobile.cyclops.db
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(indices = [Index("id")]
-        )
+@Entity(tableName = "DeviceInfo")
 data class Device(
+        @PrimaryKey(autoGenerate = true)
         val id: Int,
         @field:SerializedName("Kind")
         val kind: String,
+        @PrimaryKey
         @field:SerializedName("DeviceId")
         val deviceId: String,
         @field:SerializedName("DeviceName")
@@ -40,8 +43,5 @@ data class Device(
         val isVirtual: Boolean,
         @field:SerializedName("Platform")
         val platform: String,
-        val extraInfo: String
-) {
-
-
-}
+        val extraInfo: String,
+        val serverId:Int)

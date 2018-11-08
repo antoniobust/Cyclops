@@ -1,12 +1,6 @@
 package com.mdmobile.cyclops.dataModel.api.devices
 
-import android.content.ContentValues
 import android.database.Cursor
-import com.mdmobile.cyclops.provider.McContract
-import com.mdmobile.cyclops.utils.LabelHelper
-import com.mdmobile.cyclops.utils.Property
-import kotlin.reflect.KVisibility
-import kotlin.reflect.full.declaredMemberProperties
 
 /**
  * Represent gson class for android for work devices

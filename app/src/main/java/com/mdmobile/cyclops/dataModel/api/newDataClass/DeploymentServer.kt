@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
 
-@Entity(tableName = McContract.MANAGEMENT_SERVER_TABLE_NAME)
-data class ManagementServer(
+@Entity(tableName = McContract.DEPLOYMENT_SERVER_TABLE_NAME)
+data class DeploymentServer(
         @PrimaryKey(autoGenerate = true)
         val id: Int,
         @field:SerializedName("PrimaryManagementAddress")

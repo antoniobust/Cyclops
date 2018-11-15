@@ -13,7 +13,7 @@ import com.mdmobile.cyclops.provider.McContract
 @Entity(tableName = McContract.INSTALLED_APPLICATION_TABLE_NAME,
         foreignKeys = [ForeignKey(entity = Device::class, parentColumns = arrayOf("deviceId"), childColumns = arrayOf("deviceId"))])
 class InstalledApps(
-        @PrimaryKey
+        @PrimaryKey(autoGenerate = true)
         val id: Int,
         @field:SerializedName("DeviceId")
         val deviceId: String,

@@ -23,7 +23,7 @@ import static com.mdmobile.cyclops.provider.McContract.MANAGEMENT_SERVER_TABLE_N
 import static com.mdmobile.cyclops.provider.McContract.PROFILE_DEVICE_TABLE_NAME;
 import static com.mdmobile.cyclops.provider.McContract.PROFILE_TABLE_NAME;
 import static com.mdmobile.cyclops.provider.McContract.SCRIPT_TABLE_NAME;
-import static com.mdmobile.cyclops.provider.McContract.SERVER_INFO_TABLE_NAME;
+import static com.mdmobile.cyclops.provider.McContract.INSTANCE_INFO_TABLE_NAME;
 import static com.mdmobile.cyclops.provider.McContract.ScriptColumns.DESCRIPTION;
 import static com.mdmobile.cyclops.provider.McContract.ScriptColumns.SCRIPT;
 import static com.mdmobile.cyclops.provider.McContract.ScriptColumns.TITLE;
@@ -74,7 +74,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.Device.COLUMN_EXTRA_INFO + " TEXT,"
                 + "UNIQUE(" + McContract.Device.COLUMN_DEVICE_ID + ") ON CONFLICT REPLACE, "
                 + "FOREIGN KEY(" + McContract.Device.COLUMN_SERVER_ID + ") REFERENCES "
-                + McContract.SERVER_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
+                + McContract.INSTANCE_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
 
         //Create MsInfo table
         db.execSQL(" CREATE TABLE " + MANAGEMENT_SERVER_TABLE_NAME
@@ -89,7 +89,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.MsInfo.NAME + " TEXT, "
                 + McContract.MsInfo.STATUS + " TEXT, "
                 + "FOREIGN KEY(" + McContract.MsInfo.SERVER_ID + ") REFERENCES "
-                + McContract.SERVER_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
+                + McContract.INSTANCE_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
 
         //Create DsInfo table
         db.execSQL(" CREATE TABLE " + DEPLOYMENT_SERVER_TABLE_NAME
@@ -115,7 +115,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.DsInfo.MANAGERS_CONNECTED + " INTEGER, "
                 + McContract.DsInfo.QUEUE_LENGTH + " INTEGER, "
                 + "FOREIGN KEY(" + McContract.DsInfo.SERVER_ID + ") REFERENCES "
-                + McContract.SERVER_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
+                + McContract.INSTANCE_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
 
         //Create CustomData tables
         db.execSQL(" CREATE TABLE " + CUSTOM_DATA_TABLE_NAME
@@ -197,10 +197,10 @@ public class McHelper extends SQLiteOpenHelper {
                 + McContract.UserInfo.EULA_ACCEPTANCE_DATE + " TEXT, "
                 + McContract.UserInfo.NUMBER_OF_FAILED_LOGIN + " INTEGER,"
                 + "FOREIGN KEY(" + McContract.UserInfo.SERVER_ID + ") REFERENCES "
-                + McContract.SERVER_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
+                + McContract.INSTANCE_INFO_TABLE_NAME + "(" + McContract.ServerInfo._ID + "));");
 
         //Create server info table
-        db.execSQL("CREATE TABLE " + McContract.SERVER_INFO_TABLE_NAME + " ("
+        db.execSQL("CREATE TABLE " + McContract.INSTANCE_INFO_TABLE_NAME + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + McContract.ServerInfo.CLIENT_ID + " TEXT NOT NULL, "
                 + McContract.ServerInfo.CLIENT_SECRET + " TEXT NOT NULL, "
@@ -250,7 +250,7 @@ public class McHelper extends SQLiteOpenHelper {
                 + "END;");
 
         //Whenever we delete a server we delete all info (Devices, MS&DS, Users) related to the server
-        db.execSQL("CREATE TRIGGER RemoveDevices BEFORE DELETE ON " + McContract.SERVER_INFO_TABLE_NAME
+        db.execSQL("CREATE TRIGGER RemoveDevices BEFORE DELETE ON " + McContract.INSTANCE_INFO_TABLE_NAME
                 + " BEGIN "
                 + " DELETE FROM " + McContract.DEVICE_TABLE_NAME
                 + " WHERE " + McContract.DEVICE_TABLE_NAME + "." + McContract.Device.COLUMN_SERVER_ID
@@ -284,7 +284,7 @@ public class McHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + INSTALLED_APPLICATION_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SCRIPT_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME + ";");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SERVER_INFO_TABLE_NAME + ";");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + INSTANCE_INFO_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PROFILE_TABLE_NAME + ";");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PROFILE_DEVICE_TABLE_NAME + ";");
 

@@ -12,7 +12,6 @@ class InstalledApp(val DeviceId: String = "N/A", val ApplicationId: String = "N/
     //    val Version: String = "N/A", /**val ShortVersion: String = "N/A"*,*/ val SizeInBytes: String = "N/A",
 //    val DataSizeInBytes: String = "N/A",
     fun toContentValues(): ContentValues {
-        //TODO:excluding some data as MC return null which is parsed and saved in DB -> when read from kotlin null causes issues
         val values = ContentValues(6)
         values.put(McContract.InstalledApplications.DEVICE_ID, DeviceId)
         values.put(McContract.InstalledApplications.APPLICATION_ID, ApplicationId)

@@ -82,7 +82,7 @@ public class McProvider extends ContentProvider {
             case DEVICES_BY_SERVER: {
                 String serverName = McContract.getServerNameFromUri(uri);
                 mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.DEVICE_TABLE_NAME));
-                mQueryBuilder.appendWhere(McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
+                mQueryBuilder.appendWhere(McContract.INSTANCE_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
                 break;
             }
 
@@ -120,7 +120,7 @@ public class McProvider extends ContentProvider {
             case MS_BY_SERVER: {
                 String serverName = McContract.getServerNameFromUri(uri);
                 mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.MANAGEMENT_SERVER_TABLE_NAME));
-                mQueryBuilder.appendWhere(McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
+                mQueryBuilder.appendWhere(McContract.INSTANCE_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
                 break;
             }
             case DS_LIST:
@@ -130,14 +130,14 @@ public class McProvider extends ContentProvider {
             case DS_BY_SERVER: {
                 String serverName = McContract.getServerNameFromUri(uri);
                 mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.DEPLOYMENT_SERVER_TABLE_NAME));
-                mQueryBuilder.appendWhere(McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
+                mQueryBuilder.appendWhere(McContract.INSTANCE_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
                 break;
             }
 
             case USERS_BY_SERVER: {
                 String serverName = McContract.getServerNameFromUri(uri);
                 mQueryBuilder.setTables(QueryUtility.buildServerInfoInnerJoin(McContract.USER_TABLE_NAME));
-                mQueryBuilder.appendWhere(McContract.SERVER_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
+                mQueryBuilder.appendWhere(McContract.INSTANCE_INFO_TABLE_NAME + "." + McContract.ServerInfo.NAME + "='" + serverName + "'");
                 break;
             }
 
@@ -157,11 +157,11 @@ public class McProvider extends ContentProvider {
                 break;
             }
             case SERVERS: {
-                mQueryBuilder.setTables(McContract.SERVER_INFO_TABLE_NAME);
+                mQueryBuilder.setTables(McContract.INSTANCE_INFO_TABLE_NAME);
                 break;
             }
             case SERVER_BY_NAME: {
-                mQueryBuilder.setTables(McContract.SERVER_INFO_TABLE_NAME);
+                mQueryBuilder.setTables(McContract.INSTANCE_INFO_TABLE_NAME);
                 mQueryBuilder.appendWhere(McContract.ServerInfo.NAME + "='" + McContract.ServerInfo.getServerNameFromUri(uri) + "'");
                 break;
             }
@@ -219,7 +219,7 @@ public class McProvider extends ContentProvider {
 
             case SERVERS:
                 for (ContentValues c : values) {
-                    if (database.insert(McContract.SERVER_INFO_TABLE_NAME, null, c) > 0) {
+                    if (database.insert(McContract.INSTANCE_INFO_TABLE_NAME, null, c) > 0) {
                         dataInserted++;
                     }
                 }
@@ -491,7 +491,7 @@ public class McProvider extends ContentProvider {
             }
 
             case SERVERS: {
-                deleted = database.delete(McContract.SERVER_INFO_TABLE_NAME, selection, selectionArgs);
+                deleted = database.delete(McContract.INSTANCE_INFO_TABLE_NAME, selection, selectionArgs);
                 Logger.log(LOG_TAG, "Server deleted:" + deleted, Log.VERBOSE);
                 break;
             }
@@ -526,7 +526,7 @@ public class McProvider extends ContentProvider {
                 break;
             case SERVER_BY_NAME:
                 String serverName = McContract.ServerInfo.getServerNameFromUri(uri);
-                updated = database.update(McContract.SERVER_INFO_TABLE_NAME, values, McContract.ServerInfo.NAME + "=?", new String[]{serverName});
+                updated = database.update(McContract.INSTANCE_INFO_TABLE_NAME, values, McContract.ServerInfo.NAME + "=?", new String[]{serverName});
                 Logger.log(LOG_TAG, " Server(" + serverName + ") updated", Log.VERBOSE);
                 if (updated > 0) {
                     getContext().getContentResolver().notifyChange(uri, null);

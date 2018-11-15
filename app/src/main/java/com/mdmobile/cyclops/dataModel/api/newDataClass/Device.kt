@@ -1,11 +1,14 @@
 package com.mdmobile.cyclops.dataModel.api.newDataClass
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
 
-@Entity(tableName = McContract.DEVICE_TABLE_NAME)
+@Entity(tableName = McContract.DEVICE_TABLE_NAME, foreignKeys = [ForeignKey(
+        entity = ServerInfo::class, parentColumns = arrayOf("id"), childColumns = arrayOf("instanceId")
+)])
 data class Device(
         @PrimaryKey(autoGenerate = true)
         val id: Int,
@@ -43,4 +46,4 @@ data class Device(
         @field:SerializedName("Platform")
         val platform: String,
         val extraInfo: String,
-        val serverId: Int)
+        val instanceId: Int)

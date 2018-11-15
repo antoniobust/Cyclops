@@ -49,9 +49,9 @@ public enum McEnumUri {
 
     PROFILE_ID(520, McContract.PROFILE_TABLE_NAME + "/*", true, McContract.PROFILE_TABLE_NAME),
 
-    SERVERS(521, McContract.SERVER_INFO_TABLE_NAME, false, McContract.SERVER_INFO_TABLE_NAME),
+    SERVERS(521, McContract.INSTANCE_INFO_TABLE_NAME, false, McContract.INSTANCE_INFO_TABLE_NAME),
 
-    SERVER_BY_NAME(522, McContract.SERVER_INFO_TABLE_NAME + "/*", true, McContract.SERVER_INFO_TABLE_NAME);
+    SERVER_BY_NAME(522, McContract.INSTANCE_INFO_TABLE_NAME + "/*", true, McContract.INSTANCE_INFO_TABLE_NAME);
 
     public String path, contentType, tableName;
     public int matcherCode;

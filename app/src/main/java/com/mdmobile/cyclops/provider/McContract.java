@@ -29,7 +29,7 @@ public class McContract {
     public static final String DEPLOYMENT_SERVER_TABLE_NAME = "DsInfo";
     public static final String SCRIPT_TABLE_NAME = "Script";
     public static final String USER_TABLE_NAME = "UserInfo";
-    public static final String SERVER_INFO_TABLE_NAME = "ServerInfo";
+    public static final String INSTANCE_INFO_TABLE_NAME = "InstanceInfo";
     //Content type
     private static final String CONTENT_TYPE_BASE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
     private static final String CONTENT_TYPE_ITEM_BASE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/";
@@ -449,7 +449,7 @@ public class McContract {
     //Represent the server added to the application
     public static class ServerInfo implements ServerInfoColumns, BaseColumns {
         //Table Uri
-        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(SERVER_INFO_TABLE_NAME).build();
+        public static final Uri CONTENT_URI = DB_URI.buildUpon().appendPath(INSTANCE_INFO_TABLE_NAME).build();
 
         public static Uri buildUriWithId(long id) {
             return CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build();

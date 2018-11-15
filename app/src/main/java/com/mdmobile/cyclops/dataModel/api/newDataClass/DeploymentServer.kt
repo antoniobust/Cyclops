@@ -1,11 +1,15 @@
 package com.mdmobile.cyclops.dataModel.api.newDataClass
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
 
-@Entity(tableName = McContract.DEPLOYMENT_SERVER_TABLE_NAME)
+@Entity(tableName = McContract.DEPLOYMENT_SERVER_TABLE_NAME,
+        foreignKeys = [ForeignKey(
+                entity = ServerInfo::class, parentColumns = arrayOf("id"), childColumns = arrayOf("instanceId")
+        )])
 data class DeploymentServer(
         @PrimaryKey(autoGenerate = true)
         val id: Int,
@@ -46,4 +50,5 @@ data class DeploymentServer(
         @field:SerializedName("MsgQueueLength")
         val msgQueueLength: Int,
         @field:SerializedName("CurrentThreadCount")
-        val currentThreadCount: Int)
+        val currentThreadCount: Int,
+        val instanceId: Int)

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.mdmobile.cyclops.provider.McContract
 
 @Entity(tableName = McContract.INSTANCE_INFO_TABLE_NAME)
-data class ServerInfo(
+data class InstanceInfo(
         @PrimaryKey(autoGenerate = true)
         val id: Int,
         val serverName: String,

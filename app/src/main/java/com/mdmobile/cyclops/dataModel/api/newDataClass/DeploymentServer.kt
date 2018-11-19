@@ -8,7 +8,7 @@ import com.mdmobile.cyclops.provider.McContract
 
 @Entity(tableName = McContract.DEPLOYMENT_SERVER_TABLE_NAME,
         foreignKeys = [ForeignKey(
-                entity = ServerInfo::class, parentColumns = arrayOf("id"), childColumns = arrayOf("instanceId")
+                entity = InstanceInfo::class, parentColumns = arrayOf("id"), childColumns = arrayOf("instanceId")
         )])
 data class DeploymentServer(
         @PrimaryKey(autoGenerate = true)

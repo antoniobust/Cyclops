@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
 
 @Entity(tableName = McContract.DEVICE_TABLE_NAME, foreignKeys = [ForeignKey(
-        entity = ServerInfo::class, parentColumns = arrayOf("id"), childColumns = arrayOf("instanceId")
+        entity = InstanceInfo::class, parentColumns = arrayOf("id"), childColumns = arrayOf("instanceId")
 )])
 data class Device(
         @PrimaryKey(autoGenerate = true)

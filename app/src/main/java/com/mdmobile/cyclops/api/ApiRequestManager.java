@@ -223,7 +223,7 @@ public class ApiRequestManager {
         requestAction(instance, devID, ApiActions.SEND_SCRIPT, script, null);
     }
 
-    public void requestAction(@NonNull Instance instance, @NonNull final String deviceID, @NonNull @ApiActions.ApiActions final String action,
+    public void requestAction(@NonNull Instance instance, @NonNull final String deviceID, @NonNull final String action,
                               @Nullable final String message, @Nullable String phoneNumber) {
         String apiAuthority = instance.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, deviceID).actionRequest().build();

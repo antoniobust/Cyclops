@@ -7,9 +7,9 @@ import com.mdmobile.cyclops.dataModel.api.newDataClass.ManagmentServer
 
 @Dao
 interface ManagementServerDao : BaseDao<ManagmentServer> {
-    @Query("SELECT * FROM DsInfo")
+    @Query("SELECT * FROM MsInfo")
     fun getAllMs(): LiveData<List<ManagmentServer>>
 
-    @Query("SELECT * FROM DsInfo WHERE id = :id")
+    @Query("SELECT * FROM MsInfo WHERE id = :id")
     fun getMs(id: String): LiveData<ManagmentServer>
 }

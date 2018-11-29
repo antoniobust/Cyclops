@@ -1,9 +1,11 @@
 package com.mdmobile.cyclops.db
 
 import androidx.lifecycle.LiveData
+import androidx.room.Dao
 import androidx.room.Query
 import com.mdmobile.cyclops.dataModel.api.newDataClass.Script
 
+@Dao
 interface ScriptDao : BaseDao<Script> {
 
     @Query("SELECT * FROM Script")

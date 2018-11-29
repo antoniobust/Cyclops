@@ -11,14 +11,14 @@ interface BaseDao<T> {
     fun insertAll(objList: List<T>): List<Long>
 
     @Delete
-    fun delete(obj: T): Long
+    fun delete(obj: T): Int
 
     @Delete
-    fun deleteAll(objList: T): List<Long>
+    fun deleteAll(objList: T): Int
 
     @Update
-    fun update(obj: T): Long
+    fun update(obj: T): Int
 
     @Update
-    fun updateAll(objList: List<T>): List<Long>
+    fun updateAll(objList: List<T>): Int
 }

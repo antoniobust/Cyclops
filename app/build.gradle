@@ -1,8 +1,10 @@
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android-extensions'
+
 
 // Load keystore
 def provideSigning = false
@@ -13,7 +15,6 @@ if (rootProject.file("keystore.properties").exists()) {
     keystoreProperties = new Properties()
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
-def lifecycle_version = "1.1.1"
 
 android {
     compileSdkVersion 28
@@ -28,12 +29,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         lintOptions.abortOnError false
-    }
-
-    sourceSets {
-        main {
-            res.srcDirs += ['src/main/resources']
-        }
     }
 
     dexOptions {
@@ -92,32 +87,37 @@ android {
 }
 
 dependencies {
+    def room_version = "2.0.0"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation project(':PlayLicencing')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+    kapt "android.arch.lifecycle:compiler:1.1.1"
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     implementation 'com.android.volley:volley:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.preference:preference:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.2.71'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.google.dagger:dagger:2.15'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
-    implementation "androidx.room:room-runtime:2.1.0-alpha01"
-    annotationProcessor "androidx.room:room-compiler:2.1.0-alpha01"
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.18'
     releaseImplementation('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
         transitive = true
     }

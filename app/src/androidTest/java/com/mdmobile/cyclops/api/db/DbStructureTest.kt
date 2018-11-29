@@ -1,21 +1,24 @@
 package com.mdmobile.cyclops.api.db
 
-import androidx.test.internal.runner.junit4.AndroidJUnit4Builder
+import androidx.room.Room
+import androidx.test.platform.app.InstrumentationRegistry
 import com.mdmobile.cyclops.db.MobiControlDB
+import org.junit.After
 import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
 
-class DbStructureTest {
+abstract class DbStructureTest {
 
-    val mcDb:MobiControlDB
+    private lateinit var mcDb: MobiControlDB
+    val db: MobiControlDB
+        get() = mcDb
 
     @Before
-    fun setUpDb(){
-        mcDb = MobiControlDB.create()
+    fun setUpDb() {
+        mcDb = MobiControlDB.database
     }
-    @Test
-    fun test(){
 
-    }
+//    @After
+//    fun closeDb() {
+//        mcDb.close()
+//    }
 }

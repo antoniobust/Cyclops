@@ -9,7 +9,7 @@ import com.mdmobile.cyclops.provider.McContract
 @Entity(tableName = McContract.MANAGEMENT_SERVER_TABLE_NAME,foreignKeys = [ForeignKey(
         entity = InstanceInfo::class, parentColumns = arrayOf("id"), childColumns = arrayOf("instanceId")
 )])
-data class ManagmentServer(
+data class ManagementServer(
         @PrimaryKey(autoGenerate = true)
         val id:Int,
         @field:SerializedName("Fqdn")

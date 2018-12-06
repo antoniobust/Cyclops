@@ -16,4 +16,7 @@ interface DeviceDao : BaseDao<Device> {
 
     @Query("SELECT * FROM DeviceInfo WHERE DeviceId = :devId")
     fun getDevice(devId: String): LiveData<Device>
+
+    @Query("SELECT * FROM DeviceInfo WHERE instanceId= :instanceId")
+    fun getDevicesByInstanceId(instanceId: String): LiveData<List<Device>>
 }

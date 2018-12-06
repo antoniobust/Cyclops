@@ -11,7 +11,7 @@ import com.mdmobile.cyclops.api.ApiResponse
 import com.mdmobile.cyclops.api.ApiSuccessResponse
 import com.mdmobile.cyclops.dataModel.Resource
 
-abstract class NetworkBoundResource<ResultType, RequestType>(val appExecutors: ApplicationExecutors) {
+abstract class NetworkBoundResource<ResultType, RequestType>(private val appExecutors: ApplicationExecutors) {
 
     private val liveDataManager = MediatorLiveData<Resource<ResultType>>()
 

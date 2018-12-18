@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
 
-@Entity(tableName = McContract.PROFILE_TABLE_NAME)
+@Entity(tableName = McContract.PROFILE_TABLE_NAME,primaryKeys = ["id","referenceId"])
 data class Profile(
         @PrimaryKey(autoGenerate = true)
         val id: Int,

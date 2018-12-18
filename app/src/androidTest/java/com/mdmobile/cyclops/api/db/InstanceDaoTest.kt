@@ -45,7 +45,10 @@ class InstanceDaoTest : DbTest() {
         db.deviceDao().insert(device)
         db.instanceDao().delete(instance)
         val devices = getValue(db.deviceDao().getDevicesByInstanceId(instance.id.toString()))
-        assertThat("Device under instance id ${instance.id} was not deleted automatically\n Devices: $devices", devices.isNullOrEmpty())
+        val msList = getValue(db.managementServerDao().getAllMs())
+        val dsList = getValue(db.deploymentServerDao().getAllDs())
+        assertThat("Device under instance id ${instance.id} was not deleted automatically\n Devices: $devices",
+                devices.isNullOrEmpty() && msList.isNullOrEmpty() && dsList.isNullOrEmpty())
         db.endTransaction()
     }
 }

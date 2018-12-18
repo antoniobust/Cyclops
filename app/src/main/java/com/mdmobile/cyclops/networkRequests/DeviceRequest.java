@@ -87,19 +87,19 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
             final RuntimeTypeAdapterFactory<BasicDevice> typeFactory = RuntimeTypeAdapterFactory
                     .of(BasicDevice.class, "Kind")
-                    .registerSubtype(IosDevice.class, DeviceKind.IOS)
-                    .registerSubtype(IosDeviceV14.class, DeviceKind.IOS_V14)
-                    .registerSubtype(AndroidGeneric.class, DeviceKind.ANDROID_GENERIC)
-                    .registerSubtype(AndroidForWork.class, DeviceKind.ANDROID_FOR_WORK)
-                    .registerSubtype(AndroidPlus.class, DeviceKind.ANDROID_PLUS)
-                    .registerSubtype(SamsungElm.class, DeviceKind.ANDROID_ELM)
-                    .registerSubtype(WindowsDesktop.class, DeviceKind.WINDOWS_DESKTOP)
-                    .registerSubtype(WindowsDesktopLegacy.class, DeviceKind.WINDOWS_DESKTOP_LEGACY)
-                    .registerSubtype(WindowsPhone.class, DeviceKind.WINDOWS_PHONE)
-                    .registerSubtype(WindowsRuntime.class, DeviceKind.WINDOWS_RUNTIME)
-                    .registerSubtype(WindowsCE.class, DeviceKind.WINDOWS_CE)
-                    .registerSubtype(Linux.class, DeviceKind.LINUX)
-                    .registerSubtype(Mac.class, DeviceKind.MAC);
+                    .registerSubtype(IosDevice.class, DeviceKind.Companion.getIOS())
+                    .registerSubtype(IosDeviceV14.class, DeviceKind.Companion.getIOS_V14())
+                    .registerSubtype(AndroidGeneric.class, DeviceKind.Companion.getANDROID_GENERIC())
+                    .registerSubtype(AndroidForWork.class, DeviceKind.Companion.getANDROID_FOR_WORK())
+                    .registerSubtype(AndroidPlus.class, DeviceKind.Companion.getANDROID_PLUS())
+                    .registerSubtype(SamsungElm.class, DeviceKind.Companion.getANDROID_ELM())
+                    .registerSubtype(WindowsDesktop.class, DeviceKind.Companion.getWINDOWS_DESKTOP())
+                    .registerSubtype(WindowsDesktopLegacy.class, DeviceKind.Companion.getWINDOWS_DESKTOP_LEGACY())
+                    .registerSubtype(WindowsPhone.class, DeviceKind.Companion.getWINDOWS_PHONE())
+                    .registerSubtype(WindowsRuntime.class, DeviceKind.Companion.getWINDOWS_RUNTIME())
+                    .registerSubtype(WindowsCE.class, DeviceKind.Companion.getWINDOWS_CE())
+                    .registerSubtype(Linux.class, DeviceKind.Companion.getLINUX())
+                    .registerSubtype(Mac.class, DeviceKind.Companion.getMAC());
 //            .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
 
 

@@ -9,7 +9,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mdmobile.cyclops.ApplicationLoader.applicationContext
 import com.mdmobile.cyclops.dataModel.api.newDataClass.*
 import com.mdmobile.cyclops.provider.McContract
-import com.mdmobile.cyclops.provider.McHelper
 
 @Database(version = 1, exportSchema = false,
         entities = [Device::class, DeploymentServer::class, InstalledApps::class, InstanceInfo::class, ManagementServer::class,
@@ -56,6 +55,22 @@ abstract class MobiControlDB : RoomDatabase() {
                         + " DELETE FROM " + McContract.USER_TABLE_NAME
                         + " WHERE " + McContract.USER_TABLE_NAME + ".instanceId"
                         + "=OLD.id;"
+                        + "END;")
+
+                //Whenever we delete a device we delete related installed apps
+                db.execSQL("CREATE TRIGGER RemoveDeviceApps BEFORE DELETE ON " + McContract.DEVICE_TABLE_NAME
+                        + " BEGIN "
+                        + "DELETE FROM " + McContract.INSTALLED_APPLICATION_TABLE_NAME
+                        + " WHERE " + McContract.INSTALLED_APPLICATION_TABLE_NAME + "." + McContract.InstalledApplications.DEVICE_ID
+                        + "= OLD." + McContract.Device.COLUMN_DEVICE_ID + ";"
+                        + "END;")
+
+                //Whenever we delete a device we delete references in PROFILE-DEVICE lookup table
+                db.execSQL("CREATE TRIGGER RemoveDeviceProfiles BEFORE DELETE ON " + McContract.DEVICE_TABLE_NAME
+                        + " BEGIN "
+                        + "DELETE FROM " + McContract.PROFILE_DEVICE_TABLE_NAME
+                        + " WHERE " + McContract.PROFILE_DEVICE_TABLE_NAME + "." + McContract.ProfileDevice.DEVICE_ID
+                        + "= OLD." + McContract.Device.COLUMN_DEVICE_ID + ";"
                         + "END;")
             }
         }

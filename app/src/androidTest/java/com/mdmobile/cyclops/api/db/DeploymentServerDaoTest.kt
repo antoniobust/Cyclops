@@ -30,6 +30,7 @@ class DeploymentServerDaoTest : DbTest() {
     @Test()
     fun deleteDsAfterInstanceRemoval() {
         insertAndRead()
+
         db.instanceDao().delete(instance)
         val dSs = TestUtils.getValue(db.deploymentServerDao().getAllDs())
         MatcherAssert.assertThat("DS found in DB, it should be empty: $dSs", dSs.isNullOrEmpty())

@@ -22,4 +22,14 @@ class InstalledApps(
         @field:SerializedName("Name")
         val name: String,
         @field:SerializedName("Status")
-        val status: String)
+        val status: String) {
+
+    override fun equals(other: Any?): Boolean {
+        return if (other is InstalledApps) {
+            (other.id == this.id && other.deviceId == this.deviceId && other.packageId == this.packageId
+                    && other.name == this.name && other.status == this.status)
+        } else {
+            super.equals(other)
+        }
+    }
+}

@@ -19,12 +19,12 @@ class TestUtils {
                 4040)
 
 
-        fun createDevice() = Device(
+        fun createDevice(instance:InstanceInfo) = Device(
                 Random.nextInt(), "Android Plus", Random.nextInt().toString(), "TestDevice",
                 "Sunday", "Android", "TestHostname", "MAC:ADDR",
                 "OnePlus", "4", "6t", "9.0", "\\Anto",
                 true, true, false, "Android",
-                "ExtraInfo;ExtraInfo2", createInstance().id)
+                "ExtraInfo;ExtraInfo2", instance.id)
 
         fun createScript() = Script(
                 123, "Testing script", "Hello my name is doc. greenthumb", "reset -a \n reset -b"
@@ -40,6 +40,8 @@ class TestUtils {
         fun createManagementServer() = ManagementServer(
                 12314, "testMsFqdn", "This is a test MS", "1232", "12:we:123:123",
                 "TestManagement", "online", 443, 123, createInstance().id)
+
+        fun createInstalledApp(device: Device) = InstalledApps(12121, device.deviceId, "com.test.cyclops", "CyclopsTest", "Installed")
 
         fun <T> getValue(liveData: LiveData<T>): T? {
 

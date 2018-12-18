@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 class InstanceDaoTest : DbTest() {
 
     private val instance = TestUtils.createInstance()
-    private val device = TestUtils.createDevice()
+    private val device = TestUtils.createDevice(instance)
 
     @Test
     fun insertAndRead() {

@@ -10,9 +10,9 @@ import com.mdmobile.cyclops.ApplicationLoader.applicationContext
 import com.mdmobile.cyclops.dataModel.api.newDataClass.*
 import com.mdmobile.cyclops.provider.McContract
 
-@Database(version = 1, exportSchema = false,
+@Database(version = 5, exportSchema = false,
         entities = [Device::class, DeploymentServer::class, InstalledApps::class, InstanceInfo::class, ManagementServer::class,
-            Script::class, User::class])
+            Script::class, User::class, Profile::class,ProfileDevice::class])
 abstract class MobiControlDB : RoomDatabase() {
 
 
@@ -84,4 +84,6 @@ abstract class MobiControlDB : RoomDatabase() {
     abstract fun managementServerDao(): ManagementServerDao
     abstract fun scriptDao(): ScriptDao
     abstract fun userDao(): UserDao
+    abstract fun profileDao():ProfileDao
+    abstract fun profileDeviceDao():ProfileDeviceDao
 }

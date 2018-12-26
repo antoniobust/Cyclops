@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import com.mdmobile.cyclops.dataModel.api.newDataClass.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import kotlin.math.absoluteValue
 import kotlin.random.Random
 
 class TestUtils {
@@ -19,8 +20,8 @@ class TestUtils {
                 4040)
 
 
-        fun createDevice(instance:InstanceInfo) = Device(
-                Random.nextInt(), "Android Plus", Random.nextInt().toString(), "TestDevice",
+        fun createDevice(instance: InstanceInfo) = Device(
+                Random.nextInt().absoluteValue, "Android Plus", Random.nextInt().toString(), "TestDevice",
                 "Sunday", "Android", "TestHostname", "MAC:ADDR",
                 "OnePlus", "4", "6t", "9.0", "\\Anto",
                 true, true, false, "Android",
@@ -42,6 +43,16 @@ class TestUtils {
                 "TestManagement", "online", 443, 123, createInstance().id)
 
         fun createInstalledApp(device: Device) = InstalledApps(12121, device.deviceId, "com.test.cyclops", "CyclopsTest", "Installed")
+
+        fun createProfile() = Profile(Random.nextInt().absoluteValue, Random.nextInt().absoluteValue.toString(), "TEST PROFILE", "Installed", "20/20/1901", 11, true)
+
+        fun createProfileList(a: Int = 5): List<Profile> {
+            val list = ArrayList<Profile>()
+            for (i in 0..a) {
+                list.add(createProfile())
+            }
+            return list
+        }
 
         fun <T> getValue(liveData: LiveData<T>): T? {
 

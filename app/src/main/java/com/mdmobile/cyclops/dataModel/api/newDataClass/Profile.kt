@@ -1,11 +1,13 @@
 package com.mdmobile.cyclops.dataModel.api.newDataClass
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
 
-@Entity(tableName = McContract.PROFILE_TABLE_NAME)
+@Entity(tableName = McContract.PROFILE_TABLE_NAME,
+        indices = [Index(value = ["referenceId"], unique = true)])
 data class Profile(
         @PrimaryKey(autoGenerate = true)
         val id: Int,

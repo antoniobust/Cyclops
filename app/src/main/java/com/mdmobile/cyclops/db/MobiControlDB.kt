@@ -12,7 +12,7 @@ import com.mdmobile.cyclops.provider.McContract
 
 @Database(version = 5, exportSchema = false,
         entities = [Device::class, DeploymentServer::class, InstalledApps::class, InstanceInfo::class, ManagementServer::class,
-            Script::class, User::class, Profile::class,ProfileDevice::class])
+            Script::class, User::class, Profile::class, ProfileDevice::class])
 abstract class MobiControlDB : RoomDatabase() {
 
 
@@ -57,6 +57,7 @@ abstract class MobiControlDB : RoomDatabase() {
                         + "=OLD.id;"
                         + "END;")
 
+
                 //Whenever we delete a device we delete related installed apps
                 db.execSQL("CREATE TRIGGER RemoveDeviceApps BEFORE DELETE ON " + McContract.DEVICE_TABLE_NAME
                         + " BEGIN "
@@ -84,6 +85,6 @@ abstract class MobiControlDB : RoomDatabase() {
     abstract fun managementServerDao(): ManagementServerDao
     abstract fun scriptDao(): ScriptDao
     abstract fun userDao(): UserDao
-    abstract fun profileDao():ProfileDao
-    abstract fun profileDeviceDao():ProfileDeviceDao
+    abstract fun profileDao(): ProfileDao
+    abstract fun profileDeviceDao(): ProfileDeviceDao
 }

@@ -8,6 +8,6 @@ import com.mdmobile.cyclops.dataModel.api.newDataClass.ProfileDevice
 
 @Dao
 interface ProfileDeviceDao : BaseDao<ProfileDevice> {
-    @Query("SELECT * from Profile INNER JOIN ProfileDevice ON ProfileDevice.profileId = Profile.id INNER JOIN DeviceInfo ON DeviceInfo.id = ProfileDevice.deviceId WHERE DeviceInfo.deviceId = :deviceId")
-    fun getAllProfilesByDevice(deviceId: String): LiveData<List<Profile>>
+    @Query("SELECT * from Profile INNER JOIN ProfileDevice ON ProfileDevice.profileReferenceId = Profile.referenceId INNER JOIN DeviceInfo ON DeviceInfo.deviceId = ProfileDevice.deviceId WHERE DeviceInfo.deviceId = :devId")
+    fun getAllProfilesByDevice(devId: String): LiveData<List<Profile>>
 }

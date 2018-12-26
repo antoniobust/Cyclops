@@ -35,6 +35,4 @@ class ProfileDeviceLinkTest : DbTest() {
         val profiles = TestUtils.getValue(db.profileDeviceDao().getAllProfilesByDevice(device.deviceId))
         MatcherAssert.assertThat("Unexpected profile in DB, should be empty: $profiles", profiles.isNullOrEmpty())
     }
-
-
 }

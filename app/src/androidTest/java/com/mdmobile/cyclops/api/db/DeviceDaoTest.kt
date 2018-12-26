@@ -19,7 +19,7 @@ class DeviceDaoTest : DbTest() {
         MatcherAssert.assertThat("Select operation returned unexpected value: $devices", devices!!.find {
             it.id == device.id
         } != null)
-        val instanceDevices = TestUtils.getValue(db.deviceDao().getDevicesByInstanceId(instance.id.toString()))
+        val instanceDevices = TestUtils.getValue(db.deviceDao().getDevicesByInstance(instance.id.toString()))
         MatcherAssert.assertThat("Select operation returned unexpected value: $devices", !instanceDevices.isNullOrEmpty() && instanceDevices.find {
             it.id == device.id
         } != null)

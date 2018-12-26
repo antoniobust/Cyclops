@@ -10,6 +10,9 @@ interface DeploymentServerDao : BaseDao<DeploymentServer> {
     @Query("SELECT * FROM DsInfo")
     fun getAllDs(): LiveData<List<DeploymentServer>>
 
+    @Query("SELECT * FROM DsInfo WHERE instanceId = :instanceId")
+    fun getAllDsByInstance(instanceId: Int): LiveData<List<DeploymentServer>>
+
     @Query("SELECT * FROM DsInfo WHERE id = :id")
     fun getDs(id: String): LiveData<DeploymentServer>
 }

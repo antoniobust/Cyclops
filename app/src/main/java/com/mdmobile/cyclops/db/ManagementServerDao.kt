@@ -10,6 +10,9 @@ interface ManagementServerDao : BaseDao<ManagementServer> {
     @Query("SELECT * FROM MsInfo")
     fun getAllMs(): LiveData<List<ManagementServer>>
 
+    @Query("SELECT * FROM MsInfo WHERE instanceId = :instanceId")
+    fun getAllMsByInstance(instanceId: Int): LiveData<List<ManagementServer>>
+
     @Query("SELECT * FROM MsInfo WHERE id = :id")
     fun getMs(id: String): LiveData<ManagementServer>
 }

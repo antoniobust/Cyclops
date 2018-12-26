@@ -10,6 +10,9 @@ interface UserDao : BaseDao<User> {
     @Query("SELECT * FROM UserInfo")
     fun getUsers(): LiveData<List<User>>
 
+    @Query("SELECT * FROM UserInfo WHERE instanceId =:instanceId")
+    fun  getUserByInstance(instanceId:Int): LiveData<List<User>>
+
     @Query("SELECT * FROM UserInfo WHERE id = :id")
     fun getUser(id: String): LiveData<User>
 }

@@ -11,7 +11,7 @@ import com.mdmobile.cyclops.dataModel.api.newDataClass.*
 import com.mdmobile.cyclops.provider.McContract
 
 @Database(version = 5, exportSchema = false,
-        entities = [Device::class, DeploymentServer::class, InstalledApps::class, InstanceInfo::class, ManagementServer::class,
+        entities = [Device::class, DeploymentServer::class, InstalledApp::class, InstanceInfo::class, ManagementServer::class,
             Script::class, User::class, Profile::class, ProfileDevice::class])
 abstract class MobiControlDB : RoomDatabase() {
 

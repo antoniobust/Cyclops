@@ -42,7 +42,7 @@ class TestUtils {
                 12314, "testMsFqdn", "This is a test MS", "1232", "12:we:123:123",
                 "TestManagement", "online", 443, 123, createInstance().id)
 
-        fun createInstalledApp(device: Device) = InstalledApps(12121, device.deviceId, "com.test.cyclops", "CyclopsTest", "Installed")
+        fun createInstalledApp(device: Device) = InstalledApp(12121, device.deviceId, "com.test.cyclops", "CyclopsTest", "Installed")
 
         fun createProfile() = Profile(Random.nextInt().absoluteValue, Random.nextInt().absoluteValue.toString(), "TEST PROFILE", "Installed", "20/20/1901", 11, true)
 

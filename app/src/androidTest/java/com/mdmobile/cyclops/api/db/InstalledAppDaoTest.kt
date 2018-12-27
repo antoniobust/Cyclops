@@ -4,7 +4,7 @@ import com.mdmobile.cyclops.api.db.util.TestUtils
 import org.hamcrest.MatcherAssert
 import org.junit.Test
 
-class InstalledAppsDaoTest : DbTest() {
+class InstalledAppDaoTest : DbTest() {
 
     private val instance = TestUtils.createInstance()
     private val device = TestUtils.createDevice(instance)

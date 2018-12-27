@@ -12,7 +12,7 @@ import com.mdmobile.cyclops.provider.McContract
 
 @Entity(tableName = McContract.INSTALLED_APPLICATION_TABLE_NAME,
         foreignKeys = [ForeignKey(entity = Device::class, parentColumns = arrayOf("deviceId"), childColumns = arrayOf("deviceId"))])
-class InstalledApps(
+class InstalledApp(
         @PrimaryKey(autoGenerate = true)
         val id: Int,
         @field:SerializedName("DeviceId")
@@ -25,7 +25,7 @@ class InstalledApps(
         val status: String) {
 
     override fun equals(other: Any?): Boolean {
-        return if (other is InstalledApps) {
+        return if (other is InstalledApp) {
             (other.id == this.id && other.deviceId == this.deviceId && other.packageId == this.packageId
                     && other.name == this.name && other.status == this.status)
         } else {

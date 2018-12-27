@@ -13,7 +13,7 @@ class InstanceRepository @Inject constructor(
         private val instance: InstanceInfo,
         private val appExecutors: ApplicationExecutors) {
 
-    fun loadServer(): LiveData<Resource<InstanceInfo>> {
+    fun loadInstance(): LiveData<Resource<InstanceInfo>> {
         return object : NetworkBoundResource<InstanceInfo, InstanceInfo>(appExecutors) {
             override fun saveApiResult(item: InstanceInfo) {
                 MobiControlDB.database.instanceDao().insert(instance)

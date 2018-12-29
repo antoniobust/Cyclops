@@ -1,6 +1,6 @@
 package com.mdmobile.cyclops.api.db
 
-import com.mdmobile.cyclops.api.db.util.TestUtils
+import com.mdmobile.cyclops.commonTest.TestUtils
 import com.mdmobile.cyclops.dataModel.api.newDataClass.ProfileDevice
 import org.hamcrest.MatcherAssert
 import org.junit.Test

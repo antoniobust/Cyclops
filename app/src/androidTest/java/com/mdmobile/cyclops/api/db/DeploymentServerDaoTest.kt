@@ -3,6 +3,7 @@ package com.mdmobile.cyclops.api.db
 import com.mdmobile.cyclops.commonTest.TestUtils
 import org.hamcrest.MatcherAssert
 import org.junit.Test
+import com.mdmobile.cyclops.commonTest.LiveDataTestUtil.getValue
 
 class DeploymentServerDaoTest : DbTest() {
 
@@ -14,7 +15,7 @@ class DeploymentServerDaoTest : DbTest() {
         val insertedId = db.deploymentServerDao().insert(ds).toInt()
         MatcherAssert.assertThat("DS not inserted correctly: $insertedId", insertedId == ds.id)
 
-        val dSs = TestUtils.getValue(db.deploymentServerDao().getAllDs())
+        val dSs = getValue(db.deploymentServerDao().getAllDs())
         MatcherAssert.assertThat("DS not found in DB: $dSs", !dSs.isNullOrEmpty() && dSs.find {
             it.id == ds.id
         }?.name == ds.name)
@@ -32,7 +33,7 @@ class DeploymentServerDaoTest : DbTest() {
         insertAndRead()
 
         db.instanceDao().delete(instance)
-        val dSs = TestUtils.getValue(db.deploymentServerDao().getAllDs())
+        val dSs = getValue(db.deploymentServerDao().getAllDs())
         MatcherAssert.assertThat("DS found in DB, it should be empty: $dSs", dSs.isNullOrEmpty())
     }
 }

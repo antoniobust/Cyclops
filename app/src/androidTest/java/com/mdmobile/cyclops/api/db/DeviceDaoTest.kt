@@ -1,8 +1,10 @@
 package com.mdmobile.cyclops.api.db
 
+import com.mdmobile.cyclops.commonTest.LiveDataTestUtil.getValue
 import com.mdmobile.cyclops.commonTest.TestUtils
 import org.hamcrest.MatcherAssert
 import org.junit.Test
+
 
 class DeviceDaoTest : DbTest() {
 
@@ -15,11 +17,11 @@ class DeviceDaoTest : DbTest() {
         db.instanceDao().insert(instance)
         val newItem = db.deviceDao().insert(device)
         MatcherAssert.assertThat("New device id doesn't match the test one $newItem", newItem.toInt() == device.id)
-        val devices = TestUtils.getValue(db.deviceDao().getDevices())
+        val devices = getValue(db.deviceDao().getDevices())
         MatcherAssert.assertThat("Select operation returned unexpected value: $devices", devices!!.find {
             it.id == device.id
         } != null)
-        val instanceDevices = TestUtils.getValue(db.deviceDao().getDevicesByInstance(instance.id))
+        val instanceDevices = getValue(db.deviceDao().getDevicesByInstance(instance.id))
         MatcherAssert.assertThat("Select operation returned unexpected value: $devices", !instanceDevices.isNullOrEmpty() && instanceDevices.find {
             it.id == device.id
         } != null)

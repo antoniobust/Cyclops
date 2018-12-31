@@ -10,12 +10,12 @@ import java.util.concurrent.Executors
  * Defines executors for Network, disk and UI activity
  */
 
-class ApplicationExecutors private constructor(
+open class ApplicationExecutors constructor(
         val applicationTread: Executor,
         val networkIO: Executor,
         val diskIO: Executor) {
 
-    private val singleton by lazy{
+    private val singleton by lazy {
         ApplicationExecutors()
     }
 

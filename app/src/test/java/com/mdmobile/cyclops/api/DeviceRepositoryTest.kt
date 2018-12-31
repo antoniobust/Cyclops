@@ -47,6 +47,7 @@ class DeviceRepositoryTest {
         verify(dao).getDevice("foo")
     }
 
+    @Test
     fun loadDeviceListFromNetwork() {
         val dbData = MutableLiveData<List<Device>>()
         `when`(dao.getDevices()).thenReturn(dbData)
@@ -60,7 +61,7 @@ class DeviceRepositoryTest {
         `when`(mcApiService.getDevices()).thenReturn(apiCall)
 
         val data = repository.loadDevices()
-        verify(dao).getDevices()
+        verify(dao).getDevicesByInstance(instance.id)
     }
 
 }

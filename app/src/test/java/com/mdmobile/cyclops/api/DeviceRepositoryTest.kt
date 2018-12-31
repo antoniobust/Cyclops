@@ -12,6 +12,6 @@ class DeviceRepositoryTest {
 
     @Before
     fun init(){
-        val db = mock
+//        val db = mock
     }
 }

@@ -5,7 +5,6 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android-extensions'
 
-
 // Load keystore
 def provideSigning = false
 def keystoreProperties
@@ -34,6 +33,12 @@ android {
     dexOptions {
         javaMaxHeapSize "4g" //specify the heap size for the dex process
         preDexLibraries = false //delete the already predexed libraries
+    }
+
+    sourceSets {
+        String sharedTestPath = "src/commonTest/java"
+        androidTest.java.srcDirs += sharedTestPath
+        test.java.srcDirs += sharedTestPath
     }
 
     signingConfigs {
@@ -84,6 +89,8 @@ android {
         cruncherEnabled = false
     }
 
+    sourceSets { main { java.srcDirs = ['src/main/java', 'src/testCommon/', 'src/com.mdmobile.cyclops.commonTest', 'src/test-common'] } }
+    sourceSets { main { java.srcDirs = ['src/main/java', 'src/test-common/java'] } }
 }
 
 dependencies {
@@ -123,10 +130,13 @@ dependencies {
     }
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.8.1'
-    androidTestImplementation 'androidx.annotation:annotation:1.0.0'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test:rules:1.1.0'
+    testImplementation 'org.mockito:mockito-all:1.9.5'
+    androidTestImplementation 'androidx.annotation:annotation:1.0.1'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation "androidx.arch.core:core-testing:2.0.0"
+    testImplementation 'android.arch.core:core-testing:1.1.1'
+
 }
 
 repositories {

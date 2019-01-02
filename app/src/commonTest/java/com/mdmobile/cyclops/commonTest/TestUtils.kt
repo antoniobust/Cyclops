@@ -1,10 +1,6 @@
-package com.mdmobile.cyclops.api.db.util
+package com.mdmobile.cyclops.commonTest
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.mdmobile.cyclops.dataModel.api.newDataClass.*
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import kotlin.math.absoluteValue
 import kotlin.random.Random
 
@@ -42,7 +38,7 @@ class TestUtils {
                 12314, "testMsFqdn", "This is a test MS", "1232", "12:we:123:123",
                 "TestManagement", "online", 443, 123, createInstance().id)
 
-        fun createInstalledApp(device: Device) = InstalledApps(12121, device.deviceId, "com.test.cyclops", "CyclopsTest", "Installed")
+        fun createInstalledApp(device: Device) = InstalledApp(12121, device.deviceId, "com.test.cyclops", "CyclopsTest", "Installed")
 
         fun createProfile() = Profile(Random.nextInt().absoluteValue, Random.nextInt().absoluteValue.toString(), "TEST PROFILE", "Installed", "20/20/1901", 11, true)
 
@@ -52,24 +48,6 @@ class TestUtils {
                 list.add(createProfile())
             }
             return list
-        }
-
-        fun <T> getValue(liveData: LiveData<T>): T? {
-
-            val data = arrayOfNulls<Any>(1)
-            val latch = CountDownLatch(1)
-            val observer = object : Observer<T> {
-                override fun onChanged(o: T?) {
-                    data[0] = o
-                    latch.countDown()
-                    liveData.removeObserver(this)
-                }
-            }
-            liveData.observeForever(observer)
-            latch.await(2, TimeUnit.SECONDS)
-
-            @Suppress("UNCHECKED_CAST")
-            return data[0] as T
         }
     }
 }

@@ -1,8 +1,14 @@
 package com.mdmobile.cyclops.api
 
 import androidx.lifecycle.LiveData
-import com.mdmobile.cyclops.dataModel.api.*
-import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
+import com.mdmobile.cyclops.dataModel.api.Action
+import com.mdmobile.cyclops.dataModel.api.CollectedData
+import com.mdmobile.cyclops.dataModel.api.ServerInfo
+import com.mdmobile.cyclops.dataModel.api.Token
+import com.mdmobile.cyclops.dataModel.api.newDataClass.Device
+import com.mdmobile.cyclops.dataModel.api.newDataClass.InstalledApp
+import com.mdmobile.cyclops.dataModel.api.newDataClass.Profile
+import com.mdmobile.cyclops.dataModel.api.newDataClass.User
 import com.mdmobile.cyclops.dataTypes.ComplexDataType
 import com.mdmobile.cyclops.dataTypes.ProfileActions
 import retrofit2.http.*
@@ -23,18 +29,18 @@ interface McApiService {
     @GET("/devices")
     fun getDevices(
             @Query("path") path: String? = null,
-            @Query("skip") skip: Int?= null,
-            @Query("take") take: Int?= null,
-            @Query("order") order: String?= null,
-            @Query("filter") filter: String?= null,
-            @Query("userFilter") userFilter: String?= null
-    ): LiveData<ApiResponse<List<BasicDevice>>>
+            @Query("skip") skip: Int? = null,
+            @Query("take") take: Int? = null,
+            @Query("order") order: String? = null,
+            @Query("filter") filter: String? = null,
+            @Query("userFilter") userFilter: String? = null
+    ): LiveData<ApiResponse<List<Device>>>
 
     @GET("/search")
-    fun getDevicesV14(): LiveData<ApiResponse<List<BasicDevice>>>
+    fun getDevicesV14(): LiveData<ApiResponse<List<Device>>>
 
     @GET("/devices/{deviceId}")
-    fun getDevice(@Path("deviceId") devId: String): LiveData<ApiResponse<BasicDevice>>
+    fun getDevice(@Path("deviceId") devId: String): LiveData<ApiResponse<Device>>
 
     @DELETE("/devices/{deviceId}")
     fun deleteDevice(): LiveData<ApiResponse<Void>>

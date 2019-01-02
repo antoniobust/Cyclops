@@ -1,6 +1,7 @@
 package com.mdmobile.cyclops.api.db
 
-import com.mdmobile.cyclops.api.db.util.TestUtils
+import com.mdmobile.cyclops.commonTest.LiveDataTestUtil.getValue
+import com.mdmobile.cyclops.commonTest.TestUtils
 import org.hamcrest.MatcherAssert
 import org.junit.Test
 
@@ -14,7 +15,7 @@ class MsDaoTest :DbTest(){
         val insertedId = db.managementServerDao().insert(ms).toInt()
         MatcherAssert.assertThat("MS not inserted correctly: $insertedId", insertedId == ms.id)
 
-        val dSs = TestUtils.getValue(db.managementServerDao().getAllMs())
+        val dSs = getValue(db.managementServerDao().getAllMs())
         MatcherAssert.assertThat("MS not found in DB: $dSs", !dSs.isNullOrEmpty() && dSs.find {
             it.id == ms.id
         }?.name == ms.name)
@@ -31,7 +32,7 @@ class MsDaoTest :DbTest(){
     fun deleteDsAfterInstanceRemoval() {
         insertAndRead()
         db.instanceDao().delete(instance)
-        val dSs = TestUtils.getValue(db.managementServerDao().getAllMs())
+        val dSs = getValue(db.managementServerDao().getAllMs())
         MatcherAssert.assertThat("MS found in DB, it should be empty: $dSs", dSs.isNullOrEmpty())
     }
 }

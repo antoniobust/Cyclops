@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="server_details_view" type="id"/>
-    <item name="user_logo_preference" type="id">user_logo_preference</item>
+    <item name="user_logo_preference" type="id"/>
     <item name="chart" type="id"/>
 </resources>

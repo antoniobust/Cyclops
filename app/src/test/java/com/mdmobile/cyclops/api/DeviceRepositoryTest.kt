@@ -45,6 +45,8 @@ class DeviceRepositoryTest {
 
         val data = repository.loadDevice("foo")
         verify(dao).getDevice("foo")
+        verifyNoMoreInteractions(dao)
+
     }
 
     @Test

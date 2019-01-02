@@ -155,7 +155,7 @@ public class ApiRequestManager {
                         intent.setPackage(applicationContext.getPackageName());
                         applicationContext.sendBroadcast(intent);
 
-//                        if (LocalBroadcastManager.getInstance(ApplicationLoader.applicationContext).sendBroadcast(intent)) {
+//                        if (LocalBroadcastManager.getInstanceById(ApplicationLoader.applicationContext).sendBroadcast(intent)) {
 //                            Logger.log(LOG_TAG, "Broadcast sync dev intent sent", Log.VERBOSE);
 //                        } else{
 //                            Logger.log(LOG_TAG, "Broadcast sync dev intent NOT sent", Log.VERBOSE);

@@ -6,6 +6,11 @@ import kotlin.random.Random
 
 class TestUtils {
     companion object {
+
+        fun createToken() = Token(
+                "FOO_ACCESS_TOKEN", "Bearer", 2600, "FOO_REFRESH"
+        )
+
         fun createInstance() = InstanceInfo(
                 190,
                 "TestInstance",

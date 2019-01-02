@@ -4,11 +4,7 @@ import androidx.lifecycle.LiveData
 import com.mdmobile.cyclops.dataModel.api.Action
 import com.mdmobile.cyclops.dataModel.api.CollectedData
 import com.mdmobile.cyclops.dataModel.api.ServerInfo
-import com.mdmobile.cyclops.dataModel.api.Token
-import com.mdmobile.cyclops.dataModel.api.newDataClass.Device
-import com.mdmobile.cyclops.dataModel.api.newDataClass.InstalledApp
-import com.mdmobile.cyclops.dataModel.api.newDataClass.Profile
-import com.mdmobile.cyclops.dataModel.api.newDataClass.User
+import com.mdmobile.cyclops.dataModel.api.newDataClass.*
 import com.mdmobile.cyclops.dataTypes.ComplexDataType
 import com.mdmobile.cyclops.dataTypes.ProfileActions
 import retrofit2.http.*

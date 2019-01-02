@@ -13,4 +13,5 @@ data class InstanceInfo(
         val clientId: String,
         val serverAddress: String,
         val serverMajorVersion: Int = -1,
-        val buildNumber: Int = -1)
+        val buildNumber: Int = -1,
+        val currentToken: String = "NULL")

@@ -136,6 +136,7 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation "androidx.arch.core:core-testing:2.0.0"
     testImplementation 'android.arch.core:core-testing:1.1.1'
+    testImplementation 'com.squareup.retrofit2:retrofit-mock:2.5.0'
 
 }
 

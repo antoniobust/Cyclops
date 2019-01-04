@@ -1,13 +1,13 @@
-package com.mdmobile.cyclops.api
+package com.mdmobile.cyclops.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import com.mdmobile.cyclops.api.McApiService
 import com.mdmobile.cyclops.api.utils.InstantAppExecutors
 import com.mdmobile.cyclops.commonTest.TestUtils
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.db.InstanceDao
 import com.mdmobile.cyclops.db.MobiControlDB
-import com.mdmobile.cyclops.repository.InstanceRepository
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,6 +40,5 @@ class InstanceRepositoryTest {
         val data = instanceDao.getInstanceById(-1)
         verify(instanceDao).getInstanceById(-1)
         verifyNoMoreInteractions(instanceDao)
-
     }
 }

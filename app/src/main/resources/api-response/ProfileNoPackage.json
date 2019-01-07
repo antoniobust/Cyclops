@@ -1,0 +1,93 @@
+[
+  {
+    "$type": "DeviceProfile",
+    "ReferenceId": "fe4c10a8-dd6e-4e8c-aeee-8028497eed3a",
+    "Name": "Anto testing profile",
+    "VersionNumber": 8,
+    "Status": "Installed",
+    "IsMandatory": true,
+    "AssignmentDate": "2018-05-24T09:17:17.103Z",
+    "Configurations": [
+      {
+        "$type": "DeviceConfiguration",
+        "Name": "SOTI MOBI",
+        "DeviceConfigurationType": {
+          "$type": "DeviceConfigurationType",
+          "ConfigurationType": {
+            "$type": "DeviceConfigurationTypeInformation",
+            "Name": "WirelessSection"
+          },
+          "Subtype": {
+            "$type": "DeviceConfigurationTypeInformation",
+            "Name": "WirelessConnection"
+          }
+        },
+        "Status": "Installed"
+      }
+    ],
+    "Packages": []
+  },
+  {
+    "$type": "DeviceProfile",
+    "ReferenceId": "226b22b2-ac4c-4254-8b2c-8b8bc6bd08f7",
+    "Name": "1",
+    "VersionNumber": 1,
+    "Status": "Installed",
+    "IsMandatory": true,
+    "AssignmentDate": "2018-03-19T11:25:35.947Z",
+    "Configurations": [
+      {
+        "$type": "DeviceConfiguration",
+        "Name": "",
+        "DeviceConfigurationType": {
+          "$type": "DeviceConfigurationType",
+          "ConfigurationType": {
+            "$type": "DeviceConfigurationTypeInformation",
+            "Name": "FeatureControlSection"
+          },
+          "Subtype": null
+        },
+        "Status": "Installed"
+      }
+    ],
+    "Packages": []
+  },
+  {
+    "$type": "DeviceProfile",
+    "ReferenceId": "c9b06c1d-8333-4feb-a762-31457b7fdb9a",
+    "Name": "anto test profile",
+    "VersionNumber": 1,
+    "Status": "Installed",
+    "IsMandatory": true,
+    "AssignmentDate": "2018-07-02T09:45:30.687Z",
+    "Configurations": [
+      {
+        "$type": "DeviceConfiguration",
+        "Name": "",
+        "DeviceConfigurationType": {
+          "$type": "DeviceConfigurationType",
+          "ConfigurationType": {
+            "$type": "DeviceConfigurationTypeInformation",
+            "Name": "LockdownSection"
+          },
+          "Subtype": null
+        },
+        "Status": "Installed"
+      },
+      {
+        "$type": "DeviceConfiguration",
+        "Name": "",
+        "DeviceConfigurationType": {
+          "$type": "DeviceConfigurationType",
+          "ConfigurationType": {
+            "$type": "DeviceConfigurationTypeInformation",
+            "Name": "AuthenticationSection"
+          },
+          "Subtype": null
+        },
+        "Status": "Installed"
+      }
+    ],
+    "Packages": []
+  }
+]

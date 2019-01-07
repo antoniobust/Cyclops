@@ -1,42 +1,40 @@
-package com.mdmobile.cyclops.di
+package com.mdmobile.cyclops.api
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.gson.GsonBuilder
-import com.mdmobile.cyclops.api.McApiService
-import com.mdmobile.cyclops.api.TokenAuthenticator
-import com.mdmobile.cyclops.dataModel.Instance
+import com.mdmobile.cyclops.api.utils.ApiUtil
+import com.mdmobile.cyclops.commonTest.LiveDataTestUtil
+import com.mdmobile.cyclops.commonTest.TestUtils
+import com.mdmobile.cyclops.dataModel.api.ErrorResponse
 import com.mdmobile.cyclops.dataModel.api.RuntimeTypeAdapterFactory
 import com.mdmobile.cyclops.dataModel.api.devices.*
-import com.mdmobile.cyclops.dataModel.api.newDataClass.Device
 import com.mdmobile.cyclops.dataTypes.DeviceKind
 import com.mdmobile.cyclops.utils.LiveDataCallAdapterFactory
-import dagger.Module
-import dagger.Provides
-import okhttp3.OkHttpClient
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import okio.Okio
+import org.bouncycastle.crypto.tls.ConnectionEnd.client
+import org.hamcrest.CoreMatchers
+import org.hamcrest.MatcherAssert
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
-@Module
-class ApplicationModules {
 
-    @Provides
-    @Singleton
-    fun getMcService(serverInstance: Instance): McApiService {
+class McApiServiceTest {
 
-        val client = OkHttpClient.Builder()
-                .authenticator(TokenAuthenticator(
-                        Retrofit.Builder()
-                                .baseUrl(serverInstance.serverAddress)
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                                .build()
-                                .create(McApiService::class.java))
-                )
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .build()
+    @Rule
+    @JvmField
+    val instantExecutorRule = InstantTaskExecutorRule()
 
+    private val mockWebServer = MockWebServer()
+    private lateinit var apiService:McApiService
+
+    @Before
+    fun init() {
         val typeFactory = RuntimeTypeAdapterFactory
                 .of(BasicDevice::class.java, "Kind")
                 .registerSubtype(IosDevice::class.java, DeviceKind.IOS)
@@ -52,8 +50,6 @@ class ApplicationModules {
                 .registerSubtype(WindowsCE::class.java, DeviceKind.WINDOWS_CE)
                 .registerSubtype(Linux::class.java, DeviceKind.LINUX)
                 .registerSubtype(Mac::class.java, DeviceKind.MAC)
-//            .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
-
 
         val gson = GsonBuilder()
                 .registerTypeAdapterFactory(typeFactory)
@@ -61,13 +57,44 @@ class ApplicationModules {
                 .create()
 
 
-        return Retrofit.Builder()
-                .baseUrl(serverInstance.serverAddress)
+        apiService = Retrofit.Builder()
+                .baseUrl(mockWebServer.url("/"))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                .client(client)
                 .build()
                 .create(McApiService::class.java)
+
     }
+
+    @After
+    fun shutdown() {
+        mockWebServer.shutdown()
+    }
+
+    @Test
+    fun tokenResponseTest() {
+        enqueueReq("Token.json")
+        val token = LiveDataTestUtil.getValue(apiService.getAuthToken())
+
+
+    }
+
+
+    private fun enqueueReq(resourceName: String, headers: Map<String, String> = emptyMap()) {
+        val mockResponse = MockResponse()
+        val inputStream = javaClass.classLoader.getResourceAsStream("api-response/$resourceName")
+
+        if (inputStream == null) {
+            mockResponse.setBody("")
+        } else {
+            val inputBuffer = Okio.buffer(Okio.source(inputStream))
+            mockResponse.setBody(inputBuffer.readString(Charsets.UTF_8))
+        }
+        for ((key, value) in headers) {
+            mockResponse.addHeader(key, value)
+        }
+        mockWebServer.enqueue(mockResponse)
+    }
+
 }

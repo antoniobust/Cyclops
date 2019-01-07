@@ -5,5 +5,5 @@ import dagger.Component
 
 @Component(modules = [ApplicationModules::class])
 interface AppComponent {
-    fun injeect(mcApiService: McApiService)
+    fun inject(mcApiService: McApiService)
 }

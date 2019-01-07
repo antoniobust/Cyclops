@@ -18,7 +18,7 @@ object LiveDataTestUtil {
             }
         }
         liveData.observeForever(observer)
-        latch.await(2, TimeUnit.SECONDS)
+        latch.await(1000, TimeUnit.SECONDS)
 
         @Suppress("UNCHECKED_CAST")
         return data[0] as T

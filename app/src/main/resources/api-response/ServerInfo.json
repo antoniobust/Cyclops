@@ -1,0 +1,49 @@
+{
+  "$type": "Servers",
+  "ProductVersion": "14.2.0",
+  "ProductVersionBuild": "2894",
+  "DeploymentServers": [
+    {
+      "$type": "DeploymentServer",
+      "IsConnected": true,
+      "PrimaryManagementAddress": "uk14.mobicontrolcloud.com:5494",
+      "SecondaryManagementAddress": null,
+      "PrimaryAgentAddress": "uk14.mobicontrolcloud.com:5494",
+      "SecondaryAgentAddress": null,
+      "PulseTimeout": 60,
+      "RuleReload": 10,
+      "ScheduleInterval": 30,
+      "MinThreads": 4,
+      "MaxThreads": 32,
+      "MaxBurstThreads": 512,
+      "PulseWaitInterval": 0,
+      "ConnectedDeviceCount": 0,
+      "ConnectedManagerCount": 0,
+      "MsgQueueLength": 0,
+      "CurrentThreadCount": 4,
+      "DeviceManagementAddress": "uk14.mobicontrolcloud.com",
+      "Name": "UK14",
+      "Status": "Started"
+    }
+  ],
+  "ManagementServers": [
+    {
+      "$type": "ManagementServer",
+      "Fqdn": "uk14",
+      "PortNumber": 443,
+      "Description": null,
+      "StatusTime": "2019-01-05T10:33:13.667",
+      "MacAddress": "067EEF85A28A",
+      "TotalConsoleUsers": 6,
+      "Name": "uk14",
+      "Status": "Started"
+    }
+  ],
+  "SOTIAssistServer": {
+    "$type": "SOTIAssistServer",
+    "ServerUrl": "https://UK14.mobicontrolcloud.com:443/sotiassist",
+    "RemoteControlUri": "https://UK14.mobicontrolcloud.com:443/sotiassist/#/home/dashboard/remoteControl/",
+    "Name": "SOTIAssistServer",
+    "Status": "Unknown"
+  }
+}

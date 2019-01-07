@@ -8,10 +8,10 @@ import com.mdmobile.cyclops.provider.McContract
 data class InstanceInfo(
         @PrimaryKey(autoGenerate = true)
         val id: Int,
-        val serverName: String,
-        val apiSecret: String,
-        val clientId: String,
-        val serverAddress: String,
+        val serverName: String = "N/A",
+        val apiSecret: String = "N/A",
+        val clientId: String= "N/A",
+        val serverAddress: String= "N/A",
         val serverMajorVersion: Int = -1,
         val buildNumber: Int = -1,
-        val currentToken: String = "NULL")
+        val currentToken: String = "N/A")

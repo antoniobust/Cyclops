@@ -96,7 +96,7 @@ abstract public class BasicRequest<T> extends Request<T> {
             Logger.log(LOG_TAG, "Error " + errorCode + " HTTP BAD REQUEST", Log.ERROR);
         } else if (errorCode == HttpsURLConnection.HTTP_UNAUTHORIZED ||
                 errorCode == HttpsURLConnection.HTTP_FORBIDDEN) {
-//            Logger.log(LOG_TAG, "Attempt to request new token\n", Log.VERBOSE);
+//            Logger.log(logTag, "Attempt to request new token\n", Log.VERBOSE);
 //
 //            AccountManager manager = AccountManager.get(applicationContext);
 //            Account[] accounts = manager.getAccountsByType(applicationContext.getString(R.string.account_type));

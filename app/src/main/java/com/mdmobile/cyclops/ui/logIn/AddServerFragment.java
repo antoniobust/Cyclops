@@ -59,7 +59,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     @Override
     public void xmlParseComplete(ArrayList<Instance> allInstanceInfo) {
         rootView.findViewById(R.id.server_conf_read_label).setVisibility(View.VISIBLE);
-        ((LoginActivity) Objects.requireNonNull(getActivity())).instanceList.addAll(allInstanceInfo);
+        ((LoginActivity) Objects.requireNonNull(getActivity())).getInstanceList().addAll(allInstanceInfo);
         xmlParsedFlag = true;
     }
 
@@ -81,8 +81,8 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         super.onViewCreated(view, savedInstanceState);
 
         LoginActivity hosting = ((LoginActivity) Objects.requireNonNull(getActivity()));
-        hosting.actionChip.setText(R.string.add_instance_label);
-        hosting.actionChip
+        hosting.getActionChip().setText(R.string.add_instance_label);
+        hosting.getActionChip()
                 .setCompoundDrawablesWithIntrinsicBounds(Objects.requireNonNull(getContext()).getDrawable(R.drawable.ic_add),
                         null, null, null);
     }

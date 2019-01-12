@@ -75,7 +75,7 @@ class McApiServiceTest {
     @Test
     fun tokenResponseTest() {
         enqueueReq("Token.json")
-        val token = LiveDataTestUtil.getValue(apiService.getAuthToken())
+        val token = apiService.getAuthToken()
 
 
     }

@@ -11,50 +11,22 @@ import com.mdmobile.cyclops.db.MobiControlDB
 import javax.inject.Inject
 
 class InstanceRepository @Inject constructor(
-        private val instanceInfo: InstanceInfo,
         private val apiService: McApiService,
+        private val db: MobiControlDB,
         private val appExecutors: ApplicationExecutors) {
 
-    fun loadInstance(): LiveData<Resource<InstanceInfo>> {
-        return object : NetworkBoundResource<InstanceInfo, InstanceInfo>(appExecutors) {
-            override fun saveApiResult(item: InstanceInfo) {
-                MobiControlDB.database.instanceDao().insert(instanceInfo)
-            }
 
-            override fun shouldFetch(data: InstanceInfo?): Boolean = false
+    fun loadInstance(instanceName: String): LiveData<InstanceInfo> =
+            db.instanceDao().getInstanceByName(instanceName)
+
+    fun loadInstance(instanceInfo: InstanceInfo): LiveData<InstanceInfo> =
+            db.instanceDao().getInstanceById(instanceInfo.id)
+
+    fun loadAllInstances(): LiveData<List<InstanceInfo>> =
+            db.instanceDao().getAllInstances()
 
 
-            override fun loadFromDb(): LiveData<InstanceInfo> {
-                return MobiControlDB.database.instanceDao().getInstanceById(instanceInfo.id)
-            }
-
-            override fun createCall(): LiveData<ApiResponse<InstanceInfo>> {
-                throw UnsupportedOperationException("Instance info doesn't support create call method as cannot be" +
-                        "fetched from online services")
-            }
-
-        }.asLiveData()
-    }
-
-    fun refreshToken(): LiveData<Resource<InstanceInfo>> {
-        return object : NetworkBoundResource<InstanceInfo, Token>(appExecutors) {
-            override fun saveApiResult(item: Token) {
-                val instanceInfo = instanceInfo.copy(currentToken = item.access_token)
-                MobiControlDB.database.instanceDao().update(instanceInfo)
-            }
-
-            override fun shouldFetch(data: InstanceInfo?): Boolean {
-                //TODO:Implement logic for fetching only when needed
-                return true
-            }
-
-            override fun loadFromDb(): LiveData<InstanceInfo> {
-                return MobiControlDB.database.instanceDao().getInstanceById(instanceInfo.id)
-            }
-
-            override fun createCall(): LiveData<ApiResponse<Token>> {
-                return apiService.getAuthToken()
-            }
-        }.asLiveData()
+    fun refreshToken(): ApiResponse<Token> {
+        return apiService.getAuthToken()
     }
 }

@@ -158,7 +158,7 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
             instance = ServerUtility.getActiveServer();
         } catch (ServerNotFound e) {
             e.printStackTrace();
-            LoginActivity.LaunchActivity();
+            LoginActivity.Companion.launchActivity();
             return null;
         }
 

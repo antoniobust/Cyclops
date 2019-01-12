@@ -52,7 +52,7 @@ public class UsersFragment extends BasicFragment implements LoaderManager.Loader
                     null, null, McContract.UserInfo.DISPLAYED_NAME + " asc");
         }catch (ServerNotFound e){
             e.printStackTrace();
-            LoginActivity.LaunchActivity();
+            LoginActivity.Companion.launchActivity();
             return null;
         }
     }

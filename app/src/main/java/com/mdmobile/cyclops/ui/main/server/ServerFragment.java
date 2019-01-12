@@ -86,7 +86,7 @@ public class ServerFragment extends BasicFragment implements LoaderManager.Loade
             }
         }catch (ServerNotFound e){
             e.printStackTrace();
-            LoginActivity.LaunchActivity();
+            LoginActivity.Companion.launchActivity();
             this.getActivity().finish();
         }
         return null;

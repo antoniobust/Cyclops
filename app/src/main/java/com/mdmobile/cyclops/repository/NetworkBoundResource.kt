@@ -63,7 +63,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val appExec
                 }
                 is ApiEmptyResponse<*> -> {
                     appExecutors.applicationTread.execute {
-//                        setValue(Resource.success())
+                        setValue(Resource.success(null))
                     }
                 }
                 is ApiErrorResponse<*> -> {

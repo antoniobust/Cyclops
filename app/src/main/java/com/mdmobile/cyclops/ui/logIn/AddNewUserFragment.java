@@ -86,8 +86,8 @@ public class AddNewUserFragment extends Fragment {
             }
         }
         LoginActivity hosting = ((LoginActivity) Objects.requireNonNull(getActivity()));
-        hosting.actionChip.setText(R.string.logIn_label);
-        hosting.actionChip
+        hosting.getActionChip().setText(R.string.logIn_label);
+        hosting.getActionChip()
                 .setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         passwordView.setOnTouchListener(pwdVisibilityListener);
         return rootView;
@@ -106,16 +106,16 @@ public class AddNewUserFragment extends Fragment {
         }
 
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE);
-        hostingActivity.actionChip.setVisibility(View.GONE);
-        hostingActivity.progressBar.setVisibility(View.VISIBLE);
+        hostingActivity.getActionChip().setVisibility(View.GONE);
+        hostingActivity.getProgressBar().setVisibility(View.VISIBLE);
         try {
             ApiRequestManager.getInstance().getToken(
                     ServerUtility.getActiveServer(),
                     userName, password, (NetworkCallBack) getActivity());
         } catch (ServerNotFound e) {
             Toast.makeText(getContext(), "Add at least one instance...", Toast.LENGTH_LONG).show();
-            hostingActivity.progressBar.setVisibility(View.GONE);
-            hostingActivity.actionChip.setVisibility(View.VISIBLE);
+            hostingActivity.getProgressBar().setVisibility(View.GONE);
+            hostingActivity.getActionChip().setVisibility(View.VISIBLE);
         }
     }
 

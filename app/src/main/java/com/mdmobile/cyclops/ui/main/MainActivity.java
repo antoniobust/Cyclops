@@ -427,7 +427,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
                     .setImageDrawable(UserUtility.getUserLogo());
         } catch (ServerNotFound e) {
             e.printStackTrace();
-            LoginActivity.LaunchActivity();
+            LoginActivity.Companion.launchActivity();
         }
         drawerNavigationView.setNavigationItemSelectedListener(this);
 

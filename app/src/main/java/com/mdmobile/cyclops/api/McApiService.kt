@@ -19,7 +19,7 @@ interface McApiService {
 
     //Token
     @GET("/token")
-    fun getAuthToken(): LiveData<ApiResponse<Token>>
+    fun getAuthToken(): ApiResponse<Token>
 
     //Devices APIs
 //    @InstanceVersion.InstanceVersion(version = VERSION_14)

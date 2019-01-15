@@ -65,7 +65,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import static android.view.View.GONE;
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.R.id.main_activity_fragment_container;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;
@@ -82,7 +83,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
     private static final byte[] SALT = new byte[]{
             -56, 45, 35, -128, -3, -57, 74, -64, 51, 88, -95,
             -45, 77, -17, -36, -113, -111, 13, -54, 99};
-    public static boolean TABLET_MODE = GeneralUtility.isTabletMode(applicationContext);
+    public static boolean TABLET_MODE = GeneralUtility.isTabletMode(Companion.getApplicationContext());
     String devId, devName;
     Toolbar filtersToolbar;
     private ProgressBar progressBar;
@@ -249,7 +250,7 @@ public class MainActivity extends BaseActivity implements DevicesListAdapter.Dev
             mLicenseCheckerCallback = new LicenceCheckerCallback();
             mLicenceChecker = new LicenseChecker(this,
                     new ServerManagedPolicy(this,
-                            new AESObfuscator(SALT, applicationContext.getPackageName(), Settings.Secure.ANDROID_ID)),
+                            new AESObfuscator(SALT, Companion.getApplicationContext().getPackageName(), Settings.Secure.ANDROID_ID)),
                     getString(R.string.app_billing_public_key)
             );
 

@@ -22,7 +22,8 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 public class UserRequest extends BasicRequest<String> {
 
@@ -40,7 +41,7 @@ public class UserRequest extends BasicRequest<String> {
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
-        intent.setPackage(applicationContext.getPackageName());
+        intent.setPackage(Companion.getApplicationContext().getPackageName());
 
         try {
             String jsonResponseString = new String(response.data,
@@ -50,11 +51,11 @@ public class UserRequest extends BasicRequest<String> {
             }.getType();
             ArrayList<User> user = new Gson().fromJson(jsonResponseString, deviceCollectionType);
 
-            applicationContext.sendBroadcast(intent);
+            Companion.getApplicationContext().sendBroadcast(intent);
 
             Instance instance = ServerUtility.getActiveServer();
             Uri uri = McContract.buildUriWithServerName(McContract.UserInfo.CONTENT_URI, instance.getServerName());
-            Cursor c = applicationContext.getContentResolver().query(McContract.ServerInfo.buildServerInfoUriWithName(instance.getServerName()),
+            Cursor c = Companion.getApplicationContext().getContentResolver().query(McContract.ServerInfo.buildServerInfoUriWithName(instance.getServerName()),
                     new String[]{McContract.ServerInfo._ID}, null, null, null);
 
             if (c == null || !c.moveToFirst()) {
@@ -63,11 +64,11 @@ public class UserRequest extends BasicRequest<String> {
             String serverId = c.getString(0);
             c.close();
 
-            applicationContext.getContentResolver().delete(uri, null, null);
-            applicationContext.getContentResolver().bulkInsert(McContract.UserInfo.CONTENT_URI,
+            Companion.getApplicationContext().getContentResolver().delete(uri, null, null);
+            Companion.getApplicationContext().getContentResolver().bulkInsert(McContract.UserInfo.CONTENT_URI,
                     DbData.prepareUserValues(user, serverId));
 
-            applicationContext.sendBroadcast(intent);
+            Companion.getApplicationContext().sendBroadcast(intent);
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));

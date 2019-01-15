@@ -6,7 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.mdmobile.cyclops.ApplicationLoader.applicationContext
+import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
 import com.mdmobile.cyclops.dataModel.api.newDataClass.*
 import com.mdmobile.cyclops.provider.McContract
 

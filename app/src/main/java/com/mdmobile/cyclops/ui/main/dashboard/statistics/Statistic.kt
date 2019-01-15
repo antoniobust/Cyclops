@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.WorkerThread
-import com.mdmobile.cyclops.ApplicationLoader.applicationContext
+import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.utils.LabelHelper
 import com.mdmobile.cyclops.utils.Logger
@@ -21,7 +21,7 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
         const val MAX_POPULATION_SIZE = 7
     }
 
-    private lateinit var devices : ArrayList<BasicDevice>
+    private lateinit var devices: ArrayList<BasicDevice>
     private val logTag = Statistic::class.java.simpleName
     private val statDataList = ArrayList<Pair<String, ArrayList<StatDataEntry>>>()
 
@@ -51,7 +51,7 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
         statData = formatResult(statData)
 
         statDataList.add(Pair(cookie.toString(), statData))
-        if(statDataList.size == properties.size) {
+        if (statDataList.size == properties.size) {
             listeners.forEach {
                 it.getStatisticData(token, statDataList)
             }

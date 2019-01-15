@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.tabs.TabLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     private TabLayout dotsIndicator;
     private LogInViewPagerAdapter viewPagerAdapter;
     private View rootView;
+    private LoginViewModel viewModel;
 
     public AddServerFragment() {
         //Empty constructor
@@ -67,6 +69,8 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_server, container, false);
+//        viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+
 
         //Instantiate views
         viewPager = rootView.findViewById(R.id.login_add_server_view_pager);
@@ -161,10 +165,10 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     }
 
     public Instance grabServerInfo() {
-        String serverName = ((TextView) rootView.findViewById(R.id.server_name_text_view)).getText().toString();
+        String serverName = ((TextView) rootView.findViewById(R.id.instance_name_text_view)).getText().toString();
         String secret = ((TextView) rootView.findViewById(R.id.api_secret_text_view)).getText().toString();
         String clientId = ((TextView) rootView.findViewById(R.id.client_id_text_view)).getText().toString();
-        String address = ((TextView) rootView.findViewById(R.id.server_address_text_view)).getText().toString();
+        String address = ((TextView) rootView.findViewById(R.id.instance_address_text_view)).getText().toString();
 
 
         if (serverName.isEmpty() || secret.isEmpty() || clientId.isEmpty() || address.isEmpty()) {

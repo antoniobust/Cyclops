@@ -12,7 +12,7 @@ data class InstanceInfo(
         val serverName: String = "N/A",
         val apiSecret: String = "N/A",
         val clientId: String = "N/A",
-        val serverAddress: String = "N/A",
+        val serverAddress: String = "https:\\\\N/A",
         val serverMajorVersion: Int = -1,
         val buildNumber: Int = -1,
         val currentToken: String = "N/A") {
@@ -22,7 +22,7 @@ data class InstanceInfo(
             serverName: String = "N/A",
             apiSecret: String = "N/A",
             clientId: String = "N/A",
-            serverAddress: String = "N/A",
+            serverAddress: String = "https:\\\\NA/",
             serverMajorVersion: Int = -1,
             buildNumber: Int = -1,
             currentToken: String = "N/A"

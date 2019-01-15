@@ -19,12 +19,15 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.android.volley.VolleyError
-import com.mdmobile.cyclops.ApplicationLoader.applicationContext
 import com.mdmobile.cyclops.BuildConfig
+import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.Instance
 import com.mdmobile.cyclops.dataModel.api.Token
+import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.interfaces.NetworkCallBack
 import com.mdmobile.cyclops.services.AccountAuthenticator.*
 import com.mdmobile.cyclops.sync.SyncService
@@ -36,8 +39,10 @@ import com.mdmobile.cyclops.utils.ServerUtility
 import com.mdmobile.cyclops.utils.UserUtility
 import com.mdmobile.cyclops.utils.UserUtility.PASSWORD_KEY
 import com.mdmobile.cyclops.utils.UserUtility.USER_NAME_KEY
+import dagger.android.AndroidInjection
 import java.net.HttpURLConnection
 import java.util.*
+import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
 class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(), NetworkCallBack, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -52,6 +57,10 @@ class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(),
     lateinit var progressBar: ProgressBar
     var instanceList: ArrayList<Instance>? = ArrayList()
     private var authenticatorResponse: AccountAuthenticatorResponse? = null
+    lateinit var viewModel: LoginViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val attachedFragmentTag: String
         get() {
@@ -114,7 +123,10 @@ class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(),
 
     // -- Lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
+
         setContentView(R.layout.activity_login)
         MainActivity.TABLET_MODE = GeneralUtility.isTabletMode(applicationContext)
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -127,19 +139,15 @@ class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(),
         actionChip = findViewById(R.id.action_chip)
         progressBar = findViewById(R.id.login_progress_view)
 
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit()
+        }
+
         if (savedInstanceState != null && savedInstanceState.containsKey(instanceListKey)) {
             instanceList = savedInstanceState.getParcelableArrayList(instanceListKey)
         }
 
-        if (savedInstanceState == null) {
-            //            if (!UserUtility.checkAnyUserLogged() || getCallingActivity() != null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit()
-            //            } else {
-            //                getSupportFragmentManager().beginTransaction()
-            //                        .replace(R.id.login_activity_container, AddNewUserFragment.newInstance(), USER_FRAG_TAG).commit();
-            //            }
-        }
         authenticatorResponse = intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
 
         hintView.setOnClickListener(this)
@@ -238,7 +246,7 @@ class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(),
                     return
                 } else {
                     ServerUtility.setActiveServer(instanceList!![0])
-                    ft.replace(R.id.login_activity_container, AddNewUserFragment(), USER_FRAG_TAG)
+                    ft.replace(R.id.login_activity_container, LogIngConfigureUserFragment(), USER_FRAG_TAG)
                             .addToBackStack(SERVER_FRAG_TAG)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit()
@@ -246,7 +254,7 @@ class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(),
                 }
             }
             USER_FRAG_TAG -> {
-                (supportFragmentManager.findFragmentById(R.id.login_activity_container) as AddNewUserFragment).logIn()
+                (supportFragmentManager.findFragmentById(R.id.login_activity_container) as LogIngConfigureUserFragment).logIn()
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 ft.commit()
             }

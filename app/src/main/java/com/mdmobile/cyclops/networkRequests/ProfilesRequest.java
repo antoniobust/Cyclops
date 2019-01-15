@@ -18,7 +18,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Class to handle profiles installed info request
@@ -61,7 +62,7 @@ public class ProfilesRequest extends BasicRequest<String> {
             }
             //Parse Profiles and save in DB
             if (profiles.size() == 1) {
-                applicationContext.getContentResolver().insert(McContract.Profile.buildUriWithDeviceId(devId), profiles.get(0).toContentValues());
+                Companion.getApplicationContext().getContentResolver().insert(McContract.Profile.buildUriWithDeviceId(devId), profiles.get(0).toContentValues());
             } else if (profiles.size() > 1) {
                 ArrayList<ContentValues> values = new ArrayList<>();
                 for (Profile p : profiles) {
@@ -69,7 +70,7 @@ public class ProfilesRequest extends BasicRequest<String> {
                 }
                 ContentValues[] vals = new ContentValues[values.size()];
                 values.toArray(vals);
-                applicationContext.getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceId(devId), vals);
+                Companion.getApplicationContext().getContentResolver().bulkInsert(McContract.Profile.buildUriWithDeviceId(devId), vals);
             }
 
             return Response.success(null,

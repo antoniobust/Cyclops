@@ -19,7 +19,8 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_MULTI_PROCESS;
 import static android.content.Context.MODE_PRIVATE;
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Utility class for server info methods
@@ -39,19 +40,19 @@ public class ServerUtility {
     public static int SERVER_STARTED_BUT_NOT_CONNECTED = 5;
 
     public static boolean anyActiveServer() {
-        SharedPreferences preferences = applicationContext
-                .getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_MULTI_PROCESS);
-        return preferences.contains(applicationContext.getString(R.string.server_name_preference));
+        SharedPreferences preferences = Companion.getApplicationContext()
+                .getSharedPreferences(Companion.getApplicationContext().getString(R.string.server_shared_preference), MODE_MULTI_PROCESS);
+        return preferences.contains(Companion.getApplicationContext().getString(R.string.server_name_preference));
     }
 
     public static Instance getActiveServer() throws ServerNotFound {
-        SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_MULTI_PROCESS);
-        String serverName = preferences.getString(applicationContext.getString(R.string.server_name_preference), null);
-        String apiSecret = preferences.getString(applicationContext.getString(R.string.api_secret_preference), null);
-        String clientId = preferences.getString(applicationContext.getString(R.string.client_id_preference), null);
-        String address = preferences.getString(applicationContext.getString(R.string.server_address_preference), null);
-        int version = preferences.getInt(applicationContext.getString(R.string.server_version_preference), -1);
-        int build = preferences.getInt(applicationContext.getString(R.string.server_build_preference), -1);
+        SharedPreferences preferences = Companion.getApplicationContext().getSharedPreferences(Companion.getApplicationContext().getString(R.string.server_shared_preference), MODE_MULTI_PROCESS);
+        String serverName = preferences.getString(Companion.getApplicationContext().getString(R.string.server_name_preference), null);
+        String apiSecret = preferences.getString(Companion.getApplicationContext().getString(R.string.api_secret_preference), null);
+        String clientId = preferences.getString(Companion.getApplicationContext().getString(R.string.client_id_preference), null);
+        String address = preferences.getString(Companion.getApplicationContext().getString(R.string.server_address_preference), null);
+        int version = preferences.getInt(Companion.getApplicationContext().getString(R.string.server_version_preference), -1);
+        int build = preferences.getInt(Companion.getApplicationContext().getString(R.string.server_build_preference), -1);
 
         if (serverName != null && apiSecret != null && clientId != null && address != null) {
             return new Instance(serverName, apiSecret, clientId, address, version, build);
@@ -65,14 +66,14 @@ public class ServerUtility {
     }
 
     public static void setActiveServer(Instance instance) {
-        SharedPreferences.Editor editor = applicationContext
-                .getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_PRIVATE).edit();
-        editor.putString(applicationContext.getString(R.string.server_name_preference), instance.getServerName());
-        editor.putString(applicationContext.getString(R.string.api_secret_preference), instance.getApiSecret());
-        editor.putString(applicationContext.getString(R.string.client_id_preference), instance.getClientId());
-        editor.putString(applicationContext.getString(R.string.server_address_preference), instance.getServerAddress());
-        editor.putInt(applicationContext.getString(R.string.server_version_preference), instance.getServerMajorVersion());
-        editor.putInt(applicationContext.getString(R.string.server_build_preference), instance.getBuildNumber());
+        SharedPreferences.Editor editor = Companion.getApplicationContext()
+                .getSharedPreferences(Companion.getApplicationContext().getString(R.string.server_shared_preference), MODE_PRIVATE).edit();
+        editor.putString(Companion.getApplicationContext().getString(R.string.server_name_preference), instance.getServerName());
+        editor.putString(Companion.getApplicationContext().getString(R.string.api_secret_preference), instance.getApiSecret());
+        editor.putString(Companion.getApplicationContext().getString(R.string.client_id_preference), instance.getClientId());
+        editor.putString(Companion.getApplicationContext().getString(R.string.server_address_preference), instance.getServerAddress());
+        editor.putInt(Companion.getApplicationContext().getString(R.string.server_version_preference), instance.getServerMajorVersion());
+        editor.putInt(Companion.getApplicationContext().getString(R.string.server_build_preference), instance.getBuildNumber());
         editor.apply();
 
         Logger.log(LOG_TAG, instance.getServerName() + " set as active", Log.VERBOSE);
@@ -81,11 +82,11 @@ public class ServerUtility {
 
     public static void deactivateServer() {
         SharedPreferences.Editor editor =
-                applicationContext.getSharedPreferences(applicationContext.getString(R.string.server_shared_preference), MODE_MULTI_PROCESS).edit();
-        editor.remove(applicationContext.getString(R.string.server_name_preference));
-        editor.remove(applicationContext.getString(R.string.api_secret_preference));
-        editor.remove(applicationContext.getString(R.string.client_id_preference));
-        editor.remove(applicationContext.getString(R.string.server_address_preference));
+                Companion.getApplicationContext().getSharedPreferences(Companion.getApplicationContext().getString(R.string.server_shared_preference), MODE_MULTI_PROCESS).edit();
+        editor.remove(Companion.getApplicationContext().getString(R.string.server_name_preference));
+        editor.remove(Companion.getApplicationContext().getString(R.string.api_secret_preference));
+        editor.remove(Companion.getApplicationContext().getString(R.string.client_id_preference));
+        editor.remove(Companion.getApplicationContext().getString(R.string.server_address_preference));
         editor.apply();
         Logger.log(LOG_TAG, " active server deactivated", Log.VERBOSE);
     }
@@ -142,30 +143,30 @@ public class ServerUtility {
     }
 
     public static void notifyServerStatus(String serverName, int status) {
-        String message = applicationContext.getResources().getStringArray(R.array.server_notification_labels)[status];
+        String message = Companion.getApplicationContext().getResources().getStringArray(R.array.server_notification_labels)[status];
         message = String.format(message, serverName);
 
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(applicationContext, applicationContext.getPackageName())
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(Companion.getApplicationContext(), Companion.getApplicationContext().getPackageName())
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_block)
-                .setContentTitle(applicationContext.getString(R.string.notification_server_status_title))
+                .setContentTitle(Companion.getApplicationContext().getString(R.string.notification_server_status_title))
                 .setContentText(message);
 
-        NotificationManager notificationManager = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) Companion.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notificationBuilder.build());
 
     }
 
     public static void deleteServer(int serverId) {
-        applicationContext.getContentResolver().delete(McContract.ServerInfo.CONTENT_URI,
+        Companion.getApplicationContext().getContentResolver().delete(McContract.ServerInfo.CONTENT_URI,
                 McContract.ServerInfo._ID + "=?", new String[]{String.valueOf(serverId)});
     }
 
     public static Instance getServer(String serverName) {
         String[] projection = {McContract.ServerInfo.NAME, McContract.ServerInfo.SERVER_ADDRESS, McContract.ServerInfo.SERVER_MAJOR_VERSION,
                 McContract.ServerInfo.SERVER_BUILD_NUMBER, McContract.ServerInfo.CLIENT_ID, McContract.ServerInfo.CLIENT_SECRET};
-        Cursor c = applicationContext.getContentResolver()
+        Cursor c = Companion.getApplicationContext().getContentResolver()
                 .query(McContract.ServerInfo.buildServerInfoUriWithName(serverName), projection, null, null, null);
         if (c == null || !c.moveToFirst()) {
             throw new UnsupportedOperationException("No server found");
@@ -178,7 +179,7 @@ public class ServerUtility {
     public static Instance[] getAllInstances() {
         String[] projection = {McContract.ServerInfo.NAME, McContract.ServerInfo.SERVER_ADDRESS, McContract.ServerInfo.SERVER_MAJOR_VERSION,
                 McContract.ServerInfo.SERVER_BUILD_NUMBER, McContract.ServerInfo.CLIENT_ID, McContract.ServerInfo.CLIENT_SECRET};
-        Cursor c = applicationContext.getContentResolver()
+        Cursor c = Companion.getApplicationContext().getContentResolver()
                 .query(McContract.ServerInfo.CONTENT_URI, projection, null, null, null);
         if (c == null || !c.moveToFirst()) {
             throw new UnsupportedOperationException("No server found");

@@ -21,7 +21,7 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.mdmobile.cyclops.ApplicationLoader.applicationContext
+import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.chart.Chart
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatDataEntry
@@ -38,7 +38,7 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
         android.widget.PopupMenu.OnMenuItemClickListener {
 
     private val LOG_TAG = ChartsAdapter::class.java.simpleName
-    private val colors = arrayOf(R.color.blue_dark,R.color.teal,R.color.colorPrimary, R.color.red,
+    private val colors = arrayOf(R.color.blue_dark, R.color.teal, R.color.colorPrimary, R.color.red,
             R.color.orange, R.color.yellow, R.color.dark_grey).toIntArray()
 
 
@@ -106,13 +106,13 @@ class ChartsAdapter(private var chartsDataList: ArrayList<kotlin.Pair<String, Ar
 
     private fun removeChart(adapterPosition: Int) {
         chartsDataList.removeAt(adapterPosition)
-        val prefCurrentValue: String = applicationContext.getSharedPreferences(
+        val prefCurrentValue: String? = applicationContext.getSharedPreferences(
                 applicationContext.getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
                 .getString(applicationContext.getString(R.string.charts_preference), String())
         val listType = object : TypeToken<List<Chart>>() {}.type
         val gson = Gson()
         var chartList: ArrayList<Chart> = ArrayList()
-        if (prefCurrentValue.isNotEmpty()) {
+        if (prefCurrentValue != null && prefCurrentValue.isNotEmpty()) {
             chartList = gson.fromJson(prefCurrentValue, listType)
         }
         chartList.removeAt(adapterPosition)

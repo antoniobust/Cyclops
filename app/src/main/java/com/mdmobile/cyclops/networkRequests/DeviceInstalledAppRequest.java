@@ -16,7 +16,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Volley request to get installed application on a single device
@@ -51,7 +52,7 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
 
             //Parse devices to extract common properties and put other as extra string
             if (applications.size() == 1) {
-                applicationContext.getContentResolver().insert(McContract.InstalledApplications.CONTENT_URI, applications.get(0).toContentValues());
+                Companion.getApplicationContext().getContentResolver().insert(McContract.InstalledApplications.CONTENT_URI, applications.get(0).toContentValues());
             } else if (applications.size() > 1) {
                 ArrayList<ContentValues> values = new ArrayList<>();
                 for (InstalledApp app : applications) {
@@ -59,7 +60,7 @@ public class DeviceInstalledAppRequest extends BasicRequest<String> {
                 }
                 ContentValues[] vals = new ContentValues[values.size()];
                 values.toArray(vals);
-                applicationContext.getContentResolver().bulkInsert(McContract.InstalledApplications.CONTENT_URI, vals);
+                Companion.getApplicationContext().getContentResolver().bulkInsert(McContract.InstalledApplications.CONTENT_URI, vals);
             }
 
             return Response.success(null,

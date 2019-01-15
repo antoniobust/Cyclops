@@ -42,7 +42,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Main class for API requests.
@@ -57,7 +58,7 @@ public class ApiRequestManager {
     public final static String API_AUTH_ERROR = "apiAuthError";
 
     private ApiRequestManager() {
-        requestsQueue = Volley.newRequestQueue(applicationContext);
+        requestsQueue = Volley.newRequestQueue(Companion.getApplicationContext());
     }
 
     public static synchronized ApiRequestManager getInstance() {
@@ -121,7 +122,7 @@ public class ApiRequestManager {
         String apiAuthority = instance.getServerAddress();
         String api = ApiModel.DevicesApi.SelectDevice.Builder(apiAuthority, devId).build();
 
-        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, instance,
+        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(Companion.getApplicationContext(), Request.Method.GET, api, instance,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -141,19 +142,19 @@ public class ApiRequestManager {
         String apiAuthority = instance.getServerAddress();
         String api = ApiModel.DevicesApi.Builder(apiAuthority, instance.getServerMajorVersion()).build();
 
-        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(applicationContext, Request.Method.GET, api, instance,
+        DeviceRequest<? extends JSONArray> deviceRequest = new DeviceRequest<>(Companion.getApplicationContext(), Request.Method.GET, api, instance,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Logger.log(LOG_TAG, "Devices synced...", Log.VERBOSE);
                         GeneralUtility.setSharedPreference(
-                                applicationContext,
-                                applicationContext.getString(R.string.last_dev_sync_pref),
+                                Companion.getApplicationContext(),
+                                Companion.getApplicationContext().getString(R.string.last_dev_sync_pref),
                                 Calendar.getInstance().getTimeInMillis());
 
                         Intent intent = new Intent(MainActivity.SYNC_DONE_BROADCAST_ACTION);
-                        intent.setPackage(applicationContext.getPackageName());
-                        applicationContext.sendBroadcast(intent);
+                        intent.setPackage(Companion.getApplicationContext().getPackageName());
+                        Companion.getApplicationContext().sendBroadcast(intent);
 
 //                        if (LocalBroadcastManager.getInstanceById(ApplicationLoader.applicationContext).sendBroadcast(intent)) {
 //                            Logger.log(logTag, "Broadcast sync dev intent sent", Log.VERBOSE);
@@ -245,7 +246,7 @@ public class ApiRequestManager {
 
         queueUp(actionRequest);
         Logger.log(LOG_TAG, "Request( " + action + " -> " + message + ") requested to device: " + deviceID, Log.VERBOSE);
-        Toast.makeText(applicationContext, action + " request sent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(Companion.getApplicationContext(), action + " request sent", Toast.LENGTH_SHORT).show();
     }
 
     public void getServicesInfo(Instance instance) {
@@ -260,8 +261,8 @@ public class ApiRequestManager {
                     public void onResponse(String response) {
                         Logger.log(LOG_TAG, "Server info synced...", Log.VERBOSE);
                         GeneralUtility.setSharedPreference(
-                                applicationContext,
-                                applicationContext.getString(R.string.last_server_sync_pref),
+                                Companion.getApplicationContext(),
+                                Companion.getApplicationContext().getString(R.string.last_server_sync_pref),
                                 Calendar.getInstance().getTimeInMillis());
                     }
                 }, new Response.ErrorListener() {
@@ -283,8 +284,8 @@ public class ApiRequestManager {
                     public void onResponse(String response) {
                         Logger.log(LOG_TAG, "Users synced...", Log.VERBOSE);
                         GeneralUtility.setSharedPreference(
-                                applicationContext,
-                                applicationContext.getString(R.string.last_user_sync_pref),
+                                Companion.getApplicationContext(),
+                                Companion.getApplicationContext().getString(R.string.last_user_sync_pref),
                                 Calendar.getInstance().getTimeInMillis());
                     }
                 },

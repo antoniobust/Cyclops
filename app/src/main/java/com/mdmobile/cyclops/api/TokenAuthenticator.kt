@@ -58,7 +58,7 @@ class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
         Logger.log(TokenAuthenticator::class.java.simpleName,
                 "Attempting a token refresh with current credentials ($retryCount)", Log.INFO)
 
-        val newToken = apiService.getAuthToken().value
+        val newToken = apiService.getAuthToken()
 
 
 
@@ -76,9 +76,9 @@ class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
     }
 
     private fun rewriteRequest(oldRequest: Request, retryCount: Int, authToken: String?): Request? {
-        return oldRequest.newBuilder()?.header("Authorization", "bearer: $authToken")
-                ?.header(retryHeader, "$retryCount")
-                ?.build()
+        return oldRequest.newBuilder().header("Authorization", "bearer: $authToken")
+                .header(retryHeader, "$retryCount")
+                .build()
     }
 
 }

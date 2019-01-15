@@ -20,7 +20,8 @@ import com.mdmobile.cyclops.utils.ServerUtility;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Responsible of requesting and storing information about Servers
@@ -49,7 +50,7 @@ public class ServerInfoRequest extends BasicRequest<String> {
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
-        intent.setPackage(applicationContext.getPackageName());
+        intent.setPackage(Companion.getApplicationContext().getPackageName());
 
         try {
             String jsonResponseString = new String(response.data,
@@ -60,18 +61,18 @@ public class ServerInfoRequest extends BasicRequest<String> {
             ArrayList<ServerInfo.ManagementServer> managementServers = new ArrayList<>(serverComponents.getManagementServers());
             ArrayList<ServerInfo.DeploymentServer> deploymentServers = new ArrayList<>(serverComponents.getDeploymentServers());
 
-            applicationContext.sendBroadcast(intent);
+            Companion.getApplicationContext().sendBroadcast(intent);
 
             //Update serverInfo table with version -> it could have changed since last sync
             Instance instanceInfo = ServerUtility.getActiveServer();
             Instance newInstanceInfo = new Instance(instanceInfo.getServerName(), instanceInfo.getApiSecret(), instanceInfo.getClientId(),
                     instanceInfo.getServerAddress(), serverComponents.getProductVersion(), serverComponents.getProductVersionBuild());
 
-            applicationContext.getContentResolver().update(McContract.ServerInfo.buildServerInfoUriWithName(instanceInfo.getServerName()),
+            Companion.getApplicationContext().getContentResolver().update(McContract.ServerInfo.buildServerInfoUriWithName(instanceInfo.getServerName()),
                     newInstanceInfo.toContentValues(), null, null);
             newInstanceInfo.setActive();
 
-            Cursor c = applicationContext.getContentResolver()
+            Cursor c = Companion.getApplicationContext().getContentResolver()
                     .query(McContract.ServerInfo.buildServerInfoUriWithName(instanceInfo.getServerName()),
                             new String[]{McContract.ServerInfo._ID}, null, null, null);
 
@@ -84,23 +85,23 @@ public class ServerInfoRequest extends BasicRequest<String> {
 
             //Delete any existing MS,DS in DB
             Uri uri = McContract.buildUriWithServerName(McContract.MsInfo.CONTENT_URI, instanceInfo.getServerName());
-            applicationContext.getContentResolver().delete(uri, null, null);
+            Companion.getApplicationContext().getContentResolver().delete(uri, null, null);
             uri = McContract.buildUriWithServerName(McContract.DsInfo.CONTENT_URI, instanceInfo.getServerName());
-            applicationContext.getContentResolver().delete(uri, null, null);
+            Companion.getApplicationContext().getContentResolver().delete(uri, null, null);
 
             if (managementServers.size() > 1) {
-                applicationContext.getContentResolver().bulkInsert(McContract.MsInfo.CONTENT_URI,
+                Companion.getApplicationContext().getContentResolver().bulkInsert(McContract.MsInfo.CONTENT_URI,
                         DbData.prepareMsValues(managementServers, serverId));
             } else {
-                applicationContext.getContentResolver().insert(McContract.MsInfo.CONTENT_URI,
+                Companion.getApplicationContext().getContentResolver().insert(McContract.MsInfo.CONTENT_URI,
                         DbData.prepareMsValues(managementServers.get(0), serverId));
             }
 
             if (deploymentServers.size() > 1) {
-                applicationContext.getContentResolver().bulkInsert(McContract.DsInfo.CONTENT_URI,
+                Companion.getApplicationContext().getContentResolver().bulkInsert(McContract.DsInfo.CONTENT_URI,
                         DbData.prepareDsValues(deploymentServers, serverId));
             } else {
-                applicationContext.getContentResolver().insert(McContract.DsInfo.CONTENT_URI,
+                Companion.getApplicationContext().getContentResolver().insert(McContract.DsInfo.CONTENT_URI,
                         DbData.prepareDsValues(deploymentServers.get(0), serverId));
             }
 
@@ -120,7 +121,7 @@ public class ServerInfoRequest extends BasicRequest<String> {
                 }
             }
 
-            applicationContext.sendBroadcast(intent);
+            Companion.getApplicationContext().sendBroadcast(intent);
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));

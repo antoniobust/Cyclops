@@ -12,8 +12,7 @@ import javax.inject.Inject
 
 class InstanceRepository @Inject constructor(
         private val apiService: McApiService,
-        private val db: MobiControlDB,
-        private val appExecutors: ApplicationExecutors) {
+        private val db: MobiControlDB) {
 
 
     fun loadInstance(instanceName: String): LiveData<InstanceInfo> =

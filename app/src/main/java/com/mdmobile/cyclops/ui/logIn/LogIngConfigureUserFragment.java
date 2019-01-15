@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +24,12 @@ import com.mdmobile.cyclops.utils.ServerUtility;
 import java.util.Objects;
 
 
-public class AddNewUserFragment extends Fragment {
+public class LogIngConfigureUserFragment extends Fragment implements View.OnFocusChangeListener {
 
-    private static final String LOG_TAG = AddNewUserFragment.class.getSimpleName();
+    private static final String LOG_TAG = LogIngConfigureUserFragment.class.getSimpleName();
     private static final String USER_NAME_KEY = "USER_NAME_KEY";
     private static final String PASSWORD_KEY = "PASSWORD_KEY";
-    private TextView userNameView, passwordView;
+    private EditText userNameView, passwordView;
     private LoginActivity hostingActivity;
     private View.OnTouchListener pwdVisibilityListener = new View.OnTouchListener() {
         @Override
@@ -55,12 +56,30 @@ public class AddNewUserFragment extends Fragment {
         }
     };
 
-    public AddNewUserFragment() {
+    //Interfaces
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            return;
+        }
+        switch (v.getId()) {
+            case R.id.user_name_text_view:
+                ((LoginActivity) getActivity()).viewModel.updateUserName(((EditText) v).getText().toString());
+                break;
+            case R.id.password_text_view:
+                ((LoginActivity) getActivity()).viewModel.updatePassword(((EditText) v).getText().toString());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown view ID: " + v.getId());
+        }
+    }
+
+    public LogIngConfigureUserFragment() {
         //Empty constructor required
     }
 
-    public static AddNewUserFragment newInstance() {
-        return new AddNewUserFragment();
+    public static LogIngConfigureUserFragment newInstance() {
+        return new LogIngConfigureUserFragment();
     }
 
 
@@ -76,6 +95,9 @@ public class AddNewUserFragment extends Fragment {
         userNameView = rootView.findViewById(R.id.user_name_text_view);
         passwordView = rootView.findViewById(R.id.password_text_view);
         hostingActivity = (LoginActivity) getActivity();
+
+        userNameView.setOnFocusChangeListener(this);
+        passwordView.setOnFocusChangeListener(this);
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(USER_NAME_KEY)) {

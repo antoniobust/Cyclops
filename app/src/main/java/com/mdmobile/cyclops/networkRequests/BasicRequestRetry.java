@@ -15,7 +15,8 @@ import java.lang.ref.WeakReference;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 /**
@@ -45,13 +46,13 @@ public class BasicRequestRetry extends DefaultRetryPolicy {
                 ApiRequestManager.getInstance().cancelAllPendingRequest();
 
                 Logger.log(LOG_TAG, "Attempting new token request\n", Log.VERBOSE);
-                AccountManager manager = AccountManager.get(applicationContext);
-                Account[] accounts = manager.getAccountsByType(applicationContext.getString(R.string.account_type));
+                AccountManager manager = AccountManager.get(Companion.getApplicationContext());
+                Account[] accounts = manager.getAccountsByType(Companion.getApplicationContext().getString(R.string.account_type));
 
                 if (accounts.length == 1) {
                     String tokenType = manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY);
                     String token = manager.peekAuthToken(accounts[0], tokenType);
-                    manager.invalidateAuthToken(applicationContext.getString(R.string.account_type), token);
+                    manager.invalidateAuthToken(Companion.getApplicationContext().getString(R.string.account_type), token);
                     manager.getAuthToken(accounts[0], manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
                             null, true,
                             new OnTokenResponse(new WeakReference<>(originalReq)), null);

@@ -17,7 +17,8 @@ import com.mdmobile.cyclops.utils.Logger;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 /**
@@ -41,15 +42,15 @@ public class OnTokenResponse implements AccountManagerCallback<Bundle> {
                 //If result contains KEY INTENT then we require new credential otherwise resend req
                 if (newInfo.containsKey(AccountManager.KEY_INTENT)) {
                     Intent intent = new Intent(ApiRequestManager.API_AUTH_ERROR);
-                    intent.setPackage(applicationContext.getPackageName());
+                    intent.setPackage(Companion.getApplicationContext().getPackageName());
                     intent.putExtra("srvName", request.get().getServerUrl());
-                    applicationContext.sendBroadcast(intent);
+                    Companion.getApplicationContext().sendBroadcast(intent);
                 } else{
                     String accountName = newInfo.getString(AccountManager.KEY_ACCOUNT_NAME);
                     String accountType = newInfo.getString(AccountManager.KEY_ACCOUNT_TYPE);
                     String authTokenType = newInfo.getString(AUTH_TOKEN_TYPE_KEY);
                     String authToken = newInfo.getString(AccountManager.KEY_AUTHTOKEN);
-                    AccountManager accountManager = AccountManager.get(applicationContext);
+                    AccountManager accountManager = AccountManager.get(Companion.getApplicationContext());
                     Account[] accounts = accountManager.getAccountsByType(accountType);
                     if (accounts[0].name.equals(accountName)) {
                         accountManager.setAuthToken(accounts[0], authTokenType, authToken);

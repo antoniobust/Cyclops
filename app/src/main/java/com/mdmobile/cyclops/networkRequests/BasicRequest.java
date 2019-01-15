@@ -12,7 +12,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.utils.Logger;
 import com.mdmobile.cyclops.utils.ServerUtility;
@@ -24,7 +23,8 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 /**
@@ -45,7 +45,7 @@ abstract public class BasicRequest<T> extends Request<T> {
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> headers = new HashMap<>();
-        AccountManager accountManager = AccountManager.get(applicationContext);
+        AccountManager accountManager = AccountManager.get(Companion.getApplicationContext());
 
         //TODO: support multiple account
         Account account = UserUtility.getUser();

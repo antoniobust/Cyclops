@@ -1,73 +1,49 @@
 package com.mdmobile.cyclops.di
 
-import com.google.gson.GsonBuilder
-import com.mdmobile.cyclops.api.McApiService
-import com.mdmobile.cyclops.api.TokenAuthenticator
-import com.mdmobile.cyclops.dataModel.Instance
-import com.mdmobile.cyclops.dataModel.api.RuntimeTypeAdapterFactory
-import com.mdmobile.cyclops.dataModel.api.devices.*
-import com.mdmobile.cyclops.dataModel.api.newDataClass.Device
-import com.mdmobile.cyclops.dataTypes.DeviceKind
-import com.mdmobile.cyclops.utils.LiveDataCallAdapterFactory
+import android.app.Application
+import android.content.Context
+import androidx.room.Room
+import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
+import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
+import com.mdmobile.cyclops.db.DeviceDao
+import com.mdmobile.cyclops.db.InstanceDao
+import com.mdmobile.cyclops.db.MobiControlDB
 import dagger.Module
 import dagger.Provides
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [NetModules::class, ViewModelModules::class])
 class ApplicationModules {
 
-    @Provides
+
     @Singleton
-    fun getMcService(serverInstance: Instance): McApiService {
+    @Provides
+    fun providesApplicationContext(app:Application): Context {
+        return app.applicationContext
+    }
 
-        val client = OkHttpClient.Builder()
-                .authenticator(TokenAuthenticator(
-                        Retrofit.Builder()
-                                .baseUrl(serverInstance.serverAddress)
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                                .build()
-                                .create(McApiService::class.java))
-                )
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
+    @Singleton
+    @Provides
+    fun provideMcDb(applicationContext: Context): MobiControlDB {
+        return Room.databaseBuilder(applicationContext, MobiControlDB::class.java, "MobiControl.db")
+                .fallbackToDestructiveMigration()
                 .build()
+    }
 
-        val typeFactory = RuntimeTypeAdapterFactory
-                .of(BasicDevice::class.java, "Kind")
-                .registerSubtype(IosDevice::class.java, DeviceKind.IOS)
-                .registerSubtype(IosDeviceV14::class.java, DeviceKind.IOS_V14)
-                .registerSubtype(AndroidGeneric::class.java, DeviceKind.ANDROID_GENERIC)
-                .registerSubtype(AndroidForWork::class.java, DeviceKind.ANDROID_FOR_WORK)
-                .registerSubtype(AndroidPlus::class.java, DeviceKind.ANDROID_PLUS)
-                .registerSubtype(SamsungElm::class.java, DeviceKind.ANDROID_ELM)
-                .registerSubtype(WindowsDesktop::class.java, DeviceKind.WINDOWS_DESKTOP)
-                .registerSubtype(WindowsDesktopLegacy::class.java, DeviceKind.WINDOWS_DESKTOP_LEGACY)
-                .registerSubtype(WindowsPhone::class.java, DeviceKind.WINDOWS_PHONE)
-                .registerSubtype(WindowsRuntime::class.java, DeviceKind.WINDOWS_RUNTIME)
-                .registerSubtype(WindowsCE::class.java, DeviceKind.WINDOWS_CE)
-                .registerSubtype(Linux::class.java, DeviceKind.LINUX)
-                .registerSubtype(Mac::class.java, DeviceKind.MAC)
-//            .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
+    @Singleton
+    @Provides
+    fun provideDeviceDao(db: MobiControlDB): DeviceDao {
+        return db.deviceDao()
+    }
 
+    @Singleton
+    @Provides
+    fun provideInstanceDao(db: MobiControlDB): InstanceDao {
+        return db.instanceDao()
+    }
 
-        val gson = GsonBuilder()
-                .registerTypeAdapterFactory(typeFactory)
-                .setLenient()
-                .create()
-
-
-        return Retrofit.Builder()
-                .baseUrl(serverInstance.serverAddress)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                .client(client)
-                .build()
-                .create(McApiService::class.java)
+    @Provides
+    fun provideInstanceInfo(): InstanceInfo {
+        return InstanceInfo()
     }
 }

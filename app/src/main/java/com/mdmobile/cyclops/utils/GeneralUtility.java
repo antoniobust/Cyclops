@@ -12,7 +12,8 @@ import com.mdmobile.cyclops.R;
 import java.util.HashMap;
 import java.util.Set;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 public class GeneralUtility {
 
@@ -102,7 +103,7 @@ public class GeneralUtility {
 
     public static boolean hasPermission(String permission) {
         return Build.VERSION.SDK_INT < 23 ||
-                ContextCompat.checkSelfPermission(applicationContext, permission) == PackageManager.PERMISSION_GRANTED;
+                ContextCompat.checkSelfPermission(Companion.getApplicationContext(), permission) == PackageManager.PERMISSION_GRANTED;
     }
 }
 

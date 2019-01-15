@@ -9,7 +9,7 @@
     tools:background="@android:color/black">
 
     <EditText
-        android:id="@+id/server_name_text_view"
+        android:id="@+id/instance_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/server_name_hint"
@@ -18,7 +18,7 @@
         android:textColorHint="@color/colorAccent"/>
 
     <EditText
-        android:id="@+id/server_address_text_view"
+        android:id="@+id/instance_address_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

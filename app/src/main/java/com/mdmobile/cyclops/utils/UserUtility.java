@@ -12,7 +12,8 @@ import android.util.Log;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.provider.McContract;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_EXPIRATION_KEY;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 import static com.mdmobile.cyclops.utils.ServerUtility.SERVER_ADDRESS_KEY;
@@ -46,15 +47,15 @@ public class UserUtility {
     }
 
     public static Account getUser() {
-        return AccountManager.get(applicationContext)
-                .getAccountsByType(applicationContext.getString(R.string.account_type))[0];
+        return AccountManager.get(Companion.getApplicationContext())
+                .getAccountsByType(Companion.getApplicationContext().getString(R.string.account_type))[0];
     }
 
     public static Boolean checkAnyUserLogged() {
         Logger.log(LOG_TAG, "Checking any users Logged", Log.VERBOSE);
 
         Account[] accounts =
-                AccountManager.get(applicationContext).getAccountsByType(applicationContext.getString(R.string.account_type));
+                AccountManager.get(Companion.getApplicationContext()).getAccountsByType(Companion.getApplicationContext().getString(R.string.account_type));
         if (accounts.length > 0) {
             Logger.log(LOG_TAG, "found:" + accounts.length + " logged", Log.VERBOSE);
             return true;
@@ -64,7 +65,7 @@ public class UserUtility {
 
     public static Bundle getUserInfo(Account account) {
 
-        AccountManager accountManager = AccountManager.get(applicationContext);
+        AccountManager accountManager = AccountManager.get(Companion.getApplicationContext());
         Bundle userInfo = new Bundle();
         //TODO:support multiple account
         userInfo.putString(AUTH_TOKEN_TYPE_KEY,
@@ -78,7 +79,7 @@ public class UserUtility {
     public static void updateUserData(@NonNull Bundle userInfo) {
         //TODO:support multiple account
 
-        AccountManager manager = AccountManager.get(applicationContext);
+        AccountManager manager = AccountManager.get(Companion.getApplicationContext());
 
         Account account = getUser();
 
@@ -101,16 +102,16 @@ public class UserUtility {
     }
 
     public static void clearUserPreferences(String userName){
-        String preferenceKey = applicationContext.getString(R.string.user_shared_preference,userName);
+        String preferenceKey = Companion.getApplicationContext().getString(R.string.user_shared_preference,userName);
         SharedPreferences.Editor editor =
-                applicationContext.getSharedPreferences(preferenceKey,Context.MODE_PRIVATE).edit();
+                Companion.getApplicationContext().getSharedPreferences(preferenceKey,Context.MODE_PRIVATE).edit();
         editor.clear();
         editor.apply();
     }
 
     public static Drawable getUserLogo() {
-        SharedPreferences preferences = applicationContext.getSharedPreferences(applicationContext.getString(R.string.user_shared_preference),Context.MODE_PRIVATE);
-        int drawableId = preferences.getInt(applicationContext.getString(R.string.user_logo_preference),R.drawable.ic_android);
-        return applicationContext.getResources().getDrawable(drawableId);
+        SharedPreferences preferences = Companion.getApplicationContext().getSharedPreferences(Companion.getApplicationContext().getString(R.string.user_shared_preference),Context.MODE_PRIVATE);
+        int drawableId = preferences.getInt(Companion.getApplicationContext().getString(R.string.user_logo_preference),R.drawable.ic_android);
+        return Companion.getApplicationContext().getResources().getDrawable(drawableId);
     }
 }

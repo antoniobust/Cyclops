@@ -1,8 +1,6 @@
 package com.mdmobile.cyclops.ui.logIn;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.mdmobile.cyclops.R;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import static com.mdmobile.cyclops.utils.GeneralUtility.validateUrl;
 
 
-public class LoginConfigureServerFragment extends Fragment {
+public class LoginConfigureServerFragment extends Fragment implements View.OnFocusChangeListener {
 
-    public EditText serverAddressEditText;
+    private EditText serverAddressEditText, serverNameEditText;
 
     public LoginConfigureServerFragment() {
         //Empty constructor required
@@ -29,6 +30,24 @@ public class LoginConfigureServerFragment extends Fragment {
 
     public static LoginConfigureServerFragment newInstance() {
         return new LoginConfigureServerFragment();
+    }
+
+    //Interfaces
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            return;
+        }
+        switch (v.getId()) {
+            case R.id.instance_name_text_view:
+                ((LoginActivity) getActivity()).viewModel.updateInstanceName(((EditText) v).getText().toString());
+                break;
+            case R.id.instance_address_text_view:
+                ((LoginActivity) getActivity()).viewModel.updateInstanceAddress(((EditText) v).getText().toString());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown view ID: " + v.getId());
+        }
     }
 
     @Override
@@ -40,7 +59,11 @@ public class LoginConfigureServerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_server_name, container, false);
-        serverAddressEditText = rootView.findViewById(R.id.server_address_text_view);
+        serverAddressEditText = rootView.findViewById(R.id.instance_address_text_view);
+        serverNameEditText = rootView.findViewById(R.id.instance_name_text_view);
+
+        serverNameEditText.setOnFocusChangeListener(this);
+        serverAddressEditText.setOnFocusChangeListener(this);
 
         return rootView;
     }
@@ -64,5 +87,4 @@ public class LoginConfigureServerFragment extends Fragment {
             }
         });
     }
-
 }

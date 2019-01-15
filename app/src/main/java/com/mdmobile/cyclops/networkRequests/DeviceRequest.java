@@ -41,7 +41,8 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import static com.mdmobile.cyclops.ApplicationLoader.applicationContext;
+import static com.mdmobile.cyclops.CyclopsApplication.Companion;
+import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Request devices
@@ -79,7 +80,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
-        intent.setPackage(applicationContext.getPackageName());
+        intent.setPackage(Companion.getApplicationContext().getPackageName());
         try {
 
             String jsonResponseString = new String(response.data,
@@ -113,7 +114,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
             }.getType();
             ArrayList<? extends BasicDevice> devices = gson.fromJson(jsonResponseString, deviceCollectionType);
 
-            applicationContext.sendBroadcast(intent);
+            Companion.getApplicationContext().sendBroadcast(intent);
             Uri uri = McContract.buildUriWithServerName(McContract.Device.CONTENT_URI, ServerUtility.getActiveServer().getServerName());
             mContext.getContentResolver().delete(uri, null, null);
 
@@ -122,7 +123,7 @@ public class DeviceRequest<T> extends BasicRequest<T> {
 
             saveDevicesToDB(devices);
 
-            applicationContext.sendBroadcast(intent);
+            Companion.getApplicationContext().sendBroadcast(intent);
 
             return Response.success(null,
                     HttpHeaderParser.parseCacheHeaders(response));

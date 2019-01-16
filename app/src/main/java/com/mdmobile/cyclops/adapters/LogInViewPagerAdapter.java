@@ -27,7 +27,7 @@ public class LogInViewPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return LoginConfigureServerFragment.newInstance();
+                return LoginConfigureServerFragment.Companion.newInstance();
             case 1:
                 return LoginConfigureSecretIdFragment.Companion.newInstance();
             default:

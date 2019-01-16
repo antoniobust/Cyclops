@@ -4,13 +4,6 @@ import android.Manifest;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.LogInViewPagerAdapter;
 import com.mdmobile.cyclops.dataModel.Instance;
@@ -32,6 +26,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
+
 /**
  * Fragment displayed to add a new server
  */
@@ -40,13 +41,9 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
 
     public static final int EXTERNAL_STORAGE_READ_PERMISSION = 100;
     private final static String LOG_TAG = AddServerFragment.class.getSimpleName();
-    public EditText serverNameEditText, apiSecretEditText, clientIdEditText, serverAddressEditText;
-    public boolean xmlParsedFlag = false;
     private ViewPager viewPager;
     private TabLayout dotsIndicator;
-    private LogInViewPagerAdapter viewPagerAdapter;
     private View rootView;
-    private LoginViewModel viewModel;
 
     public AddServerFragment() {
         //Empty constructor
@@ -57,20 +54,21 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         return new AddServerFragment();
     }
 
-    //Interface methods
+    //Interfaces
     @Override
     public void xmlParseComplete(ArrayList<Instance> allInstanceInfo) {
         rootView.findViewById(R.id.server_conf_read_label).setVisibility(View.VISIBLE);
         ((LoginActivity) Objects.requireNonNull(getActivity())).getInstanceList().addAll(allInstanceInfo);
-        xmlParsedFlag = true;
+        boolean xmlParsedFlag = true;
     }
 
+
+    //Lifecycle
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_server, container, false);
-//        viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
-
+//        viewModel = ViewModelProviders.of(this,((LoginActivity)getActivity()).viewModelFactory).get(LoginViewModel.class);
 
         //Instantiate views
         viewPager = rootView.findViewById(R.id.login_add_server_view_pager);
@@ -109,7 +107,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
 
     //Convenience method to set up the view pager
     private void setViewPager() {
-        viewPagerAdapter = new LogInViewPagerAdapter(getChildFragmentManager());
+        LogInViewPagerAdapter viewPagerAdapter = new LogInViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setPageMargin(80);
         dotsIndicator.setupWithViewPager(viewPager, true);
@@ -136,7 +134,7 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
         }
     }
 
-    public boolean checkStoragePermission() {
+    private boolean checkStoragePermission() {
         if (!GeneralUtility.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(getActivity()), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
@@ -165,10 +163,10 @@ public class AddServerFragment extends Fragment implements ServerXmlConfigParser
     }
 
     public Instance grabServerInfo() {
-        String serverName = ((TextView) rootView.findViewById(R.id.instance_name_text_view)).getText().toString();
-        String secret = ((TextView) rootView.findViewById(R.id.api_secret_text_view)).getText().toString();
-        String clientId = ((TextView) rootView.findViewById(R.id.client_id_text_view)).getText().toString();
-        String address = ((TextView) rootView.findViewById(R.id.instance_address_text_view)).getText().toString();
+        String serverName = ((TextView) rootView.findViewById(R.id.instance_name_edit_text)).getText().toString();
+        String secret = ((TextView) rootView.findViewById(R.id.instance_secret_edit_text)).getText().toString();
+        String clientId = ((TextView) rootView.findViewById(R.id.instance_client_id_edit_text)).getText().toString();
+        String address = ((TextView) rootView.findViewById(R.id.instance_address_edit_text)).getText().toString();
 
 
         if (serverName.isEmpty() || secret.isEmpty() || clientId.isEmpty() || address.isEmpty()) {

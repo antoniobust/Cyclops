@@ -40,6 +40,8 @@ import com.mdmobile.cyclops.utils.UserUtility
 import com.mdmobile.cyclops.utils.UserUtility.PASSWORD_KEY
 import com.mdmobile.cyclops.utils.UserUtility.USER_NAME_KEY
 import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.activity_login.*
+import okhttp3.internal.Internal.instance
 import java.net.HttpURLConnection
 import java.util.*
 import javax.inject.Inject
@@ -136,8 +138,8 @@ class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(),
         }
 
         val hintView = findViewById<ImageView>(R.id.light_bulb_view)
-        actionChip = findViewById(R.id.action_chip)
-        progressBar = findViewById(R.id.login_progress_view)
+        actionChip = action_chip
+        progressBar = login_progress_view
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -152,6 +154,10 @@ class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(),
 
         hintView.setOnClickListener(this)
         actionChip.setOnClickListener(this)
+
+        viewModel.instance.observe(this, androidx.lifecycle.Observer<InstanceInfo> {
+            Logger.log(logTag, "Instance updated:$it", Log.DEBUG)
+        })
     }
 
     override fun onPostCreate(@Nullable savedInstanceState: Bundle?) {

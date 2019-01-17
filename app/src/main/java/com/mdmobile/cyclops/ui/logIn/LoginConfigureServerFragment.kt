@@ -7,12 +7,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.mdmobile.cyclops.R
-import com.mdmobile.cyclops.utils.GeneralUtility.validateUrl
 
 
 class LoginConfigureServerFragment : Fragment(), View.OnFocusChangeListener {
@@ -51,20 +46,19 @@ class LoginConfigureServerFragment : Fragment(), View.OnFocusChangeListener {
         return rootView
     }
 
-    fun serverConnectionTest(v: View) {
-        val requestQueue = Volley.newRequestQueue(context)
-        var serverUrl = serverAddressEditText!!.text.toString()
-
-        serverUrl = validateUrl(serverUrl)
-
-        val stringRequest = StringRequest(Request.Method.GET, serverUrl,
-                Response.Listener { }, Response.ErrorListener { })
-    }
+//    fun serverConnectionTest(v: View) {
+//        val requestQueue = Volley.newRequestQueue(context)
+//        var serverUrl = serverAddressEditText!!.text.toString()
+//
+//        serverUrl = validateUrl(serverUrl)
+//
+//        val stringRequest = StringRequest(Request.Method.GET, serverUrl,
+//                Response.Listener { }, Response.ErrorListener { })
+//    }
 
     companion object {
-
         fun newInstance(): LoginConfigureServerFragment {
             return LoginConfigureServerFragment()
         }
     }
-}//Empty constructor required
+}

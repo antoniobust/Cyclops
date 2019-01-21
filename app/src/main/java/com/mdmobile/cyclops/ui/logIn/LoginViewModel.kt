@@ -3,9 +3,13 @@ package com.mdmobile.cyclops.ui.logIn
 import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.mdmobile.cyclops.ApplicationExecutors
+import com.mdmobile.cyclops.dataModel.Resource
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.repository.InstanceRepository
+import com.mdmobile.cyclops.repository.OfflineResource
 import javax.inject.Inject
 
 
@@ -15,18 +19,35 @@ fun EditText.validate(errorMessage: String, validator: (String) -> Boolean) {
     }
 }
 
-class LoginViewModel @Inject constructor(val repository: InstanceRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(val repository: InstanceRepository,
+                                         val applicationExecutors: ApplicationExecutors) : ViewModel() {
 
     private var _instance: MutableLiveData<InstanceInfo> = MutableLiveData()
+    private val instanceList: LiveData<Resource<List<InstanceInfo>>>
+    val isDuplicate: LiveData<Boolean>
+
+
     val instance: LiveData<InstanceInfo>
         get() = _instance
     private var user: MutableLiveData<User> = MutableLiveData()
 
     init {
-        _instance.value = InstanceInfo()
-    }
+        instanceList = loadInstances()
+        isDuplicate = Transformations.switchMap(_instance) { instanceInfo ->
+            if (instanceList.value?.data?.find {
+                        it.serverName == instanceInfo.serverName
+                    } != null) {
+                val check = MutableLiveData<Boolean>()
+                check.value = true
+                check
 
-    fun logIn() {
+            } else {
+                val check = MutableLiveData<Boolean>()
+                check.value = true
+                check
+            }
+        }
+        _instance.value = InstanceInfo()
     }
 
 
@@ -54,16 +75,19 @@ class LoginViewModel @Inject constructor(val repository: InstanceRepository) : V
         user.value = user.value?.copy(password = password)
     }
 
-
-    private fun exists(instanceInfo: InstanceInfo) {
-        repository.loadInstance(instanceInfo)
+    fun logIn() {
+        repository.refreshToken()
     }
 
-    private fun loadInstances(): LiveData<List<InstanceInfo>> {
-        return repository.loadAllInstances()
+    private fun loadInstances(): LiveData<Resource<List<InstanceInfo>>> {
+        return object : OfflineResource<List<InstanceInfo>>(applicationExecutors) {
+            override fun loadFromDB(): LiveData<List<InstanceInfo>> {
+                return repository.loadAllInstances()
+            }
+        }.asLiveData()
     }
 
-    data class User(val userName: String?, val password: String?)
+    private data class User(val userName: String?, val password: String?)
 }
 
 

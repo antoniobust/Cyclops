@@ -1,9 +1,7 @@
-package com.mdmobile.cyclops.api.db
+package com.mdmobile.cyclops.db
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
-import com.mdmobile.cyclops.db.MobiControlDB
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

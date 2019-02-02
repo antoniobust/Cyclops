@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.mdmobile.cyclops.api.McApiService
 import com.mdmobile.cyclops.api.utils.ApiUtil
-import com.mdmobile.cyclops.api.utils.InstantAppExecutors
+import com.mdmobile.cyclops.commonTest.InstantAppExecutors
 import com.mdmobile.cyclops.commonTest.TestUtils
 import com.mdmobile.cyclops.dataModel.api.newDataClass.Device
 import com.mdmobile.cyclops.db.DeviceDao

@@ -3,7 +3,7 @@ package com.mdmobile.cyclops.repository
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.mdmobile.cyclops.api.McApiService
-import com.mdmobile.cyclops.api.utils.InstantAppExecutors
+import com.mdmobile.cyclops.commonTest.InstantAppExecutors
 import com.mdmobile.cyclops.commonTest.TestUtils
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.db.InstanceDao
@@ -28,7 +28,7 @@ class InstanceRepositoryTest {
     fun init() {
         val db = mock(MobiControlDB::class.java)
         `when`(db.instanceDao()).thenReturn(instanceDao)
-        repository = InstanceRepository(instance, mcApiService, InstantAppExecutors())
+        repository = InstanceRepository(mcApiService,db)
     }
 
     @Test

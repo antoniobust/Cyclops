@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.api.utils
+package com.mdmobile.cyclops.commonTest
 
 import com.mdmobile.cyclops.ApplicationExecutors
 import java.util.concurrent.Executor

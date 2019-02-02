@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.api.db
+package com.mdmobile.cyclops.db
 
 import androidx.test.runner.AndroidJUnit4
 import com.mdmobile.cyclops.commonTest.LiveDataTestUtil.getValue
@@ -18,7 +18,7 @@ class InstanceDaoTest : DbTest() {
     fun insertAndRead() {
         val newItem = db.instanceDao().insert(instance)
         assertThat("New instance id doesn't match the test one $newItem", newItem.toInt() == 190)
-        val newInstance = getValue(db.instanceDao().getInstanceById(instance.id.toString()))
+        val newInstance = getValue(db.instanceDao().getInstanceById(instance.id))
         assertThat("Select operation returned unexpected value: $newInstance", newInstance != null && newInstance == instance)
     }
 

@@ -7,8 +7,6 @@ import com.mdmobile.cyclops.dataModel.api.ServerInfo
 import com.mdmobile.cyclops.dataModel.api.newDataClass.*
 import com.mdmobile.cyclops.dataTypes.ComplexDataType
 import com.mdmobile.cyclops.dataTypes.ProfileActions
-import com.mdmobile.cyclops.interfaces.InstanceVersion
-import com.mdmobile.cyclops.interfaces.InstanceVersion.Companion.VERSION_14
 import retrofit2.http.*
 
 /**
@@ -19,7 +17,7 @@ interface McApiService {
 
     //Token
     @GET("/token")
-    fun getAuthToken(): ApiResponse<Token>
+    fun getAuthToken(): LiveData<ApiResponse<Token>>
 
     //Devices APIs
 //    @InstanceVersion.InstanceVersion(version = VERSION_14)

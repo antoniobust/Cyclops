@@ -26,7 +26,6 @@ class LogIngConfigureUserFragment : Fragment(), View.OnFocusChangeListener {
     private lateinit var userNameView: EditText
     private lateinit var passwordView: EditText
     private lateinit var viewModel: LoginViewModel
-    private val hostingActivity: LoginActivity = activity as LoginActivity
     private val pwdVisibilityListener = View.OnTouchListener { view, motionEvent ->
         view.performClick()
         if (motionEvent.rawX >= passwordView.right - passwordView.compoundDrawables[2].bounds.width()) {
@@ -63,14 +62,14 @@ class LogIngConfigureUserFragment : Fragment(), View.OnFocusChangeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, hostingActivity.viewModelFactory).get(LoginViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, (activity as LoginActivity).viewModelFactory).get(LoginViewModel::class.java)
 
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_add_user, container, false)
-        userNameView = user_name_text_view
-        passwordView = password_text_view
+        userNameView = rootView.findViewById(R.id.user_name_text_view)
+        passwordView = rootView.findViewById(R.id.password_text_view)
 
         userNameView.onFocusChangeListener = this
         passwordView.onFocusChangeListener = this
@@ -99,16 +98,16 @@ class LogIngConfigureUserFragment : Fragment(), View.OnFocusChangeListener {
         }
 
         Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE)
-        hostingActivity.actionChip.visibility = View.GONE
-        hostingActivity.progressBar.visibility = View.VISIBLE
+        (activity as LoginActivity).actionChip.visibility = View.GONE
+        (activity as LoginActivity).progressBar.visibility = View.VISIBLE
         try {
             ApiRequestManager.getInstance().getToken(
                     ServerUtility.getActiveServer(),
                     userName, password, activity as NetworkCallBack)
         } catch (e: ServerNotFound) {
             Toast.makeText(context, "Add at least one instance...", Toast.LENGTH_LONG).show()
-            hostingActivity.progressBar.visibility = View.GONE
-            hostingActivity.actionChip.visibility = View.VISIBLE
+            (activity as LoginActivity).progressBar.visibility = View.GONE
+            (activity as LoginActivity).actionChip.visibility = View.VISIBLE
         }
 
     }

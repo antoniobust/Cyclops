@@ -1,9 +1,11 @@
 package com.mdmobile.cyclops.dataModel.api.newDataClass
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.mdmobile.cyclops.provider.McContract
+import retrofit2.http.Field
 
 @Entity(tableName = McContract.INSTANCE_INFO_TABLE_NAME)
 data class InstanceInfo(
@@ -15,7 +17,7 @@ data class InstanceInfo(
         val serverAddress: String = "https:\\\\N/A",
         val serverMajorVersion: Int = -1,
         val buildNumber: Int = -1,
-        val currentToken: String = "N/A") {
+        val token: String = "N/A") {
 
     @Ignore
     constructor(
@@ -25,6 +27,6 @@ data class InstanceInfo(
             serverAddress: String = "https:\\\\NA/",
             serverMajorVersion: Int = -1,
             buildNumber: Int = -1,
-            currentToken: String = "N/A"
-    ) : this(-1, serverName, apiSecret, clientId, serverAddress, serverMajorVersion, buildNumber, currentToken)
+            token: String = "N/A"
+    ) : this(-1, serverName, apiSecret, clientId, serverAddress, serverMajorVersion, buildNumber, token)
 }

@@ -47,7 +47,7 @@ class NetModules {
 
     @Provides
     @Singleton
-    fun provideTokenAutheticator(serverInstance: InstanceInfo): TokenAuthenticator {
+    fun provideTokenAuthenticator(serverInstance: InstanceInfo): TokenAuthenticator {
         return TokenAuthenticator(
                 Retrofit.Builder()
                         .baseUrl(serverInstance.serverAddress)

@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.api.db
+package com.mdmobile.cyclops.db
 
 import com.mdmobile.cyclops.commonTest.LiveDataTestUtil.getValue
 import com.mdmobile.cyclops.commonTest.TestUtils

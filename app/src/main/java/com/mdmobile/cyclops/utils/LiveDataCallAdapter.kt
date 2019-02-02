@@ -10,7 +10,7 @@ import java.lang.reflect.Type
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * Adapter to transform a retrofit Call into a lve data object
+ * Adapter to transform a retrofit Call into a live data object
  */
 
 class LiveDataCallAdapter<R>(private val responseType: Type) : CallAdapter<R, LiveData<ApiResponse<R>>> {

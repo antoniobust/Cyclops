@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
+import com.mdmobile.cyclops.dataModel.api.newDataClass.Token
 
 @Dao
 interface InstanceDao : BaseDao<InstanceInfo> {
@@ -16,7 +17,7 @@ interface InstanceDao : BaseDao<InstanceInfo> {
     @Query("SELECT * FROM InstanceInfo WHERE serverName = :serverName")
     fun getInstanceByName(serverName: String): LiveData<InstanceInfo>
 
-    @Query("SELECT currentToken FROM InstanceInfo WHERE id= :serverId")
-    fun getInstanceToken(serverId: Int): LiveData<String>
+    @Query("SELECT token FROM InstanceInfo WHERE id= :serverId")
+    fun getInstanceToken(serverId: Int): LiveData<Token>
 
 }

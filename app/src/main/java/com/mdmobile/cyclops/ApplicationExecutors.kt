@@ -4,13 +4,14 @@ import android.os.Handler
 import android.os.Looper
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
 /**
  * Application executors pool.
  * Defines executors for Network, disk and UI activity
  */
 
-open class ApplicationExecutors constructor(
+open class ApplicationExecutors(
         val applicationTread: Executor,
         val networkIO: Executor,
         val diskIO: Executor) {
@@ -19,6 +20,7 @@ open class ApplicationExecutors constructor(
         ApplicationExecutors()
     }
 
+    @Inject
     constructor() : this(
             Executors.newSingleThreadExecutor(),
             Executors.newFixedThreadPool(3),

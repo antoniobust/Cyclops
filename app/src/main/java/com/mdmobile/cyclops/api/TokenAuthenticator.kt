@@ -18,7 +18,7 @@ import okhttp3.Route
 class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
 
     private val retryHeader = "RetryCountHeader"
-    override fun authenticate(route: Route, response: Response): Request? {
+    override fun authenticate(route: Route?, response: Response): Request? {
         Logger.log(TokenAuthenticator::class.java.simpleName,
                 "Detected authentication error: ${response.code()} - ${response.request().url()}", Log.VERBOSE)
 
@@ -57,16 +57,15 @@ class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
 
         Logger.log(TokenAuthenticator::class.java.simpleName,
                 "Attempting a token refresh with current credentials ($retryCount)", Log.INFO)
-
         val newToken = apiService.getAuthToken()
 
-
-
         newToken.let {
-            return if (it is ApiSuccessResponse ) {
+            val response = it.value
+            return if (response is ApiSuccessResponse) {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
                         "Got new token -> resending request -> (${oldReq.method()}) - ${oldReq.url()}", Log.VERBOSE)
-                rewriteRequest(oldReq, retryCount, it.body.access_token)
+
+                rewriteRequest(oldReq, retryCount, response.body.token)
             } else {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
                         "Failed to retrieve new Auth token...", Log.VERBOSE)

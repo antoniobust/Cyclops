@@ -33,10 +33,9 @@ class LoginViewModel @Inject constructor(val repository: InstanceRepository,
 
     init {
         instanceList = loadInstances()
+        _instance.value = InstanceInfo()
         isDuplicate = Transformations.switchMap(_instance) { instanceInfo ->
-            if (instanceList.value?.data?.find {
-                        it.serverName == instanceInfo.serverName
-                    } != null) {
+            if (instanceList.value?.data?.find { it.serverName == instanceInfo.serverName } != null) {
                 val check = MutableLiveData<Boolean>()
                 check.value = true
                 check
@@ -47,7 +46,6 @@ class LoginViewModel @Inject constructor(val repository: InstanceRepository,
                 check
             }
         }
-        _instance.value = InstanceInfo()
     }
 
 

@@ -3,6 +3,7 @@ package com.mdmobile.cyclops.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import com.mdmobile.cyclops.ApplicationExecutors
 import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.db.DeviceDao
@@ -46,4 +47,5 @@ class ApplicationModules {
     fun provideInstanceInfo(): InstanceInfo {
         return InstanceInfo()
     }
+
 }

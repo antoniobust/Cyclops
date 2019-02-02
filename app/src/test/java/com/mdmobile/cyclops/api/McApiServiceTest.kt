@@ -76,8 +76,6 @@ class McApiServiceTest {
     fun tokenResponseTest() {
         enqueueReq("Token.json")
         val token = apiService.getAuthToken()
-
-
     }
 
 

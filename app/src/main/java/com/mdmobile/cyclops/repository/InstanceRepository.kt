@@ -25,7 +25,7 @@ class InstanceRepository @Inject constructor(
             db.instanceDao().getAllInstances()
 
 
-    fun refreshToken(): ApiResponse<Token> {
+    fun refreshToken(): LiveData<ApiResponse<Token>> {
         return apiService.getAuthToken()
     }
 }

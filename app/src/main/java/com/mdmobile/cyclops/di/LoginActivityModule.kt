@@ -11,6 +11,6 @@ import dagger.Provides
 class LoginActivityModule {
     @Provides
     fun provideLogInActivityViewModel(repository:InstanceRepository,appExecutor:ApplicationExecutors): LoginViewModel {
-        return LoginViewModel(repository,appExecutor)
+        return LoginViewModel(repository)
     }
 }

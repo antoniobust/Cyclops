@@ -16,7 +16,7 @@ class LoginViewModelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private val repository = mock(InstanceRepository::class.java)
-    private val viewModel = LoginViewModel(repository, InstantAppExecutors())
+    private val viewModel = LoginViewModel(repository)
 
     @Test
     fun testNullInstance() {

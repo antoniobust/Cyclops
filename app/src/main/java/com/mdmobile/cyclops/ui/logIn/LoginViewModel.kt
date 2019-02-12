@@ -12,6 +12,7 @@ import com.mdmobile.cyclops.repository.InstanceRepository
 import com.mdmobile.cyclops.repository.OfflineResource
 import com.mdmobile.cyclops.testing.OpenForTesting
 import javax.inject.Inject
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
 fun EditText.validate(errorMessage: String, validator: (String) -> Boolean) {
@@ -20,8 +21,7 @@ fun EditText.validate(errorMessage: String, validator: (String) -> Boolean) {
     }
 }
 
-class LoginViewModel @Inject constructor(val repository: InstanceRepository,
-                                         val applicationExecutors: ApplicationExecutors) : ViewModel() {
+class LoginViewModel @Inject constructor(val repository: InstanceRepository) : ViewModel() {
 
     private var _instance: MutableLiveData<InstanceInfo> = MutableLiveData()
     private val instanceList: LiveData<Resource<List<InstanceInfo>>>
@@ -34,7 +34,7 @@ class LoginViewModel @Inject constructor(val repository: InstanceRepository,
 
     init {
         instanceList = loadInstances()
-        _instance.value = InstanceInfo()
+        _instance.postValue(InstanceInfo())
         isDuplicate = Transformations.switchMap(_instance) { instanceInfo ->
             if (instanceList.value?.data?.find { it.serverName == instanceInfo.serverName } != null) {
                 val check = MutableLiveData<Boolean>()
@@ -79,11 +79,12 @@ class LoginViewModel @Inject constructor(val repository: InstanceRepository,
     }
 
     private fun loadInstances(): LiveData<Resource<List<InstanceInfo>>> {
-        return object : OfflineResource<List<InstanceInfo>>(applicationExecutors) {
+        return object : OfflineResource<List<InstanceInfo>>() {
             override fun loadFromDB(): LiveData<List<InstanceInfo>> {
                 return repository.loadAllInstances()
             }
         }.asLiveData()
+
     }
 
     private data class User(val userName: String?, val password: String?)

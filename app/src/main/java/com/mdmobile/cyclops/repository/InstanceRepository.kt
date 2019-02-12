@@ -8,8 +8,10 @@ import com.mdmobile.cyclops.dataModel.Resource
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.dataModel.api.newDataClass.Token
 import com.mdmobile.cyclops.db.MobiControlDB
+import com.mdmobile.cyclops.testing.OpenForTesting
 import javax.inject.Inject
 
+@OpenForTesting
 class InstanceRepository @Inject constructor(
         private val apiService: McApiService,
         private val db: MobiControlDB) {

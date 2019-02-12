@@ -10,6 +10,7 @@ import com.mdmobile.cyclops.dataModel.Resource
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.repository.InstanceRepository
 import com.mdmobile.cyclops.repository.OfflineResource
+import com.mdmobile.cyclops.testing.OpenForTesting
 import javax.inject.Inject
 
 

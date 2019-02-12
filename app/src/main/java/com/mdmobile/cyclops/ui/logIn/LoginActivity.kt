@@ -54,7 +54,7 @@ class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(),
     private val SERVER_FRAG_TAG = "SERVER_FRAG_TAG"
     private val USER_FRAG_TAG = "USER_FRAG_TAG"
     private val instanceListKey = "InstanceList"
-    var activityForResult = false
+    private var activityForResult = false
     lateinit var actionChip: Button
     lateinit var progressBar: ProgressBar
     var instanceList: ArrayList<Instance>? = ArrayList()

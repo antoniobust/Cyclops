@@ -2,7 +2,7 @@ package com.mdmobile.cyclops.ui.main.dashboard.statistics
 
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.security.ServerNotFound
-import com.mdmobile.cyclops.utils.ServerUtility
+import com.mdmobile.cyclops.util.ServerUtility
 
 /**
  * Counter statistic, given a property groups the device per property value and counts

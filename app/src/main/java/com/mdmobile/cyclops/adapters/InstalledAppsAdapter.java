@@ -16,8 +16,8 @@ import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.ConfirmActionDialog;
 import com.mdmobile.cyclops.ui.ViewHolder.InstalledAppViewHolder;
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity;
-import com.mdmobile.cyclops.utils.GeneralUtility;
-import com.mdmobile.cyclops.utils.ServerUtility;
+import com.mdmobile.cyclops.util.GeneralUtility;
+import com.mdmobile.cyclops.util.ServerUtility;
 
 
 public class InstalledAppsAdapter extends CursorAdapter implements PopupMenu.OnMenuItemClickListener, ConfirmActionDialog.ConfirmAction {

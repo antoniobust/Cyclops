@@ -3,7 +3,7 @@
              android:layout_height="match_parent"
              android:layout_gravity="center">
 
-    <com.mdmobile.cyclops.utils.RecyclerEmptyView
+    <com.mdmobile.cyclops.util.RecyclerEmptyView
         android:id="@+id/dashboard_recycler_view"
         style="@style/AppTheme.MainActivity.Fragment"
         android:layout_width="match_parent"

@@ -1,7 +1,7 @@
 package com.mdmobile.cyclops.api
 
 import android.util.Log
-import com.mdmobile.cyclops.utils.Logger
+import com.mdmobile.cyclops.util.Logger
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response

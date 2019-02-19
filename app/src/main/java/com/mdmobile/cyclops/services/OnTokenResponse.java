@@ -12,13 +12,12 @@ import android.util.Log;
 
 import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.networkRequests.BasicRequest;
-import com.mdmobile.cyclops.utils.Logger;
+import com.mdmobile.cyclops.util.Logger;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 /**

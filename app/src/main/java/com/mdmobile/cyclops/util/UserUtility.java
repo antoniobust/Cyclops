@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.utils;
+package com.mdmobile.cyclops.util;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -13,10 +13,9 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.provider.McContract;
 
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_EXPIRATION_KEY;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
-import static com.mdmobile.cyclops.utils.ServerUtility.SERVER_ADDRESS_KEY;
+import static com.mdmobile.cyclops.util.ServerUtility.SERVER_ADDRESS_KEY;
 
 /**
  * Helper methods to deal with users

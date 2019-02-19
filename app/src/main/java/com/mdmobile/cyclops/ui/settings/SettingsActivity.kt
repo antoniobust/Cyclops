@@ -10,7 +10,7 @@ import androidx.preference.*
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.Instance
 import com.mdmobile.cyclops.provider.McContract
-import com.mdmobile.cyclops.utils.ServerUtility
+import com.mdmobile.cyclops.util.ServerUtility
 
 
 class SettingsActivity : AppCompatActivity(), Preference.OnPreferenceClickListener {

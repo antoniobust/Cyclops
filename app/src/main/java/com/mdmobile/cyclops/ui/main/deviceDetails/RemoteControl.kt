@@ -10,8 +10,8 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.api.ApiRequestManager
-import com.mdmobile.cyclops.utils.Logger
-import com.mdmobile.cyclops.utils.ServerUtility
+import com.mdmobile.cyclops.util.Logger
+import com.mdmobile.cyclops.util.ServerUtility
 import kotlinx.android.synthetic.main.fragment_remote_control.*
 
 

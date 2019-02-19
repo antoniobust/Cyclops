@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.Log;
 
-import com.mdmobile.cyclops.utils.Logger;
-import com.mdmobile.cyclops.utils.QueryUtility;
+import com.mdmobile.cyclops.util.Logger;
+import com.mdmobile.cyclops.util.QueryUtility;
 
 import java.util.Arrays;
 import java.util.HashMap;

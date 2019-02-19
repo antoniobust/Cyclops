@@ -13,9 +13,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.mdmobile.cyclops.security.ServerNotFound;
-import com.mdmobile.cyclops.utils.Logger;
-import com.mdmobile.cyclops.utils.ServerUtility;
-import com.mdmobile.cyclops.utils.UserUtility;
+import com.mdmobile.cyclops.util.Logger;
+import com.mdmobile.cyclops.util.ServerUtility;
+import com.mdmobile.cyclops.util.UserUtility;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -24,7 +24,6 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 /**

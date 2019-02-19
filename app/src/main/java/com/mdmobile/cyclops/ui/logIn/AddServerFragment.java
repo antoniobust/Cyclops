@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +16,10 @@ import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.adapters.LogInViewPagerAdapter;
 import com.mdmobile.cyclops.dataModel.Instance;
 import com.mdmobile.cyclops.provider.McContract;
-import com.mdmobile.cyclops.utils.ConfigureServerAsyncTask;
-import com.mdmobile.cyclops.utils.GeneralUtility;
-import com.mdmobile.cyclops.utils.Logger;
-import com.mdmobile.cyclops.utils.ServerXmlConfigParser;
+import com.mdmobile.cyclops.util.ConfigureServerAsyncTask;
+import com.mdmobile.cyclops.util.GeneralUtility;
+import com.mdmobile.cyclops.util.Logger;
+import com.mdmobile.cyclops.util.ServerXmlConfigParser;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 /**

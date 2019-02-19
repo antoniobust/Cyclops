@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.utils
+package com.mdmobile.cyclops.util
 
 import androidx.lifecycle.LiveData
 import com.mdmobile.cyclops.api.ApiResponse

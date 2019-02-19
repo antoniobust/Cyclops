@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.utils
+package com.mdmobile.cyclops.util
 
 /**
  * Data class that holds values for each property.

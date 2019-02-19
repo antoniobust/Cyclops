@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.utils.DbData;
+import com.mdmobile.cyclops.util.DbData;
 
 import static com.mdmobile.cyclops.provider.McContract.COMPLIANCE_ITEM_TABLE_NAME;
 import static com.mdmobile.cyclops.provider.McContract.CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME;

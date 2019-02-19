@@ -8,7 +8,7 @@ import com.mdmobile.cyclops.dataModel.api.RuntimeTypeAdapterFactory
 import com.mdmobile.cyclops.dataModel.api.devices.*
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.dataTypes.DeviceKind
-import com.mdmobile.cyclops.utils.LiveDataCallAdapterFactory
+import com.mdmobile.cyclops.util.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

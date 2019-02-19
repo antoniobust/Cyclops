@@ -14,6 +14,7 @@ public class McContract {
     //TODO: create user info table
     public static final String DEVICE_TABLE_NAME = "DeviceInfo";
     public static final String COMPLIANCE_ITEM_TABLE_NAME = "ComplianceItem";
+    public static final String TOKEN_TABLE_NAME = "ApiToken";
     public static final String CUSTOM_ATTRIBUTE_TABLE_NAME = "CustomAttribute";
     public static final String CUSTOM_ATTRIBUTE_DEVICE_TABLE_NAME = "CustomAttributeDevice";
     public static final String PROFILE_TABLE_NAME = "Profile";

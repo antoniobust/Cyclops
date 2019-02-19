@@ -56,17 +56,16 @@ import com.mdmobile.cyclops.ui.main.server.ServerDetailsActivity;
 import com.mdmobile.cyclops.ui.main.server.ServerFragment;
 import com.mdmobile.cyclops.ui.main.users.UsersFragment;
 import com.mdmobile.cyclops.ui.settings.SettingsActivity;
-import com.mdmobile.cyclops.utils.GeneralUtility;
-import com.mdmobile.cyclops.utils.Logger;
-import com.mdmobile.cyclops.utils.ServerUtility;
-import com.mdmobile.cyclops.utils.UserUtility;
+import com.mdmobile.cyclops.util.GeneralUtility;
+import com.mdmobile.cyclops.util.Logger;
+import com.mdmobile.cyclops.util.ServerUtility;
+import com.mdmobile.cyclops.util.UserUtility;
 
 import java.util.Calendar;
 import java.util.List;
 
 import static android.view.View.GONE;
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.R.id.main_activity_fragment_container;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_NAME_EXTRA_KEY;

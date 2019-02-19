@@ -8,17 +8,18 @@ class TestUtils {
     companion object {
 
         fun createToken() = Token(
-                "FOO_ACCESS_TOKEN", "Bearer", 2600, "FOO_REFRESH"
-        )
+                "FOO_ACCESS_TOKEN")
 
-        fun createInstance() = InstanceInfo(
-                190,
-                "TestInstance",
-                "xxxx",
-                "zzzz",
-                "https://address",
-                13,
-                4040)
+        fun createInstance() =
+                InstanceInfo(
+                        190,
+                        "TestServerInstance",
+                        "TestInstance",
+                        "xxxx",
+                        "zzzz",
+                        13,
+                        5494,
+                        createToken())
 
 
         fun createDevice(instance: InstanceInfo) = Device(

@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.utils;
+package com.mdmobile.cyclops.util;
 
 
 import android.content.Context;
@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 public class GeneralUtility {
 

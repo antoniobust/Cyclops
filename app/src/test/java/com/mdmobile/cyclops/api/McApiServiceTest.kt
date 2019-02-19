@@ -2,20 +2,13 @@ package com.mdmobile.cyclops.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.gson.GsonBuilder
-import com.mdmobile.cyclops.api.utils.ApiUtil
-import com.mdmobile.cyclops.commonTest.LiveDataTestUtil
-import com.mdmobile.cyclops.commonTest.TestUtils
-import com.mdmobile.cyclops.dataModel.api.ErrorResponse
 import com.mdmobile.cyclops.dataModel.api.RuntimeTypeAdapterFactory
 import com.mdmobile.cyclops.dataModel.api.devices.*
 import com.mdmobile.cyclops.dataTypes.DeviceKind
-import com.mdmobile.cyclops.utils.LiveDataCallAdapterFactory
+import com.mdmobile.cyclops.util.LiveDataCallAdapterFactory
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.Okio
-import org.bouncycastle.crypto.tls.ConnectionEnd.client
-import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.mdmobile.cyclops.utils.LabelHelper
+import com.mdmobile.cyclops.util.LabelHelper
 
 /**
  * Custom adapter used to populate 2 columns lists -> in a row the first cell is the property Name provided from a String[],

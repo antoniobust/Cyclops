@@ -24,9 +24,9 @@ import com.google.gson.reflect.TypeToken
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.chart.Chart
 import com.mdmobile.cyclops.ui.CustomAutoCompleteView
-import com.mdmobile.cyclops.utils.GeneralUtility
-import com.mdmobile.cyclops.utils.LabelHelper
-import com.mdmobile.cyclops.utils.Logger
+import com.mdmobile.cyclops.util.GeneralUtility
+import com.mdmobile.cyclops.util.LabelHelper
+import com.mdmobile.cyclops.util.Logger
 
 /**
  * Dialog to be presented in order to create a new chart

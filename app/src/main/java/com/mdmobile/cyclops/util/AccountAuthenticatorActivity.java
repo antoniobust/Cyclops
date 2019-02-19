@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.utils;
+package com.mdmobile.cyclops.util;
 
 /*
  * Copyright (C) 2009 The Android Open Source Project

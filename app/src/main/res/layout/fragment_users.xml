@@ -4,7 +4,7 @@
     style="@style/AppTheme.MainActivity.Fragment"
     tools:context=".ui.main.users.UsersFragment">
 
-    <com.mdmobile.cyclops.utils.RecyclerEmptyView
+    <com.mdmobile.cyclops.util.RecyclerEmptyView
         android:id="@+id/users_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

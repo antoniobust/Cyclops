@@ -29,7 +29,7 @@ import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;
-import com.mdmobile.cyclops.utils.ServerUtility;
+import com.mdmobile.cyclops.util.ServerUtility;
 
 import static com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY;
 

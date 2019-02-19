@@ -12,8 +12,8 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import com.mdmobile.cyclops.api.ApiRequestManager.API_AUTH_ERROR
 import com.mdmobile.cyclops.ui.logIn.LoginActivity
-import com.mdmobile.cyclops.utils.ServerUtility
-import com.mdmobile.cyclops.utils.UserUtility
+import com.mdmobile.cyclops.util.ServerUtility
+import com.mdmobile.cyclops.util.UserUtility
 import kotlinx.android.synthetic.main.actionbar.*
 
 /**

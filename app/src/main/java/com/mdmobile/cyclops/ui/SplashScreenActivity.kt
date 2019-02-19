@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.ui.logIn.LoginActivity
 import com.mdmobile.cyclops.ui.main.MainActivity
-import com.mdmobile.cyclops.utils.Logger
-import com.mdmobile.cyclops.utils.ServerUtility
-import com.mdmobile.cyclops.utils.UserUtility
+import com.mdmobile.cyclops.util.Logger
+import com.mdmobile.cyclops.util.ServerUtility
+import com.mdmobile.cyclops.util.UserUtility
 
 class SplashScreenActivity : AppCompatActivity() {
 

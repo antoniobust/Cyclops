@@ -9,14 +9,13 @@ import com.android.volley.VolleyError;
 import com.mdmobile.cyclops.R;
 import com.mdmobile.cyclops.api.ApiRequestManager;
 import com.mdmobile.cyclops.services.OnTokenResponse;
-import com.mdmobile.cyclops.utils.Logger;
+import com.mdmobile.cyclops.util.Logger;
 
 import java.lang.ref.WeakReference;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 import static com.mdmobile.cyclops.services.AccountAuthenticator.AUTH_TOKEN_TYPE_KEY;
 
 /**

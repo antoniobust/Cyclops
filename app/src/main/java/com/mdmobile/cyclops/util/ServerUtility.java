@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.utils;
+package com.mdmobile.cyclops.util;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import static android.content.Context.MODE_MULTI_PROCESS;
 import static android.content.Context.MODE_PRIVATE;
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Utility class for server info methods

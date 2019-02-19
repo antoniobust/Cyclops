@@ -14,7 +14,9 @@ import javax.inject.Inject
 @OpenForTesting
 class InstanceRepository @Inject constructor(
         private val apiService: McApiService,
-        private val db: MobiControlDB) {
+        private val db: MobiControlDB,
+        private val appExecutors: ApplicationExecutors,
+        private val instanceInfo: InstanceInfo) {
 
 
     fun loadInstance(instanceName: String): LiveData<InstanceInfo> =
@@ -27,7 +29,24 @@ class InstanceRepository @Inject constructor(
             db.instanceDao().getAllInstances()
 
 
-    fun refreshToken(): LiveData<ApiResponse<Token>> {
-        return apiService.getAuthToken()
+    fun getToken(): LiveData<Resource<InstanceInfo>> {
+        return object : NetworkBoundResource<InstanceInfo, Token>(appExecutors) {
+            override fun shouldFetch(data: InstanceInfo?): Boolean {
+                return instanceInfo.token.token.isNullOrEmpty()
+            }
+
+            override fun loadFromDb(): LiveData<InstanceInfo> {
+                return db.instanceDao().getInstanceById(instanceInfo.id)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<Token>> {
+                return apiService.getAuthToken()
+            }
+
+            override fun saveApiResult(item: Token) {
+                val updatedInstance = instanceInfo.copy(token = item)
+                db.instanceDao().insert(updatedInstance)
+            }
+        }.asLiveData()
     }
 }

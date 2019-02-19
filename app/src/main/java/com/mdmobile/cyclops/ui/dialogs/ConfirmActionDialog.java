@@ -12,7 +12,7 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 
 import com.mdmobile.cyclops.R;
-import com.mdmobile.cyclops.utils.GeneralUtility;
+import com.mdmobile.cyclops.util.GeneralUtility;
 
 /**
  * Alert dialog shown to uninstall an application

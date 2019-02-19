@@ -3,7 +3,7 @@ package com.mdmobile.cyclops.dataModel
 import android.content.ContentValues
 import android.os.Parcelable
 import com.mdmobile.cyclops.provider.McContract
-import com.mdmobile.cyclops.utils.ServerUtility
+import com.mdmobile.cyclops.util.ServerUtility
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

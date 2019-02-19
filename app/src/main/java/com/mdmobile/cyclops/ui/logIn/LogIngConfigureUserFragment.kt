@@ -16,9 +16,8 @@ import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.api.ApiRequestManager
 import com.mdmobile.cyclops.interfaces.NetworkCallBack
 import com.mdmobile.cyclops.security.ServerNotFound
-import com.mdmobile.cyclops.utils.Logger
-import com.mdmobile.cyclops.utils.ServerUtility
-import kotlinx.android.synthetic.main.fragment_add_user.*
+import com.mdmobile.cyclops.util.Logger
+import com.mdmobile.cyclops.util.ServerUtility
 import java.util.*
 
 

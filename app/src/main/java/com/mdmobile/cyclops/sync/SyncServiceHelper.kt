@@ -5,7 +5,7 @@ import android.util.Log
 import com.mdmobile.cyclops.api.ApiRequestManager
 import com.mdmobile.cyclops.dataModel.Instance
 import com.mdmobile.cyclops.sync.SyncService.*
-import com.mdmobile.cyclops.utils.Logger
+import com.mdmobile.cyclops.util.Logger
 
 class SyncServiceHelper {
     companion object {

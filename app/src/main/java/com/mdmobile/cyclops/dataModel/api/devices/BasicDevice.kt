@@ -7,8 +7,8 @@ import android.os.Parcelable
 import androidx.annotation.CallSuper
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
-import com.mdmobile.cyclops.utils.LabelHelper
-import com.mdmobile.cyclops.utils.Property
+import com.mdmobile.cyclops.util.LabelHelper
+import com.mdmobile.cyclops.util.Property
 import kotlinx.android.parcel.Parcelize
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.declaredMemberProperties

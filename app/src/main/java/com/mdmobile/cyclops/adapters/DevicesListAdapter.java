@@ -22,8 +22,8 @@ import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.MessageDialog;
 import com.mdmobile.cyclops.ui.dialogs.ScriptDialog;
 import com.mdmobile.cyclops.ui.main.MainActivity;
-import com.mdmobile.cyclops.utils.Logger;
-import com.mdmobile.cyclops.utils.ServerUtility;
+import com.mdmobile.cyclops.util.Logger;
+import com.mdmobile.cyclops.util.ServerUtility;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;

@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mdmobile.cyclops.dataModel.api.Profile;
 import com.mdmobile.cyclops.provider.McContract;
-import com.mdmobile.cyclops.utils.Logger;
+import com.mdmobile.cyclops.util.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Class to handle profiles installed info request

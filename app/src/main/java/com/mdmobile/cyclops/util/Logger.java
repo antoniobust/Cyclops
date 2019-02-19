@@ -1,4 +1,4 @@
-package com.mdmobile.cyclops.utils;
+package com.mdmobile.cyclops.util;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;

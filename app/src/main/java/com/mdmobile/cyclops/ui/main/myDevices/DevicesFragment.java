@@ -28,9 +28,9 @@ import com.mdmobile.cyclops.ui.BasicFragment;
 import com.mdmobile.cyclops.ui.dialogs.PinFolderDialog;
 import com.mdmobile.cyclops.ui.dialogs.SortingDeviceDialog;
 import com.mdmobile.cyclops.ui.logIn.LoginActivity;
-import com.mdmobile.cyclops.utils.Logger;
-import com.mdmobile.cyclops.utils.RecyclerEmptyView;
-import com.mdmobile.cyclops.utils.ServerUtility;
+import com.mdmobile.cyclops.util.Logger;
+import com.mdmobile.cyclops.util.RecyclerEmptyView;
+import com.mdmobile.cyclops.util.ServerUtility;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

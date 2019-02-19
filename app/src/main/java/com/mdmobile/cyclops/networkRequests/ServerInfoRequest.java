@@ -14,14 +14,13 @@ import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.provider.McContract;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.main.MainActivity;
-import com.mdmobile.cyclops.utils.DbData;
-import com.mdmobile.cyclops.utils.ServerUtility;
+import com.mdmobile.cyclops.util.DbData;
+import com.mdmobile.cyclops.util.ServerUtility;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Responsible of requesting and storing information about Servers

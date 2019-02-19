@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.api.ApiRequestManager
 import com.mdmobile.cyclops.dataTypes.ApiActions
-import com.mdmobile.cyclops.utils.ServerUtility
+import com.mdmobile.cyclops.util.ServerUtility
 
 import com.mdmobile.cyclops.ui.main.deviceDetails.DeviceDetailsActivity.DEVICE_ID_EXTRA_KEY
 

@@ -33,21 +33,20 @@ import com.mdmobile.cyclops.services.AccountAuthenticator.*
 import com.mdmobile.cyclops.sync.SyncService
 import com.mdmobile.cyclops.ui.dialogs.HintDialog
 import com.mdmobile.cyclops.ui.main.MainActivity
-import com.mdmobile.cyclops.utils.GeneralUtility
-import com.mdmobile.cyclops.utils.Logger
-import com.mdmobile.cyclops.utils.ServerUtility
-import com.mdmobile.cyclops.utils.UserUtility
-import com.mdmobile.cyclops.utils.UserUtility.PASSWORD_KEY
-import com.mdmobile.cyclops.utils.UserUtility.USER_NAME_KEY
+import com.mdmobile.cyclops.util.GeneralUtility
+import com.mdmobile.cyclops.util.Logger
+import com.mdmobile.cyclops.util.ServerUtility
+import com.mdmobile.cyclops.util.UserUtility
+import com.mdmobile.cyclops.util.UserUtility.PASSWORD_KEY
+import com.mdmobile.cyclops.util.UserUtility.USER_NAME_KEY
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
-import okhttp3.internal.Internal.instance
 import java.net.HttpURLConnection
 import java.util.*
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
-class LoginActivity : com.mdmobile.cyclops.utils.AccountAuthenticatorActivity(), NetworkCallBack, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(), NetworkCallBack, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     private val logTag = LoginActivity::class.java.simpleName

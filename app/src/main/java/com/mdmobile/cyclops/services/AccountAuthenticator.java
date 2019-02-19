@@ -19,9 +19,9 @@ import com.mdmobile.cyclops.dataModel.api.Token;
 import com.mdmobile.cyclops.interfaces.NetworkCallBack;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.logIn.LoginActivity;
-import com.mdmobile.cyclops.utils.Logger;
-import com.mdmobile.cyclops.utils.ServerUtility;
-import com.mdmobile.cyclops.utils.UserUtility;
+import com.mdmobile.cyclops.util.Logger;
+import com.mdmobile.cyclops.util.ServerUtility;
+import com.mdmobile.cyclops.util.UserUtility;
 
 import javax.net.ssl.HttpsURLConnection;
 

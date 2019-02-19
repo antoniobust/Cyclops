@@ -23,7 +23,7 @@ import com.mdmobile.cyclops.dataTypes.ApiActions;
 import com.mdmobile.cyclops.security.ServerNotFound;
 import com.mdmobile.cyclops.ui.dialogs.MessageDialog;
 import com.mdmobile.cyclops.ui.dialogs.ScriptDialog;
-import com.mdmobile.cyclops.utils.ServerUtility;
+import com.mdmobile.cyclops.util.ServerUtility;
 
 import static androidx.core.view.ViewCompat.animate;
 

@@ -74,7 +74,7 @@ public abstract class ApiStandard {
 
     public String build() {
         String uri = Uri.decode(currentApi.build().toString());
-        com.mdmobile.cyclops.utils.Logger.log("ApiStandard.class", uri, Log.VERBOSE);
+        com.mdmobile.cyclops.util.Logger.log("ApiStandard.class", uri, Log.VERBOSE);
         return uri;
     }
 

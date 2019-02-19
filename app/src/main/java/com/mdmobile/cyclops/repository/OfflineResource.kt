@@ -2,36 +2,26 @@ package com.mdmobile.cyclops.repository
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.mdmobile.cyclops.dataModel.Resource
 
 abstract class OfflineResource<T> {
 
     private val liveData: MutableLiveData<Resource<T>> = MutableLiveData()
-    private val liveDataManager = MediatorLiveData<Resource<T>>()
     private val dbData: LiveData<T>
 
     init {
-        liveDataManager.postValue( Resource.loading(null))
+        liveData.postValue(Resource.loading(null))
         dbData = loadFromDB()
-        liveDataManager.addSource(dbData) {
-            liveDataManager.removeSource(dbData)
-            liveDataManager.addSource(dbData) { newData ->
-                setValue(Resource.success(newData))
-            }
-
+        Transformations.switchMap(dbData){ newData ->
+            val dt = MutableLiveData<Resource<T>>()
+            dt.value = Resource.success(newData)
+            dt
         }
     }
 
     abstract fun loadFromDB(): LiveData<T>
 
-    @MainThread
-    private fun setValue(newData: Resource<T>) {
-        if (newData != liveDataManager.value) {
-            liveDataManager.value = newData
-        }
-    }
-
-    fun asLiveData() = liveDataManager as LiveData<Resource<T>>
+    fun asLiveData() = liveData
 }

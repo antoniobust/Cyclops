@@ -25,7 +25,7 @@ import com.mdmobile.cyclops.ui.main.dashboard.statistics.CounterStat;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatDataEntry;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.Statistic;
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatisticFactory;
-import com.mdmobile.cyclops.utils.RecyclerEmptyView;
+import com.mdmobile.cyclops.util.RecyclerEmptyView;
 
 import org.jetbrains.annotations.NotNull;
 

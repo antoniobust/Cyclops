@@ -25,8 +25,8 @@ import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.dataModel.chart.Chart
 import com.mdmobile.cyclops.ui.main.dashboard.statistics.StatDataEntry
-import com.mdmobile.cyclops.utils.GeneralUtility
-import com.mdmobile.cyclops.utils.LabelHelper
+import com.mdmobile.cyclops.util.GeneralUtility
+import com.mdmobile.cyclops.util.LabelHelper
 
 
 /**

@@ -5,14 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.mdmobile.cyclops.ApplicationExecutors
-import com.mdmobile.cyclops.dataModel.Resource
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
+import com.mdmobile.cyclops.dataModel.api.newDataClass.Token
 import com.mdmobile.cyclops.repository.InstanceRepository
-import com.mdmobile.cyclops.repository.OfflineResource
-import com.mdmobile.cyclops.testing.OpenForTesting
+import com.mdmobile.cyclops.util.AbsentLiveData
 import javax.inject.Inject
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
 fun EditText.validate(errorMessage: String, validator: (String) -> Boolean) {
@@ -23,32 +20,48 @@ fun EditText.validate(errorMessage: String, validator: (String) -> Boolean) {
 
 class LoginViewModel @Inject constructor(val repository: InstanceRepository) : ViewModel() {
 
-    private var _instance: MutableLiveData<InstanceInfo> = MutableLiveData()
-    private val instanceList: LiveData<Resource<List<InstanceInfo>>>
+    private val _instance: MutableLiveData<InstanceInfo> = MutableLiveData()
+    private val _user: MutableLiveData<User> = MutableLiveData()
+    val token: LiveData<Token>
+    private val instanceList: LiveData<List<InstanceInfo>> = repository.loadAllInstances()
     val isDuplicate: LiveData<Boolean>
-
-
     val instance: LiveData<InstanceInfo>
         get() = _instance
-    private var user: MutableLiveData<User> = MutableLiveData()
+    val user: LiveData<User>
+        get() = _user
 
     init {
-        instanceList = loadInstances()
         _instance.postValue(InstanceInfo())
-        isDuplicate = Transformations.switchMap(_instance) { instanceInfo ->
-            if (instanceList.value?.data?.find { it.serverName == instanceInfo.serverName } != null) {
-                val check = MutableLiveData<Boolean>()
-                check.value = true
-                check
-
+        _user.postValue(User())
+        token = Transformations.switchMap(_instance) {
+            if (it.token.token.isEmpty()) {
+                val tmp = MutableLiveData<Token>()
+                tmp.value = it.token
+                tmp
             } else {
-                val check = MutableLiveData<Boolean>()
-                check.value = true
-                check
+                AbsentLiveData.create<Token>()
+            }
+        }
+        isDuplicate = Transformations.switchMap(_instance) { instanceInfo ->
+            val flag = MutableLiveData<Boolean>()
+            flag.value = false
+            when {
+                instanceList == null -> flag
+                instanceList.value.isNullOrEmpty() -> flag
+                instanceList.value?.find { it.serverName == instanceInfo.serverName } != null -> {
+                    flag.value = true
+                    flag
+                }
+                else -> {
+                    flag
+                }
             }
         }
     }
 
+//    fun isFirstInstance(): Boolean? {
+//        return instanceList.value?.isEmpty()
+//    }
 
     fun updateClientId(clientId: String) {
         _instance.value = _instance.value?.copy(clientId = clientId)
@@ -67,27 +80,18 @@ class LoginViewModel @Inject constructor(val repository: InstanceRepository) : V
     }
 
     fun updateUserName(userName: String) {
-        user.value = user.value?.copy(userName = userName)
+        _user.value = _user.value?.copy(userName = userName)
     }
 
     fun updatePassword(password: String) {
-        user.value = user.value?.copy(password = password)
+        _user.value = _user.value?.copy(password = password)
     }
 
     fun logIn() {
-        repository.refreshToken()
+        repository.getToken()
     }
 
-    private fun loadInstances(): LiveData<Resource<List<InstanceInfo>>> {
-        return object : OfflineResource<List<InstanceInfo>>() {
-            override fun loadFromDB(): LiveData<List<InstanceInfo>> {
-                return repository.loadAllInstances()
-            }
-        }.asLiveData()
-
-    }
-
-    private data class User(val userName: String?, val password: String?)
+    data class User(val userName: String = "N/A", val password: String = "N/A")
 }
 
 

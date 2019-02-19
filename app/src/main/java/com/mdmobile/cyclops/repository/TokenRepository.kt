@@ -19,7 +19,7 @@ class TokenRepository @Inject constructor(
     fun loadToken(): LiveData<Resource<Token>> {
         return object : NetworkBoundResource<Token, Token>(appExecutors) {
             override fun saveApiResult(item: Token) {
-                val _instance = instance.copy(token = item.token)
+                val _instance = instance.copy(token = item)
                 instanceDao.insert(_instance)
             }
 

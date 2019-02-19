@@ -1,7 +1,6 @@
-package com.mdmobile.cyclops.utils;
+package com.mdmobile.cyclops.util;
 
 import android.content.ContentValues;
-import android.os.Bundle;
 
 import com.mdmobile.cyclops.dataModel.api.ServerInfo;
 import com.mdmobile.cyclops.dataModel.api.User;

@@ -32,9 +32,9 @@ import com.mdmobile.cyclops.networkRequests.ServerInfoRequest;
 import com.mdmobile.cyclops.networkRequests.SimpleRequest;
 import com.mdmobile.cyclops.networkRequests.UserRequest;
 import com.mdmobile.cyclops.ui.main.MainActivity;
-import com.mdmobile.cyclops.utils.GeneralUtility;
-import com.mdmobile.cyclops.utils.Logger;
-import com.mdmobile.cyclops.utils.UserUtility;
+import com.mdmobile.cyclops.util.GeneralUtility;
+import com.mdmobile.cyclops.util.Logger;
+import com.mdmobile.cyclops.util.UserUtility;
 
 import org.json.JSONArray;
 
@@ -43,7 +43,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.mdmobile.cyclops.CyclopsApplication.Companion;
-import static com.mdmobile.cyclops.CyclopsApplication.applicationContext;
 
 /**
  * Main class for API requests.

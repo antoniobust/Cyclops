@@ -7,8 +7,8 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
 import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
-import com.mdmobile.cyclops.utils.LabelHelper
-import com.mdmobile.cyclops.utils.Logger
+import com.mdmobile.cyclops.util.LabelHelper
+import com.mdmobile.cyclops.util.Logger
 
 /**
  * Class responsible for creating a new statistic and return statsData from DB

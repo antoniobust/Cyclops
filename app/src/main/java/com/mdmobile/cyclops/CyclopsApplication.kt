@@ -13,14 +13,12 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mdmobile.cyclops.dataModel.chart.Chart
-import com.mdmobile.cyclops.di.ApplicationModules
 import com.mdmobile.cyclops.di.DaggerAppComponent
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.ui.main.dashboard.ChartFactory
-import com.mdmobile.cyclops.utils.GeneralUtility
-import com.mdmobile.cyclops.utils.Logger
+import com.mdmobile.cyclops.util.GeneralUtility
+import com.mdmobile.cyclops.util.Logger
 
-import java.lang.reflect.Type
 import java.util.ArrayList
 
 import javax.inject.Inject

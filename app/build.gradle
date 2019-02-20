@@ -18,7 +18,7 @@ if (rootProject.file("keystore.properties").exists()) {
 
 allOpen {
     //will allow to open kotlin final classes for testing
-    annotation 'com.mdmobile.cyclops.testing.OpenForTesting'
+    annotation 'OpenForTesting'
 }
 
 android {
@@ -103,6 +103,7 @@ android {
     }
     sourceSets { main { java.srcDirs = ['src/main/java', 'src/test-common/java'] } }
     sourceSets { debug { java.srcDirs = ['src/debug/java', 'src/debug'] } }
+    sourceSets { release { java.srcDirs = ['src/release/java', 'src/release/com.mdmobile.cyclops/java/'] } }
 }
 
 dependencies {

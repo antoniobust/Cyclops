@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Authenticator only checks "Bearer" requests as "basic" ones are token requests
  */
 
-class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
+class TokenAuthenticator : Authenticator {
 
     private val retryHeader = "RetryCountHeader"
     override fun authenticate(route: Route?, response: Response): Request? {
@@ -61,11 +61,11 @@ class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
         Logger.log(TokenAuthenticator::class.java.simpleName,
                 "Attempting a token refresh with current credentials - retry:($retryCount)", Log.VERBOSE)
 
-//        val apiService = Retrofit.Builder()
-//                .baseUrl(oldReq.url().scheme() + oldReq.url().host())
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build()
-//                .create(McApiService::class.java)
+        val apiService = Retrofit.Builder()
+                .baseUrl(oldReq.url().scheme() + oldReq.url().host())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(McApiService::class.java)
 
         val newToken = apiService.getAuthToken()
 

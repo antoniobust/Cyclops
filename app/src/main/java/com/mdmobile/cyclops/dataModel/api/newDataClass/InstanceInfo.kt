@@ -33,4 +33,17 @@ data class InstanceInfo(
             mode: Int = 0,
             token: Token = Token()
     ) : this(-1, serverName, apiSecret, clientId, serverAddress, serverMajorVersion, buildNumber, mode, token)
+
+    companion object {
+        fun validateAddress(address: String): String {
+            var a = address
+            if (!a.startsWith("https://")) {
+                a = "https://".plus(address)
+            }
+            if (!a.toLowerCase().endsWith("/mobicontrol")) {
+                a = address.plus("/mobicontrol")
+            }
+            return a
+        }
+    }
 }

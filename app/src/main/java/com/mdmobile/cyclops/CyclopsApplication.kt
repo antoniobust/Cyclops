@@ -30,7 +30,7 @@ import dagger.android.HasActivityInjector
 class CyclopsApplication : Application(), HasActivityInjector {
     @Inject
     internal lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
-    private val LOG_TAG = CyclopsApplication::class.java.simpleName
+    private val logTag = CyclopsApplication::class.java.simpleName
 
     override fun onCreate() {
         super.onCreate()
@@ -56,7 +56,7 @@ class CyclopsApplication : Application(), HasActivityInjector {
             GeneralUtility.setSharedPreference(applicationContext, getString(R.string.charts_preference), json)
             GeneralUtility.setSharedPreference(applicationContext, getString(R.string.first_boot_preference), false)
 
-            Logger.log(LOG_TAG,
+            Logger.log(logTag,
                     "First boot... Added following charts:\n" + json.replace("},{", "}\n{") + "}\n in saved charts",
                     Log.VERBOSE)
 

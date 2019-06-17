@@ -11,6 +11,7 @@ import com.mdmobile.cyclops.dataTypes.DeviceKind
 import com.mdmobile.cyclops.util.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
+import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,22 +23,19 @@ class NetModules {
 
     @Provides
     @Singleton
-    fun provideMcApiService(instanceInfo: InstanceInfo, okHttpClient: OkHttpClient,
-                            gSon: Gson): McApiService {
+    fun provideStandardRetrofitBuilder(okHttpClient: OkHttpClient,
+                                       gSon: Gson): Retrofit.Builder {
 
         return Retrofit.Builder()
-                .baseUrl(instanceInfo.serverAddress)
                 .addConverterFactory(GsonConverterFactory.create(gSon))
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .client(okHttpClient)
-                .build()
-                .create(McApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(tokenAuthenticator: TokenAuthenticator): OkHttpClient {
+    fun provideOkHttpClient(tokenAuthenticator: Authenticator): OkHttpClient {
         return OkHttpClient.Builder()
                 .authenticator(tokenAuthenticator)
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -47,14 +45,8 @@ class NetModules {
 
     @Provides
     @Singleton
-    fun provideTokenAuthenticator(serverInstance: InstanceInfo): TokenAuthenticator {
-        return TokenAuthenticator(
-                Retrofit.Builder()
-                        .baseUrl(serverInstance.serverAddress)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                        .build()
-                        .create(McApiService::class.java))
+    fun provideTokenAuthenticator(): Authenticator {
+        return TokenAuthenticator()
     }
 
 

@@ -2,6 +2,7 @@ package com.mdmobile.cyclops.ui.logIn
 
 import android.widget.EditText
 import androidx.lifecycle.*
+import com.mdmobile.cyclops.dataModel.Instance
 import com.mdmobile.cyclops.dataModel.Resource
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.dataModel.api.newDataClass.Token
@@ -80,7 +81,7 @@ class LoginViewModel @Inject constructor(final val repository: InstanceRepositor
             _instanceInfo.value = _instanceInfo.value?.copy(serverName = it)
         }
         instanceMediatorLiveData.addSource(_instanceAddress) {
-            _instanceInfo.value = _instanceInfo.value?.copy(serverAddress = it)
+            _instanceInfo.value = _instanceInfo.value?.copy(serverAddress = InstanceInfo.validateAddress(it))
         }
         instanceMediatorLiveData.addSource(_clientId) {
             _instanceInfo.value = _instanceInfo.value?.copy(clientId = it)
@@ -104,7 +105,7 @@ class LoginViewModel @Inject constructor(final val repository: InstanceRepositor
     }
 
     fun updateInstanceName(instanceName: String) {
-        _instanceName.value = instanceName
+        _instanceName.value =  InstanceInfo.validateAddress(instanceName)
     }
 
     fun updateInstanceAddress(address: String) {
@@ -121,7 +122,7 @@ class LoginViewModel @Inject constructor(final val repository: InstanceRepositor
 
     fun logIn() {
         val instance = _instanceInfo.value ?: return
-        val token = repository.getToken()
+        val token = repository.getToken(instance)
     }
 
     fun instanceNotDefault(instanceInfo: InstanceInfo): Boolean {

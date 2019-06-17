@@ -11,6 +11,7 @@ import com.mdmobile.cyclops.ui.logIn.LoginActivity
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 
@@ -25,9 +26,8 @@ interface AppComponent {
     fun inject(cyclopsApp: CyclopsApplication)
     fun inject(context: Context)
     fun inject(loginActivity: LoginActivity)
-    fun inject(mcApiService: McApiService)
+    fun inject(retrofitBuilder: Retrofit.Builder)
     fun inject(instanceRepository: InstanceRepository)
-    fun inject(typeFactory: RuntimeTypeAdapterFactory<BasicDevice>)
 
     @Component.Builder
     interface Builder {

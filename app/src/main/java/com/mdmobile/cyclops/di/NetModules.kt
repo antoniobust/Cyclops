@@ -52,6 +52,7 @@ class NetModules {
                 Retrofit.Builder()
                         .baseUrl(serverInstance.serverAddress)
                         .addConverterFactory(GsonConverterFactory.create())
+                        .addCallAdapterFactory(LiveDataCallAdapterFactory())
                         .build()
                         .create(McApiService::class.java))
     }
@@ -60,8 +61,8 @@ class NetModules {
 
     @Provides
     @Singleton
-    fun provideGsonConverter(): Gson {
-        val typeFactory = RuntimeTypeAdapterFactory
+    fun provideRunTypeAdapterFactory(): RuntimeTypeAdapterFactory<BasicDevice> {
+        return RuntimeTypeAdapterFactory
                 .of(BasicDevice::class.java, "Kind")
                 .registerSubtype(IosDevice::class.java, DeviceKind.IOS)
                 .registerSubtype(IosDeviceV14::class.java, DeviceKind.IOS_V14)
@@ -77,10 +78,15 @@ class NetModules {
                 .registerSubtype(Linux::class.java, DeviceKind.LINUX)
                 .registerSubtype(Mac::class.java, DeviceKind.MAC)
 //            .registerSubtype(SamsungKnoxDevice.class, DeviceKind.ANDROID_KNOX)
+    }
 
+    @Provides
+    @Singleton
+    fun provideGsonConverter(typeFactory: RuntimeTypeAdapterFactory<BasicDevice>): Gson {
         return GsonBuilder()
                 .registerTypeAdapterFactory(typeFactory)
                 .setLenient()
                 .create()
     }
+
 }

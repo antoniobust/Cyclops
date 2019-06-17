@@ -6,6 +6,8 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Authenticator class for okHttp.
@@ -58,13 +60,21 @@ class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
 
         Logger.log(TokenAuthenticator::class.java.simpleName,
                 "Attempting a token refresh with current credentials - retry:($retryCount)", Log.VERBOSE)
+
+//        val apiService = Retrofit.Builder()
+//                .baseUrl(oldReq.url().scheme() + oldReq.url().host())
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build()
+//                .create(McApiService::class.java)
+
         val newToken = apiService.getAuthToken()
 
         newToken.let {
-            return if (it is ApiSuccessResponse) {
+            val response = newToken.value
+            return if (response is ApiSuccessResponse ) {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
                         "Got new token -> resending original request -> (${oldReq.method()}) - ${oldReq.url()}", Log.VERBOSE)
-                rewriteRequest(oldReq, retryCount, it.body.value?.token)
+                rewriteRequest(oldReq, retryCount, response.body.token)
             } else {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
                         "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)

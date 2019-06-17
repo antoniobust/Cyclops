@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import com.mdmobile.cyclops.CyclopsApplication
 import com.mdmobile.cyclops.api.McApiService
+import com.mdmobile.cyclops.dataModel.api.RuntimeTypeAdapterFactory
+import com.mdmobile.cyclops.dataModel.api.devices.BasicDevice
 import com.mdmobile.cyclops.repository.InstanceRepository
 import com.mdmobile.cyclops.ui.logIn.LoginActivity
 import dagger.BindsInstance
@@ -25,6 +27,7 @@ interface AppComponent {
     fun inject(loginActivity: LoginActivity)
     fun inject(mcApiService: McApiService)
     fun inject(instanceRepository: InstanceRepository)
+    fun inject(typeFactory: RuntimeTypeAdapterFactory<BasicDevice>)
 
     @Component.Builder
     interface Builder {

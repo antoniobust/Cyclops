@@ -17,7 +17,7 @@ interface McApiService {
 
     //Token
     @GET("/token")
-    fun getAuthToken(): ApiResponse<LiveData<Token>>
+    fun getAuthToken(): LiveData<ApiResponse<Token>>
 
     //Devices APIs
     @GET("/search")

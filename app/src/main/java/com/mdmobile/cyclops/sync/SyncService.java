@@ -111,8 +111,8 @@ public class SyncService extends AbstractThreadedSyncAdapter {
             Logger.log(LOG_TAG, "Syncing " + activeInstance.getServerName() +
                     "\n Action to perform:" + actions.toString(), Log.VERBOSE);
 
-            Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
-            intent.putExtra(MainActivity.UPDATE_LOADING_BAR_ACTION_COUNT, actions.size());
+            Intent intent = new Intent(MainActivity.Companion.getUPDATE_LOADING_BAR_ACTION());
+            intent.putExtra(MainActivity.Companion.getUPDATE_LOADING_BAR_ACTION_COUNT(), actions.size());
             intent.setPackage(getContext().getPackageName());
 
             for (String action : actions) {

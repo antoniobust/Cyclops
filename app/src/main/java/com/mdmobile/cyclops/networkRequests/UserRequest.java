@@ -39,7 +39,7 @@ public class UserRequest extends BasicRequest<String> {
 
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
-        Intent intent = new Intent(MainActivity.UPDATE_LOADING_BAR_ACTION);
+        Intent intent = new Intent(MainActivity.Companion.getUPDATE_LOADING_BAR_ACTION());
         intent.setPackage(Companion.getApplicationContext().getPackageName());
 
         try {

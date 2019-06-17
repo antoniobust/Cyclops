@@ -260,7 +260,7 @@ public class DeviceDetailsFragment extends Fragment implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (MainActivity.TABLET_MODE) {
+                if (MainActivity.Companion.getTABLET_MODE()) {
                     hideDetailsFragment();
                     return true;
                 }

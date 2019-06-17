@@ -1,11 +1,14 @@
 package com.mdmobile.cyclops.dataModel.api.newDataClass
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.mdmobile.cyclops.provider.McContract
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = McContract.TOKEN_TABLE_NAME)
 data class Token(
         @PrimaryKey
@@ -16,4 +19,4 @@ data class Token(
         @Ignore
         val tokenExpiration: Int= -1,
         @Ignore
-        val refreshToken: String= "N/A")
+        val refreshToken: String= "N/A") : Parcelable

@@ -17,11 +17,10 @@ interface McApiService {
 
     //Token
     @GET("/token")
-    fun getAuthToken(): LiveData<ApiResponse<Token>>
+    fun getAuthToken(): ApiResponse<LiveData<Token>>
 
     //Devices APIs
-//    @InstanceVersion.InstanceVersion(version = VERSION_14)
-    @GET("/devices")
+    @GET("/search")
     fun getDevices(
             @Query("path") path: String? = null,
             @Query("skip") skip: Int? = null,
@@ -30,9 +29,6 @@ interface McApiService {
             @Query("filter") filter: String? = null,
             @Query("userFilter") userFilter: String? = null
     ): LiveData<ApiResponse<List<Device>>>
-
-    @GET("/search")
-    fun getDevicesV14(): LiveData<ApiResponse<List<Device>>>
 
     @GET("/devices/{deviceId}")
     fun getDevice(@Path("deviceId") devId: String): LiveData<ApiResponse<Device>>

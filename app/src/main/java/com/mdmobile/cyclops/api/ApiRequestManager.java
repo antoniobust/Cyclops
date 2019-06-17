@@ -151,7 +151,7 @@ public class ApiRequestManager {
                                 Companion.getApplicationContext().getString(R.string.last_dev_sync_pref),
                                 Calendar.getInstance().getTimeInMillis());
 
-                        Intent intent = new Intent(MainActivity.SYNC_DONE_BROADCAST_ACTION);
+                        Intent intent = new Intent(MainActivity.Companion.getSYNC_DONE_BROADCAST_ACTION());
                         intent.setPackage(Companion.getApplicationContext().getPackageName());
                         Companion.getApplicationContext().sendBroadcast(intent);
 

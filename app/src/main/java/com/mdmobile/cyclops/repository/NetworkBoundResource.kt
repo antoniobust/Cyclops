@@ -1,29 +1,36 @@
 package com.mdmobile.cyclops.repository
 
+import android.accounts.AccountManager
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import com.github.mikephil.charting.utils.Utils.init
 import com.mdmobile.cyclops.ApplicationExecutors
+import com.mdmobile.cyclops.CyclopsApplication
 import com.mdmobile.cyclops.api.ApiEmptyResponse
 import com.mdmobile.cyclops.api.ApiErrorResponse
 import com.mdmobile.cyclops.api.ApiResponse
 import com.mdmobile.cyclops.api.ApiSuccessResponse
 import com.mdmobile.cyclops.dataModel.Resource
 
-abstract class NetworkBoundResource<ResultType, RequestType>(private val appExecutors: ApplicationExecutors) {
+abstract class NetworkBoundResource<ResultType, RequestType>
+ @MainThread constructor(private val appExecutors: ApplicationExecutors) {
 
-    private val liveDataManager = MediatorLiveData<Resource<ResultType>>()
+    private val result = MediatorLiveData<Resource<ResultType>>()
+    private val dbData = MutableLiveData<ResultType>()
 
     init {
-        liveDataManager.value = Resource.loading(null)
+        result.value = Resource.loading(null)
+        @Suppress("LeakingThis")
         val dbData = loadFromDb()
-        liveDataManager.addSource(dbData) { data ->
-            liveDataManager.removeSource(dbData)
+        result.addSource(dbData) { data ->
+            result.removeSource(dbData)
             if (shouldFetch(data)) {
                 fetchFromNetwork(dbData)
             } else {
-                liveDataManager.addSource(dbData) { newData ->
+                result.addSource(dbData) { newData ->
                     setValue(Resource.success(newData))
                 }
             }
@@ -42,20 +49,20 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val appExec
          */
         val apiResponse = createCall()
         //while loading reattach DB as a source which will dispatch data quicker
-        liveDataManager.addSource(dbSource){ newData ->
+        result.addSource(dbSource){ newData ->
             setValue(Resource.loading(newData))
         }
 
-        liveDataManager.addSource(apiResponse) { response ->
-            liveDataManager.removeSource(apiResponse)
-            liveDataManager.removeSource(dbSource)
+        result.addSource(apiResponse) { response ->
+            result.removeSource(apiResponse)
+            result.removeSource(dbSource)
 
             when (response) {
                 is ApiSuccessResponse -> {
                     appExecutors.diskIO.execute {
                         saveApiResult(processResponse(response))
                         appExecutors.applicationTread.execute {
-                            liveDataManager.addSource(loadFromDb()) { newData ->
+                            result.addSource(loadFromDb()) { newData ->
                                 setValue(Resource.success(newData))
                             }
                         }
@@ -77,12 +84,12 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val appExec
 
     @MainThread
     private fun setValue(newData: Resource<ResultType>) {
-        if (newData != liveDataManager.value) {
-            liveDataManager.value = newData
+        if (newData != result.value) {
+            result.value = newData
         }
     }
 
-    fun asLiveData() = liveDataManager as LiveData<Resource<ResultType>>
+    fun asLiveData() = result as LiveData<Resource<ResultType>>
 
     @WorkerThread
     protected open fun processResponse(response: ApiSuccessResponse<RequestType>) = response.body

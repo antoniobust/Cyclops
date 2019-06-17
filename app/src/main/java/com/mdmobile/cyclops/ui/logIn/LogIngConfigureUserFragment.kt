@@ -96,7 +96,7 @@ class LogIngConfigureUserFragment : Fragment(), View.OnFocusChangeListener {
             return
         }
 
-        Logger.log(LOG_TAG, "Requesting token...", Log.VERBOSE)
+        Logger.log(LOG_TAG, "Requesting _token...", Log.VERBOSE)
         (activity as LoginActivity).actionChip.visibility = View.GONE
         (activity as LoginActivity).progressBar.visibility = View.VISIBLE
         try {

@@ -44,14 +44,14 @@ public class BasicRequestRetry extends DefaultRetryPolicy {
                 Logger.log(LOG_TAG, "Auth failed cancelling all pending requests...", Log.VERBOSE);
                 ApiRequestManager.getInstance().cancelAllPendingRequest();
 
-                Logger.log(LOG_TAG, "Attempting new token request\n", Log.VERBOSE);
+                Logger.log(LOG_TAG, "Attempting new _token request\n", Log.VERBOSE);
                 AccountManager manager = AccountManager.get(Companion.getApplicationContext());
-                Account[] accounts = manager.getAccountsByType(Companion.getApplicationContext().getString(R.string.account_type));
+                Account[] accounts = manager.getAccountsByType(Companion.getApplicationContext().getString(R.string.MC_account_type));
 
                 if (accounts.length == 1) {
                     String tokenType = manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY);
                     String token = manager.peekAuthToken(accounts[0], tokenType);
-                    manager.invalidateAuthToken(Companion.getApplicationContext().getString(R.string.account_type), token);
+                    manager.invalidateAuthToken(Companion.getApplicationContext().getString(R.string.MC_account_type), token);
                     manager.getAuthToken(accounts[0], manager.getUserData(accounts[0], AUTH_TOKEN_TYPE_KEY),
                             null, true,
                             new OnTokenResponse(new WeakReference<>(originalReq)), null);

@@ -8,14 +8,18 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.mdmobile.cyclops.R
+import kotlinx.android.synthetic.main.fragment_server_name.*
 
 
 class LoginConfigureServerFragment : Fragment(), View.OnFocusChangeListener {
 
-    private lateinit var serverAddressEditText: EditText
-    private lateinit var serverNameEditText: EditText
     private lateinit var viewModel: LoginViewModel
 
+    companion object {
+        fun newInstance(): LoginConfigureServerFragment {
+            return LoginConfigureServerFragment()
+        }
+    }
 
     //Interfaces
     override fun onFocusChange(v: View, hasFocus: Boolean) {
@@ -30,20 +34,20 @@ class LoginConfigureServerFragment : Fragment(), View.OnFocusChangeListener {
         }
     }
 
+    // - LifeCycle events
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this, (activity as LoginActivity).viewModelFactory).get(LoginViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val rootView = inflater.inflate(R.layout.fragment_server_name, container, false)
-        serverAddressEditText = rootView.findViewById(R.id.instance_address_edit_text)
-        serverNameEditText = rootView.findViewById(R.id.instance_name_edit_text)
+        return inflater.inflate(R.layout.fragment_server_name, container, false)
+    }
 
-        serverNameEditText.onFocusChangeListener = this
-        serverAddressEditText.onFocusChangeListener = this
-
-        return rootView
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        instance_address_edit_text.onFocusChangeListener = this
+        instance_name_edit_text.onFocusChangeListener = this
     }
 
 //    fun serverConnectionTest(v: View) {
@@ -56,9 +60,4 @@ class LoginConfigureServerFragment : Fragment(), View.OnFocusChangeListener {
 //                Response.Listener { }, Response.ErrorListener { })
 //    }
 
-    companion object {
-        fun newInstance(): LoginConfigureServerFragment {
-            return LoginConfigureServerFragment()
-        }
-    }
 }

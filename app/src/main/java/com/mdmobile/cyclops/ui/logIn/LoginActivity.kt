@@ -12,24 +12,23 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.android.volley.VolleyError
-import com.mdmobile.cyclops.BuildConfig
 import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
 import com.mdmobile.cyclops.R
-import com.mdmobile.cyclops.dataModel.Instance
 import com.mdmobile.cyclops.dataModel.api.Token
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
-import com.mdmobile.cyclops.interfaces.NetworkCallBack
-import com.mdmobile.cyclops.services.AccountAuthenticator.*
+import com.mdmobile.cyclops.services.AccountAuthenticator
+import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.ACCOUNT_TYPE_KEY
+import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.ADDING_NEW_ACCOUNT_KEY
+import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.AUTH_TOKEN_EXPIRATION_KEY
+import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.AUTH_TOKEN_TYPE_KEY
+import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.REFRESH_AUTH_TOKEN_KEY
 import com.mdmobile.cyclops.sync.SyncService
 import com.mdmobile.cyclops.ui.dialogs.HintDialog
 import com.mdmobile.cyclops.ui.main.MainActivity
@@ -41,27 +40,34 @@ import com.mdmobile.cyclops.util.UserUtility.PASSWORD_KEY
 import com.mdmobile.cyclops.util.UserUtility.USER_NAME_KEY
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
-import java.net.HttpURLConnection
-import java.util.*
+import kotlinx.android.synthetic.main.light_bulb.*
 import javax.inject.Inject
-import javax.net.ssl.HttpsURLConnection
 
-class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(), NetworkCallBack, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(),
+        View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     private val logTag = LoginActivity::class.java.simpleName
-    private val SERVER_FRAG_TAG = "SERVER_FRAG_TAG"
-    private val USER_FRAG_TAG = "USER_FRAG_TAG"
+
     private val instanceListKey = "InstanceList"
-    private var activityForResult = false
     lateinit var actionChip: Button
     lateinit var progressBar: ProgressBar
-    var instanceList: ArrayList<Instance>? = ArrayList()
+    //    var instanceList: ArrayList<Instance> = ArrayList()
     private var authenticatorResponse: AccountAuthenticatorResponse? = null
     lateinit var viewModel: LoginViewModel
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+
+    companion object {
+        private const val USER_FRAG_TAG = "USER_FRAG_TAG"
+        private const val SERVER_FRAG_TAG = "SERVER_FRAG_TAG"
+        fun launchActivity() {
+            val intent = Intent(applicationContext, LoginActivity::class.java)
+            applicationContext.startActivity(intent)
+        }
+    }
 
     private val attachedFragmentTag: String
         get() {
@@ -74,10 +80,9 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(), 
             return SERVER_FRAG_TAG
         }
 
-    // -- Interface methods
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.light_bulb_view -> HintDialog.newInstance(getString(R.string.api_console_hint)).show(supportFragmentManager, null)
+            R.id.light_bulb_view -> showHelpDialog()
             R.id.action_chip -> buttonChipClick()
         }
     }
@@ -97,78 +102,84 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(), 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    override fun tokenReceived(userInput: Bundle, response: Token) {
-        if (BuildConfig.DEBUG) {
-            Toast.makeText(applicationContext, "token received", Toast.LENGTH_SHORT).show()
-        }
-        (supportFragmentManager.findFragmentByTag(SERVER_FRAG_TAG) as AddServerFragment).saveServer(instanceList)
-        finishLogin(userInput, response)
-    }
+//    override fun tokenReceived(userInput: Bundle, response: Token) {
+//        if (BuildConfig.DEBUG) {
+//            Toast.makeText(applicationContext, "token received", Toast.LENGTH_SHORT).show()
+//        }
+//        (supportFragmentManager.findFragmentByTag(SERVER_FRAG_TAG) as AddServerFragment).saveServer(instanceList)
+//        finishLogin(userInput, response)
+//    }
 
-    override fun errorReceivingToken(error: VolleyError?) {
-        progressBar.visibility = View.GONE
-        actionChip.visibility = View.VISIBLE
-        val message: String = if (error?.networkResponse == null) {
-            "Login failed...Please try again"
-        } else {
-            when (error.networkResponse.statusCode) {
-                HttpsURLConnection.HTTP_BAD_REQUEST -> "Login failed... Check your credentials"
-                HttpsURLConnection.HTTP_FORBIDDEN -> "Login failed... Check your credentials"
-                HttpURLConnection.HTTP_INTERNAL_ERROR -> "Internal server error"
-                HttpURLConnection.HTTP_NOT_FOUND -> "Server not found"
-                else -> "Login failed"
-            }
-        }
-        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
-    }
+//    override fun errorReceivingToken(error: VolleyError?) {
+//        progressBar.visibility = View.GONE
+//        actionChip.visibility = View.VISIBLE
+//        val message: String = if (error?.networkResponse == null) {
+//            "Login failed...Please try again"
+//        } else {
+//            when (error.networkResponse.statusCode) {
+//                HttpsURLConnection.HTTP_BAD_REQUEST -> "Login failed... Check your credentials"
+//                HttpsURLConnection.HTTP_FORBIDDEN -> "Login failed... Check your credentials"
+//                HttpURLConnection.HTTP_INTERNAL_ERROR -> "Internal server error"
+//                HttpURLConnection.HTTP_NOT_FOUND -> "Server not found"
+//                else -> "Login failed"
+//            }
+//        }
+//        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+//    }
 
-    // -- Lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
-
         setContentView(R.layout.activity_login)
         MainActivity.TABLET_MODE = GeneralUtility.isTabletMode(applicationContext)
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-
         if (!MainActivity.TABLET_MODE) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
 
-        val hintView = findViewById<ImageView>(R.id.light_bulb_view)
+        val instanceObserver = Observer<InstanceInfo>{
+            when {
+                it == null -> {
+                    return@Observer
+                }
+                (viewModel.instanceNotDefault(it)) -> {
+                    actionChip.isEnabled = true
+                    return@Observer
+                }
+                else -> actionChip.isEnabled = false
+            }
+        }
+        val instanceLiveDataManagerObserver = Observer<InstanceInfo> {
+
+        }
+        val userObserver = Observer<LoginViewModel.User>{
+            if(!viewModel.userNotDefault(it)){
+              return@Observer
+            }
+            viewModel.logIn()
+        }
+        viewModel.instanceMediatorLiveData.observe(this,instanceLiveDataManagerObserver)
+        viewModel.instanceInfo.observe(this,instanceObserver)
+        viewModel.userMediatorLiveData.observe(this, userObserver)
+
+
+        light_bulb_view.setOnClickListener(this)
         actionChip = action_chip
         progressBar = login_progress_view
+        actionChip.setOnClickListener(this)
+
+        authenticatorResponse = intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit()
         }
+//
+//        if (savedInstanceState != null && savedInstanceState.containsKey(instanceListKey)) {
+//            instanceList = savedInstanceState.getParcelableArrayList(instanceListKey)
+//        }
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(instanceListKey)) {
-            instanceList = savedInstanceState.getParcelableArrayList(instanceListKey)
-        }
-
-        authenticatorResponse = intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)
-
-        hintView.setOnClickListener(this)
-        actionChip.setOnClickListener(this)
-
-        viewModel.instance.observe(this, androidx.lifecycle.Observer<InstanceInfo> {
-            Logger.log(logTag, "Instance updated:$it", Log.DEBUG)
-        })
-    }
-
-    override fun onPostCreate(@Nullable savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        if (callingActivity != null && ServerUtility.anyActiveServer()) {
-            activityForResult = true
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(instanceListKey, instanceList)
     }
 
     private fun finishLogin(userInput: Bundle, response: Token) {
@@ -200,7 +211,7 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(), 
             userInfo.putString(AUTH_TOKEN_TYPE_KEY, tokenType)
         }
         if (accountType == null || tokenType == "") {
-            accountType = getString(R.string.account_type)
+            accountType = getString(R.string.MC_account_type)
         }
 
 
@@ -212,7 +223,7 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(), 
             accountManager.addAccountExplicitly(account, psw, userInfo)
             accountManager.setPassword(account, psw)
         } else {
-            account = accountManager.getAccountsByType(getString(R.string.account_type))[0]
+            account = accountManager.getAccountsByType(getString(R.string.MC_account_type))[0]
             accountManager.setPassword(account, psw)
             UserUtility.updateUserData(userInfo)
         }
@@ -229,43 +240,39 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(), 
 
     }
 
+    private fun showHelpDialog() {
+        HintDialog.newInstance(getString(R.string.api_console_hint)).show(supportFragmentManager, null)
+    }
+
     private fun buttonChipClick() {
-        val currentFragTag = attachedFragmentTag
         val ft = supportFragmentManager.beginTransaction()
-        when (currentFragTag) {
+        val instance = viewModel.instanceInfo.value ?: return
+        when (attachedFragmentTag) {
             SERVER_FRAG_TAG -> {
-                val f = supportFragmentManager.findFragmentById(R.id.login_activity_container) as AddServerFragment
-                val s = f.grabServerInfo()
-                if (s != null) {
-                    instanceList!!.add(s)
-                }
-                if (instanceList!!.size == 0) {
-                    return
-                }
-                if (activityForResult) {
-                    f.saveServer(instanceList)
+                if (activityForResult()) {
                     val resultData = Intent()
-                    resultData.putParcelableArrayListExtra("RESULT", instanceList)
+                    resultData.putExtra("RESULT", instance)
                     setResult(1, resultData)
                     finish()
-                    return
                 } else {
-                    ServerUtility.setActiveServer(instanceList!![0])
+//                  ServerUtility.setActiveServer(instance)
                     ft.replace(R.id.login_activity_container, LogIngConfigureUserFragment(), USER_FRAG_TAG)
                             .addToBackStack(SERVER_FRAG_TAG)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit()
-                    return
                 }
             }
+
             USER_FRAG_TAG -> {
-                (supportFragmentManager.findFragmentById(R.id.login_activity_container) as LogIngConfigureUserFragment).logIn()
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                ft.commit()
+//              (supportFragmentManager.findFragmentById(R.id.login_activity_container) as LogIngConfigureUserFragment).logIn()
+                viewModel.logIn()
             }
         }
+    }
 
 
+    private fun activityForResult(): Boolean {
+        return (callingActivity != null && ServerUtility.anyActiveServer())
     }
 
     private fun startMainActivity() {
@@ -274,14 +281,6 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(), 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
-    }
-
-    companion object {
-
-        fun launchActivity() {
-            val intent = Intent(applicationContext, LoginActivity::class.java)
-            applicationContext.startActivity(intent)
-        }
     }
 }
 

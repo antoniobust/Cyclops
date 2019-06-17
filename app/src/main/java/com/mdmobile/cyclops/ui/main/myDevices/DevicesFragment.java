@@ -114,7 +114,7 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
     @Override
     public void onRefresh() {
         Logger.log(LOG_TAG, "Devices refresh manually requested... ", Log.VERBOSE);
-        Account account = AccountManager.get(getContext()).getAccountsByType(getString(R.string.account_type))[0];
+        Account account = AccountManager.get(getContext()).getAccountsByType(getString(R.string.MC_account_type))[0];
         ProgressBar progressBar = getActivity().findViewById(R.id.loading_bar);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setProgress(0);

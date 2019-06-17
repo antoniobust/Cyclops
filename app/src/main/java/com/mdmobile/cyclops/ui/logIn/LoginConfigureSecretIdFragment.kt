@@ -9,6 +9,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.mdmobile.cyclops.R
+import kotlinx.android.synthetic.main.fragment_api_client_secret.*
 
 class LoginConfigureSecretIdFragment : Fragment(), View.OnFocusChangeListener {
 
@@ -37,14 +38,14 @@ class LoginConfigureSecretIdFragment : Fragment(), View.OnFocusChangeListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val rootView = inflater.inflate(R.layout.fragment_api_client_secret, container, false)
-        clientIdEditText = rootView.findViewById(R.id.instance_client_id_edit_text)
-        apiSecretEditText = rootView.findViewById(R.id.instance_secret_edit_text)
+        return inflater.inflate(R.layout.fragment_api_client_secret, container, false)
 
-        clientIdEditText.onFocusChangeListener = this
-        apiSecretEditText.onFocusChangeListener = this
+    }
 
-        return rootView
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        instance_client_id_edit_text.onFocusChangeListener = this
+        instance_secret_edit_text.onFocusChangeListener = this
     }
 
     companion object {

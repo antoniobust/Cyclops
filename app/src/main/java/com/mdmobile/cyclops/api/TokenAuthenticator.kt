@@ -25,7 +25,7 @@ class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
         return when (isBearerRequest(response)) {
             false -> {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
-                        "Token request couldn't be verified ", Log.ERROR)
+                        "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)
                 null
             }
             true -> {
@@ -35,6 +35,7 @@ class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
         }
     }
 
+    //Check whether failed request was a bearer(api call) or basic request(token request)
     private fun isBearerRequest(response: Response): Boolean {
         val authorization = response.request().header("Authorization")
         if (authorization != null) {
@@ -48,27 +49,25 @@ class TokenAuthenticator(private val apiService: McApiService) : Authenticator {
     // Synced method so if multiple request fail dont refresh the same token
     @Synchronized
     private fun reAuthenticateReq(oldReq: Request, retryCount: Int): Request? {
-        //If to many re-attempt assume credentials are not valid
+        //too many api re-attempt user must not have enough permission
         if (retryCount > 1) {
             Logger.log(TokenAuthenticator::class.java.simpleName,
-                    "To many re-attempts ($retryCount), refresh credentials", Log.INFO)
+                    "Failed to execute  ${oldReq.url()} - retry:($retryCount) - user doesn't have access specified resource", Log.ERROR)
             return null
         }
 
         Logger.log(TokenAuthenticator::class.java.simpleName,
-                "Attempting a token refresh with current credentials ($retryCount)", Log.INFO)
+                "Attempting a token refresh with current credentials - retry:($retryCount)", Log.VERBOSE)
         val newToken = apiService.getAuthToken()
 
         newToken.let {
-            val response = it.value
-            return if (response is ApiSuccessResponse) {
+            return if (it is ApiSuccessResponse) {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
-                        "Got new token -> resending request -> (${oldReq.method()}) - ${oldReq.url()}", Log.VERBOSE)
-
-                rewriteRequest(oldReq, retryCount, response.body.token)
+                        "Got new token -> resending original request -> (${oldReq.method()}) - ${oldReq.url()}", Log.VERBOSE)
+                rewriteRequest(oldReq, retryCount, it.body.value?.token)
             } else {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
-                        "Failed to retrieve new Auth token...", Log.VERBOSE)
+                        "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)
                 null
             }
         }

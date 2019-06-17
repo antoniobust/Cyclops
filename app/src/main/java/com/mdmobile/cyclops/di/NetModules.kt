@@ -52,7 +52,6 @@ class NetModules {
                 Retrofit.Builder()
                         .baseUrl(serverInstance.serverAddress)
                         .addConverterFactory(GsonConverterFactory.create())
-                        .addCallAdapterFactory(LiveDataCallAdapterFactory())
                         .build()
                         .create(McApiService::class.java))
     }

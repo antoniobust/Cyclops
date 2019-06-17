@@ -99,7 +99,7 @@ public class DashboardFragment extends BasicFragment implements Statistic.IStati
         chartsRecycler = rootView.findViewById(R.id.dashboard_recycler_view);
 
 
-        if (MainActivity.TABLET_MODE) {
+        if (MainActivity.Companion.getTABLET_MODE()) {
             chartsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false));
         } else {
             chartsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));

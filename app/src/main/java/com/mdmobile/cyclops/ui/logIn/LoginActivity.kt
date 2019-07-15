@@ -16,14 +16,16 @@ import android.widget.ProgressBar
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.mdmobile.cyclops.CyclopsApplication.Companion.applicationContext
 import com.mdmobile.cyclops.R
+import com.mdmobile.cyclops.dataModel.User
 import com.mdmobile.cyclops.dataModel.api.Token
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
-import com.mdmobile.cyclops.services.AccountAuthenticator
+import com.mdmobile.cyclops.dataTypes.ResourceStatus
 import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.ACCOUNT_TYPE_KEY
 import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.ADDING_NEW_ACCOUNT_KEY
 import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.AUTH_TOKEN_EXPIRATION_KEY
@@ -44,21 +46,16 @@ import kotlinx.android.synthetic.main.light_bulb.*
 import javax.inject.Inject
 
 class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(),
-        View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
-
-
-    private val logTag = LoginActivity::class.java.simpleName
-
-    private val instanceListKey = "InstanceList"
-    lateinit var actionChip: Button
-    lateinit var progressBar: ProgressBar
-    //    var instanceList: ArrayList<Instance> = ArrayList()
-    private var authenticatorResponse: AccountAuthenticatorResponse? = null
-    lateinit var viewModel: LoginViewModel
+        View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback, LifecycleOwner {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    private val logTag = LoginActivity::class.java.simpleName
+    lateinit var actionChip: Button
+    lateinit var progressBar: ProgressBar
+    private var authenticatorResponse: AccountAuthenticatorResponse? = null
+    lateinit var viewModel: LoginViewModel
 
     companion object {
         private const val USER_FRAG_TAG = "USER_FRAG_TAG"
@@ -69,16 +66,6 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(),
         }
     }
 
-    private val attachedFragmentTag: String
-        get() {
-            val fragments = supportFragmentManager.fragments
-            for (fragment in fragments) {
-                if (fragment.isAdded && fragment.isVisible) {
-                    return fragment.tag!!
-                }
-            }
-            return SERVER_FRAG_TAG
-        }
 
     override fun onClick(view: View) {
         when (view.id) {
@@ -89,11 +76,11 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(),
 
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>,
                                             @NonNull grantResults: IntArray) {
-        if (requestCode == AddServerFragment.EXTERNAL_STORAGE_READ_PERMISSION) {
+        if (requestCode == AddInstanceFragment.EXTERNAL_STORAGE_READ_PERMISSION) {
             if (permissions.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Logger.log(logTag, android.Manifest.permission.READ_EXTERNAL_STORAGE + " has been granted \n app restart required",
                         Log.INFO)
-                (supportFragmentManager.findFragmentByTag(attachedFragmentTag) as AddServerFragment).parseServerConfigFile()
+                (supportFragmentManager.findFragmentByTag(attachedFragmentTag) as AddInstanceFragment).parseServerConfigFile()
             } else {
                 Logger.log(logTag, android.Manifest.permission.READ_EXTERNAL_STORAGE + " has been denied", Log.INFO)
             }
@@ -101,31 +88,6 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(),
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
-
-//    override fun tokenReceived(userInput: Bundle, response: Token) {
-//        if (BuildConfig.DEBUG) {
-//            Toast.makeText(applicationContext, "token received", Toast.LENGTH_SHORT).show()
-//        }
-//        (supportFragmentManager.findFragmentByTag(SERVER_FRAG_TAG) as AddServerFragment).saveServer(instanceList)
-//        finishLogin(userInput, response)
-//    }
-
-//    override fun errorReceivingToken(error: VolleyError?) {
-//        progressBar.visibility = View.GONE
-//        actionChip.visibility = View.VISIBLE
-//        val message: String = if (error?.networkResponse == null) {
-//            "Login failed...Please try again"
-//        } else {
-//            when (error.networkResponse.statusCode) {
-//                HttpsURLConnection.HTTP_BAD_REQUEST -> "Login failed... Check your credentials"
-//                HttpsURLConnection.HTTP_FORBIDDEN -> "Login failed... Check your credentials"
-//                HttpURLConnection.HTTP_INTERNAL_ERROR -> "Internal server error"
-//                HttpURLConnection.HTTP_NOT_FOUND -> "Server not found"
-//                else -> "Login failed"
-//            }
-//        }
-//        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -138,30 +100,28 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(),
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
 
-        val instanceObserver = Observer<InstanceInfo>{
+        val instanceObserver = Observer<InstanceInfo> {
             when {
                 it == null -> {
                     return@Observer
                 }
-                (viewModel.instanceNotDefault(it)) -> {
+                (InstanceInfo.instanceNotDefault(it)) -> {
                     actionChip.isEnabled = true
                     return@Observer
                 }
                 else -> actionChip.isEnabled = false
             }
         }
-        val instanceLiveDataManagerObserver = Observer<InstanceInfo> {
+        val userObserver = Observer<User> {
 
         }
-        val userObserver = Observer<LoginViewModel.User>{
-            if(!viewModel.userNotDefault(it)){
-              return@Observer
+        viewModel.instanceInfo.observe(this, instanceObserver)
+        viewModel.serverInfo.observe(this, Observer {
+            if (it != null || (it?.status == ResourceStatus.SUCCESS && it.data != null)) {
+                it.data
             }
-            viewModel.logIn()
-        }
-        viewModel.instanceMediatorLiveData.observe(this,instanceLiveDataManagerObserver)
-        viewModel.instanceInfo.observe(this,instanceObserver)
-        viewModel.userMediatorLiveData.observe(this, userObserver)
+        })
+        viewModel.user.observe(this, userObserver)
 
 
         light_bulb_view.setOnClickListener(this)
@@ -173,7 +133,7 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(),
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.login_activity_container, AddServerFragment.newInstance(), SERVER_FRAG_TAG).commit()
+                    .replace(R.id.login_activity_container, AddInstanceFragment.newInstance(), SERVER_FRAG_TAG).commit()
         }
 //
 //        if (savedInstanceState != null && savedInstanceState.containsKey(instanceListKey)) {
@@ -264,12 +224,22 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(),
             }
 
             USER_FRAG_TAG -> {
-//              (supportFragmentManager.findFragmentById(R.id.login_activity_container) as LogIngConfigureUserFragment).logIn()
-                viewModel.logIn()
+//              (supportFragmentManager.findFragmentById(R.id.login_activity_container) as LogIngConfigureUserFragment).getServerInfo()
+                viewModel.loginButtonClick()
             }
         }
     }
 
+    private val attachedFragmentTag: String
+        get() {
+            val fragments = supportFragmentManager.fragments
+            for (fragment in fragments) {
+                if (fragment.isAdded && fragment.isVisible) {
+                    return fragment.tag!!
+                }
+            }
+            return SERVER_FRAG_TAG
+        }
 
     private fun activityForResult(): Boolean {
         return (callingActivity != null && ServerUtility.anyActiveServer())

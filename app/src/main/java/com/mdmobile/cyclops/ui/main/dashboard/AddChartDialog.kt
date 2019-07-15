@@ -67,12 +67,12 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
             Logger.log(LOG_TAG, "Chart canceled returning", Log.VERBOSE)
             return
         } else if (which == Dialog.BUTTON_POSITIVE) {
-            val prefCurrentValue: String = context!!.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
-                    .getString(getString(R.string.charts_preference), String())
+            val prefCurrentValue: String? = context?.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
+                    ?.getString(getString(R.string.charts_preference), String())
             val listType = object : TypeToken<List<Chart>>() {}.type
             val gson = Gson()
             var chartList: ArrayList<Chart> = ArrayList()
-            if (prefCurrentValue.isNotEmpty()) {
+            if (prefCurrentValue?.isNotEmpty()!!) {
                 chartList = gson.fromJson(prefCurrentValue, listType)
             }
             chartList.add(getCurrentValues())
@@ -122,7 +122,7 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
     override fun onDismiss() {
         if (property2TextView.isPopupShowing || property1TextView.isPopupShowing) {
             val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(dialog.currentFocus.windowToken, 0)
+            inputMethodManager.hideSoftInputFromWindow(dialog.currentFocus?.windowToken, 0)
             return
         }
     }
@@ -144,7 +144,7 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
 
         chartTypeSpinner = rootView.findViewById(R.id.chart_type_spinner)
         val spinnerAdapter: ArrayAdapter<CharSequence> =
-                ArrayAdapter.createFromResource(context, R.array.chart_types_label, android.R.layout.simple_dropdown_item_1line)
+                ArrayAdapter.createFromResource(context!!, R.array.chart_types_label, android.R.layout.simple_dropdown_item_1line)
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
@@ -154,8 +154,8 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
         val properties = LabelHelper.getStatisticProperties()
         val labelsList: ArrayList<String> = ArrayList()
         properties.mapTo(labelsList) { it.uiLabel }
-        property1TextView.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, labelsList))
-        property2TextView.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, labelsList))
+        property1TextView.setAdapter(ArrayAdapter(context!!, android.R.layout.simple_dropdown_item_1line, labelsList))
+        property2TextView.setAdapter(ArrayAdapter(context!!, android.R.layout.simple_dropdown_item_1line, labelsList))
 
 
         dialog = AlertDialog.Builder(context).setTitle("Create a new chart...")
@@ -164,7 +164,7 @@ class AddChartDialog : DialogFragment(), AdapterView.OnItemSelectedListener, Dia
                 .setView(rootView)
                 .create()
 
-        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return dialog
     }
 

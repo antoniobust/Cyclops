@@ -3,7 +3,6 @@ package com.mdmobile.cyclops.api
 import androidx.lifecycle.LiveData
 import com.mdmobile.cyclops.dataModel.api.Action
 import com.mdmobile.cyclops.dataModel.api.CollectedData
-import com.mdmobile.cyclops.dataModel.api.ServerInfo
 import com.mdmobile.cyclops.dataModel.api.newDataClass.*
 import com.mdmobile.cyclops.dataTypes.ComplexDataType
 import com.mdmobile.cyclops.dataTypes.ProfileActions
@@ -17,7 +16,7 @@ interface McApiService {
 
     //Token
     @GET("/token")
-    fun getAuthToken(): LiveData<ApiResponse<Token>>
+    fun getAuthToken(): ApiResponse<Token>
 
     //Devices APIs
     @GET("/search")
@@ -73,7 +72,7 @@ interface McApiService {
 
     //Server APIs
     @GET("/api/servers")
-    fun getServers(): LiveData<ApiResponse<List<ServerInfo>>>
+    fun getServers(): LiveData<ApiResponse<ServerInfo>>
 
     //User APIs
     @GET("/api/security/users")

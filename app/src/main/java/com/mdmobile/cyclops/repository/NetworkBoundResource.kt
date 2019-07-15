@@ -75,6 +75,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                 }
                 is ApiErrorResponse<*> -> {
                     onFetchFailed()
+                    appExecutors.applicationTread.execute{
+                        result.postValue(Resource.error(response.errorMessage,null))
+                    }
                 }
             }
         }

@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.mdmobile.cyclops.dataModel.Instance;
-import com.mdmobile.cyclops.ui.logIn.AddServerFragment;
+import com.mdmobile.cyclops.ui.logIn.AddInstanceFragment;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -19,13 +19,13 @@ import java.util.ArrayList;
 
 public class ConfigureServerAsyncTask extends AsyncTask<File, Void, ArrayList<Instance>> {
     private static final String LOG_TAG = ConfigureServerAsyncTask.class.getSimpleName();
-    private final WeakReference<AddServerFragment> hostingFragment;
+    private final WeakReference<AddInstanceFragment> hostingFragment;
     private Throwable throwable;
     private ServerXmlConfigParser.ServerXmlParse parseCompleteCallback;
 
     public ConfigureServerAsyncTask(ServerXmlConfigParser.ServerXmlParse callback) {
         parseCompleteCallback = callback;
-        hostingFragment = new WeakReference<>((AddServerFragment) callback);
+        hostingFragment = new WeakReference<>((AddInstanceFragment) callback);
     }
 
     @Override

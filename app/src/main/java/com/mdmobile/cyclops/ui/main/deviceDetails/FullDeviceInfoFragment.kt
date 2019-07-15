@@ -35,8 +35,8 @@ class FullDeviceInfoFragment : Fragment() {
     // -- Lifecycle's methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        deviceID = arguments!!.getString(DEVICE_ID_EXTRA_KEY)
-        device = arguments!!.getParcelable(DEVICE_EXTRA_KEY)
+        deviceID = arguments!!.getString(DEVICE_ID_EXTRA_KEY)!!
+        device = arguments!!.getParcelable(DEVICE_EXTRA_KEY)!!
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -17,8 +17,8 @@ class TestUtils {
                         "TestInstance",
                         "xxxx",
                         "zzzz",
-                        13,
-                        5494,
+                        "13",
+                        "5494",
                         1,
                         createToken())
 

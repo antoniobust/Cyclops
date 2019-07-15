@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="320dp"
         android:scaleType="centerCrop"
         android:src="@drawable/login_background_list"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,36 +1,32 @@
 package com.mdmobile.cyclops.ui.logIn
 
-import android.widget.EditText
+import android.util.Log
 import androidx.lifecycle.*
-import com.mdmobile.cyclops.dataModel.Instance
 import com.mdmobile.cyclops.dataModel.Resource
+import com.mdmobile.cyclops.dataModel.User
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
-import com.mdmobile.cyclops.dataModel.api.newDataClass.Token
 import com.mdmobile.cyclops.repository.InstanceRepository
 import com.mdmobile.cyclops.testing.OpenForTesting
+import com.mdmobile.cyclops.util.Logger
+import okhttp3.internal.Internal
 import javax.inject.Inject
-
-
-fun EditText.validate(errorMessage: String, validator: (String) -> Boolean) {
-    if (validator(this.text.toString())) {
-        this.error = errorMessage
-    }
-}
 
 @OpenForTesting
 class LoginViewModel @Inject constructor(final val repository: InstanceRepository) : ViewModel() {
 
-    private val _instanceInfo: MutableLiveData<InstanceInfo> = MutableLiveData()
+    private val logTag = LoginViewModel::class.java.simpleName
     private val _instanceName: MutableLiveData<String> = MutableLiveData()
     private val _instanceAddress: MutableLiveData<String> = MutableLiveData()
     private val _clientId: MutableLiveData<String> = MutableLiveData()
     private val _apiSecret: MutableLiveData<String> = MutableLiveData()
     private val _userName: MutableLiveData<String> = MutableLiveData()
     private val _password: MutableLiveData<String> = MutableLiveData()
-    private val _user: MutableLiveData<User> = MutableLiveData()
-    private val _token: MutableLiveData<Resource<Token>> = MutableLiveData()
-    val userMediatorLiveData = MediatorLiveData<User>()
-    val instanceMediatorLiveData = MediatorLiveData<InstanceInfo>()
+    private val _user = MediatorLiveData<User>()
+    private val _instanceInfo = MediatorLiveData<InstanceInfo>()
+    private val _login = MutableLiveData<Int>()
+    val serverInfo: LiveData<Resource<InstanceInfo>> = Transformations.switchMap(_login) {
+        login()
+    }
 
     val instanceInfo: LiveData<InstanceInfo>
         get() = _instanceInfo
@@ -42,59 +38,62 @@ class LoginViewModel @Inject constructor(final val repository: InstanceRepositor
         get() = _clientId
     val apiSecret: LiveData<String>
         get() = _apiSecret
+    val userName: LiveData<String>
+        get() = _userName
+    val password: LiveData<String>
+        get() = _password
     val user: LiveData<User>
         get() = _user
-
-    val token: LiveData<Resource<Token>>
-        get() = _token
-
-
-//    private val _user: MutableLiveData<User> = MutableLiveData()
-//    private val _instanceList: LiveData<List<InstanceInfo>> = repository.loadAllInstances()
-//    private var _token: MutableLiveData<Resource<Token>> = MutableLiveData()
-//    final val instanceInfo: LiveData<InstanceInfo>
-//        get() = _instanceInfo
-
-//    val instanceList: LiveData<List<InstanceInfo>>
-//        get() = _instanceList
-
+//    val serverInfo: LiveData<Resource<InstanceInfo>>
+//        get() = serverInfo
 
     init {
-        _instanceInfo.postValue(InstanceInfo())
-        _instanceName.postValue("")
-        _instanceAddress.postValue("")
-        _clientId.postValue("")
-        _apiSecret.postValue("")
-        _userName.postValue("")
-        _password.postValue("")
-
-        userMediatorLiveData.addSource(_userName) {
-            val current = _user.value
-            _user.value = current?.copy(userName = it)
+        _login.value = 0
+        _instanceInfo.addSource(_instanceName) {
+            if (_instanceInfo.value == null) {
+                _instanceInfo.value = InstanceInfo(instanceName = it)
+            } else {
+                _instanceInfo.value = _instanceInfo.value?.copy(instanceName = it)
+            }
+        }
+        _instanceInfo.addSource(_instanceAddress) {
+            if (_instanceInfo.value == null) {
+                _instanceInfo.value = InstanceInfo(serverAddress = it)
+            } else {
+                _instanceInfo.value = _instanceInfo.value?.copy(serverAddress = InstanceInfo.validateAddress(it))
+            }
+        }
+        _instanceInfo.addSource(_clientId) {
+            if (_instanceInfo.value == null) {
+                _instanceInfo.value = InstanceInfo(clientId = it)
+            } else {
+                _instanceInfo.value = _instanceInfo.value?.copy(clientId = it)
+            }
+        }
+        _instanceInfo.addSource(_apiSecret) {
+            if (_instanceInfo.value == null) {
+                _instanceInfo.value = InstanceInfo(apiSecret = it)
+            } else {
+                _instanceInfo.value = _instanceInfo.value?.copy(apiSecret = it)
+            }
         }
 
-        userMediatorLiveData.addSource(_password) {
-            val current = _user.value
-            _user.value = current?.copy(password = it)
+        _user.addSource(_userName) {
+            if (_user.value == null) {
+                _user.value = User(userName = it)
+            } else {
+                _user.value = _user.value?.copy(userName = it)
+            }
         }
-        instanceMediatorLiveData.addSource(_instanceName) {
-            _instanceInfo.value = _instanceInfo.value?.copy(serverName = it)
-        }
-        instanceMediatorLiveData.addSource(_instanceAddress) {
-            _instanceInfo.value = _instanceInfo.value?.copy(serverAddress = InstanceInfo.validateAddress(it))
-        }
-        instanceMediatorLiveData.addSource(_clientId) {
-            _instanceInfo.value = _instanceInfo.value?.copy(clientId = it)
-        }
-        instanceMediatorLiveData.addSource(_apiSecret) {
-            _instanceInfo.value = _instanceInfo.value?.copy(apiSecret = it)
+        _user.addSource(_password) {
+            if (_user.value == null) {
+                _user.value = User(password = it)
+            } else {
+                _user.value = _user.value?.copy(password = it)
+            }
         }
     }
 
-//    fun addServer(): Long {
-//        val instanceInfo = _instance.value ?: return -1
-//        return repository.saveInstance(instanceInfo)
-//    }
 
     fun updateClientId(clientId: String) {
         _clientId.value = clientId
@@ -105,7 +104,7 @@ class LoginViewModel @Inject constructor(final val repository: InstanceRepositor
     }
 
     fun updateInstanceName(instanceName: String) {
-        _instanceName.value =  InstanceInfo.validateAddress(instanceName)
+        _instanceName.value = instanceName
     }
 
     fun updateInstanceAddress(address: String) {
@@ -113,31 +112,32 @@ class LoginViewModel @Inject constructor(final val repository: InstanceRepositor
     }
 
     fun updateUserName(userName: String) {
-        _user.value = _user.value?.copy(userName = userName)
+        _userName.value = userName
     }
 
     fun updatePassword(password: String) {
-        _user.value = _user.value?.copy(password = password)
+        _password.value = password
     }
 
-    fun logIn() {
-        val instance = _instanceInfo.value ?: return
-        val token = repository.getToken(instance)
+    fun loginButtonClick() {
+        _login.value = _login.value?.plus(1)
     }
 
-    fun instanceNotDefault(instanceInfo: InstanceInfo): Boolean {
-        return !(instanceInfo.serverAddress.isEmpty() || instanceInfo.serverAddress == "https:\\\\N/A/"
-                || instanceInfo.apiSecret.isEmpty() || instanceInfo.apiSecret == "N/A"
-                || instanceInfo.clientId.isEmpty() || instanceInfo.clientId == "N/A"
-                || instanceInfo.serverName.isEmpty() || instanceInfo.serverName == "N/A")
+    private fun login(): LiveData<Resource<InstanceInfo>>? {
+        val info = _instanceInfo.value
+        val u = _user.value
+//        return  if (info == null || u?.userName.isNullOrBlank() || u?.password.isNullOrBlank() || !instanceNotDefault(info)) {
+//             Resource.error("Invalid credentials", null)
+//        } else {
+        Logger.log(logTag, "Attempting log-in ${Internal.instance} by server request", Log.INFO)
+        return if (info == null) {
+            null
+        } else {
+            Transformations.map(repository.getServerInfo(info)) {
+                it
+            }
+        }
     }
-
-    fun userNotDefault(user: User): Boolean {
-        return !(user.userName.isBlank() || user.userName == "N/A"
-                || user.password.isBlank() || user.password == "N/A")
-    }
-
-    data class User(val userName: String = "N/A", val password: String = "N/A")
 }
 
 

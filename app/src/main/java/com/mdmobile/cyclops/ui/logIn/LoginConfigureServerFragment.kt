@@ -12,9 +12,6 @@ import kotlinx.android.synthetic.main.fragment_server_name.*
 
 
 class LoginConfigureServerFragment : Fragment(), View.OnFocusChangeListener {
-
-    private lateinit var viewModel: LoginViewModel
-
     companion object {
         fun newInstance(): LoginConfigureServerFragment {
             return LoginConfigureServerFragment()
@@ -32,12 +29,6 @@ class LoginConfigureServerFragment : Fragment(), View.OnFocusChangeListener {
             R.id.instance_address_edit_text -> (activity as LoginActivity).viewModel.updateInstanceAddress(text)
             else -> throw IllegalArgumentException("Unknown view ID: " + v.id)
         }
-    }
-
-    // - LifeCycle events
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, (activity as LoginActivity).viewModelFactory).get(LoginViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

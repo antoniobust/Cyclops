@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Parse the xml file provided from user to import client id secret and address automatically
  * Format expected
- * <server Name="serverName">
+ * <server Name="instanceName">
  * <secret>XXXX</secret>
  * <clientId>XXXX</clientId>
  * <address>http://xxx</address>

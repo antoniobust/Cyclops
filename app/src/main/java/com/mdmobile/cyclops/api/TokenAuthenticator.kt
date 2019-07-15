@@ -70,11 +70,10 @@ class TokenAuthenticator : Authenticator {
         val newToken = apiService.getAuthToken()
 
         newToken.let {
-            val response = newToken.value
-            return if (response is ApiSuccessResponse ) {
+            return if (it is ApiSuccessResponse ) {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
                         "Got new token -> resending original request -> (${oldReq.method()}) - ${oldReq.url()}", Log.VERBOSE)
-                rewriteRequest(oldReq, retryCount, response.body.token)
+                rewriteRequest(oldReq, retryCount, it.body.token)
             } else {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
                         "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)

@@ -11,7 +11,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import com.mdmobile.cyclops.R
 import com.mdmobile.cyclops.api.ApiRequestManager
 import com.mdmobile.cyclops.interfaces.NetworkCallBack
@@ -24,7 +23,6 @@ import java.util.*
 class LogIngConfigureUserFragment : Fragment(), View.OnFocusChangeListener {
     private lateinit var userNameView: EditText
     private lateinit var passwordView: EditText
-    private lateinit var viewModel: LoginViewModel
     private val pwdVisibilityListener = View.OnTouchListener { view, motionEvent ->
         view.performClick()
         if (motionEvent.rawX >= passwordView.right - passwordView.compoundDrawables[2].bounds.width()) {
@@ -52,18 +50,12 @@ class LogIngConfigureUserFragment : Fragment(), View.OnFocusChangeListener {
         }
         val text = (v as EditText).text.toString()
         when (v.id) {
-            R.id.user_name_text_view -> viewModel.updateUserName(text)
-            R.id.password_text_view -> viewModel.updatePassword(text)
+            R.id.user_name_text_view -> (activity as LoginActivity).viewModel.updateUserName(text)
+            R.id.password_text_view -> (activity as LoginActivity).viewModel.updatePassword(text)
             else -> throw IllegalArgumentException("Unknown view ID: " + v.id)
         }
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, (activity as LoginActivity).viewModelFactory).get(LoginViewModel::class.java)
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_add_user, container, false)

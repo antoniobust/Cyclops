@@ -81,7 +81,7 @@ abstract class Statistic constructor(val properties: List<String>) : AsyncQueryH
                 it.takeIf {
                     extraInfoBundle.containsKey(property)
                 }?.apply {
-                    propertyMap.add(Pair(property, extraInfoBundle.getString(property)))
+                    propertyMap.add(Pair(property, extraInfoBundle.getString(property)!!))
                 }
             }
             val valuesMap = propertyMap.groupBy {

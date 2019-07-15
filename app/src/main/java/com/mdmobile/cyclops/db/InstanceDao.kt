@@ -14,8 +14,8 @@ interface InstanceDao : BaseDao<InstanceInfo> {
     @Query("SELECT * FROM InstanceInfo WHERE id = :id")
     fun getInstanceById(id: Int): LiveData<InstanceInfo>
 
-    @Query("SELECT * FROM InstanceInfo WHERE serverName = :serverName")
-    fun getInstanceByName(serverName: String): LiveData<InstanceInfo>
+    @Query("SELECT * FROM InstanceInfo WHERE instanceName = :instanceName")
+    fun getInstanceByName(instanceName: String): LiveData<InstanceInfo>
 
     @Query("SELECT token FROM InstanceInfo WHERE id= :serverId")
     fun getInstanceToken(serverId: Int): LiveData<Token>
@@ -26,7 +26,7 @@ interface InstanceDao : BaseDao<InstanceInfo> {
     @Query("SELECT * FROM InstanceInfo WHERE mode= 1")
     fun getActiveInstance(): LiveData<InstanceInfo>
 
-    @Query("SELECT token from InstanceInfo WHERE serverName = :instanceName")
+    @Query("SELECT token from InstanceInfo WHERE instanceName = :instanceName")
     fun getInstanceToken(instanceName:String):LiveData<Token>
 
 }

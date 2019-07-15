@@ -212,7 +212,7 @@ public class DevicesFragment extends BasicFragment implements LoaderManager.Load
                 if (!pathSelection.equals("")) {
                     selection = McContract.Device.COLUMN_PATH + " = ?";
                     String[] arguments = {pathSelection};
-//                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getServerName()), projection, selection, arguments, sortingParameter);
+//                    return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(server.getInstanceName()), projection, selection, arguments, sortingParameter);
                     return new CursorLoader(getContext(), McContract.Device.buildUriWithServerName(instance.getServerName()), projection, selection, arguments, sortingParameter);
                 }
             }

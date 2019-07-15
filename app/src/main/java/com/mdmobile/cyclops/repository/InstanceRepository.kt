@@ -4,31 +4,63 @@ import androidx.lifecycle.LiveData
 import com.mdmobile.cyclops.ApplicationExecutors
 import com.mdmobile.cyclops.api.ApiResponse
 import com.mdmobile.cyclops.api.McApiService
+import com.mdmobile.cyclops.dataModel.Resource
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
-import com.mdmobile.cyclops.dataModel.api.newDataClass.Token
+import com.mdmobile.cyclops.dataModel.api.newDataClass.ServerInfo
 import com.mdmobile.cyclops.db.MobiControlDB
 import com.mdmobile.cyclops.testing.OpenForTesting
 import retrofit2.Retrofit
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 @OpenForTesting
 class InstanceRepository @Inject constructor(
-        private val retrofitBuilder:Retrofit.Builder,
+        private val retrofitBuilder: Retrofit.Builder,
         private val db: MobiControlDB,
         private val appExecutors: ApplicationExecutors) {
 
 
-    fun loadInstance(instanceName: String): LiveData<InstanceInfo> =
-            db.instanceDao().getInstanceByName(instanceName)
+    fun getServerInfo(instanceInfo: InstanceInfo): LiveData<Resource<InstanceInfo>> {
+        return object : NetworkBoundResource<InstanceInfo, ServerInfo>(appExecutors) {
+            override fun shouldFetch(data: InstanceInfo?): Boolean {
+                return true
+            }
 
-    fun loadInstance(instanceInfo: InstanceInfo): LiveData<InstanceInfo> =
-            db.instanceDao().getInstanceById(instanceInfo.id)
+            override fun loadFromDb(): LiveData<InstanceInfo> {
+                return db.instanceDao().getInstanceByName(instanceInfo.instanceName)
+            }
 
-    fun loadAllInstances(): LiveData<List<InstanceInfo>> =
-            db.instanceDao().getAllInstances()
+            override fun createCall(): LiveData<ApiResponse<ServerInfo>> {
+                return retrofitBuilder
+                        .baseUrl(instanceInfo.serverAddress).build()
+                        .create(McApiService::class.java)
+                        .getServers()
+            }
+
+            override fun saveApiResult(item: ServerInfo) {
+                val dsInfo = item.deploymentServer
+                val msInfo = item.managementServer
+                if (item.ProductVersion != null && item.ProductVersionBuild != null) {
+                    val instance = instanceInfo.copy(serverMajorVersion = item.ProductVersion,
+                            buildNumber = item.ProductVersionBuild)
+                    db.instanceDao().insert(instance)
+                }
+                db.deploymentServerDao().insertAll(dsInfo)
+                db.managementServerDao().insertAll(msInfo)
+            }
+
+            override fun onFetchFailed() {
+                super.onFetchFailed()
+
+            }
+        }.asLiveData()
 
 
-    fun getToken(instanceInfo: InstanceInfo): LiveData<ApiResponse<Token>> {
-        return retrofitBuilder.baseUrl(instanceInfo.serverAddress).build().create(McApiService::class.java).getAuthToken()
+
     }
+//
+//    fun isValidVersion(serverInfo: ServerInfo): Boolean {
+//        return serverInfo.ProductVersion != null && serverInfo.ProductVersion >= "14"
+//    }
 }

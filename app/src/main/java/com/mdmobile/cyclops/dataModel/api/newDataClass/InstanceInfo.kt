@@ -8,6 +8,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.mdmobile.cyclops.provider.McContract
 import kotlinx.android.parcel.Parcelize
+import okhttp3.HttpUrl
 
 @Parcelize
 @Entity(tableName = McContract.INSTANCE_INFO_TABLE_NAME)

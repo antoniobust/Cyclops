@@ -9,14 +9,13 @@ import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.dataModel.api.newDataClass.ServerInfo
 import com.mdmobile.cyclops.db.MobiControlDB
 import com.mdmobile.cyclops.testing.OpenForTesting
-import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 @OpenForTesting
 class InstanceRepository @Inject constructor(
-        private val retrofitBuilder: Retrofit.Builder,
+        private val mcApiService: McApiService,
         private val db: MobiControlDB,
         private val appExecutors: ApplicationExecutors) {
 
@@ -32,10 +31,7 @@ class InstanceRepository @Inject constructor(
             }
 
             override fun createCall(): LiveData<ApiResponse<ServerInfo>> {
-                return retrofitBuilder
-                        .baseUrl(instanceInfo.serverAddress).build()
-                        .create(McApiService::class.java)
-                        .getServers()
+                return mcApiService.getServers()
             }
 
             override fun saveApiResult(item: ServerInfo) {
@@ -55,7 +51,6 @@ class InstanceRepository @Inject constructor(
 
             }
         }.asLiveData()
-
 
 
     }

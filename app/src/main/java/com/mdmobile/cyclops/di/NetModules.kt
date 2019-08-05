@@ -3,11 +3,13 @@ package com.mdmobile.cyclops.di
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mdmobile.cyclops.api.McApiService
+import com.mdmobile.cyclops.api.McApiServiceHolder
 import com.mdmobile.cyclops.api.TokenAuthenticator
 import com.mdmobile.cyclops.dataModel.api.RuntimeTypeAdapterFactory
 import com.mdmobile.cyclops.dataModel.api.devices.*
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.dataTypes.DeviceKind
+import com.mdmobile.cyclops.repository.InstanceRepository
 import com.mdmobile.cyclops.util.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -19,18 +21,21 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module(includes = [ViewModelModules::class])
-class NetModules {
-
+class NetModules(var instanceInfo: InstanceInfo) {
     @Provides
     @Singleton
-    fun provideStandardRetrofitBuilder(okHttpClient: OkHttpClient,
-                                       gSon: Gson): Retrofit.Builder {
-
-        return Retrofit.Builder()
+    fun provideMcApiService(okHttpClient: OkHttpClient,
+                            gSon: Gson, mcApiServiceHolder: McApiServiceHolder): McApiService {
+        val retrofitService = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gSon))
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .client(okHttpClient)
+                .baseUrl(instanceInfo.serverAddress)
+                .build()
+                .create(McApiService::class.java)
+        mcApiServiceHolder.mcApiService = retrofitService
+        return retrofitService
     }
 
     @Provides
@@ -45,10 +50,16 @@ class NetModules {
 
     @Provides
     @Singleton
-    fun provideTokenAuthenticator(): Authenticator {
-        return TokenAuthenticator()
+    fun provideMcApiServiceHolder(): McApiServiceHolder {
+        return McApiServiceHolder()
     }
 
+
+    @Provides
+    @Singleton
+    fun provideTokenAuthenticator(mcApiServiceHolder: McApiServiceHolder, instanceRepo:InstanceRepository): Authenticator {
+        return TokenAuthenticator(mcApiServiceHolder,instanceRepo)
+    }
 
 
     @Provides

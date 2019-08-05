@@ -16,7 +16,6 @@ import javax.inject.Singleton
 @Module(includes = [NetModules::class, ViewModelModules::class])
 class ApplicationModules {
 
-
     @Singleton
     @Provides
     fun providesApplicationContext(app:Application): Context {

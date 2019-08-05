@@ -26,6 +26,7 @@ import com.mdmobile.cyclops.dataModel.User
 import com.mdmobile.cyclops.dataModel.api.Token
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.dataTypes.ResourceStatus
+import com.mdmobile.cyclops.di.NetModules
 import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.ACCOUNT_TYPE_KEY
 import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.ADDING_NEW_ACCOUNT_KEY
 import com.mdmobile.cyclops.services.AccountAuthenticator.Companion.AUTH_TOKEN_EXPIRATION_KEY
@@ -99,6 +100,7 @@ class LoginActivity : com.mdmobile.cyclops.util.AccountAuthenticatorActivity(),
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
+
 
         val instanceObserver = Observer<InstanceInfo> {
             when {

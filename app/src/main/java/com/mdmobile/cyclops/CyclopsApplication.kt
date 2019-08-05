@@ -9,34 +9,41 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
-
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.dataModel.chart.Chart
+import com.mdmobile.cyclops.di.AppComponent
 import com.mdmobile.cyclops.di.DaggerAppComponent
+import com.mdmobile.cyclops.di.NetModules
 import com.mdmobile.cyclops.provider.McContract
 import com.mdmobile.cyclops.ui.main.dashboard.ChartFactory
 import com.mdmobile.cyclops.util.GeneralUtility
 import com.mdmobile.cyclops.util.Logger
-
-import java.util.ArrayList
-
-import javax.inject.Inject
-
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import java.util.*
+import javax.inject.Inject
+import com.mdmobile.cyclops.di.AppComponent
+
+
+
 
 class CyclopsApplication : Application(), HasActivityInjector {
     @Inject
     internal lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
     private val logTag = CyclopsApplication::class.java.simpleName
+    private lateinit var mAppComponent: AppComponent
+
 
     override fun onCreate() {
         super.onCreate()
-        DaggerAppComponent.builder()
+        mAppComponent = DaggerAppComponent.builder()
+                .netModuleBuilder(NetModules(InstanceInfo()))
                 .application(this)
-                .build().inject(this)
+                .build()
+        mAppComponent.inject(this)
 
         CyclopsApplication.applicationContext = applicationContext
         val firstLoad = applicationContext.getSharedPreferences(getString(R.string.general_shared_preference), Context.MODE_PRIVATE)
@@ -82,6 +89,10 @@ class CyclopsApplication : Application(), HasActivityInjector {
 
     override fun activityInjector(): AndroidInjector<Activity>? {
         return dispatchingActivityInjector
+    }
+
+    fun getAppComponent(): AppComponent {
+        return mAppComponent
     }
 
     companion object {

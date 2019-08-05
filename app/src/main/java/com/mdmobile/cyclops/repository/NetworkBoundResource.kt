@@ -1,22 +1,24 @@
 package com.mdmobile.cyclops.repository
 
-import android.accounts.AccountManager
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.github.mikephil.charting.utils.Utils.init
 import com.mdmobile.cyclops.ApplicationExecutors
-import com.mdmobile.cyclops.CyclopsApplication
 import com.mdmobile.cyclops.api.ApiEmptyResponse
 import com.mdmobile.cyclops.api.ApiErrorResponse
 import com.mdmobile.cyclops.api.ApiResponse
 import com.mdmobile.cyclops.api.ApiSuccessResponse
 import com.mdmobile.cyclops.dataModel.Resource
 
+/**
+ * Class responsible for retrieving Resources which are network bound.
+ * Retrieves current data from DB while loading from network and updates observers once done
+ */
+
 abstract class NetworkBoundResource<ResultType, RequestType>
- @MainThread constructor(private val appExecutors: ApplicationExecutors) {
+@MainThread constructor(private val appExecutors: ApplicationExecutors) {
 
     private val result = MediatorLiveData<Resource<ResultType>>()
     private val dbData = MutableLiveData<ResultType>()
@@ -28,7 +30,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         result.addSource(dbData) { data ->
             result.removeSource(dbData)
             if (shouldFetch(data)) {
-                fetchFromNetwork(dbData)
+                    fetchFromNetwork(dbData)
             } else {
                 result.addSource(dbData) { newData ->
                     setValue(Resource.success(newData))
@@ -49,7 +51,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
          */
         val apiResponse = createCall()
         //while loading reattach DB as a source which will dispatch data quicker
-        result.addSource(dbSource){ newData ->
+        result.addSource(dbSource) { newData ->
             setValue(Resource.loading(newData))
         }
 
@@ -75,8 +77,8 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                 }
                 is ApiErrorResponse<*> -> {
                     onFetchFailed()
-                    appExecutors.applicationTread.execute{
-                        result.postValue(Resource.error(response.errorMessage,null))
+                    appExecutors.applicationTread.execute {
+                        result.postValue(Resource.error(response.errorMessage, null))
                     }
                 }
             }

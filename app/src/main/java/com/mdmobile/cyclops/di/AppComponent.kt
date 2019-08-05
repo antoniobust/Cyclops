@@ -22,17 +22,17 @@ import javax.inject.Singleton
     ViewModelModules::class,
     ActivityModules::class])
 interface AppComponent {
-
     fun inject(cyclopsApp: CyclopsApplication)
-    fun inject(context: Context)
+//    fun inject(context: Context)
     fun inject(loginActivity: LoginActivity)
-    fun inject(retrofitBuilder: Retrofit.Builder)
-    fun inject(instanceRepository: InstanceRepository)
+//    fun inject(mcApiService: McApiService)
+//    fun inject(instanceRepository: InstanceRepository)
 
     @Component.Builder
     interface Builder {
         fun build(): AppComponent
         @BindsInstance
         fun application(application: Application): Builder
+        fun netModuleBuilder(netModules: NetModules): Builder
     }
 }

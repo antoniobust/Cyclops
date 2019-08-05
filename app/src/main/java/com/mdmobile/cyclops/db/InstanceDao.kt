@@ -27,6 +27,6 @@ interface InstanceDao : BaseDao<InstanceInfo> {
     fun getActiveInstance(): LiveData<InstanceInfo>
 
     @Query("SELECT token from InstanceInfo WHERE instanceName = :instanceName")
-    fun getInstanceToken(instanceName:String):LiveData<Token>
+    fun getInstanceToken(instanceName:String):Token
 
 }

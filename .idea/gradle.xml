@@ -8,6 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/McApiService" />
             <option value="$PROJECT_DIR$/PlayLicencing" />
             <option value="$PROJECT_DIR$/app" />
           </set>

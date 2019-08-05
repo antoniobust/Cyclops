@@ -1,43 +1,55 @@
 package com.mdmobile.cyclops.api
 
 import android.util.Log
+import com.mdmobile.cyclops.dataModel.api.newDataClass.Token
+import com.mdmobile.cyclops.repository.InstanceRepository
+import com.mdmobile.cyclops.repository.TokenRepository
 import com.mdmobile.cyclops.util.Logger
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Authenticator class for okHttp.
- * On 401 response will try to request a new token with stored credentials
- * Request limit is 2 -> if requesting a new token with same credential returns 401
- * we can assume credentials are no longer valid.
+ * If 401 is returned for a bearer request then try to get a new token with stored credentials.
+ * Request limit is 2.
+ * If requesting a new token with same credential returns 401 then current credentials are no longer valid
  * Authenticator only checks "Bearer" requests as "basic" ones are token requests
  */
 
-class TokenAuthenticator : Authenticator {
 
-    private val retryHeader = "RetryCountHeader"
+class TokenAuthenticator(private val apiServiceHolder: McApiServiceHolder, private val tokenRepository: TokenRepository) : Authenticator {
+
+    private val retryHeaderName = "RetryCountHeader"
     override fun authenticate(route: Route?, response: Response): Request? {
         Logger.log(TokenAuthenticator::class.java.simpleName,
-                "Detected authentication error: ${response.code()} - ${response.request().url()}", Log.VERBOSE)
-
-        return when (isBearerRequest(response)) {
+                "Authentication error: ${response.code()} request: ${response.request().url()}", Log.VERBOSE)
+        when (isBearerRequest(response)) {
             false -> {
                 Logger.log(TokenAuthenticator::class.java.simpleName,
                         "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)
-                null
+                return null
             }
             true -> {
                 val count = retryCount(response)
-                reAuthenticateReq(response.request(), count + 1)
+                val tokenResponse = authenticateReq(response.request(), count + 1)
+                tokenResponse.let {
+                    return if (it is ApiSuccessResponse) {
+                        Logger.log(TokenAuthenticator::class.java.simpleName,
+                                "Got new token -> re-attempting request: (${response.request().url()})", Log.VERBOSE)
+                        tokenRepository
+                        rewriteRequest(response.request(), count, it.body.token)
+                    } else {
+                        Logger.log(TokenAuthenticator::class.java.simpleName,
+                                "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)
+                        null
+                    }
+                }
             }
         }
     }
 
-    //Check whether failed request was a bearer(api call) or basic request(token request)
     private fun isBearerRequest(response: Response): Boolean {
         val authorization = response.request().header("Authorization")
         if (authorization != null) {
@@ -46,45 +58,26 @@ class TokenAuthenticator : Authenticator {
         return false
     }
 
-    private fun retryCount(response: Response): Int = response.header(retryHeader)?.toInt() ?: 0
+    private fun retryCount(response: Response): Int = response.header(retryHeaderName)?.toInt() ?: 0
 
     // Synced method so if multiple request fail dont refresh the same token
     @Synchronized
-    private fun reAuthenticateReq(oldReq: Request, retryCount: Int): Request? {
-        //too many api re-attempt user must not have enough permission
+    private fun authenticateReq(oldReq: Request, retryCount: Int): ApiResponse<Token>? {
         if (retryCount > 1) {
             Logger.log(TokenAuthenticator::class.java.simpleName,
-                    "Failed to execute  ${oldReq.url()} - retry:($retryCount) - user doesn't have access specified resource", Log.ERROR)
+                    "Failed to execute  ${oldReq.url()} - retry:($retryCount) - user doesn't have access to the" +
+                            "specified resource", Log.ERROR)
             return null
         }
 
         Logger.log(TokenAuthenticator::class.java.simpleName,
                 "Attempting a token refresh with current credentials - retry:($retryCount)", Log.VERBOSE)
-
-        val apiService = Retrofit.Builder()
-                .baseUrl(oldReq.url().scheme() + oldReq.url().host())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(McApiService::class.java)
-
-        val newToken = apiService.getAuthToken()
-
-        newToken.let {
-            return if (it is ApiSuccessResponse ) {
-                Logger.log(TokenAuthenticator::class.java.simpleName,
-                        "Got new token -> resending original request -> (${oldReq.method()}) - ${oldReq.url()}", Log.VERBOSE)
-                rewriteRequest(oldReq, retryCount, it.body.token)
-            } else {
-                Logger.log(TokenAuthenticator::class.java.simpleName,
-                        "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)
-                null
-            }
-        }
+        return tokenRepository.refreshToken()
     }
 
     private fun rewriteRequest(oldRequest: Request, retryCount: Int, authToken: String?): Request? {
         return oldRequest.newBuilder().header("Authorization", "bearer: $authToken")
-                .header(retryHeader, "$retryCount")
+                .header(retryHeaderName, "$retryCount")
                 .build()
     }
 

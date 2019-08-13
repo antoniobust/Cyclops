@@ -69,7 +69,6 @@ interface McApiService {
                             @Path("profileId") profileId: String,
                             @Body @ProfileActions action: String): LiveData<ApiResponse<Void>>
 
-
     //Server APIs
     @GET("/api/servers")
     fun getServers(): LiveData<ApiResponse<ServerInfo>>

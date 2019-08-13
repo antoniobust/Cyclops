@@ -1,47 +1,46 @@
-//package com.mdmobile.cyclops.api
-//
-//import android.util.Log
-//import com.mdmobile.cyclops.dataModel.api.newDataClass.Token
-//import com.mdmobile.cyclops.repository.InstanceRepository
-//import com.mdmobile.cyclops.repository.TokenRepository
-//import com.mdmobile.cyclops.util.Logger
-//import mobicontrol.mcApiService.api.ApiResponse
-//import mobicontrol.mcApiService.api.ApiSuccessResponse
-//import okhttp3.Authenticator
-//import okhttp3.Request
-//import okhttp3.Response
-//import okhttp3.Route
-//
-///**
-// * Authenticator class for okHttp.
-// * If 401 is returned for a bearer request then try to get a new token with stored credentials.
-// * Request limit is 2.
-// * If requesting a new token with same credential returns 401 then current credentials are no longer valid
-// * Authenticator only checks "Bearer" requests as "basic" ones are token requests
-// */
-//
-//
-//class TokenAuthenticator(private val apiServiceHolder: McApiServiceHolder, private val tokenRepository: TokenRepository) : Authenticator {
-//
+package mobicontrol.mcApiService.api
+
+
+import okhttp3.Authenticator
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.Route
+
+/**
+ * Authenticator class for okHttp.
+ * If 401 is returned for a bearer request then try to get a new token with stored credentials.
+ * Request limit is 2.
+ * If requesting a new token with same credential returns 401 then current credentials are no longer valid
+ * Authenticator only checks "Bearer" requests as "basic" ones are token requests
+ */
+
+
+class TokenAuthenticator : Authenticator {
+    override fun authenticate(route: Route?, response: Response): Request? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 //    private val retryHeaderName = "RetryCountHeader"
 //    override fun authenticate(route: Route?, response: Response): Request? {
-//        Logger.log(TokenAuthenticator::class.java.simpleName,
+//        (TokenAuthenticator::class.java.simpleName,
 //                "Authentication error: ${response.code()} request: ${response.request().url()}", Log.VERBOSE)
 //        when (isBearerRequest(response)) {
 //            false -> {
 //                Logger.log(TokenAuthenticator::class.java.simpleName,
-//                        "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)
+//                "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)
 //                return null
 //            }
 //            true -> {
 //                val count = retryCount(response)
 //                val tokenResponse = authenticateReq(response.request(), count + 1)
 //                tokenResponse.let {
-//                    return if (it is ApiSuccessResponse) {
+//                    return null
+//                    if (it is ApiSuccessResponse) {
 //                        Logger.log(TokenAuthenticator::class.java.simpleName,
 //                                "Got new token -> re-attempting request: (${response.request().url()})", Log.VERBOSE)
 //                        tokenRepository
 //                        rewriteRequest(response.request(), count, it.body.token)
+//                        null
 //                    } else {
 //                        Logger.log(TokenAuthenticator::class.java.simpleName,
 //                                "Token request couldn't be retrieved, current credentials are no longer valid, update credentials ", Log.ERROR)
@@ -62,9 +61,11 @@
 //
 //    private fun retryCount(response: Response): Int = response.header(retryHeaderName)?.toInt() ?: 0
 //
-//    // Synced method so if multiple request fail dont refresh the same token
+//     Synced method so if multiple request fail dont refresh the same token
 //    @Synchronized
-//    private fun authenticateReq(oldReq: Request, retryCount: Int): ApiResponse<Token>? {
+//    private fun authenticateReq(oldReq: Request, retryCount: Int)
+//            : ApiResponse<Token>?
+//    {
 //        if (retryCount > 1) {
 //            Logger.log(TokenAuthenticator::class.java.simpleName,
 //                    "Failed to execute  ${oldReq.url()} - retry:($retryCount) - user doesn't have access to the" +
@@ -82,5 +83,5 @@
 //                .header(retryHeaderName, "$retryCount")
 //                .build()
 //    }
-//
-//}
+
+}

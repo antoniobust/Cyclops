@@ -46,5 +46,4 @@ class ApplicationModules {
     fun provideInstanceInfo(): InstanceInfo {
         return InstanceInfo()
     }
-
 }

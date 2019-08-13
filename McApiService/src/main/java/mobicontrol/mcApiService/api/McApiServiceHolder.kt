@@ -1,6 +1,4 @@
-package com.mdmobile.cyclops.api
-
-import mobicontrol.mcApiService.api.McApiService
+package mobicontrol.mcApiService.api
 
 class McApiServiceHolder {
     lateinit var mcApiService: McApiService

@@ -2,7 +2,6 @@ package com.mdmobile.cyclops.api
 
 import android.util.Log
 import com.mdmobile.cyclops.dataModel.api.newDataClass.Token
-import com.mdmobile.cyclops.repository.InstanceRepository
 import com.mdmobile.cyclops.repository.TokenRepository
 import com.mdmobile.cyclops.util.Logger
 import okhttp3.Authenticator
@@ -19,7 +18,7 @@ import okhttp3.Route
  */
 
 
-class TokenAuthenticator(private val apiServiceHolder: McApiServiceHolder, private val tokenRepository: TokenRepository) : Authenticator {
+class TokenAuthenticator(private val tokenRepository: TokenRepository) : Authenticator {
 
     private val retryHeaderName = "RetryCountHeader"
     override fun authenticate(route: Route?, response: Response): Request? {
@@ -38,7 +37,6 @@ class TokenAuthenticator(private val apiServiceHolder: McApiServiceHolder, priva
                     return if (it is ApiSuccessResponse) {
                         Logger.log(TokenAuthenticator::class.java.simpleName,
                                 "Got new token -> re-attempting request: (${response.request().url()})", Log.VERBOSE)
-                        tokenRepository
                         rewriteRequest(response.request(), count, it.body.token)
                     } else {
                         Logger.log(TokenAuthenticator::class.java.simpleName,

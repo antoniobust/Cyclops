@@ -135,7 +135,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.google.dagger:dagger:2.18'
     implementation 'com.google.dagger:dagger-android:2.18'

@@ -10,6 +10,7 @@ import com.mdmobile.cyclops.dataModel.api.devices.*
 import com.mdmobile.cyclops.dataModel.api.newDataClass.InstanceInfo
 import com.mdmobile.cyclops.dataTypes.DeviceKind
 import com.mdmobile.cyclops.repository.InstanceRepository
+import com.mdmobile.cyclops.repository.TokenRepository
 import com.mdmobile.cyclops.util.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -57,8 +58,8 @@ class NetModules(var instanceInfo: InstanceInfo) {
 
     @Provides
     @Singleton
-    fun provideTokenAuthenticator(mcApiServiceHolder: McApiServiceHolder, instanceRepo:InstanceRepository): Authenticator {
-        return TokenAuthenticator(mcApiServiceHolder,instanceRepo)
+    fun provideTokenAuthenticator(tokenRepository:TokenRepository): Authenticator {
+        return TokenAuthenticator(tokenRepository)
     }
 
 
